@@ -82,26 +82,138 @@ When you create a branch off the *master* branch, you’re making a copy, or sna
 
 This diagram shows:
 
-The *master* branch
-A new branch called feature (because we’re doing ‘feature work’ on this branch)
-The journey that feature takes before it’s merged into master
-a branch
+- The *master* branch
+- A new branch called *feature* (because we’re doing ‘feature work’ on this branch)
+- The journey that *feature* takes before it’s merged into *master*
+
+下图展示了：
+
+- *master*分支
+- 一个被称为*feature*的分支（因为我们正在这个分支上做“突出介绍”工作）
+- *feature*分支被合并到*master*之前经过的路程
+
+![branching.png](https://guides.github.com/activities/hello-world/branching.png)
 
 Have you ever saved different versions of a file? Something like:
 
-story.txt
-story-joe-edit.txt
-story-joe-edit-reviewed.txt
+- *story.txt*
+- *story-joe-edit.txt*
+- *story-joe-edit-reviewed.txt*
+
+你是否曾经保存过一个文件的不同版本？一些像这样的东西：
+
+- *story.txt*
+- *story-joe-edit.txt*
+- *story-joe-edit-reviewed.txt*
+
 Branches accomplish similar goals in GitHub repositories.
 
-Here at GitHub, our developers, writers, and designers use branches for keeping bug fixes and feature work separate from our *master* (production) branch. When a change is ready, they merge their branch into master.
+GitHub仓库中的分支完成类似的目标。
 
-To create a new branch
+Here at GitHub, our developers, writers, and designers use branches for keeping bug fixes and feature work separate from our *master* (production) branch. When a change is ready, they merge their branch into *master*.
 
-Go to your new repository hello-world.
-Click the drop down at the top of the file list that says branch: master.
-Type a branch name, readme-edits, into the new branch text box.
-Select the blue Create branch box or hit “Enter” on your keyboard.
-branch gif
+在GitHub中，我们的开发者、编写者和设计者使用不同分支持续修正bug，在*master*（生产）分支之外专注工作。当修改准备好了，他们就将他们的分支合并到*master*。
 
-Now you have two branches, *master* and readme-edits. They look exactly the same, but not for long! Next we’ll add our changes to the new branch.
+##To create a new branch 创建一个新分支
+
+1. Go to your new repository *hello-world*.
+2. Click the drop down at the top of the file list that says **branch: master**.
+3. Type a branch name, *readme-edits*, into the new branch text box.
+4. Select the blue **Create branch** box or hit “Enter” on your keyboard.
+
+>
+
+1. 进入你的新仓库*hello-world*。
+2. 点击文件列表上方的下拉菜单，上面写着**branch: master**。
+3. 输入一个分支名称，*readme-edits*，写入新分支文本框。
+4. 选中蓝色的**Create branch**框或者在键盘上敲下“Enter”。
+
+![readme-edits.gif](https://guides.github.com/activities/hello-world/readme-edits.gif)
+
+Now you have two branches, *master* and *readme-edits*. They look exactly the same, but not for long! Next we’ll add our changes to the new branch.
+
+现在你有两个分支了，*master*和*readme-edits*。它们看起来完全一样，但是不会太久！下一步我们就将添加我们的修改到新的分支。
+
+#Step 3. Make and commit changes 修改和提交改动
+Bravo! Now, you’re on the code view for your *readme-edits* branch, which is a copy of *master*. Let’s make some edits.
+
+好的！现在你已经在*readme-edits*分支的代码界面了，这是*master*分支的一份拷贝。让我们来做一些编辑。
+
+On GitHub, saved changes are called *commits*. Each commit has an associated *commit message*, which is a description explaining why a particular change was made. Commit messages capture the history of your changes, so other contributors can understand what you’ve done and why.
+
+在GitHub上，保存改动被称为*提交*。每一个提交有一个相关联的*提交消息*，它解释了为什么要做一个特别的改动。提交消息捕获你改动的历史，因此其他投稿人可以理解你做了什么以及为什么。
+
+##Make and commit changes 改动和提交改动
+
+1. Click the *README.md* file.
+2. Click the ✏️ pencil icon in the upper right corner of the file view to edit.
+3. In the editor, write a bit about yourself.
+4. Write a commit message that describes your changes.
+5. Click **Commit changes** button.
+
+>
+
+1. 点击*README.md*文件。
+2. 点击✏️铅笔图标以编辑，图标在文件视图的右上角。
+3. 在编辑者中，写一小段关于自己的信息。
+4. 写一个提交消息描述你的改动。
+5. 点击**提交改动**按钮。
+
+![commit.png](https://guides.github.com/activities/hello-world/commit.png)
+
+These changes will be made to just the *README* file on your *readme-edits* branch, so now this branch contains content that’s different from *master*.
+
+这些改动仅被放入了*readme-edits*分支的*README*文件，因此现在该分支与*master*包含不同的内容。
+
+#Step 4. Open a Pull Request 打开一个拉取请求
+Nice edits! Now that you have changes in a branch off of master, you can open a pull request.
+
+Pull Requests are the heart of collaboration on GitHub. When you open a pull request, you’re proposing your changes and requesting that someone review and pull in your contribution and merge them into their branch. Pull requests show diffs, or differences, of the content from both branches. The changes, additions, and subtractions are shown in green and red.
+
+As soon as you make a commit, you can open a pull request and start a discussion, even before the code is finished.
+
+By using GitHub’s [@mention system](https://help.github.com/articles/about-writing-and-formatting-on-github/#text-formatting-toolbar) in your pull request message, you can ask for feedback from specific people or teams, whether they’re down the hall or 10 time zones away.
+
+You can even open pull requests in your own repository and merge them yourself. It’s a great way to learn the GitHub Flow before working on larger projects.
+
+##Open a Pull Request for changes to the README 打开对README的修改的拉取请求
+
+*Click on the image for a larger version*
+
+|**Step**|	**Screenshot**  |
+|--|--|
+|Click the **Pull Request** tab, then from the Pull Request page, click the green **New pull request** button.|![pr-tab.gif](https://guides.github.com/activities/hello-world/pr-tab.gif)|
+|Select the branch you made, *readme-edits*, to compare with *master* (the original).	|![pick-branch.png](https://guides.github.com/activities/hello-world/pick-branch.png)|
+|Look over your changes in the diffs on the Compare page, make sure they’re what you want to submit.|![diff.png](https://guides.github.com/activities/hello-world/diff.png)|
+|When you’re satisfied that these are the changes you want to submit, click the big green **Create Pull Request** button.|![create-pr.png](https://guides.github.com/activities/hello-world/create-pr.png)|
+|Give your pull request a title and write a brief description of your changes.	|![pr-form.png](https://guides.github.com/activities/hello-world/pr-form.png)
+When you’re done with your message, click **Create pull request**!
+
+>Tip: You can use emoji and drag and drop images and gifs onto comments and Pull Requests.
+
+#Step 5. Merge your Pull Request 步骤5.合并你的拉取请求
+In this final step, it’s time to bring your changes together – merging your *readme-edits* branch into the *master* branch.
+
+1. Click the green **Merge pull request** button to merge the changes into *master*.
+2. Click **Confirm merge**.
+3. Go ahead and delete the branch, since its changes have been incorporated, with the **Delete branch** button in the purple box.
+merge delete
+
+![merge-button.png](https://guides.github.com/activities/hello-world/merge-button.png)
+
+#Celebrate! 祝贺你！
+
+By completing this tutorial, you’ve learned to create a project and make a pull request on GitHub! :tada: :octocat: :zap:
+
+Here’s what you accomplished in this tutorial:
+
+- Created an open source repository
+- Started and managed a new branch
+- Changed a file and committed those changes to GitHub
+- Opened and merged a Pull Request
+
+Take a look at your GitHub profile and you’ll see your new *contribution squares*!
+
+To learn more about the power of Pull Requests, we recommend reading the [GitHub Flow Guide](http://guides.github.com/overviews/flow/). You might also visit [GitHub Explore](http://github.com/explore) and get involved in an Open Source project.
+
+>Tip: Check out our other [Guides](http://guides.github.com/), [YouTube Channel](http://youtube.com/githubguides) and [On-Demand Training](https://services.github.com/on-demand/) for more on how to get started with GitHub.
