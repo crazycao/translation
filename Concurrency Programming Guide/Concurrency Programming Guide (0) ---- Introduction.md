@@ -60,6 +60,6 @@ For complete definitions of these and other key terms used by this document, see
 
 ##0.3 See Also 其他参考
 
-This document focuses on the preferred technologies for implementing concurrency in your applications and does not cover the use of threads. If you need information about using threads and other thread-related technologies, see *[Threading Programming Guide]((https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i))*.
+This document focuses on the preferred technologies for implementing concurrency in your applications and does not cover the use of threads. If you need information about using threads and other thread-related technologies, see *[Threading Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i)*.
 
-本文在应用中实现并发的高级技术，而没有涵盖线程的使用。如果你需要关于使用线程和其他基于线程的技术的信息，参见*[Threading Programming Guide]((https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i))*。
+本文在应用中实现并发的高级技术，而没有涵盖线程的使用。如果你需要关于使用线程和其他基于线程的技术的信息，参见*[Threading Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i)*。
