@@ -27,14 +27,14 @@ This document contains the following chapters:
 本文档包括以下章节：
 
 - [Concurrency and Application Design](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/ConcurrencyandApplicationDesign/ConcurrencyandApplicationDesign.html#//apple_ref/doc/uid/TP40008091-CH100-SW1) introduces the basics of asynchronous application design and the technologies for performing your custom tasks asynchronously. 
-- [Concurrency and Application Design](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/ConcurrencyandApplicationDesign/ConcurrencyandApplicationDesign.html#//apple_ref/doc/uid/TP40008091-CH100-SW1)介绍了异步应用设计的基础知识和异步执行你的自定义任务的基本技术。
 - [Operation Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW1) shows you how to encapsulate and perform tasks using Objective-C objects. 
-- [Operation Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW1)展示了如何使用Objective-C对象包含和执行任务。
 - [Dispatch Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW1) shows you how to execute tasks concurrently in C-based applications. 
-- [Dispatch Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW1) 展示了如何在基于C的程序中并发的执行任务。
 - [Dispatch Sources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1) shows you how to handle system events asynchronously.
-- [Dispatch Sources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1) 展示了如何异步处理系统事件。
 - [Migrating Away from Threads](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1) provides tips and techniques for migrating your existing thread-based code over to use newer technologies.
+- [Concurrency and Application Design](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/ConcurrencyandApplicationDesign/ConcurrencyandApplicationDesign.html#//apple_ref/doc/uid/TP40008091-CH100-SW1)介绍了异步应用设计的基础知识和异步执行你的自定义任务的基本技术。
+- [Operation Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW1)展示了如何使用Objective-C对象包含和执行任务。
+- [Dispatch Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW1) 展示了如何在基于C的程序中并发的执行任务。
+- [Dispatch Sources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1) 展示了如何异步处理系统事件。
 - [Migrating Away from Threads](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1) 提供了建议和技术帮助你从已有的基于线程的代码迁移到新的技术。
 
 This document also includes a glossary that defines relevant terms.
@@ -60,6 +60,7 @@ For complete definitions of these and other key terms used by this document, see
 
 ##0.3 See Also 其他参考
 
-This document focuses on the preferred technologies for implementing concurrency in your applications and does not cover the use of threads. If you need information about using threads and other thread-related technologies, see *Threading Programming Guide*.
+This document focuses on the preferred technologies for implementing concurrency in your applications and does not cover the use of threads. If you need information about using threads and other thread-related technologies, see *[Threading Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i)*.
 
 本文在应用中实现并发的高级技术，而没有涵盖线程的使用。如果你需要关于使用线程和其他基于线程的技术的信息，参见*[Threading Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i)*。
+
