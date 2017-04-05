@@ -61,47 +61,67 @@ For more information about interfaces you use to manipulate dispatch queues, see
 
 关于用于操作调度队列的接口的更多信息，参见《*Grand Central Dispatch (GCD) Reference*》。
 
-##3.2 Queue-Related Technologies
+##3.2 Queue-Related Technologies 基于队列的技术
 
 In addition to dispatch queues, Grand Central Dispatch provides several technologies that use queues to help manage your code. Table 3-2 lists these technologies and provides links to where you can find out more information about them.
 
+除了调度队列，GCD还提供了若干使用队列的技术帮助你管理你的代码。表3-2列出了这些技术，并提供了找到更多关于它们的信息的链接。
+
+**Table 3-2** Technologies that use dispatch queues
+
+**表 3-2** 使用调度队列的技术
+
 | Technology          | Description                              |
 | ------------------- | ---------------------------------------- |
-| Dispatch groups     | A dispatch group is a way to monitor a set of [block objects]() for completion. (You can monitor the blocks synchronously or asynchronously depending on your needs.) Groups provide a useful synchronization mechanism for code that depends on the completion of other tasks. For more information about using groups, see [Waiting on Groups of Queued Tasks](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW25). |
-| Dispatch semaphores | A dispatch semaphore is similar to a traditional semaphore but is generally more efficient. Dispatch semaphores call down to the kernel only when the calling thread needs to be blocked because the semaphore is unavailable. If the semaphore is available, no kernel call is made. For an example of how to use dispatch semaphores, see [Using Dispatch Semaphores to Regulate the Use of Finite Resources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW24). |
-| Dispatch sources    | A dispatch source generates notifications in response to specific types of system events. You can use dispatch sources to monitor events such as process notifications, signals, and descriptor events among others. When an event occurs, the dispatch source submits your task code asynchronously to the specified dispatch queue for processing. For more information about creating and using dispatch sources, see [Dispatch Sources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1). |
+| Dispatch groups </br>调度组    | A dispatch group is a way to monitor a set of [block objects]() for completion. (You can monitor the blocks synchronously or asynchronously depending on your needs.) Groups provide a useful synchronization mechanism for code that depends on the completion of other tasks. For more information about using groups, see [Waiting on Groups of Queued Tasks](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW25). </br>调度组是监控一组[block对象]()是否完成的方法。（你可以同步或异步的监控block，取决于你的需求。）组为依赖于其他任务完成的代码提供有用的同步机制。关于使用组的更多信息，参见《[Waiting on Groups of Queued Tasks](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW25)》。 |
+| Dispatch semaphores </br>调度信号量 | A dispatch semaphore is similar to a traditional semaphore but is generally more efficient. Dispatch semaphores call down to the kernel only when the calling thread needs to be blocked because the semaphore is unavailable. If the semaphore is available, no kernel call is made. For an example of how to use dispatch semaphores, see [Using Dispatch Semaphores to Regulate the Use of Finite Resources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW24). </br>调度信号量与传统的信号量类似，但通常更高效。调度信号量只在调用线程需要被阻塞时才会调用内核，因为这时信号量是不可用的。如果信号量是可以用的，不需要进行内核调用。对于如何使用调度信号量的例子，参见《[Using Dispatch Semaphores to Regulate the Use of Finite Resources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW24)》。 |
+| Dispatch sources </br>调度源   | A dispatch source generates notifications in response to specific types of system events. You can use dispatch sources to monitor events such as process notifications, signals, and descriptor events among others. When an event occurs, the dispatch source submits your task code asynchronously to the specified dispatch queue for processing. For more information about creating and using dispatch sources, see [Dispatch Sources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1). </br>调度源产生相应的特定类型的系统事件的通知。你可以使用调度源监控事件，如其他过程的通知，信号，描述符事件等。当事件发生，调度源异步提交你的任务代码到指定的调度队列处理。关于创建和使用调度源的更多信息，参见《[Dispatch Sources](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1)》。 |
 
-##3.3 Implementing Tasks Using Blocks
+##3.3 Implementing Tasks Using Blocks 使用Block实现任务
 
 [Block objects]() are a C-based language feature that you can use in your C, [Objective-C](), and C++ code. Blocks make it easy to define a self-contained unit of work. Although they might seem akin to function pointers, a block is actually represented by an underlying data structure that resembles an object and is created and managed for you by the compiler. The compiler packages up the code you provide (along with any related data) and encapsulates it in a form that can live in the heap and be passed around your application.
 
+[Block对象]()是基于C语言的特性，你可以在你的C、[Objective-C]()和C++代码中使用它。Block使得更容易定义工作的独立单元。尽管它们可能跟函数指针差不多，block实际上是由类似于对象的基础数据结构来表示，并由编译器创建和管理。编译器会将你提供的代码（包括所有相关的数据）打包，以保存在堆中的形式封装起来，并传递给你的应用。
+
 One of the key advantages of blocks is their ability to use variables from outside their own lexical scope. When you define a block inside a function or method, the block acts as a traditional code block would in some ways. For example, a block can read the values of variables defined in the parent scope. Variables accessed by the block are copied to the block data structure on the heap so that the block can access them later. When blocks are added to a dispatch queue, these values must typically be left in a read-only format. However, blocks that are executed synchronously can also use variables that have the `__block` keyword prepended to return data back to the parent’s calling scope. 
+
+Block的一个主要优势是可以从它们的词法作用域之外使用变量。当你在一个函数或方法里定义block时，block在某些方面表现得跟传统代码块一样。例如，block可以读取定义在它们的父作用域的变量的值。由block访问的变量会被拷贝到堆上的block数据结构，以便block可以在之后访问它们。当block被添加到调度队列时，这些值必须一直留在只读格式。然而，同步执行的block也可以使用前面带有`__block`的值返回数据到父调用区域。
 
 You declare blocks inline with your code using a syntax that is similar to the syntax used for function pointers. The main difference between a block and a function pointer is that the block name is preceded with a caret (`^`) instead of an asterisk (`*`). Like a function pointer, you can pass arguments to a block and receive a return value from it. Listing 3-1 shows you how to declare and execute blocks synchronously in your code. The variable `aBlock`is declared to be a block that takes a single integer parameter and returns no value. An actual block matching that prototype is then assigned to `aBlock` and declared inline. The last line executes the block immediately, printing the specified integers to standard out. 
 
+你使用与函数指针类似的语法声明与你的代码内联的block。Block与函数指针的主要不同是block名字前面带有一个脱字号（`^`）而不是星号（`*`）。像函数指针一样，你可以传递参数到block并从中接收一个返回值。表3-1展示了如何在你的代码中声明并同步的执行block。变量`aBlock`声明成了一个block，传入一个整形参数，无返回值。然后，匹配该原型的实际block会关联到`aBlock`并内联声明。最后一行立即执行了block，打印指定的整数到标准输出。
+
 **Listing 3-1**  A simple block example
 
-| `int x = 123;`                          |
-| --------------------------------------- |
-| `int y = 456;`                          |
-| ` `                                     |
-| `// Block declaration and assignment`   |
-| `void (^aBlock)(int) = ^(int z) {`      |
-| `    printf("%d %d %d\n", x, y, z);`    |
-| `};`                                    |
-| ` `                                     |
-| `// Execute the block`                  |
-| `aBlock(789);   // prints: 123 456 789` |
+	int x = 123;
+	int y = 456;
+	 
+	// Block declaration and assignment
+	void (^aBlock)(int) = ^(int z) {
+	    printf("%d %d %d\n", x, y, z);
+	};
+	 
+	// Execute the block
+	aBlock(789);   // prints: 123 456 789
 
 The following is a summary of some of the key guidelines you should consider when designing your blocks:
 
+下面总结了一些在设计block时应该考虑的主要指导：
+
 - For blocks that you plan to perform asynchronously using a dispatch queue, it is safe to capture scalar variables from the parent function or method and use them in the block. However, you should not try to capture large structures or other pointer-based variables that are allocated and deleted by the calling context. By the time your block is executed, the memory referenced by that pointer may be gone. Of course, it is safe to allocate memory (or an object) yourself and explicitly hand off ownership of that memory to the block. 
+- 对于你计划使用调度队列异步执行的block，从父函数或方法中获取标量变量并在block中使用它们是安全的。但是，你不能尝试获取大结构或者其他基于指针的变量，它们由调用上下文分配和删除。在你的block执行时，由该指针引用的内存可以已经被释放。当然，你自己分配内存（或对象）并显式的移除内存与block的关系是安全的。
 - Dispatch queues copy blocks that are added to them, and they release blocks when they finish executing. In other words, you do not need to explicitly copy blocks before adding them to a queue. 
+- 调度队列会拷贝添加到其中的block，并当它们完成执行时释放block。换句话说，在添加block到队列之前，你不需要显式的拷贝block。
 - Although queues are more efficient than raw threads at executing small tasks, there is still overhead to creating blocks and executing them on a queue. If a block does too little work, it may be cheaper to execute it inline than dispatch it to a queue. The way to tell if a block is doing too little work is to gather metrics for each path using the performance tools and compare them.
+- 尽管在执行小任务时队列比原始线程更高效，但创建block和在队列中执行它们仍然会有开销。如果block做了太少的工作，内联执行比调度到队列更划算。判断一个block是否做了太少的工作的办法是使用性能工具采集每条路径的度量并比较它们。
 - Do not cache data relative to the underlying thread and expect that data to be accessible from a different block. If tasks in the same queue need to share data, use the context pointer of the dispatch queue to store the data instead. For more information on how to access the context data of a dispatch queue, see [Storing Custom Context Information with a Queue](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW13). 
+- 不要缓存与基本线程相关的数据并期望该数据可以从不同的block访问。如果同一个队列中的任务需要共享数据，使用调度队列的上下文指针储存数据。关于如何访问调度队列的上下文数据，参见《[Storing Custom Context Information with a Queue](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW13)》。
 - If your block creates more than a few Objective-C objects, you might want to enclose parts of your block’s code in an @autorelease block to handle the memory management for those objects. Although GCD dispatch queues have their own autorelease pools, they make no guarantees as to when those pools are drained. If your application is memory constrained, creating your own autorelease pool allows you to free up the memory for autoreleased objects at more regular intervals.
+- 如果你的block创建了一些Objective-C对象，你可能想要在@autorelease块中附上部分你的block的代码，以处理那些对象的内存管理。虽然GCD调度队列有它们自己的自动释放池，它们不能保值什么时候这些池子会放干。如果你的程序有内存限制，创建你自己的自动释放池可以让你在更多常规间隔释放自动释放对象的内存。
 
 For more information about blocks, including how to declare and use them, see *Blocks Programming Topics*. For information about how you add blocks to a dispatch queue, see [Adding Tasks to a Queue](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW20). 
+
+关于block的更多信息，包括如何声明和使用它们，参见*Blocks Programming Topics*。关于如何添加block到调度队列的信息，参见《[Adding Tasks to a Queue](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW20)》。
 
 ##3.4 Creating and Managing Dispatch Queues
 
