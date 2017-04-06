@@ -123,19 +123,23 @@ For more information about blocks, including how to declare and use them, see *B
 
 关于block的更多信息，包括如何声明和使用它们，参见*Blocks Programming Topics*。关于如何添加block到调度队列的信息，参见《[Adding Tasks to a Queue](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW20)》。
 
-##3.4 Creating and Managing Dispatch Queues
+##3.4 Creating and Managing Dispatch Queues 创建和管理调度队列
 
 Before you add your tasks to a queue, you have to decide what type of queue to use and how you intend to use it. Dispatch queues can execute tasks either serially or concurrently. In addition, if you have a specific use for the queue in mind, you can configure the queue attributes accordingly. The following sections show you how to create dispatch queues and configure them for use.
 
-###3.4.1 Getting the Global Concurrent Dispatch Queues
+在你添加你的任务到队列之前，你需要决定使用哪种队列以及你将如何使用它。调度队列可以串行或并发的执行任务。另外，如果在你的想法中队列有特殊的用途，你可以相应的配置队列属性。下面一节向你展示了如何创建队列以及如何配置以使用。
+
+###3.4.1 Getting the Global Concurrent Dispatch Queues 获取全局并发调度队列
 
 A concurrent dispatch queue is useful when you have multiple tasks that can run in parallel. A concurrent queue is still a queue in that it dequeues tasks in a first-in, first-out order; however, a concurrent queue may dequeue additional tasks before any previous tasks finish. The actual number of tasks executed by a concurrent queue at any given moment is variable and can change dynamically as conditions in your application change. Many factors affect the number of tasks executed by the concurrent queues, including the number of available cores, the amount of work being done by other processes, and the number and priority of tasks in other serial dispatch queues. 
 
 The system provides each application with four concurrent dispatch queues. These queues are global to the application and are differentiated only by their priority level. Because they are global, you do not create them explicitly. Instead, you ask for one of the queues using the `dispatch_get_global_queue` function, as shown in the following example:
 
+	dispatch_queue_t aQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
 In addition to getting the default concurrent queue, you can also get queues with high- and low-priority levels by passing in the `DISPATCH_QUEUE_PRIORITY_HIGH` and `DISPATCH_QUEUE_PRIORITY_LOW` constants to the function instead, or get a background queue by passing the `DISPATCH_QUEUE_PRIORITY_BACKGROUND` constant. As you might expect, tasks in the high-priority concurrent queue execute before those in the default and low-priority queues. Similarly, tasks in the default queue execute before those in the low-priority queue.
 
-**Note:** The second argument to the `dispatch_get_global_queue` function is reserved for future expansion. For now, you should always pass `0` for this argument.
+>**Note:** The second argument to the `dispatch_get_global_queue` function is reserved for future expansion. For now, you should always pass `0` for this argument.
 
 Although dispatch queues are reference-counted objects, you do not need to retain and release the global concurrent queues. Because they are global to your application, retain and release calls for these queues are ignored. Therefore, you do not need to store references to these queues. You can just call the `dispatch_get_global_queue` function whenever you need a reference to one of them.
 
@@ -149,9 +153,8 @@ Listing 3-2 shows the steps required to create a custom serial queue. The `dispa
 
 **Listing 3-2**  Creating a new serial queue
 
-| `dispatch_queue_t queue;`                |
-| ---------------------------------------- |
-| `queue = dispatch_queue_create("com.example.MyQueue", NULL);` |
+	dispatch_queue_t queue;
+	queue = dispatch_queue_create("com.example.MyQueue", NULL);
 
 In addition to any custom queues you create, the system automatically creates a serial queue and binds it to your application’s main thread. For more information about getting the queue for the main thread, see [Getting Common Queues at Runtime](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW3). 
 
