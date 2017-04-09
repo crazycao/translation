@@ -20,23 +20,31 @@ We recommend letting CocoaPods do the hard work here. Running `pod lib create [p
 
 我们建议让CocoaPods在这里做更困难的工作。运行`pod lib create [pod name]`将为你设置一个经过深思熟虑的库结构，让你可以很简单的包含你的文件并迅速开始，我们有一个[为此而写的教程](https://guides.cocoapods.org/making/using-pod-lib-create)。如果你想要一个更新到最新的整个过程的指南，以推送到主干，可以检出[由tutsplus提供的第三方教程](http://code.tutsplus.com/tutorials/creating-your-first-cocoapod--cms-24332)。
 
-###2.1.1 [The Pod Files](https://guides.cocoapods.org/making/#the-pod-files)
+###2.1.1 [The Pod Files](https://guides.cocoapods.org/making/#the-pod-files) Pod文件
 
 There are only a few differences between a CocoaPod and a generic open source library. The most important ones, aside from the actual source, are the `.podspec` and `LICENSE`. We do not accept libraries into the trunk without a code license. For information on what license to choose, we suggest reading [this article on CodingHorror](http://www.codinghorror.com/blog/2007/04/pick-a-license-any-license.html) or [tl;dr Legal](http://www.tldrlegal.com/).
 
-####2.1.1.1 [Development](https://guides.cocoapods.org/making/#development)
+在CocoaPod和普通的开源库之间只有少量不同。其中最重要的东西，不是实际的源，而是`.podspec`和`LICENSE`。我们不会接受把库放到没有代码许可证的主干中。关于要选择什么许可证的信息，我们建议阅读[这篇CodingHorror上的文章](http://www.codinghorror.com/blog/2007/04/pick-a-license-any-license.html)或者[tl;dr Legal](http://www.tldrlegal.com/)
+
+####2.1.1.1 [Development](https://guides.cocoapods.org/making/#development) 开发
 
 You can work on the library from its folder on your system.
 
+你可以在你的系统上的文件夹中完成库的工作。
+
 > Alternatively you can work from an application project using the `:path` option:
+> 
+> 或者你可以在应用工程中使用`:path`选项工作：
 
 ```
 pod 'Name', :path => '~/code/Pods/'
 ```
 
-####2.1.1.2 [Testing](https://guides.cocoapods.org/making/#testing)
+####2.1.1.2 [Testing](https://guides.cocoapods.org/making/#testing) 测试
 
 You can test the syntax of your Podfile by linting the pod against the files of its directory, this won't test the downloading aspect of linting.
+
+你可以通过对器目录中pod文件的拉取测试你的Podfile的语法，这将不会测试拉取的下载方面进行测试。
 
 ```
 $ cd ~/code/Pods/NAME
@@ -46,7 +54,11 @@ $ pod lib lint
 
 Before releasing your new Pod to the world its best to test that you can install your pod successfully into an Xcode project. You can do this in a couple of ways:
 
+在发布你的新Pod到全世界之前，最好测试一下你成否成功将你的pod安装到Xcode工程中。你可以用两种方法实现：
+
 > Push your podspec to your repository, then create a new Xcode project with a Podfile and add your pod to the file like so:
+> 
+> 把你的podspec推送到你的仓库，然后创建一个带Podfile的新Xcode工程，并添加你的pod到该文件，如下：
 
 ```
 pod 'NAME', :git => 'https://example.com/URL/to/repo/NAME.git'
@@ -54,6 +66,7 @@ pod 'NAME', :git => 'https://example.com/URL/to/repo/NAME.git'
 ```
 
 > Then run
+> 然后运行
 
 ```
 pod install
@@ -63,6 +76,8 @@ pod update
 ```
 
 > Alternatively if you have a separate Xcode project for your unit tests you can use a Podfile for this project that references your development podspec
+> 
+> 或者，如果你有一个独立的Xcode工程用于单元测试，你可以为该工程使用一个Podfile，并引用你的开发podspec。
 
 ```
 xcodeproj 'NAMETests'
@@ -71,11 +86,15 @@ workspace '../NAME'
 pod 'NAME', :path => '../'
 ```
 
-####2.1.1.3 [Release](https://guides.cocoapods.org/making/#release)
+####2.1.1.3 [Release](https://guides.cocoapods.org/making/#release) 发布
 
 Once you have a release ready you'll need to make the corresponding tag. First run a quick `pod lib lint` then create your tag and push it.
 
+一旦你准备好发布，你需要制作相应的标签。首先运行快速的`pod lib lint`，然后创建你的标签，并推送它。
+
 > The release workflow is similar to the following.
+> 
+> 发布工作流与下面类似。
 
 ```
 $ cd ~/code/Pods/NAME
@@ -90,9 +109,11 @@ $ git push --tags
 
 ```
 
-#####2.1.1.3.1 Submitting Open Source Code
+#####2.1.1.3.1 Submitting Open Source Code 提交开源代码
 
 Once your tags are pushed you can use the command:
+
+在推送你的标签之后，你可以使用这个命令：
 
 ```
 pod trunk push NAME.podspec
@@ -101,9 +122,13 @@ pod trunk push NAME.podspec
 
 to send your library to the Specs repo. For more information on getting this setup see [Getting Setup With Trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk).
 
-#####2.1.1.3.2 Submitting Private Code
+将你的库发送到Specs仓库。关于获得此设置的更多信息，参见《[Getting Setup With Trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk)》。
+
+#####2.1.1.3.2 Submitting Private Code 提交私有代码
 
 Once your tags are pushed you can use the command:
+
+在推送你的标签之后，你可以使用这个命令：
 
 ```
 pod repo push [repo] NAME.podspec
@@ -112,13 +137,20 @@ pod repo push [repo] NAME.podspec
 
 to send your library to the named private specs repo. For more information on getting this setup see [Private CocoaPods](https://guides.cocoapods.org/making/private-cocoapods).
 
-###2.1.2 [Library Versioning](https://guides.cocoapods.org/making/#library-versioning)
+将你的库发送到已命名的私有描述仓库。关于获得此设置的更多信息，参见《[Private CocoaPods](https://guides.cocoapods.org/making/private-cocoapods)》。
+
+###2.1.2 [Library Versioning](https://guides.cocoapods.org/making/#library-versioning) 库版本
 
 There is, unfortunately, often an issue of developers not interpreting version numbers well or assigning emotional value to certain version numbers.
 
+很不幸，这通常都是开发者的问题，不关注版本号或者随意的设置主版本数字。
+
 However, arbitrary revisions as version is not a good idea for a library manager instead of a proper version number (see [Semantic Versioning](http://semver.org)). Let us explain how, in an ideal world, we’d prefer people to interact with it:
 
+然而，对于库管理来说，随意修改版本并不是一个好主意，而应该用正确的版本号（参见《[Semantic Versioning](http://semver.org)》）。让我们解释一下，在理想的世界中，我们希望人们如何与它互动：
+
 - “I want to start using CocoaLumberjack, the current version will be fine for now.” So the dev adds a dependency on the lib *without* a version requirement and `pod install`s which will use the latest version:
+- “我想要开始使用CocoaLumberjack，当前版本现在就很好了。”所以开发添加了对这个库的依赖*而没有*带上版本要求，`pod install`将会使用最近的版本：
 
 ```
   pod 'CocoaLumberjack'
@@ -126,7 +158,9 @@ However, arbitrary revisions as version is not a good idea for a library manager
 ```
 
 - Some time into the future, the dev wants to update the dependencies, and to do so runs the install command again, which will now install the version of the lib which is the latest version *at that time*.
+- 在未来的某个时候，开发想要更新依赖，然后再次运行安装命令，这将会安装这个库*在那时*的最新版本。
 - At some point the dev is finished on the client work (or a newer version of the lib changes the API and the changes aren’t needed) so the dev adds a version requirement to the dependency. For instance, consider that the author of the lib follows the semver guidelines, you can somewhat trust that between ‘1.0.7’ and ‘1.1.0’ **no** API changes will be made, but only bug fixes. So instead of requiring a specific version, the dev can specify that *any* ‘1.0.x’ is allowed as long as it’s higher than ‘1.0.7’:
+- 在某个节点，开发完成了客户端工作（或者这个库的新版本修改了API而这个修改不是必须的），那么开发添加版本要求到依赖。举个例子，假如这个库的作者遵照semver指南，你会一定程度认为在‘1.0.7’和‘1.1.0’之间**没有**API做了修改，而只是修正了bug。那么就不需要指定的版本，开发可以指定接受*任意*‘1.0.x’只要它高于‘1.0.7’：
 
 ```
 pod 'CocoaLumberjack', '~> 1.0.7'
@@ -135,36 +169,54 @@ pod 'CocoaLumberjack', '~> 1.0.7'
 
 The point is that developers can easily keep track of newer versions of dependencies, by simply running `pod install` again, which they might otherwise do less if they had to change everything manually. CocoaPods uses a less stringent form of Semantic versioning in that it will not force you to use `X.Y.Z`, you can use `X.Y` versions.
 
-####2.1.2.1 [CocoaPods Versioning Specifics](https://guides.cocoapods.org/making/#cocoapods-versioning-specifics)
+开发者可以简单的保持对依赖的新版本的跟踪，只需要再次运行`pod install`，这将能够比他们手动修改每一件事情做更少的工作。CocoaPods使用Semantic版本的不严格形式，在这里不强制你使用`X.Y.Z`，你也可以使用`x.y`版本。
+
+####2.1.2.1 [CocoaPods Versioning Specifics](https://guides.cocoapods.org/making/#cocoapods-versioning-specifics) CocoaPods版本详情
 
 CocoaPods uses RubyGems versions for specifying pod spec versions. The [RubyGems Versioning Policies](http://guides.rubygems.org/patterns/#semantic-versioning) describes the rules used for interpreting version numbers. The [RubyGems version specifiers](http://guides.rubygems.org/patterns/#declaring-dependencies) describes exactly how to use the comparison operators that specify dependency versions.
 
+CocoaPods使用RubyGems版本说明pod详情版本。《[RubyGems Versioning Policies](http://guides.rubygems.org/patterns/#semantic-versioning)》描述了用于解释版本号的规则。《[RubyGems version specifiers](http://guides.rubygems.org/patterns/#declaring-dependencies)》确切的描述了如何使用具体依赖版本的比较器。
+
 Following the pattern established in RubyGems, pre-release versions can also be specified in CocoaPods. A pre-release of version 1.2, for example, can be specified by `1.2-beta3`. In this example, the dependency specifier `~> 1.2-beta` will match `1.2-beta3`.
+
+按照RubyGems建立的模式，在CocoaPods中也可以指定预发布版本。例如，版本1.2的预发布版本可能是`1.2-beta3`。在这个例子中，依赖分类符`~> 1.2-beta`将会匹配到`1.2-beta3`。
 
 There's a great video from Google about how this works: ["CocoaPods and the Case of the Squiggly Arrow (Route 85)"](https://www.youtube.com/watch?v=x4ARXyovvPc).
 
-###2.1.3 [Documenting a Pod](https://guides.cocoapods.org/making/#documenting-a-pod)
+这里有个谷歌的大视频介绍它是如何工作的：["CocoaPods and the Case of the Squiggly Arrow (Route 85)"](https://www.youtube.com/watch?v=x4ARXyovvPc)。
 
-Right now the best place to get information on documenting your Pods is NSHipster's blog post on [Obj-C](http://nshipster.com/documentation/) and [Swift](http://nshipster.com/swift-documentation/) Documentation. [CocoaDocs](http://github.com/cocoapods/cocoadocs.org) will release an appledoc/jazzy parsed code based on your Podspec's public API roughly 15 minutes after it is pushed. More information on CocoaDocs can be found on the [CocoaDocs developer README](http://cocoadocs.org/readme)
+###2.1.3 [Documenting a Pod](https://guides.cocoapods.org/making/#documenting-a-pod) 给Pod写文档
 
-###2.1.4 [Where can I ask questions?](https://guides.cocoapods.org/making/#where-can-i-ask-questions)
+Right now the best place to get information on documenting your Pods is NSHipster's blog post on [Obj-C](http://nshipster.com/documentation/) and [Swift](http://nshipster.com/swift-documentation/) Documentation. [CocoaDocs](http://github.com/cocoapods/cocoadocs.org) will release an appledoc/jazzy parsed code based on your Podspec's public API roughly 15 minutes after it is pushed. More information on CocoaDocs can be found on the [CocoaDocs developer README](http://cocoadocs.org/readme).
+
+现在给你的Pod写文档以获取信息的最好的地方是NSHipster的博客，以[Obj-C](http://nshipster.com/documentation/)和[Swift](http://nshipster.com/swift-documentation/)文档发布。[CocoaDocs](http://github.com/cocoapods/cocoadocs.org)大致在将其推送15分钟之后，就会发布基于你的Podspec的公共API的appledoc/jazzy语法的代码。关于CocoaDocs的更多信息可以在《[CocoaDocs developer README](http://cocoadocs.org/readme)》中找到。
+
+###2.1.4 [Where can I ask questions?](https://guides.cocoapods.org/making/#where-can-i-ask-questions) 在哪里可以提问？
 
 We have multiple avenues for support, here they are in the order we prefer.
 
+我们支持多个渠道，这里是我们推荐的使用顺序。
+
 - [Stack Overflow](http://stackoverflow.com/search?q=CocoaPods), get yourself some internet points. This keeps the pressure off the CocoaPods dev team and gives us time to work on the project and not support. One of the advantages of using Stack Overflow is that the answer is then easily accessible for others.
 - [CocoaPods Mailing List](http://groups.google.com/group/cocoapods), the mailing list is mainly used for announcements of related projects and occasionally for support.
+- [Stack Overflow](http://stackoverflow.com/search?q=CocoaPods)，自己获得一些网上的观点。这可以减轻CocoaPods开发团队的压力，并给我们时间为工程和其他未支持的地方工作。使用Stack Overflow的另一个好处是，答案在之后可以很容易被其他人访问到。
+- [CocoaPods Mailing List](http://groups.google.com/group/cocoapods)，邮件列表主要用于相关工程的通告，偶尔用于提供支持。
 
-###2.1.5 [External resources](https://guides.cocoapods.org/making/#external-resources)
+###2.1.5 [External resources](https://guides.cocoapods.org/making/#external-resources) 扩展资源
 
-- [Why your podspec is failing](http://codeslingers.co.uk/2014/05/16/why-your-podspec-is-failing/)
+- [Why your podspec is failing](http://codeslingers.co.uk/2014/05/16/why-your-podspec-is-failing/) 为什么你的podspec会失败
 
-##2.2 [Using Pod Lib Create](https://guides.cocoapods.org/making/using-pod-lib-create.html)
+##2.2 [Using Pod Lib Create](https://guides.cocoapods.org/making/using-pod-lib-create.html) 使用Pod Lib创建
 
 The guide for getting a CocoaPod up and running quickly.
 
-###2.2.1 Getting started
+本指导用于快速建立一个CocoaPod并运行。
+
+###2.2.1 Getting started 开始
 
 We're going to through the creation of an entire pod using `pod lib create` to bootstrap the process. So let's start with the initial command:
+
+我们使用`pod lib create`引导该过程贯穿整个pod的创建。那么我们将从这个初始命令开始：
 
 ```
 pod lib create MyLibrary
@@ -172,25 +224,40 @@ pod lib create MyLibrary
 ```
 
 > Note: To use your own [pod-template](https://github.com/cocoapods/pod-template) you can add the parameter `--template-url=URL` where URL is the git repo containing a compatible template.
+> 
+> 注意：要使用你自己的[pod-template](https://github.com/cocoapods/pod-template)，你可以添加参数`--template-url=URL`，URL就是包含一个兼容模板的git repo。
+> 
 > Second Note: you can press return to select the default (underlined) option.
+> 
+> 第二个注意：你可以按下返回以选择默认（下划线的）设置。
 
-###2.2.2 [Objective-C or Swift](https://guides.cocoapods.org/making/#objective-c-or-swift)
+###2.2.2 [Objective-C or Swift](https://guides.cocoapods.org/making/#objective-c-or-swift) Objective-C还是Swift
 
 The first question you're asked is what language you want to build a pod in. For both choices CocoaPods will set up your library as a framework.
 
-###2.2.3 [Making a Demo Application](https://guides.cocoapods.org/making/#making-a-demo-application)
+第一个问题是你想要使用哪种语言建立一个pod。对于任何一个选择CocoaPods都会把你的库设置成一个框架。
+
+###2.2.3 [Making a Demo Application](https://guides.cocoapods.org/making/#making-a-demo-application) 制作一个Demo程序
 
 The template will generate an Xcode project for your library. This means you don't have to go through creating a new project in Xcode.
 
+模板会为你的库生成一个Xcode工程。这意味着你不需要完成在Xcode中创建新工程的整个过程。
+
 If you want to have an example project for `pod try MyLib` or need to have your library's tests run inside an application ( interaction tests, custom fonts, etc ) then you should say yes. A good metric is *"Should this Pod include a screenshot?"*; if so, then you should have a demo.
 
-###2.2.4 [Choosing a Test Framework](https://guides.cocoapods.org/making/#choosing-a-test-framework)
+如果你想要有一个为`pod try MyLib`提供的示例工程或者需要让你的库测试在程序内部运行（交互测试，自定义字体，等等），然后你可能说是的。*"这个Pod是否包含屏幕截图？"*是一个很好的衡量标准；如果这样，那么你应该有一个demo。
+
+###2.2.4 [Choosing a Test Framework](https://guides.cocoapods.org/making/#choosing-a-test-framework) 选择一个测试框架
 
 You should be testing your library. Testing ensures stability for people using your library. In open source libraries this means people can make changes knowing that they haven't broken implicit expectations. We recommend using a testing framework rather than relying on Apple's XCTest but that is included. In Objective-C we include a choice of two popular testing frameworks; Specta/Expecta and Kiwi. If you can't decide, use Specta/Expecta.
+
+你应该要测试你的库。测试确保人们能稳定使用你的库。在开源库中，这意味着人们能在做出修改时知道他们没有打破隐含的预期。我们推荐使用测试框架而不是依赖苹果的XCTest，但这也是包含的。在Objective-C，我们推荐两个常用测试框架供选择；Specta/Expecta和Kiwi。如果你无法决定，那就使用Specta/Expecta吧。
 
 ####2.2.4.1 Specta/Expecta
 
 A light-weight TDD / BDD framework for Objective-C & Cocoa.
+
+一个为Objective-C和Cocoa提供的轻量级TDD/BDD框架。
 
 > [GitHub repo](https://github.com/specta/specta)
 
@@ -198,23 +265,35 @@ A light-weight TDD / BDD framework for Objective-C & Cocoa.
 
 Kiwi is a Behaviour Driven Development library for iOS development. The goal is to provide a BDD library that is exquisitely simple to setup and use.
 
+Kiwi是是一个为iOS开发提供的行为驱动开发（BDD）库。其目标是提供一个极度简易安装和使用的BDD库。
+
 > [GitHub repo](https://github.com/kiwi-bdd/Kiwi)
 
 The major differences is that Kiwi is an all-in-one approach to Stubs/Mocks/Expectations whereas Specta/Expecta is a modular approach through different Podspecs. We include all the necessary includes and setup for your testing framework in `MyLib-Tests.pch` so that you don't have to include them in each file.
 
+二者的主要区别是，Kiwi为Stubs、Mocks、Expectations提供了一体化方法，而Specta/Expecta通过不同的Podspecs提供模块化方法。我们在`MyLib-Tests.pch`中为你的测试框架包含了所有必要的包含和设置，这样你就不用再每一个文件中包含它们。
+
 In Swift we only offer the choice of [Quick/Nimble](https://github.com/Quick/Quick) as this looks to be the dominant testing library.
 
-###2.2.5 [View-based Testing](https://guides.cocoapods.org/making/#view-based-testing)
+在Swift中我们只提供一个选择[Quick/Nimble](https://github.com/Quick/Quick)，因为它看起来是最好的测试库。
+
+###2.2.5 [View-based Testing](https://guides.cocoapods.org/making/#view-based-testing) 基于视图的测试
 
 Depending on what library you are building you may find Snapshot based testing to be a smart way to verify the results of [different](https://github.com/neilang/NAMapKit/blob/master/Demo/DemoTests/NAInteractiveDemoViewControllerTests.m) [actions](https://github.com/orta/ORStackView/blob/master/ORStackViewExampleTests/ORFourthViewControllerTests.m) [on](https://github.com/liaojinxing/StarRatingView/blob/599390e258b44e8efe2121356bac5d74494086f9/StarRatingViewTests/StarRatingViewTests.m) [your](https://github.com/AshFurrow/ARCollectionViewMasonryLayout/blob/58f2b987756bd1d1b710a74c51aa48204006fc99/IntegrationTests/ARCollectionViewMasonryLayoutTests.m) [views](https://github.com/yujinakayama/NAKPlaybackIndicatorView/blob/b81c29b399e109c56024eefdffd89dfd606d662c/Tests/SnapshotTests.m). We recommend using [FBSnapShotTestCase](https://github.com/facebook/ios-snapshot-test-case), if you are using Specta/Expecta then we [include a Pod](https://github.com/dblock/ios-snapshot-test-case-expecta) to improve the syntax.
 
-###2.2.6 [Prefixes for Objective-C](https://guides.cocoapods.org/making/#prefixes-for-objective-c)
+取决于你构建什么库，你可能发现基于Snapshot的测试是一个聪明的方法验证你的视图上的不同操作。我们推荐使用[FBSnapShotTestCase](https://github.com/facebook/ios-snapshot-test-case)，如果你使用Specta/Expecta然后我们[包含一个Pod](https://github.com/dblock/ios-snapshot-test-case-expecta)以改善该语法。
+
+###2.2.6 [Prefixes for Objective-C](https://guides.cocoapods.org/making/#prefixes-for-objective-c) Objective-C前缀
 
 To wrap up an Objective-C project we want to know your class prefix. This means that we can make all the classes generated by CocoaPods fit in with your style, also all classes generated from inside Xcode will start with your prefix. We know that Apple is deprecating prefixes, but in reality they still have their place in Objective-C codebases.
 
-###2.2.7 [The Pod Lib Create Template](https://guides.cocoapods.org/making/#the-pod-lib-create-template)
+要圆满完成一个Objective-C工程，我们想要知道你的类前缀。这意味着我们可以让所有由CocoaPods生成的类都适应你的风格，并且所有在Xcode中生成的类都以你的前缀开头。我们知道Apple反对前缀，但是实际上在Objective-C代码库中仍然有它们的位置。
+
+###2.2.7 [The Pod Lib Create Template](https://guides.cocoapods.org/making/#the-pod-lib-create-template) Pod库创建模板
 
 With the questions over, we run `pod install` on the newly created Project. Let's look at the results:
+
+随着问题发展，我们在新创建的工程中运行`pod install`。让我们看看结果： 
 
 ```
 $ tree MyLib -L 2
@@ -242,21 +321,35 @@ $ tree MyLib -L 2
 
 We've tried to keep the amount in the root folder minimised, You will see the following files:
 
+我们试图尽量减少根文件夹中的文件数量，我们将看到下面的文件：
+
 - `.travis.yml` - a setup file for [travis-ci](https://travis-ci.org/).
 - `_Pods.xcproject` - a symlink to your Pod's project for Carthage support
 - `LICENSE` - defaulting to the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
 - `MyLib.podspec` - the Podspec for your Library.
 - `README.md` - a default README in markdown.
 - `RemoveMe.swift/m` - a single file to to ensure compilation works initially.
+- `.travis.yml` - 一个[travis-ci](https://travis-ci.org/)的配置文件。
+- `_Pods.xcproject` - 给你的Pod工程提供Carthage支持的符号链接
+- `LICENSE` - 默认的[MIT许可](http://en.wikipedia.org/wiki/MIT_License).
+- `MyLib.podspec` - 你的库的Podspec
+- `README.md` - 用Markdown写的默认README
+- `RemoveMe.swift/m` - 起初确保编译工作的单一文件
 
 and the following folders:
 
+以及下面的文件夹：
+
 - `Pod` - This is where you place your library's classes
 - `Example` - This is the generated Demo & Testing bundle
+- `Pod` - 放置你的库的类的地方
+- `Example` - 生成的Demo和Testing包
 
-###2.2.8 [Putting your Library Together](https://guides.cocoapods.org/making/#putting-your-library-together)
+###2.2.8 [Putting your Library Together](https://guides.cocoapods.org/making/#putting-your-library-together) 把你的库放到一起
 
 CocoaPods will open your Xcode project straight away; from there you can edit all of the files generated by CocoaPods. Let's look at an expanded version of Xcode:
+
+CocoaPods将直接打开你的Xcode工程；在那里你可以编辑所有由CocoaPods生成的文件。让我们在Xcode的扩展版本中查看：
 
 [![img](https://guides.cocoapods.org/assets/images/pod_lib_create/xcode.png)](https://guides.cocoapods.org/assets/images/pod_lib_create/xcode.png)
 
@@ -266,27 +359,49 @@ CocoaPods will open your Xcode project straight away; from there you can edit al
 4. This is the Development Pods section, and actually where you can work on your library. See below for more information.
 5. Finally the Pods used in setting up the project.
 
+>
+
+1. 你可以编辑你的Podspec元数据，这让你修改你的README和Podspec。
+2. 这是Demo库，如果你没有勾选就不会有。
+3. 这是你更早些时候选择的为框架做spec测试的遗留。
+4. 这是Development Pod部分，你实际为你的库工作的地方。下面有更多介绍。
+5. 最后是用于建立这个工程的Pod。
+
 It's worth mentioning here, as this catches people quite often, a Swift library needs to have its classes declared as `public` for you to see them in your example library.
 
-####2.2.8.1 Development Pods
+这里值得注意的是，由于这经常困住人们，Swift库需要将它的类声明为`public`，以便你可以在你的示例库中看到它们。
+
+####2.2.8.1 Development Pods 开发Pods
 
 Development Pods are different from normal CocoaPods in that they are symlinked files, so making edits to them will change the original files, so you can work on your library from inside Xcode. Your demo & tests will need to include references to headers using the `#import <MyLib/XYZ.h>`format.
 
-> `[!] Note:` Due to a Development Pods implementation detail, when you add new/existing files to `Pod/Classes` or `Pod/Assets` or update your podspec, you should run `pod install` or `pod update`.
+Development Pod与正常CocoaPods不同，它们是已经符号链接的文件，因此编辑它们会修改原始的文件，那么你就可以从Xcode内部在你的库上工作。你的demo和测试将需要使用`#import <MyLib/XYZ.h>`格式包含头文件的引用。
 
-###2.2.9 [Adding Travis CI](https://guides.cocoapods.org/making/#adding-travis-ci)
+> `[!] Note:` Due to a Development Pods implementation detail, when you add new/existing files to `Pod/Classes` or `Pod/Assets` or update your podspec, you should run `pod install` or `pod update`.
+> 
+> `[!] 注意：`由于Development Pod的实现细节，当你添加新的/已存在的文件到`Pod/Classes`或`Pod/Assets`或更新你的podspec，你都应该运行`pod instrall`或`pod update`。
+
+###2.2.9 [Adding Travis CI](https://guides.cocoapods.org/making/#adding-travis-ci) 添加Travis CI
 
 The template includes a `.travis.yml` file that will run the default tests included in the project. If you have an open source repo on GitHub, open [your profile](https://travis-ci.org/profile/) on Travis CI and turn the library on.
 
+模板包含一个`.travis.yml`文件，这将运行包含在工程中的默认测试。如果你在GitHub上有一个开源repo，在Travis CI中打开[your profile](https://travis-ci.org/profile/)并开启库。
+
 ![/assets/images/pod_lib_create/travis-ci.png](https://guides.cocoapods.org/assets/images/pod_lib_create/travis-ci.png)
 
-###2.2.10 [Deploying your Library](https://guides.cocoapods.org/making/#deploying-your-library)
+###2.2.10 [Deploying your Library](https://guides.cocoapods.org/making/#deploying-your-library) 部署你的库
 
 So you've got your library ready to go. First you should check if the Podspec lints correctly, as you can't deploy with errors. This can be done with two methods, `pod lib lint` and `pod spec lint`. The difference between them is that `pod lib lint` does not access the network, whereas `pod spec lint` checks the external repo and associated tag.
 
+那么你已经准备好了你的库将进行下一步。首先你要检查Podspec拉取是否正确，因为你不能带着错误部署。这可以用两个方法来做，`pod lib lint`和`pod spec lint`。二者不同在于`pod lib lint`不会访问网络，而`pod spec lint`会检查额外的repo和相关联的标签。
+
 If you're deploying an Open Source library to [trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk), you cannot have CocoaPods warnings. You can have Xcode warnings though. You should continue to the [getting started with trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk) guide to deploy to the public.
 
+如果你正发布一个开源库到[主干](https://guides.cocoapods.org/making/getting-setup-with-trunk)，你不能有CocoaPods警告。尽管你可以由Xcode警告。你可以继续到《[getting started with trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk)》学习发布到公共空间的指南。
+
 If you're deploying to a private Specs repo, you will need to have already added that repo. See the guides on [Private Specs Repos](https://guides.cocoapods.org/making/private-cocoapods) to set that up. If you are deploying to an existing Private Repo, use this command to deploy:
+
+如果你正发布一个私有Spec仓库，你需要已经添加这个仓库。参见《[Private Specs Repos](https://guides.cocoapods.org/making/private-cocoapods)》指南设置它。如果你正发布一个已存在的私有仓库，使用这个命令发布即可：
 
 ```
 pod repo push SPEC_REPO *.podspec --verbose
