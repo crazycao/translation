@@ -133,23 +133,39 @@ Before you add your tasks to a queue, you have to decide what type of queue to u
 
 A concurrent dispatch queue is useful when you have multiple tasks that can run in parallel. A concurrent queue is still a queue in that it dequeues tasks in a first-in, first-out order; however, a concurrent queue may dequeue additional tasks before any previous tasks finish. The actual number of tasks executed by a concurrent queue at any given moment is variable and can change dynamically as conditions in your application change. Many factors affect the number of tasks executed by the concurrent queues, including the number of available cores, the amount of work being done by other processes, and the number and priority of tasks in other serial dispatch queues. 
 
+当你有可以平行运行的多个任务时，并发调度队列是非常有用的。并发队列仍然是一个队列，在这个队列中它仍按照先进先出的顺序让任务出列；但是，并发队列可能在前一个任务完成之前让另一个任务出列。在任意给定时刻一个并发队列执行的实际任务数是可变的，并且会随着你的应用程序的条件变化而动态变化。许多因素影响着并发队列执行的任务数，包括可用的内核个数，其他进程正在做的工作的量，以及其他串行调度队列中任务的数量和优先级。
+
 The system provides each application with four concurrent dispatch queues. These queues are global to the application and are differentiated only by their priority level. Because they are global, you do not create them explicitly. Instead, you ask for one of the queues using the `dispatch_get_global_queue` function, as shown in the following example:
+
+系统给每个程序提供了4个并发调度队列。这些队列对于程序是全局的并且只通过它们的优先级来区分。由于它们是全局的，你不用明确的创建它们。相反，你使用`dispatch_get_global_queue`函数请求其中一个队列，如下面的例子中展示的：
 
 	dispatch_queue_t aQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
 In addition to getting the default concurrent queue, you can also get queues with high- and low-priority levels by passing in the `DISPATCH_QUEUE_PRIORITY_HIGH` and `DISPATCH_QUEUE_PRIORITY_LOW` constants to the function instead, or get a background queue by passing the `DISPATCH_QUEUE_PRIORITY_BACKGROUND` constant. As you might expect, tasks in the high-priority concurrent queue execute before those in the default and low-priority queues. Similarly, tasks in the default queue execute before those in the low-priority queue.
 
+除了获取默认的并发队列，你也可以通过传入`DISPATCH_QUEUE_PRIORITY_HIGH`和`DISPATCH_QUEUE_PRIORITY_LOW`到该函数来获取高和低优先级的队列，或者传入`DISPATCH_QUEUE_PRIORITY_BACKGROUND`常量获得后台队列。正如你可能期望的，在高优先级并发队列中的任务会比在默认和低优先级队列中的任务先执行。类似的，在默认队列中的任务会比在低优先级中的任务先执行。
+
 >**Note:** The second argument to the `dispatch_get_global_queue` function is reserved for future expansion. For now, you should always pass `0` for this argument.
+>
+>**注意：**`dispatch_get_global_queue`函数的第二个参数是为以后扩展准备的。现在，你应该给这个参数传`0`就好。
 
 Although dispatch queues are reference-counted objects, you do not need to retain and release the global concurrent queues. Because they are global to your application, retain and release calls for these queues are ignored. Therefore, you do not need to store references to these queues. You can just call the `dispatch_get_global_queue` function whenever you need a reference to one of them.
 
-###3.4.2 Creating Serial Dispatch Queues
+虽然调度队列是有引用计数的对象，你不需要保持或释放全局并发队列。因为它们对你的程序时全局的，对这些队列的保持或释放调用可以忽略。所以，你不需要保存这些队列的引用。你都可以只是在任何需要引用其中一个时调用`dispatch_get_global_queue`函数。
+
+###3.4.2 Creating Serial Dispatch Queues 创建串行调度队列
 
 Serial queues are useful when you want your tasks to execute in a specific order. A serial queue executes only one task at a time and always pulls tasks from the head of the queue. You might use a serial queue instead of a lock to protect a shared resource or mutable data structure. Unlike a lock, a serial queue ensures that tasks are executed in a predictable order. And as long as you submit your tasks to a serial queue asynchronously, the queue can never deadlock.
 
+当你想要你的任务以特定顺序执行时，串行队列是非常有用的。串行队列一次只执行一个任务，并且总是从队列的头部拉取任务。你可能使用串行队列取代保护共享资源或可变数据结构的锁。与锁不同，串行队列确保任务以可预料的顺序执行。并且只要你异步提交任务到串行队列，该队列永远不会死锁。
+
 Unlike concurrent queues, which are created for you, you must explicitly create and manage any serial queues you want to use. You can create any number of serial queues for your application but should avoid creating large numbers of serial queues solely as a means to execute as many tasks simultaneously as you can. If you want to execute large numbers of tasks concurrently, submit them to one of the global concurrent queues. When creating serial queues, try to identify a purpose for each queue, such as protecting a resource or synchronizing some key behavior of your application.
 
+不像已经为你创建好的并发队列，你必须明确的创建和管理你想要使用的任何串行队列。你可以为你的程序创建任意个数的串行队列，但是应该避免单独创建大量串行队列来作为同时执行尽可能多的任务的手段。如果你想要并发的执行大量任务，把它们提交到全局并发队列就行。当创建串行队列时，尝试给每个队列确定一个目的，比如保护某个资源或者同步程序的一些关键行为。
+
 Listing 3-2 shows the steps required to create a custom serial queue. The `dispatch_queue_create` function takes two parameters: the queue name and a set of queue attributes. The debugger and performance tools display the queue name to help you track how your tasks are being executed. The queue attributes are reserved for future use and should be `NULL`. 
+
+表3-2展示了创建一个自定义串行队列需要的步骤。`dispatch_queue_create`方法由两个参数：队列名称和队列属性组合。调试器和性能工具会显示队列名称帮助你跟踪你的任务是如何执行的。队列属性是为未来使用保留的，应该传入`NULL`。
 
 **Listing 3-2**  Creating a new serial queue
 
@@ -158,62 +174,84 @@ Listing 3-2 shows the steps required to create a custom serial queue. The `dispa
 
 In addition to any custom queues you create, the system automatically creates a serial queue and binds it to your application’s main thread. For more information about getting the queue for the main thread, see [Getting Common Queues at Runtime](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW3). 
 
-###3.4.3 Getting Common Queues at Runtime
+除了你创建的任意自定义队列，系统自动的创建了一个串行队列并绑定到你的程序的主线程。关于获取主线程队列的更多信息，参见《[Getting Common Queues at Runtime](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW3)》。
+
+###3.4.3 Getting Common Queues at Runtime 在运行时获取常见队列
 
 Grand Central Dispatch provides functions to let you access several common dispatch queues from your application:
 
-- Use the `dispatch_get_current_queue` function for debugging purposes or to test the identity of the current queue. Calling this function from inside a [block object]() returns the queue to which the block was submitted (and on which it is now presumably running). Calling this function from outside of a block returns the default concurrent queue for your application.
-- Use the `dispatch_get_main_queue` function to get the serial dispatch queue associated with your application’s main thread. This queue is created automatically for Cocoa applications and for applications that either call the `dispatch_main` function or configure a run loop (using either the `CFRunLoopRef` type or an `NSRunLoop` object) on the main thread.
-- Use the `dispatch_get_global_queue` function to get any of the shared concurrent queues. For more information, see [Getting the Global Concurrent Dispatch Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW5). 
+GCD提供了让你从程序中访问几个常见队列的函数：
 
-###3.4.4 Memory Management for Dispatch Queues
+- Use the `dispatch_get_current_queue` function for debugging purposes or to test the identity of the current queue. Calling this function from inside a [block object]() returns the queue to which the block was submitted (and on which it is now presumably running). Calling this function from outside of a block returns the default concurrent queue for your application.
+- 使用`dispatch_get_current_queue`函数进行调试或者测试当前队列的标识。在一个[block对象]()中调用这个函数会返回这个block被提交到了哪一个队列中（并且它当前大概正在该队列中运行）。在一个block外面调用这个队列会返回你的程序的默认并发队列。
+- Use the `dispatch_get_main_queue` function to get the serial dispatch queue associated with your application’s main thread. This queue is created automatically for Cocoa applications and for applications that either call the `dispatch_main` function or configure a run loop (using either the `CFRunLoopRef` type or an `NSRunLoop` object) on the main thread.
+- 使用`dispatch_get_main_queue`函数获取与你的程序的主线程关联的串行调度队列。这个队列自动的为Cocoa程序创建，以及为在主线程调用了`dispatch_main`函数或者配置了一个run loop（使用`CFRunLoopRef`类型或`NSRunLoop`对象）的程序创建。
+- Use the `dispatch_get_global_queue` function to get any of the shared concurrent queues. For more information, see [Getting the Global Concurrent Dispatch Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW5). 
+- 使用`dispatch_get_global_queue`函数获取任意共享并发队列。更多信息参见《[Getting the Global Concurrent Dispatch Queues](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW5)》。
+
+###3.4.4 Memory Management for Dispatch Queues 调度队列的内存管理
 
 Dispatch queues and other dispatch objects are reference-counted data types. When you create a serial dispatch queue, it has an initial reference count of 1. You can use the `dispatch_retain` and `dispatch_release` functions to increment and decrement that reference count as needed. When the reference count of a queue reaches zero, the system asynchronously deallocates the queue. 
 
+调度队列及其他调度对象都是有引用计数的数据类型。当你创建一个串行调度队列时，它就有了初始引用计数 1。你可以使用`dispatch_retain`和`dispatch_release`函数按需增加或减少该引用计数。当一个队列的引用计数到了 0，系统会异步的销毁这个队列。
+
 It is important to retain and release dispatch objects, such as queues, to ensure that they remain in memory while they are being used. As with [memory-managed]() Cocoa objects, the general rule is that if you plan to use a queue that was passed to your code, you should retain the queue before you use it and release it when you no longer need it. This basic pattern ensures that the queue remains in memory for as long as you are using it. 
+
+保持和释放调度对象，如队列，是非常重要的，可以确保当使用它们时它们仍然在内存中。正如带[有内存管理的]()Cocoa对象一样，一般的规则是如果你要使用一个传到你的代码中的队列，你应该在打算使用它之前保持它，并且当你不在需要它的时候释放它。这个基本模式确保队列在你使用过程中一直保持在内存中。
 
 **Note:** You do not need to retain or release any of the global dispatch queues, including the concurrent dispatch queues or the main dispatch queue. Any attempts to retain or release the queues are ignored.
 
+**注意：**你不需要保持或释放任何全局调度队列，包括并发调度队列或主调度队列。任何对这些队列进行保持或释放的尝试都会被忽略。
+
 Even if you implement a garbage-collected application, you must still retain and release your dispatch queues and other dispatch objects. Grand Central Dispatch does not support the garbage collection model for reclaiming memory.
 
-###3.4.5 Storing Custom Context Information with a Queue
+即使你实现一个有垃圾回收的程序，你仍必须保持和释放你的调度队列和其他调度对象。GCD不支持垃圾收集模型来回收内存。
+
+###3.4.5 Storing Custom Context Information with a Queue 使用队列储存自定义上下文信息
 
 All dispatch objects (including dispatch queues) allow you to associate custom context data with the object. To set and get this data on a given object, you use the `dispatch_set_context` and `dispatch_get_context` functions. The system does not use your custom data in any way, and it is up to you to both allocate and deallocate the data at the appropriate times.
 
+所有调度对象（包括调度队列）允许你用对象关联自定义上下文数据。要在一个给定的对象上设置和获取这个数据，可以使用`dispatch_set_context`和`dispatch_get_context`函数。系统不会以任何方式使用你的自定义数据，并且需要靠你在适当的时候分配和销毁改数据。
+
 For queues, you can use context data to store a pointer to an Objective-C object or other data structure that helps identify the queue or its intended usage to your code. You can use the queue’s finalizer function to deallocate (or disassociate) your context data from the queue before it is deallocated. An example of how to write a finalizer function that clears a queue’s context data is shown in [Listing 3-3](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW8). 
 
-###3.4.6 Providing a Clean Up Function For a Queue
+对于队列，你可以使用上下文数据存储Objective-C对象的指针或者为帮助你的代码标识队列或它的计划用途的其他数据结构。你可以使用队列的终结函数在队列被销毁前销毁（或取消关联）你的上下文数据。如何写一个清理队列上下文数据的终结函数的列子展示在[表3-3](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/#//apple_ref/doc/uid/TP40008091-CH102-SW8)中。
+
+###3.4.6 Providing a Clean Up Function For a Queue 为队列提供一个清理函数
 
 After you create a serial dispatch queue, you can attach a finalizer function to perform any custom clean up when the queue is deallocated. Dispatch queues are reference counted objects and you can use the `dispatch_set_finalizer_f` function to specify a function to be executed when the reference count of your queue reaches zero. You use this function to clean up the context data associated with a queue and the function is called only if the context pointer is not `NULL`.
 
+在你创建一个串行调度队列之后，你可以添加一个终结函数，在队列被销毁时执行任何自定义清理。调度队列是引用计数对象，你可以是使用`dispatch_set_finalizer_f`函数指定一个当队列的引用计数到达0时执行的函数。你使用这个函数清理关联到队列的上下文对象，并且这个函数只在上下文指针不是`NULL`时调用。
+
 Listing 3-3 shows a custom finalizer function and a function that creates a queue and installs that finalizer. The queue uses the finalizer function to release the data stored in the queue’s context pointer. (The `myInitializeDataContextFunction` and `myCleanUpDataContextFunction` functions referenced from the code are custom functions that you would provide to initialize and clean up the contents of the data structure itself.) The context pointer passed to the finalizer function contains the data object associated with the queue.
 
-**Listing 3-3**  Installing a queue clean up function
+表3-3展示了自定义终结函数和创建队列并安装该终结者的函数。队列使用终结函数释放储存在队列的上下文指针中的数据。（代码中引用的`myInitializeDataContextFunction`和`myCleanUpDataContextFunction`函数是你需要提供用来初始化和清理数据结构的内容的自定义函数。）传给终结函数的上下文指针包括了关联到队列的数据对象。
 
-| `void myFinalizerFunction(void *context)` |
-| ---------------------------------------- |
-| `{`                                      |
-| `    MyDataContext* theData = (MyDataContext*)context;` |
-| ` `                                      |
-| `    // Clean up the contents of the structure` |
-| `    myCleanUpDataContextFunction(theData);` |
-| ` `                                      |
-| `    // Now release the structure itself.` |
-| `    free(theData);`                     |
-| `}`                                      |
-| ` `                                      |
-| `dispatch_queue_t createMyQueue()`       |
-| `{`                                      |
-| `    MyDataContext*  data = (MyDataContext*) malloc(sizeof(MyDataContext));` |
-| `    myInitializeDataContextFunction(data);` |
-| ` `                                      |
-| `    // Create the queue and set the context data.` |
-| `    dispatch_queue_t serialQueue = dispatch_queue_create("com.example.CriticalTaskQueue", NULL);` |
-| `    dispatch_set_context(serialQueue, data);` |
-| `    dispatch_set_finalizer_f(serialQueue, &myFinalizerFunction);` |
-| ` `                                      |
-| `    return serialQueue;`                |
-| `}`                                      |
+**Listing 3-3**  Installing a queue clean up function 安装一个队列清理函数
+
+	void myFinalizerFunction(void *context)
+	{
+	    MyDataContext* theData = (MyDataContext*)context;
+	 
+	    // Clean up the contents of the structure
+	    myCleanUpDataContextFunction(theData);
+	 
+	    // Now release the structure itself.
+	    free(theData);
+	}
+	 
+	dispatch_queue_t createMyQueue()
+	{
+	    MyDataContext*  data = (MyDataContext*) malloc(sizeof(MyDataContext));
+	    myInitializeDataContextFunction(data);
+	 
+	    // Create the queue and set the context data.
+	    dispatch_queue_t serialQueue = dispatch_queue_create("com.example.CriticalTaskQueue", NULL);
+	    dispatch_set_context(serialQueue, data);
+	    dispatch_set_finalizer_f(serialQueue, &myFinalizerFunction);
+	 
+	    return serialQueue;
+	}
 
 ##3.5 Adding Tasks to a Queue
 
@@ -225,24 +263,23 @@ There are two ways to add a task to a queue: asynchronously or synchronously. Wh
 
 Although you should add tasks asynchronously whenever possible, there may still be times when you need to add a task synchronously to prevent race conditions or other synchronization errors. In these instances, you can use the `dispatch_sync` and `dispatch_sync_f` functions to add the task to the queue. These functions block the current thread of execution until the specified task finishes executing. 
 
-**Important:** You should never call the `dispatch_sync` or `dispatch_sync_f` function from a task that is executing in the same queue that you are planning to pass to the function. This is particularly important for serial queues, which are guaranteed to deadlock, but should also be avoided for concurrent queues. 
+>**Important:** You should never call the `dispatch_sync` or `dispatch_sync_f` function from a task that is executing in the same queue that you are planning to pass to the function. This is particularly important for serial queues, which are guaranteed to deadlock, but should also be avoided for concurrent queues. 
 
 The following example shows how to use the block-based variants for dispatching tasks asynchronously and synchronously: 
 
-| `dispatch_queue_t myCustomQueue;`        |
-| ---------------------------------------- |
-| `myCustomQueue = dispatch_queue_create("com.example.MyCustomQueue", NULL);` |
-| ` `                                      |
-| `dispatch_async(myCustomQueue, ^{`       |
-| `    printf("Do some work here.\n");`    |
-| `});`                                    |
-| ` `                                      |
-| `printf("The first block may or may not have run.\n");` |
-| ` `                                      |
-| `dispatch_sync(myCustomQueue, ^{`        |
-| `    printf("Do some more work here.\n");` |
-| `});`                                    |
-| `printf("Both blocks have completed.\n");` |
+	dispatch_queue_t myCustomQueue;
+	myCustomQueue = dispatch_queue_create("com.example.MyCustomQueue", NULL);
+	 
+	dispatch_async(myCustomQueue, ^{
+	    printf("Do some work here.\n");
+	});
+	 
+	printf("The first block may or may not have run.\n");
+	 
+	dispatch_sync(myCustomQueue, ^{
+	    printf("Do some more work here.\n");
+	});
+	printf("Both blocks have completed.\n");
 
 ###3.5.2 Performing a Completion Block When a Task Is Done
 
@@ -254,51 +291,48 @@ Listing 3-4 shows an averaging function implemented using [blocks](). The last t
 
 **Listing 3-4**  Executing a completion callback after a task
 
-| `void average_async(int *data, size_t len,` |
-| ---------------------------------------- |
-| `   dispatch_queue_t queue, void (^block)(int))` |
-| `{`                                      |
-| `   // Retain the queue provided by the user to make` |
-| `   // sure it does not disappear before the completion` |
-| `   // block can be called.`             |
-| `   dispatch_retain(queue);`             |
-| ` `                                      |
-| `   // Do the work on the default concurrent queue and then` |
-| `   // call the user-provided block with the results.` |
-| `   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{` |
-| `      int avg = average(data, len);`    |
-| `      dispatch_async(queue, ^{ block(avg);});` |
-| ` `                                      |
-| `      // Release the user-provided queue when done` |
-| `      dispatch_release(queue);`         |
-| `   });`                                 |
-| `}`                                      |
+	void average_async(int *data, size_t len,
+	   dispatch_queue_t queue, void (^block)(int))
+	{
+	   // Retain the queue provided by the user to make
+	   // sure it does not disappear before the completion
+	   // block can be called.
+	   dispatch_retain(queue);
+	 
+	   // Do the work on the default concurrent queue and then
+	   // call the user-provided block with the results.
+	   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+	      int avg = average(data, len);
+	      dispatch_async(queue, ^{ block(avg);});
+	 
+	      // Release the user-provided queue when done
+	      dispatch_release(queue);
+	   });
+	}
 
 ###3.5.3 Performing Loop Iterations Concurrently
 
 One place where concurrent dispatch queues might improve performance is in places where you have a loop that performs a fixed number of iterations. For example, suppose you have a `for` loop that does some work through each loop iteration: 
 
-| `for (i = 0; i < count; i++) {` |
-| ------------------------------- |
-| `   printf("%u\n",i);`          |
-| `}`                             |
+	for (i = 0; i < count; i++) {
+	   printf("%u\n",i);
+	}
 
 If the work performed during each iteration is distinct from the work performed during all other iterations, and the order in which each successive loop finishes is unimportant, you can replace the loop with a call to the `dispatch_apply` or `dispatch_apply_f` function. These functions submit the specified [block]() or function to a queue once for each loop iteration. When dispatched to a concurrent queue, it is therefore possible to perform multiple loop iterations at the same time. 
 
 You can specify either a serial queue or a concurrent queue when calling `dispatch_apply` or `dispatch_apply_f`. Passing in a concurrent queue allows you to perform multiple loop iterations simultaneously and is the most common way to use these functions. Although using a serial queue is permissible and does the right thing for your code, using such a queue has no real performance advantages over leaving the loop in place. 
 
-**Important:** Like a regular `for` loop, the `dispatch_apply` and `dispatch_apply_f` functions do not return until all loop iterations are complete. You should therefore be careful when calling them from code that is already executing from the context of a queue. If the queue you pass as a parameter to the function is a serial queue and is the same one executing the current code, calling these functions will deadlock the queue. Because they effectively block the current thread, you should also be careful when calling these functions from your main thread, where they could prevent your event handling loop from responding to events in a timely manner. If your loop code requires a noticeable amount of processing time, you might want to call these functions from a different thread.
+>**Important:** Like a regular `for` loop, the `dispatch_apply` and `dispatch_apply_f` functions do not return until all loop iterations are complete. You should therefore be careful when calling them from code that is already executing from the context of a queue. If the queue you pass as a parameter to the function is a serial queue and is the same one executing the current code, calling these functions will deadlock the queue. Because they effectively block the current thread, you should also be careful when calling these functions from your main thread, where they could prevent your event handling loop from responding to events in a timely manner. If your loop code requires a noticeable amount of processing time, you might want to call these functions from a different thread.
 
 Listing 3-5 shows how to replace the preceding `for` loop with the `dispatch_apply` syntax. The block you pass in to the `dispatch_apply` function must contain a single parameter that identifies the current loop iteration. When the block is executed, the value of this parameter is `0` for the first iteration, `1` for the second, and so on. The value of the parameter for the last iteration is `count - 1`, where `count` is the total number of iterations. 
 
 **Listing 3-5**  Performing the iterations of a `for` loop concurrently
 
-| `dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);` |
-| ---------------------------------------- |
-| ` `                                      |
-| `dispatch_apply(count, queue, ^(size_t i) {` |
-| `   printf("%u\n",i);`                   |
-| `});`                                    |
+	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	 
+	dispatch_apply(count, queue, ^(size_t i) {
+	   printf("%u\n",i);
+	});
 
 You should make sure that your task code does a reasonable amount of work through each iteration. As with any block or function you dispatch to a queue, there is overhead to scheduling that code for execution. If each iteration of your loop performs only a small amount of work, the overhead of scheduling the code may outweigh the performance benefits you might achieve from dispatching it to a queue. If you find this is true during your testing, you can use striding to increase the amount of work performed during each loop iteration. With striding, you group together multiple iterations of your original loop into a single block and reduce the iteration count proportionately. For example, if you perform 100 iterations initially but decide to use a stride of 4, you now perform 4 loop iterations from each block and your iteration count is 25. For an example of how to implement striding, see [Improving on Loop Code](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW2). 
 
@@ -320,7 +354,7 @@ For more information about autorelease pools and Objective-C memory management, 
 
 You can prevent a queue from executing [block objects]() temporarily by suspending it. You suspend a dispatch queue using the `dispatch_suspend`function and resume it using the `dispatch_resume` function. Calling `dispatch_suspend` increments the queue’s suspension reference count, and calling `dispatch_resume` decrements the reference count. While the reference count is greater than zero, the queue remains suspended. Therefore, you must balance all suspend calls with a matching resume call in order to resume processing blocks. 
 
-**Important:** Suspend and resume calls are asynchronous and take effect only between the execution of blocks. Suspending a queue does not cause an already executing block to stop.
+>**Important:** Suspend and resume calls are asynchronous and take effect only between the execution of blocks. Suspending a queue does not cause an already executing block to stop.
 
 ##3.7 Using Dispatch Semaphores to Regulate the Use of Finite Resources
 
@@ -335,17 +369,16 @@ The semantics for using a dispatch semaphore are as follows:
 
 For an example of how these steps work, consider the use of file descriptors on the system. Each application is given a limited number of file descriptors to use. If you have a task that processes large numbers of files, you do not want to open so many files at one time that you run out of file descriptors. Instead, you can use a semaphore to limit the number of file descriptors in use at any one time by your file-processing code. The basic pieces of code you would incorporate into your tasks is as follows: 
 
-| `// Create the semaphore, specifying the initial pool size` |
-| ---------------------------------------- |
-| `dispatch_semaphore_t fd_sema = dispatch_semaphore_create(getdtablesize() / 2);` |
-| ` `                                      |
-| `// Wait for a free file descriptor`     |
-| `dispatch_semaphore_wait(fd_sema, DISPATCH_TIME_FOREVER);` |
-| `fd = open("/etc/services", O_RDONLY);`  |
-| ` `                                      |
-| `// Release the file descriptor when done` |
-| `close(fd);`                             |
-| `dispatch_semaphore_signal(fd_sema);`    |
+	// Create the semaphore, specifying the initial pool size
+	dispatch_semaphore_t fd_sema = dispatch_semaphore_create(getdtablesize() / 2);
+	 
+	// Wait for a free file descriptor
+	dispatch_semaphore_wait(fd_sema, DISPATCH_TIME_FOREVER);
+	fd = open("/etc/services", O_RDONLY);
+	 
+	// Release the file descriptor when done
+	close(fd);
+	dispatch_semaphore_signal(fd_sema);
 
 When you create the semaphore, you specify the number of available resources. This value becomes the initial count variable for the semaphore. Each time you wait on the semaphore, the `dispatch_semaphore_wait` function decrements that count variable by 1. If the resulting value is negative, the function tells the kernel to block your thread. On the other end, the `dispatch_semaphore_signal` function increments the count variable by 1 to indicate that a resource has been freed up. If there are tasks blocked and waiting for a resource, one of them is subsequently unblocked and allowed to do its work. 
 
@@ -357,23 +390,22 @@ Listing 3-6 shows the basic process for setting up a group, dispatching tasks to
 
 **Listing 3-6**  Waiting on asynchronous tasks
 
-| `dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);` |
-| ---------------------------------------- |
-| `dispatch_group_t group = dispatch_group_create();` |
-| ` `                                      |
-| `// Add a task to the group`             |
-| `dispatch_group_async(group, queue, ^{`  |
-| `   // Some asynchronous work`           |
-| `});`                                    |
-| ` `                                      |
-| `// Do some other work while the tasks execute.` |
-| ` `                                      |
-| `// When you cannot make any more forward progress,` |
-| `// wait on the group to block the current thread.` |
-| `dispatch_group_wait(group, DISPATCH_TIME_FOREVER);` |
-| ` `                                      |
-| `// Release the group when it is no longer needed.` |
-| `dispatch_release(group);`               |
+	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	dispatch_group_t group = dispatch_group_create();
+	 
+	// Add a task to the group
+	dispatch_group_async(group, queue, ^{
+	   // Some asynchronous work
+	});
+	 
+	// Do some other work while the tasks execute.
+	 
+	// When you cannot make any more forward progress,
+	// wait on the group to block the current thread.
+	dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+	 
+	// Release the group when it is no longer needed.
+	dispatch_release(group);
 
 ##3.9 Dispatch Queues and Thread Safety
 
