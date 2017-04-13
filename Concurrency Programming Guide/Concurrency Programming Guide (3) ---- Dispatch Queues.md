@@ -253,19 +253,29 @@ Listing 3-3 shows a custom finalizer function and a function that creates a queu
 	    return serialQueue;
 	}
 
-##3.5 Adding Tasks to a Queue
+##3.5 Adding Tasks to a Queue 添加任务到队列
 
 To execute a task, you must dispatch it to an appropriate dispatch queue. You can dispatch tasks synchronously or asynchronously, and you can dispatch them singly or in groups. Once in a queue, the queue becomes responsible for executing your tasks as soon as possible, given its constraints and the existing tasks already in the queue. This section shows you some of the techniques for dispatching tasks to a queue and describes the advantages of each.
 
-###3.5.1 Adding a Single Task to a Queue
+要执行一个任务，你必须将其调度到合适的调度队列。你可以同步或异步的调度任务，你也可以单独或分组的调度它们。一旦在一个队列中，队列会负责根据任务约束和队列中已存在的任务尽可能快的执行你的任务。本节展示了调度任务到队列中的一些技术，并介绍了每一个的优点。
+
+###3.5.1 Adding a Single Task to a Queue 添加单个任务到队列
 
 There are two ways to add a task to a queue: asynchronously or synchronously. When possible, asynchronous execution using the `dispatch_async`and `dispatch_async_f` functions is preferred over the synchronous alternative. When you add a [block object]() or function to a queue, there is no way to know when that code will execute. As a result, adding blocks or functions asynchronously lets you schedule the execution of the code and continue to do other work from the calling thread. This is especially important if you are scheduling the task from your application’s main thread—perhaps in response to some user event.
 
+这里有两个方法添加一个任务到队列：同步或异步。在可能的情况下，优先使用`dispatch_async`和`dispatch_async_f`函数异步执行，而把同步作为备选。当你添加一个[block对象]()或函数到队列，没有办法知道代码将在何时执行。因此，异步添加block或函数让你可以安排好代码的执行并继续在调用线程做其他工作。如果你正在程序的主线程安排任务——可能是响应一些用户事件，这将尤其重要。
+
 Although you should add tasks asynchronously whenever possible, there may still be times when you need to add a task synchronously to prevent race conditions or other synchronization errors. In these instances, you can use the `dispatch_sync` and `dispatch_sync_f` functions to add the task to the queue. These functions block the current thread of execution until the specified task finishes executing. 
 
+尽管你无论何时都应该尽可能异步添加任务，仍然有一些时候需要同步的添加任务以避免竞争条件或其他同步错误。在这些情况下，你可以使用`dispatch_sync`和`dispatch_sync_f`函数添加任务到队列。这些函数会阻塞当前执行的线程，直到指定的任务完成执行。
+
 >**Important:** You should never call the `dispatch_sync` or `dispatch_sync_f` function from a task that is executing in the same queue that you are planning to pass to the function. This is particularly important for serial queues, which are guaranteed to deadlock, but should also be avoided for concurrent queues. 
+>
+>**重要：**你永远不要在你计划传入函数的队列中的正在执行的任务中调用`dispatch_sync`或`dispatch_sync_f`函数。这对于串行队列尤其重要，这肯定会死锁；而且也要避免在并行队列中这样用。
 
 The following example shows how to use the block-based variants for dispatching tasks asynchronously and synchronously: 
+
+下面的例子展示了如何使用基于block的变量同步和异步的调度任务：
 
 	dispatch_queue_t myCustomQueue;
 	myCustomQueue = dispatch_queue_create("com.example.MyCustomQueue", NULL);
