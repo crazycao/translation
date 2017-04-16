@@ -2,7 +2,7 @@
 
 # [Objective-C 运行时编程指南](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1)
 
-#0 Introduction 简介
+# 0 Introduction 简介
 
 The Objective-C language defers as many decisions as it can from compile time and link time to runtime. Whenever possible, it does things dynamically. This means that the language requires not just a compiler, but also a runtime system to execute the compiled code. The runtime system acts as a kind of operating system for the Objective-C language; it’s what makes the language work.
 
@@ -16,7 +16,7 @@ You should read this document to gain an understanding of how the Objective-C ru
 
 你阅读本文，可以获得Objective-C系统如何工作的理解，以及如何利用它。然而，一般情况下，写一个Cocoa应用并不是需要知道和理解这些材料。
 
-##0.1 Organization of This Document 本文的结构
+## 0.1 Organization of This Document 本文的结构
 
 This document has the following chapters:
 
@@ -30,7 +30,7 @@ This document has the following chapters:
 * [Type Encodings](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1)
 * [Declared Properties](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html#//apple_ref/doc/uid/TP40008048-CH101-SW1)
 
-##0.2  See Also 其他参考
+## 0.2  See Also 其他参考
 
 *[Objective-C Runtime Reference](https://developer.apple.com/reference/objectivec/1657527-objective_c_runtime)* describes the data structures and functions of the Objective-C runtime support library. Your programs can use these interfaces to interact with the Objective-C runtime system. For example, you can add classes or methods, or obtain a list of all class definitions for loaded classes.
 
@@ -44,13 +44,13 @@ This document has the following chapters:
 
 *[Objective-C Release Notes](https://developer.apple.com/library/content/releasenotes/Cocoa/RN-ObjectiveC/index.html#//apple_ref/doc/uid/TP40004309)* 介绍了OS X近期版本中关于Objective-C运行时部分的改动。
 
-#1 Runtime Versions and Platforms Runtime版本和平台
+# 1 Runtime Versions and Platforms Runtime版本和平台
 
 There are different versions of the Objective-C runtime on different platforms.
 
 在不同的平台上有着不同的Objective-C运行时版本。
 
-##1.1 Legacy and Modern Versions 过去的和当前的版本
+## 1.1 Legacy and Modern Versions 过去的和当前的版本
 
 There are two versions of the Objective-C runtime—“modern” and “legacy”. The modern version was introduced with Objective-C 2.0 and includes a number of new features. The programming interface for the legacy version of the runtime is described in *Objective-C 1 Runtime Reference*; the programming interface for the modern version of the runtime is described in *[Objective-C Runtime Reference](https://developer.apple.com/reference/objectivec/1657527-objective_c_runtime)*.
 
@@ -69,7 +69,7 @@ In addition, the modern runtime supports instance variable synthesis for declare
 
 另外，当前的运行时支持已声明属性的实例变量组合（参见《 *The Objective-C Programming Language* 》的《Declared Properties》一节）。
 
-##1.2 Platforms 平台
+## 1.2 Platforms 平台
 
 iPhone applications and 64-bit programs on OS X v10.5 and later use the modern version of the runtime.
 
@@ -79,13 +79,13 @@ iPhone应用和在OS X v10.5及以后版本的64位程序使用运行时的当�
 
 其他程序（OS X桌面的32位程序）使用运行时的过去版本。
 
-#2 Interacting with the Runtime 与Runtime交互
+# 2 Interacting with the Runtime 与Runtime交互
 
 Objective-C programs interact with the runtime system at three distinct levels: through Objective-C source code; through methods defined in the *NSObject* class of the Foundation framework; and through direct calls to runtime functions.
 
 Objective-C程序与运行时系统在三个明显不同的层次进行交互：通过Objective-C源代码；通过定义在Foundation框架里的 *NSObject* 类中的方法；通过直接调用运行时方法。
 
-##2.1 Objective-C Source Code Objective-C源码
+## 2.1 Objective-C Source Code Objective-C源码
 
 For the most part, the runtime system works automatically and behind the scenes. You use it just by writing and compiling Objective-C source code.
 
@@ -95,7 +95,7 @@ When you compile code containing Objective-C classes and methods, the compiler c
 
 当你编译包含Objective-C类和方法的代码时，编译器创建数据结构和方法调用，实现语言的动态特性。数据结构捕获的相关信息可以在类和类别定义及协议声明中找到；在《*The Objective-C Programming Language*》 的《Defining a Class and Protocols》一章中论述了类和协议对象，以及方法选择器、实例变量模板和其他从源码中提取的信息。最重要的运行时方法是发送消息，称为[Messaging](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtHowMessagingWorks.html#//apple_ref/doc/uid/TP40008048-CH104-SW1)。它被源码消息表达式引用。
 
-##2.2 NSObject Methods NSObject方法
+## 2.2 NSObject Methods NSObject方法
 
 Most objects in Cocoa are subclasses of the *NSObject* class, so most objects inherit the methods it defines. (The notable exception is the *NSProxy* class; see Message Forwarding for more information.) Its methods therefore establish behaviors that are inherent to every instance and every class object. However, in a few cases, the *NSObject* class merely defines a template for how something should be done; it doesn’t provide all the necessary code itself.
 
@@ -107,21 +107,21 @@ For example, the *NSObject* class defines a *description* instance method that r
 
 Some of the *NSObject* methods simply query the runtime system for information. These methods allow objects to perform introspection. Examples of such methods are the *class* method, which asks an object to identify its class; *isKindOfClass:* and *isMemberOfClass:*, which test an object’s position in the inheritance hierarchy; *respondsToSelector:*, which indicates whether an object can accept a particular message; *conformsToProtocol:*, which indicates whether an object claims to implement the methods defined in a specific protocol; and *methodForSelector:*, which provides the address of a method’s implementation. Methods like these give an object the ability to introspect about itself.
 
-某些 *NSObject* 方法简单的向运行时系统查询信息。这些方法允许对象做出反馈。这些方法的例子是 *class* 方法，会让对象定义自己的类；*isKindOfClass:* 和 *isMemberOfClass:* ，这两个方法可以测试对象在继承层级中的位置；*respondsToSelector:* ，这个方法可以指出一个对象是否可以接受一个特定的消息；*conformsToProtocol:* ，这个方法可以指出一个对象是否声明实现了某个特殊协议定义的方法； *methodForSelector:* ，这个方法提供了某个方法实现的地址。像这些方法给予对象内省其自身的能力。
+某些 *NSObject* 方法简单的向运行时系统查询信息。这些方法允许对象做出反馈。这些方法的例子是 *class* 方法，会让对象认出自己的类；*isKindOfClass:* 和 *isMemberOfClass:* ，这两个方法可以测试对象在继承层级中的位置；*respondsToSelector:* ，这个方法可以指出一个对象是否可以接受一个特定的消息；*conformsToProtocol:* ，这个方法可以指出一个对象是否声明实现了某个特殊协议定义的方法； *methodForSelector:* ，这个方法提供了某个方法实现的地址。像这些方法给予对象内省其自身的能力。
 
-##2.3 Runtime Functions Runtime方法
+## 2.3 Runtime Functions Runtime方法
 
 The runtime system is a dynamic shared library with a public interface consisting of a set of functions and data structures in the header files located within the directory */usr/include/objc*. Many of these functions allow you to use plain C to replicate what the compiler does when you write Objective-C code. Others form the basis for functionality exported through the methods of the *NSObject* class. These functions make it possible to develop other interfaces to the runtime system and produce tools that augment the development environment; they’re not needed when programming in Objective-C. However, a few of the runtime functions might on occasion be useful when writing an Objective-C program. All of these functions are documented in *[Objective-C Runtime Reference](https://developer.apple.com/reference/objectivec/1657527-objective_c_runtime)*.
 
 运行时系统是一个带有公共接口的动态共享库，由一系列函数和数据结构组成，头文件放置在*/usr/include/objc*目录下。这些方法中许多允许你使用纯C语言重新获得在你编写Objective-C代码时编译器完成的工作。其他的方法成为了通过*NSObject*类方法出口的功能的基础。这些函数使得为运行时系统开发其他接口和制作增加开发环境的工具成为可能；而在用Objective-C编程时并不需要它们。但是，也有少数运行时方法可能在写Objective-C程序时偶尔有用。所有的这些方法都写在了《*[Objective-C Runtime Reference](https://developer.apple.com/reference/objectivec/1657527-objective_c_runtime)*》之中。
 
-#3 Messaging 消息通信
+# 3 Messaging 消息通信
 
 This chapter describes how the message expressions are converted into *[objc_msgSend](https://developer.apple.com/reference/objectivec/1456712-objc_msgsend)* function calls, and how you can refer to methods by name. It then explains how you can take advantage of *objc_msgSend*, and how—if you need to—you can circumvent dynamic binding.
 
 本章介绍了消息表达式如何转化为*[objc_msgSend](https://developer.apple.com/reference/objectivec/1456712-objc_msgsend)*函数调用，以及如何通过名称引用方法。然后解释了如何利用*objc_msgSend*，以及如何——如果需要这么做——能够绕开动态绑定。
 
-##3.1 The objc_msgSend Function objc_msgSend方法
+## 3.1 The objc_msgSend Function objc_msgSend方法
 
 In Objective-C, messages aren’t bound to method implementations until runtime. The compiler converts a message expression,
 
@@ -173,11 +173,11 @@ The key to messaging lies in the structures that the compiler builds for each cl
 
 When a new object is created, memory for it is allocated, and its instance variables are initialized. First among the object’s variables is a pointer to its class structure. This pointer, called *isa*, gives the object access to its class and, through the class, to all the classes it inherits from.
 
-消息通信的关键在于编译器为每个类和对象构建的结构 。每个类结构包括下面两个基本元素：
+消息通信的关键在于编译器为每个类和对象构建的结构。每个类结构包括下面两个基本元素：
 
 * 父类的指针。
 
-* 一个 *dispatch table* 。这个表的每一个条目都关联了方法选择器和每个类不同的辨识方法的具体地址。比如， *setOrigin::* 方法的选择关联到 *setOrigin::*（程序实现）的地址， *display* 方法的选择器关联到 *display* 的地址，等等。
+* 一个 *dispatch table* 。这个表的每一个条目都关联了方法选择器和它们标识的方法的在每个类中的不同具体地址。比如， *setOrigin::* 方法的选择关联到 *setOrigin::*（程序实现）的地址， *display* 方法的选择器关联到 *display* 的地址，等等。
 
 当创建一个新的对象，为它分配了内存，它的实例变量也初始化了。对象的第一个变量就是其类结构的指针。这个指针，被称为“*isa*”，让对象可以访问它的类，以及通过这个类访问它继承的所有类。
 
@@ -196,7 +196,7 @@ Figure 3-1  Messaging Framework
 
 When a message is sent to an object, the messaging function follows the object’s *isa* pointer to the class structure where it looks up the method selector in the dispatch table. If it can’t find the selector there, *objc_msgSend* follows the pointer to the superclass and tries to find the selector in its dispatch table. Successive failures cause *objc_msgSend* to climb the class hierarchy until it reaches the *NSObject* class. Once it locates the selector, the function calls the method entered in the table and passes it the receiving object’s data structure.
 
-当消息被发送到一个对象时，消息通信方法按照对象的 *isa* 指针找到类结构，并在dispatch表中查找方法选择器。如果没有在那里找到选择器，*objc_msgSend*按照指针找到父类，并尝试在父类的dispatch表中找到选择器。连续的失败会导致*objc_msgSend*方法按类的层级一层层往上找，直到到达*NSObject*类。一旦它定位到选择器，这个函数会调用表中的方法，并向其传递接收对象的数据结构。
+当消息被发送到一个对象时，消息通信方法按照对象的 *isa* 指针找到类结构，并在dispatch表中查找方法选择器。如果没有在那里找到选择器，*objc_msgSend*沿着父类的指针尝试在父类的dispatch表中找到选择器。连续的失败会导致*objc_msgSend*方法按类的层级一层层往上找，直到到达*NSObject*类。一旦它定位到选择器，这个函数会调用表中的方法，并向其传递接收对象的数据结构。
 
 This is the way that method implementations are chosen at runtime—or, in the jargon of object-oriented programming, that methods are dynamically bound to messages.
 
@@ -206,7 +206,7 @@ To speed the messaging process, the runtime system caches the selectors and addr
 
 为了加快消息传递的速度，运行时系统缓存了使用过的选择器和方法地址。每个类有自己单独的缓存空间，可以包含继承的方法的选择器和类里面定义的方法的选择器。在查找dispatch表之前，消息通信通常首先会检查接受对象的类的缓存空间(理论上用过一次的方法很可能再次使用)。如果方法选择器在缓存中，消息通信只是比方法调用稍微慢一点点。一旦程序运行了足够长的时间让它的缓存“热”起来，几乎所有她发送的消息对可以找到一个缓存的方法。在程序运行时，缓存会动态的适应新的消息通信。
 
-##3.2 Using Hidden Arguments 使用隐藏的参数
+## 3.2 Using Hidden Arguments 使用隐藏的参数
 
 When *objc_msgSend* finds the procedure that implements a method, it calls the procedure and passes it all the arguments in the message. It also passes the procedure two hidden arguments:
 
@@ -239,7 +239,7 @@ Although these arguments aren’t explicitly declared, source code can still ref
 
 *self*在两个参数中更有用。实际上，这正是接收对象的实例变量对于消息定义可用的方法。
 
-##3.3 Getting a Method Address 获取方法地址
+## 3.3 Getting a Method Address 获取方法地址
 
 The only way to circumvent dynamic binding is to get the address of a method and call it directly as if it were a function. This might be appropriate on the rare occasions when a particular method will be performed many times in succession and you want to avoid the overhead of messaging each time the method is performed.
 
@@ -272,13 +272,13 @@ Note that *methodForSelector:* is provided by the Cocoa runtime system; it’s n
 
 注意 *methodForSelector:* 是由Cocoa运行时系统提供的；它并不是Objective-C语言自身的特性。
 
-#4 Dynamic Method Resolution 动态方法解析
+# 4 Dynamic Method Resolution 动态方法解析
 
 This chapter describes how you can provide an implementation of a method dynamically.
 
 本章介绍了如何动态的提供一个方法的实现。
 
-##4.1 Dynamic Method Resolution 动态方法解析
+## 4.1 Dynamic Method Resolution 动态方法解析
 
 There are situations where you might want to provide an implementation of a method dynamically. For example, the Objective-C declared properties feature (see Declared Properties in *The Objective-C Programming Language*) includes the *@dynamic* directive:
 
@@ -316,9 +316,9 @@ you can dynamically add it to a class as a method (called *resolveThisMethodDyna
 	@end
 Forwarding methods (as described in *[Message Forwarding](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtForwarding.html#//apple_ref/doc/uid/TP40008048-CH105-SW1)*) and dynamic method resolution are, largely, orthogonal. A class has the opportunity to dynamically resolve a method before the forwarding mechanism kicks in. If *[respondsToSelector:](https://developer.apple.com/reference/objectivec/nsobjectprotocol/1418583-responds)* or *[instancesRespondToSelector:](https://developer.apple.com/reference/objectivec/nsobject/1418555-instancesrespondtoselector)* is invoked, the dynamic method resolver is given the opportunity to provide an *IMP* for the selector first. If you implement *[resolveInstanceMethod:](https://developer.apple.com/reference/objectivec/nsobject/1418500-resolveinstancemethod)* but want particular selectors to actually be forwarded via the forwarding mechanism, you return *NO* for those selectors.
 
-消息转发（见《 *[Message Forwarding](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtForwarding.html#//apple_ref/doc/uid/TP40008048-CH105-SW1)* 》）和动态方法解析很大程度上是正交的。一个类有机会在进入转发机制之前动态的解析一个方法。如果调用了 *[respondsToSelector:](https://developer.apple.com/reference/objectivec/nsobjectprotocol/1418583-responds)* 或 *[instancesRespondToSelector:](https://developer.apple.com/reference/objectivec/nsobject/1418555-instancesrespondtoselector)* ，动态方法解析器就得到一个机会先提供为选择器提供一个 *IMP* 。如果你实现了 *[resolveInstanceMethod:](https://developer.apple.com/reference/objectivec/nsobject/1418500-resolveinstancemethod)* ，但是想要某些特别的选择器实际上通过转发机制转发，你只需要对这些选择器返回 *NO* 。
+消息转发（见《 *[Message Forwarding](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtForwarding.html#//apple_ref/doc/uid/TP40008048-CH105-SW1)* 》）和动态方法解析很大程度上是正交的。一个类有机会在进入转发机制之前动态的解析一个方法。如果调用了 *[respondsToSelector:](https://developer.apple.com/reference/objectivec/nsobjectprotocol/1418583-responds)* 或 *[instancesRespondToSelector:](https://developer.apple.com/reference/objectivec/nsobject/1418555-instancesrespondtoselector)* ，动态方法解析器就得到一个机会先为选择器提供一个 *IMP* 。如果你实现了 *[resolveInstanceMethod:](https://developer.apple.com/reference/objectivec/nsobject/1418500-resolveinstancemethod)* ，但是想要某些特别的选择器实际上通过转发机制转发，你只需要对这些选择器返回 *NO* 。
 
-##4.2 Dynamic Loading 动态加载
+## 4.2 Dynamic Loading 动态加载
 
 An Objective-C program can load and link new classes and categories while it’s running. The new code is incorporated into the program and treated identically to classes and categories loaded at the start.
 
@@ -336,13 +336,13 @@ Although there is a runtime function that performs dynamic loading of Objective-
 
 尽管在Mach-O文件中有执行Objective-C模块的动态加载的方法(*objc_loadModules*，定义在 *objc/objc-load.h* 文件中)，Cocoa的*[NSBundle](https://developer.apple.com/reference/foundation/nsbundle)*类提供了明显更加方便的方法实现动态加载——一个面向对象且集成了相关服务的方法。参见Foundation框架参考中的*[NSBundle](https://developer.apple.com/reference/foundation/nsbundle)*类说明以获取关于*[NSBundle](https://developer.apple.com/reference/foundation/nsbundle)*类及其使用的信息。参见《*OS X ABI Mach-O File Format Reference*》获取关于Mach-O文件的信息。
 
-#5 Message Forwarding 消息转发
+# 5 Message Forwarding 消息转发
 
 Sending a message to an object that does not handle that message is an error. However, before announcing the error, the runtime system gives the receiving object a second chance to handle the message.
 
 发送消息到一个不处理该消息的对象是错误的。然而，在报告这个错误之前，运行时系统给予接收对象第二次机会处理这个消息。
 
-##5.1 Forwarding 转发
+## 5.1 Forwarding 转发
 
 If you send a message to an object that does not handle that message, before announcing an error the runtime sends the object a *forwardInvocation:* message with an *NSInvocation* object as its sole argument—the *NSInvocation* object encapsulates the original message and the arguments that were passed with it.
 
@@ -416,7 +416,7 @@ For more information on forwarding and invocations, see the *NSInvocation* class
 
 关于转发和调用的更多信息，参见Foundation框架参考中的 *NSInvocation* 类的说明。
 
-##5.2 Forwarding and Multiple Inheritance 转发和多重继承
+## 5.2 Forwarding and Multiple Inheritance 转发和多重继承
 
 Forwarding mimics inheritance, and can be used to lend some of the effects of multiple inheritance to Objective-C programs. As shown in Figure 5-1, an object that responds to a message by forwarding it appears to borrow or “inherit” a method implementation defined in another class.
 
@@ -437,7 +437,7 @@ Forwarding provides most of the features that you typically want from multiple i
 
 转发提供了你通常想要从多重继承获得的大部分特性。但是，二者有一个重要的不同：多重继承将不同的功能结合在一个单独的对象中。它趋向于形成大的，多功能的对象。而转发则是将责任分配给不同的对象。它将问题分解成较小的对象，但是将这些对象以透明的方式关联到消息的发送者。
 
-##5.3 Surrogate Objects 替代者对象
+## 5.3 Surrogate Objects 替代者对象
 
 Forwarding not only mimics multiple inheritance, it also makes it possible to develop lightweight objects that represent or “cover” more substantial objects. The surrogate stands in for the other object and funnels messages to it.
 
@@ -455,7 +455,7 @@ In this circumstance, you could initially create, not the full-fledged object, b
 
 在这种情况下，你可以在起初为它创建一个轻量级的替代者，而不是完整的对象。这个对象能够靠自己完成一些工作，例如回答关于数据的问题，但大部分时候它只是为更大的对象持有一片空间，并且在需要时转发消息过去。当替代者的 *forwardInvocation:* 方法第一次收到指定给另一个对象的消息，它会确保那个对象存在，如果不存在就创建它。所有给更大对象的消息都通过替代者传递，因此，只要关注程序的其他地方，替代者和更大的对象就是一样的。
 
-##5.4 Forwarding and Inheritance 转发和继承
+## 5.4 Forwarding and Inheritance 转发和继承
 
 Although forwarding mimics inheritance, the *NSObject* class never confuses the two. Methods like *respondsToSelector:* and *isKindOfClass:* look only at the inheritance hierarchy, never at the forwarding chain. If, for example, a Warrior object is asked whether it responds to a *negotiate* message,
 
@@ -506,7 +506,7 @@ The methods mentioned in this section are described in the *NSObject* class spec
 
 本章所提到的方法详见Foundation框架参考中的 *NSObject* 类说明。关于 *invokeWithTarget:* 的信息，参见Foundation框架参考中的 *NSInvocation* 类说明。
 
-#6 Type Encodings 类型编码
+# 6 Type Encodings 类型编码
 
 To assist the runtime system, the compiler encodes the return and argument types for each method in a character string and associates the string with the method selector. The coding scheme it uses is also useful in other contexts and so is made publicly available with the *@encode()* compiler directive. When given a type specification, *@encode()* returns a string encoding that type. The type can be a basic type such as an *int*, a pointer, a tagged structure or union, or a class name—any type, in fact, that can be used as an argument to the C *sizeof()* operator.
 
@@ -607,13 +607,13 @@ Table 6-2  Objective-C method encodings
 |  R   |  byref  |
 |  V   | oneway  |
 
-#7 Declared Properties 声明的属性
+# 7 Declared Properties 声明的属性
 
 When the compiler encounters property declarations (see Declared Properties in *The Objective-C Programming Language*), it generates descriptive metadata that is associated with the enclosing class, category or protocol. You can access this metadata using functions that support looking up a property by name on a class or protocol, obtaining the type of a property as an *@encode* string, and copying a list of a property's attributes as an array of C strings. A list of declared properties is available for each class and protocol.
 
 当编译器遇到属性声明时（参见《*The Objective-C Programming Language*》中的《Declared Properties》），它会产生与封闭类、类别或协议相关联的描述性元数据。你可以使用方法访问该元数据，支持通过类或协议中的名字查找属性，获得以 *@encode* 字符串表示的属性类型，以及拷贝属性的标志列表作为C字符串数组。已声明的属性的列表对于每个类和协议都是可用的。
 
-##7.1 Property Type and Functions 属性类型和方法
+## 7.1 Property Type and Functions 属性类型和方法
 
 The *Property* structure defines an opaque handle to a property descriptor.
 
@@ -669,7 +669,7 @@ Putting these together, you can print a list of all the properties associated wi
 	    objc_property_t property = properties[i];
 	    fprintf(stdout, "%s %s\n", property_getName(property), property_getAttributes(property));
 	}
-##7.2 Property Type String 属性类型字符串
+## 7.2 Property Type String 属性类型字符串
 
 You can use the *property_getAttributes* function to discover the name, the *@encode* type string of a property, and other attributes of the property.
 
@@ -698,7 +698,7 @@ For examples, see *[Property Attribute Description Examples](https://developer.a
 
 例子参见《*[Property Attribute Description Examples](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html#//apple_ref/doc/uid/TP40008048-CH101-SW5)*》。
 
-##7.3 Property Attribute Description Examples 属性描述实例
+## 7.3 Property Attribute Description Examples 属性描述实例
 
 Given these definitions:
 
@@ -742,7 +742,7 @@ the following table shows sample property declarations and the corresponding str
 | @property(nonatomic, readonly, copy) id idReadonlyCopyNonatomic; |     T@,R,C,VidReadonlyCopyNonatomic      |
 | @property(nonatomic, readonly, retain) id idReadonlyRetainNonatomic; |    T@,R,&,VidReadonlyRetainNonatomic     |
 
-#Document Revision History 文档版本历史
+# Document Revision History 文档版本历史
 
 This table describes the changes to *Objective-C Runtime Programming Guide*.
 
