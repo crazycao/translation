@@ -291,13 +291,19 @@ The following example shows how to use the block-based variants for dispatching 
 	});
 	printf("Both blocks have completed.\n");
 
-###3.5.2 Performing a Completion Block When a Task Is Done
+###3.5.2 Performing a Completion Block When a Task Is Done 当任务完成后执行一个完成block
 
 By their nature, tasks dispatched to a queue run independently of the code that created them. However, when the task is done, your application might still want to be notified of that fact so that it can incorporate the results. With traditional asynchronous programming, you might do this using a callback mechanism, but with dispatch queues you can use a completion block. 
 
+很自然的，调度到队列的任务会独立于创建它们的代码之外运行。然而，当任务完成时，你的程序可能仍需要被通知以合并该结果。在传统的异步编程中，你可以使用回调机制做到，但是在调度队列，你可以使用一个完成block。
+
 A completion block is just another piece of code that you dispatch to a queue at the end of your original task. The calling code typically provides the completion block as a parameter when it starts the task. All the task code has to do is submit the specified block or function to the specified queue when it finishes its work. 
 
+完成block只是你调度到队列的另一片代码，添加到你的初始任务的后面。调用代码在开始任务时通常提供完成block作为参数。所有的任务代码必须要做的是，当完成其工作以后，提交指定的block或函数到指定的队列。
+
 Listing 3-4 shows an averaging function implemented using [blocks](). The last two parameters to the averaging function allow the caller to specify a queue and block to use when reporting the results. After the averaging function computes its value, it passes the results to the specified block and dispatches it to the queue. To prevent the queue from being released prematurely, it is critical to retain that queue initially and release it once the completion block has been dispatched. 
+
+表3-4展示了使用block实现的平均数函数。平均数函数的最后两个参数允许调用者指定报告结果时使用的队列和block。在平均数函数计算其值之后，它将结果传给指定的block并将其调度到队列。为了避免队列过早的释放，在最开始就保持该队列非常重要，并在完成block被调度后释放一次。
 
 **Listing 3-4**  Executing a completion callback after a task
 
@@ -320,9 +326,11 @@ Listing 3-4 shows an averaging function implemented using [blocks](). The last t
 	   });
 	}
 
-###3.5.3 Performing Loop Iterations Concurrently
+###3.5.3 Performing Loop Iterations Concurrently 并发的执行循环迭代
 
 One place where concurrent dispatch queues might improve performance is in places where you have a loop that performs a fixed number of iterations. For example, suppose you have a `for` loop that does some work through each loop iteration: 
+
+一个并发调度队列可能提升性能的地方是你要执行固定数量的迭代的循环的地方。例如，加入你有一个`for`循环，通过每次循环迭代做一些工作：
 
 	for (i = 0; i < count; i++) {
 	   printf("%u\n",i);
@@ -330,13 +338,21 @@ One place where concurrent dispatch queues might improve performance is in place
 
 If the work performed during each iteration is distinct from the work performed during all other iterations, and the order in which each successive loop finishes is unimportant, you can replace the loop with a call to the `dispatch_apply` or `dispatch_apply_f` function. These functions submit the specified [block]() or function to a queue once for each loop iteration. When dispatched to a concurrent queue, it is therefore possible to perform multiple loop iterations at the same time. 
 
+如果每个迭代中执行的工作与所有其他迭代中执行的工作都是不同的，并且每个成功循环完成的顺序并不重要，你可以将这个循环替换成对`dispatch_apply`或`dispatch_apply_f`的函数的调用。当调度到一个并发队列，那就可能同时执行多个循环调度。
+
 You can specify either a serial queue or a concurrent queue when calling `dispatch_apply` or `dispatch_apply_f`. Passing in a concurrent queue allows you to perform multiple loop iterations simultaneously and is the most common way to use these functions. Although using a serial queue is permissible and does the right thing for your code, using such a queue has no real performance advantages over leaving the loop in place. 
 
+你可以在调用`dispatch_apply`或`dispatch_apply_f`时指定一个串行队列或并行队列。传入一个并行队列允许你同时执行多个循环迭代，这也是使用这些函数的最常用方法。尽管使用串行队列是可以的，并且从代码来看也没什么问题，但是使用这样的队列与保留原来的循环相比并没有实际的性能提升。
+
 >**Important:** Like a regular `for` loop, the `dispatch_apply` and `dispatch_apply_f` functions do not return until all loop iterations are complete. You should therefore be careful when calling them from code that is already executing from the context of a queue. If the queue you pass as a parameter to the function is a serial queue and is the same one executing the current code, calling these functions will deadlock the queue. Because they effectively block the current thread, you should also be careful when calling these functions from your main thread, where they could prevent your event handling loop from responding to events in a timely manner. If your loop code requires a noticeable amount of processing time, you might want to call these functions from a different thread.
+>
+>**重要：**与常规的`for`循环一样，`dispatch_apply`和`dispatch_apply_f`函数并不会返回直到所有的循环迭代都完成。所以当你从已经在一个队列上下文中执行的代码开始调用它们时应该相当小心。如果你作为参数传递到函数的队列是串行队列并且与执行当前代码的队列是同一个，那调用这些函数将会让队列死锁。因为它们会有效的阻塞当前线程，所以当你在主线程调用这些函数时也应该非常小心，在主线程它们会阻止事件处理循环及时的响应事件。如果你的循环代码需要明显较多的处理时间，你应该从一个不同的线程调用这些函数。
 
 Listing 3-5 shows how to replace the preceding `for` loop with the `dispatch_apply` syntax. The block you pass in to the `dispatch_apply` function must contain a single parameter that identifies the current loop iteration. When the block is executed, the value of this parameter is `0` for the first iteration, `1` for the second, and so on. The value of the parameter for the last iteration is `count - 1`, where `count` is the total number of iterations. 
 
-**Listing 3-5**  Performing the iterations of a `for` loop concurrently
+表3-5展示了如何用`dispatch_apply`句法替换前面的`for`循环。你传入`dispatch_apply`函数的block必须包含一个标识当前循环迭代的参数。当block被执行，第一次迭代这个参数的值是`0`，第二次是`1`，等等。最后一次迭代中这个参数的值是`count - 1`，`count`代表迭代的总次数。
+
+**Listing 3-5**  Performing the iterations of a `for` loop concurrently 并发执行`for`循环的迭代
 
 	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 	 
@@ -346,7 +362,9 @@ Listing 3-5 shows how to replace the preceding `for` loop with the `dispatch_app
 
 You should make sure that your task code does a reasonable amount of work through each iteration. As with any block or function you dispatch to a queue, there is overhead to scheduling that code for execution. If each iteration of your loop performs only a small amount of work, the overhead of scheduling the code may outweigh the performance benefits you might achieve from dispatching it to a queue. If you find this is true during your testing, you can use striding to increase the amount of work performed during each loop iteration. With striding, you group together multiple iterations of your original loop into a single block and reduce the iteration count proportionately. For example, if you perform 100 iterations initially but decide to use a stride of 4, you now perform 4 loop iterations from each block and your iteration count is 25. For an example of how to implement striding, see [Improving on Loop Code](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW2). 
 
-###3.5.4 Performing Tasks on the Main Thread
+你应该确保你的任务代码通过每个迭代完成合理数量的工作。与你调度到队列的任何block或函数一样，安排那些代码执行也有开销。如果你的循环的每个迭代只有少量的工作，安排代码的开销可能超过你通过调度它到队列获得的性能提升。如果你在你的测试中发现这是真的，你可以使用大步来增加每个循迭代中的工作量。随着大步，你将你原始循环中的多个迭代组合成一个单独的block并相应的减少迭代次数。例如，如果你一开始执行100次迭代，而决定使用4的步子，那么现在你每个block中执行4个循环迭代，而你的迭代数是25。关于如何实现大步的例子，参见《[Improving on Loop Code](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW2)》。
+
+###3.5.4 Performing Tasks on the Main Thread 在主线程执行任务
 
 Grand Central Dispatch provides a special dispatch queue that you can use to execute tasks on your application’s main thread. This queue is provided automatically for all applications and is drained automatically by any application that sets up a run loop (managed by either a `CFRunLoopRef` type or `NSRunLoop` object) on its main thread. If you are not creating a Cocoa application and do not want to set up a run loop explicitly, you must call the `dispatch_main` function to drain the main dispatch queue explicitly. You can still add tasks to the queue, but if you do not call this function those tasks are never executed. 
 
