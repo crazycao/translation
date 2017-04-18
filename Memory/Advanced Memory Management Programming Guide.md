@@ -1,15 +1,26 @@
 # Advanced Memory Management Programming Guide
+
 高级内存管理编程指南
+
 原文链接：[https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1)
 
 # 1. About Memory Management 关于内存管理
-应用程序的内存管理是指，在程序运行时分配内存、使用内存、和使用后释放内存的过程。一个编写良好的程序会尽可能少使用内存。在objective - c中,它还可以被看成在许多块数据和代码分配有限内存资源的所有权的途径。当你已经通过这个向导完成了工作，你将拥有管理应用程序的内存所需的知识，可以显式的管理对象的生命周期并在不需要的时候释放它们。
+
+Application memory management is the process of allocating memory during your program’s runtime, using it, and freeing it when you are done with it. A well-written program uses as little memory as possible. In Objective-C, it can also be seen as a way of distributing ownership of limited memory resources among many pieces of data and code. When you have finished working through this guide, you will have the knowledge you need to manage your application’s memory by explicitly managing the life cycle of objects and freeing them when they are no longer needed.
+
+应用程序的内存管理是指，在程序运行时分配内存、使用内存、和使用后释放内存的过程。一个编写良好的程序会尽可能少使用内存。在Objective-C中,它还可以被看成在许多块数据和代码分配有限内存资源的所有权的途径。当你已经通过本指南完成了工作，你将拥有管理应用程序的内存所需的知识，可以精确的管理对象的生命周期并在不需要的时候释放它们。
+
+Although memory management is typically considered at the level of an individual object, your goal is actually to manage object graphs. You want to make sure that you have no more objects in memory than you actually need.
+
 尽管内存管理通常被认为是在单个对象级别的行为，但你的目标实际上是管理整个对象图。你要确保内存中不会有比你实际需要更多的对象。
- 
-1.1 At a Glance概述
+
+![Figure 0-1](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/MemoryMgmt/Art/memory_management_2x.png)
+
+## 1.1 At a Glance概述
 Objective-C提供了两种应用程序内存管理方法。
-1	“手动保留释放（manual retain-release）”，或称MRR。你可以通过追踪你拥有的对象显式的管理内存。该方法通过使用一个被称为引用计数的模型来实现，基础类conjunction结合运行时环境提供了这个模型。
-2	“自动引用计数（Automatic Reference Counting）”，或称ARC。系统使用了与MRR相同的引用计数系统，但是在编译时插入了适当的内存管理方法调用。强烈建议在新工程中使用ARC。如果使用ARC，通常都不需要了解本文所描述的底层实现，尽管这些知识在某些情况下是有益的。关于ARC的更多知识，请参考Transitioning to ARC Release Notes。
+
+1. “手动保留释放（manual retain-release）”，或称MRR。你可以通过追踪你拥有的对象显式的管理内存。该方法通过使用一个被称为引用计数的模型来实现，基础类conjunction结合运行时环境提供了这个模型。
+2. “自动引用计数（Automatic Reference Counting）”，或称ARC。系统使用了与MRR相同的引用计数系统，但是在编译时插入了适当的内存管理方法调用。强烈建议在新工程中使用ARC。如果使用ARC，通常都不需要了解本文所描述的底层实现，尽管这些知识在某些情况下是有益的。关于ARC的更多知识，请参考《[Transitioning to ARC Release Notes](https://developer.apple.com/library/content/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226)》。
 1.2 Good Practices Prevent Memory-Related Problems良好的实践可以避免内存相关问题
 不正确的内存管理将导致两类主要的问题：
 	释放或重写仍在使用的数据
