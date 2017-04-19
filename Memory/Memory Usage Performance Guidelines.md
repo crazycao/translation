@@ -21,91 +21,142 @@ This programming topic includes the following articles:
 
 本课程主题包括以下文章：
 
-•	[About the Virtual Memory System](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html#//apple_ref/doc/uid/20001880-BCICIHAB) introduces the terminology and provides a high-level overview of the virtual memory systems of OS X and iOS.
-•	《[关于虚拟内存](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html#//apple_ref/doc/uid/20001880-BCICIHAB)》介绍了一些术语并提供了OS X和iOS的虚拟内存系统的高度概括。
-•	[Tips for Allocating Memory](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html#//apple_ref/doc/uid/20001881-CJBCFDGA) describes the best techniques for allocating, initializing, and copying memory. It also describes the proper ways to respond to low-memory notifications in iOS.
-•	《[分配内存建议](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html#//apple_ref/doc/uid/20001881-CJBCFDGA)》描述了分配、初始化和复制内存的最佳技术。并介绍了在iOS中响应低内存通知的适当方法。
-•	[Caching and Purgeable Memory](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/CachingandPurgeableMemory.html#//apple_ref/doc/uid/TP40013104-SW1) discusses the benefits of caching, and how to avoid some of the problems that can arise from implementing caches. It also details the advantages of implementing purgeable memory into a caching system and how to successfully implement this beneficial technology.
-•	《[缓存和可清除的内存](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/CachingandPurgeableMemory.html#//apple_ref/doc/uid/TP40013104-SW1)》讨论了缓存的好处以及如何避免在实现缓存中可能遇到的问题。同时，还详述了在缓存系统中实现可清除内存的优点以及如何成功的实现这种有益的技术。
-•	[Tracking Memory Usage](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingPatterns.html#//apple_ref/doc/uid/20001882-CJBJFIDD) describes the tools and techniques for analyzing your application’s memory usage.
-•	《[跟踪内存使用](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingPatterns.html#//apple_ref/doc/uid/20001882-CJBJFIDD)》讲述了分析应用内存使用的工具和技术。
-•	[Finding Memory Leaks](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html#//apple_ref/doc/uid/20001883-CJBJFIDD) describes the tools and techniques for finding memory leaks in your application.
-•	《[找到内存泄露](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html#//apple_ref/doc/uid/20001883-CJBJFIDD)》讲述了在应用中找到内存泄露的工具和技术。
-•	[Enabling the Malloc Debugging Features](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html#//apple_ref/doc/uid/20001884-CJBJFIDD) describes the environment variables used to enable malloc history logging. You must set some of these variables before using some of the memory analysis tools.
-•	《[启用分配内存调试特性](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html#//apple_ref/doc/uid/20001884-CJBJFIDD)》讲述了用于启用分配内存历史日志的环境变量。你必须在使用内存分析工具之前设置其中的一些变量。
-•	[Viewing Virtual Memory Usage](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/VMPages.html#//apple_ref/doc/uid/20001985-CJBJFIDD) describes the tools and techniques for analyzing your application’s in-memory footprint.
-•	《[查看虚拟内存使用](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/VMPages.html#//apple_ref/doc/uid/20001985-CJBJFIDD)》讲述了分析应用程序内存占用的工具和技术。
+- [About the Virtual Memory System](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html#//apple_ref/doc/uid/20001880-BCICIHAB) introduces the terminology and provides a high-level overview of the virtual memory systems of OS X and iOS.
+- 《[关于虚拟内存](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html#//apple_ref/doc/uid/20001880-BCICIHAB)》介绍了一些术语并提供了OS X和iOS的虚拟内存系统的高度概括。
+- [Tips for Allocating Memory](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html#//apple_ref/doc/uid/20001881-CJBCFDGA) describes the best techniques for allocating, initializing, and copying memory. It also describes the proper ways to respond to low-memory notifications in iOS.
+- 《[分配内存建议](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html#//apple_ref/doc/uid/20001881-CJBCFDGA)》描述了分配、初始化和复制内存的最佳技术。并介绍了在iOS中响应低内存通知的适当方法。
+- [Caching and Purgeable Memory](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/CachingandPurgeableMemory.html#//apple_ref/doc/uid/TP40013104-SW1) discusses the benefits of caching, and how to avoid some of the problems that can arise from implementing caches. It also details the advantages of implementing purgeable memory into a caching system and how to successfully implement this beneficial technology.
+- 《[缓存和可清除的内存](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/CachingandPurgeableMemory.html#//apple_ref/doc/uid/TP40013104-SW1)》讨论了缓存的好处以及如何避免在实现缓存中可能遇到的问题。同时，还详述了在缓存系统中实现可清除内存的优点以及如何成功的实现这种有益的技术。
+- [Tracking Memory Usage](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingPatterns.html#//apple_ref/doc/uid/20001882-CJBJFIDD) describes the tools and techniques for analyzing your application’s memory usage.
+- 《[跟踪内存使用](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingPatterns.html#//apple_ref/doc/uid/20001882-CJBJFIDD)》讲述了分析应用内存使用的工具和技术。
+- [Finding Memory Leaks](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html#//apple_ref/doc/uid/20001883-CJBJFIDD) describes the tools and techniques for finding memory leaks in your application.
+- 《[找到内存泄露](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html#//apple_ref/doc/uid/20001883-CJBJFIDD)》讲述了在应用中找到内存泄露的工具和技术。
+- [Enabling the Malloc Debugging Features](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html#//apple_ref/doc/uid/20001884-CJBJFIDD) describes the environment variables used to enable malloc history logging. You must set some of these variables before using some of the memory analysis tools.
+- 《[启用分配内存调试特性](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html#//apple_ref/doc/uid/20001884-CJBJFIDD)》讲述了用于启用分配内存历史日志的环境变量。你必须在使用内存分析工具之前设置其中的一些变量。
+- [Viewing Virtual Memory Usage](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/VMPages.html#//apple_ref/doc/uid/20001985-CJBJFIDD) describes the tools and techniques for analyzing your application’s in-memory footprint.
+- 《[查看虚拟内存使用](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/VMPages.html#//apple_ref/doc/uid/20001985-CJBJFIDD)》讲述了分析应用程序内存占用的工具和技术。
 
+# 1 About the Virtual Memory System关于虚拟内存系统
 
-
-2 About the Virtual Memory System关于虚拟内存系统
 Efficient memory management is an important aspect of writing high performance code in both OS X and iOS. Minimizing memory usage not only decreases your application’s memory footprint, it can also reduce the amount of CPU time it consumes. In order to properly tune your code though, you need to understand something about how the underlying system manages memory.
+
 在OS X和iOS中，有效的内存管理都是撰写高性能代码的重要方面。最小化内存使用不仅可以减少程序的内存占用，也可以减少CPU时间的消耗。为了正确的调整你的代码，你需要了解一些关于底层系统如何管理内存的知识。
+
 Both OS X and iOS include a fully-integrated virtual memory system that you cannot turn off; it is always on. Both systems also provide up to 4 gigabytes of addressable space per 32-bit process. In addition, OS X provides approximately 18 exabytes of addressable space for 64-bit processes. Even for computers that have 4 or more gigabytes of RAM available, the system rarely dedicates this much RAM to a single process.
+
 OS X和iOS都包含了完整集成且无法关闭的虚拟内存系统；该系统始终在运行着。OS X和iOS也都为每个32位进程提供了4GB的可寻址空间。另外，OS X还为64位进程提供了接近18EB的可寻址空间。即使是拥有4GB或更大可用RAM的计算机，操作系统也很少为某一个进程提供如此大的内存。
+
 To give processes access to their entire 4 gigabyte or 18 exabyte address space, OS X uses the hard disk to hold data that is not currently in use. As memory gets full, sections of memory that are not being used are written to disk to make room for data that is needed now. The portion of the disk that stores the unused data is known as the backing store because it provides the backup storage for main memory.
+
 为了让进程可以访问到他们的整个4GB或18EB的寻址空间，OS X使用硬盘持有当前不用的数据。当内存满了，不在使用的内存段会被写入硬盘，给现在需要的数据留出空间。存储未使用的数据的磁盘部分被称为后备存储器，因为它为主存储器提供备份存储。
+
 Although OS X supports a backing store, iOS does not. In iPhone applications, read-only data that is already on the disk (such as code pages) is simply removed from memory and reloaded from disk as needed. Writable data is never removed from memory by the operating system. Instead, if the amount of free memory drops below a certain threshold, the system asks the running applications to free up memory voluntarily to make room for new data. Applications that fail to free up enough memory are terminated.
+
 尽管OS X提供了备份存储，但是iOS没有。在iPhone应用中，磁盘中准备好的只读数据（跟代码页一样）只是简单的从内存中移除并在需要时重新从磁盘加载。可写的数据从不会被操作系统从内存中移除。取而代之的是，如果可用内存的数量低于某一阈值，系统就会让应用程序自主释放内存为新数据制造空间。没有释放足够的内存的应用程序将被终止。
-Note: Unlike most UNIX-based operating systems, OS X does not use a preallocated disk partition for the backing store. Instead, it uses all of the available space on the machine’s boot partition.
-注意：不像大部分基于UNIX的操作系统，OS X不使用预分配磁盘区域作为备份存储，而是使用机器引导分区的所有可用空间。
-The following sections introduce terminology and provide a brief overview of the virtual memory system used in both OS X and iOS. For more detailed information on how the virtual memory system works, see Kernel Programming Guide.
-以下各节介绍术语和提供用于OS X和iOS系统的虚拟内存的简要概述。关于虚拟内存系统如何工作的更多详细信息，参见《内核编程指南》。
-2.1 About Virtual Memory 关于虚拟内存
+
+> **Note:** Unlike most UNIX-based operating systems, OS X does not use a preallocated disk partition for the backing store. Instead, it uses all of the available space on the machine’s boot partition.
+>
+> **注意：**不像大部分基于UNIX的操作系统，OS X不使用预分配磁盘区域作为备份存储，而是使用机器引导分区的所有可用空间。
+
+The following sections introduce terminology and provide a brief overview of the virtual memory system used in both OS X and iOS. For more detailed information on how the virtual memory system works, see [Kernel Programming Guide](https://developer.apple.com/library/content/documentation/Darwin/Conceptual/KernelProgramming/About/About.html#//apple_ref/doc/uid/TP30000905).
+
+以下各节介绍术语和提供用于OS X和iOS系统的虚拟内存的简要概述。关于虚拟内存系统如何工作的更多详细信息，参见《[Kernel Programming Guide](https://developer.apple.com/library/content/documentation/Darwin/Conceptual/KernelProgramming/About/About.html#//apple_ref/doc/uid/TP30000905)》。
+
+## 1.1 About Virtual Memory 关于虚拟内存
+
 Virtual memory allows an operating system to escape the limitations of physical RAM. The virtual memory manager creates a logical address space (or “virtual” address space) for each process and divides it up into uniformly-sized chunks of memory called pages. The processor and its memory management unit (MMU) maintain a page table to map pages in the program’s logical address space to hardware addresses in the computer’s RAM. When a program’s code accesses an address in memory, the MMU uses the page table to translate the specified logical address into the actual hardware memory address. This translation occurs automatically and is transparent to the running application.
+
 虚拟内存允许操作系统避开物理RAM的限制。虚拟内存管理器为每个进程创建一个逻辑地址空间（或者“虚拟”地址空间）并将其分为大小一致的内存块，被称为页（page）。处理器和内存管理单元（MMU）维护一个页表，将程序的逻辑地址空间里的页与计算机RAM的硬件地址进行映射。当程序代码访问内存中的地址时，MMU使用页表将指定的逻辑地址翻译成实际的硬盘内存地址。该翻译自动发生并对运行的应用程序是透明的。
+
 As far as a program is concerned, addresses in its logical address space are always available. However, if an application accesses an address on a memory page that is not currently in physical RAM, a page fault occurs. When that happens, the virtual memory system invokes a special page-fault handler to respond to the fault immediately. The page-fault handler stops the currently executing code, locates a free page of physical memory, loads the page containing the needed data from disk, updates the page table, and then returns control to the program’s code, which can then access the memory address normally. This process is known as paging.
+
 就一个程序而言，它的逻辑地址空间中的地址总是可用的。然而，如果应用程序访问内存页上的地址当前不在物理RAM上，则会出现一个页面错误。当发生这种情况时，虚拟内存系统立即调用一个特殊的页面错误处理器响应这个错误。页面错误处理器会中断当前执行的代码，定位物理内存的空闲页，从磁盘中加载包含所需数据的页，更新页表，然后将控制权返回给程序代码，这样程序代码就能正常访问内存地址。这个过程称为分页（paging）。
+
 If there are no free pages available in physical memory, the handler must first release an existing page to make room for the new page. How the system release pages depends on the platform. In OS X, the virtual memory system often writes pages to the backing store. The backing store is a disk-based repository containing a copy of the memory pages used by a given process. Moving data from physical memory to the backing store is called paging out (or “swapping out”); moving data from the backing store back in to physical memory is called paging in (or “swapping in”). In iOS, there is no backing store and so pages are are never paged out to disk, but read-only pages are still be paged in from disk as needed.
+
 如果物理内存中没有可用的空闲页，处理器必须首先释放一个已存在的页为新的页创建空间。系统如何释放页取决于平台。在OS X中，虚拟内存系统通常将页写入备份存储中。备份存储是一个基于磁盘的库，该库中包含了一个被给定进程使用的内存页的拷贝。从物理内存移动数据到备份存储的过程被称为页出（paging out）或“换出”（swapping out）；从备份存储移动数据到物理内存的过程被称为页入（paging in）或“换入”（swapping in）。在iOS中，没有备份存储，因此页永远不会换出到磁盘，但是只读页仍然按需从磁盘换入。
+
 In both OS X and iOS, the size of a page is 4 kilobytes. Thus, every time a page fault occurs, the system reads 4 kilobytes from disk. Disk thrashing can occur when the system spends a disproportionate amount of time handling page faults and reading and writing pages, rather than executing code for a program.
+
 在OS X和iOS中，页的大小都是4KB。因此，每当页面错误发生，系统就从磁盘读取4KB。当系统花费相当多的时间处理页面错误、频繁的读写页（在内存/硬盘间频繁的换入换出），这个时间超过了程序执行代码的时间，就会发生磁盘抖动。
+
 Paging of any kind, and disk thrashing in particular, affects performance negatively because it forces the system to spend a lot of time reading and writing to disk. Reading a page in from the backing store takes a significant amount of time and is much slower than reading directly from RAM. If the system has to write a page to disk before it can read another page from disk, the performance impact is even worse.
+
 任何形式的分页，特别是磁盘抖动，都会给性能带来消极影响，因为它强迫系统花费大量的时间读和写磁盘。从备份存储中读取页会花费相当多的时间，这笔直接从RAM重读取慢很多。如果系统不得不在从磁盘中读取页之前将另一个页写入磁盘，对性能的影响就更加糟糕了。
-2.2 Details of the Virtual Memory System虚拟内存系统详述
+
+## 1.2 Details of the Virtual Memory System 虚拟内存系统详述
+
 The logical address space of a process consists of mapped regions of memory. Each mapped memory region contains a known number of virtual memory pages. Each region has specific attributes controlling such things as inheritance (portions of the region may be mapped from “parent” regions), write-protection, and whether it is wired (that is, it cannot be paged out). Because regions contain a known number of pages, they are page-aligned, meaning the starting address of the region is also the starting address of a page and the ending address also defines the end of a page.
+
 进程的逻辑地址空间由已映射的内存区域组成。每个已映射的内存区域包含已知数量的虚拟内存页。每个区域都有特定的属性控制继承性（该区域的一部分可能是从“父”区域映射过来）、写保护以及是否联动的（即，不能换出）。因为区域包含已知数量的页面，所以它们是页面对齐的，这意味着区域的起始地址也是一个页面的起始地址并且区域的结束地址也定义了一个页面的结束地址。
+
 The kernel associates a VM object with each region of the logical address space. The kernel uses VM objects to track and manage the resident and nonresident pages of the associated regions. A region can map to part of the backing store or to a memory-mapped file in the file system. Each VM object contains a map that associates regions with either the default pager or the vnode pager. The default pager is a system manager that manages the nonresident virtual memory pages in the backing store and fetches those pages when requested. The vnode pager implements memory-mapped file access. The vnode pager uses the paging mechanism to provide a window directly into a file. This mechanism lets you read and write portions of the file as if they were located in memory.
+
 内核（kernel）将VM对象与逻辑地址空间的每一个区域关联起来。内核使用VM对象来跟踪和管理所关联区域的常驻和非常驻页面。一个区域可以映射到备份存储的一部分或者映射到一个文件系统的内存映射文件。每个VM对象包含了一个关联区域与默认寻页器（default paper）或虚拟节点寻页器（vnode paper）的映射。默认寻页器是一个系统管理器，它管理了备份存储中的非常驻虚拟内存页，并在请求时获取这些页。虚拟节点寻页器实现了内存映射文件的访问。虚拟节点寻页器使用分页机制提供了一个窗口直接通到文件。该机制让你读写文件的某些部分，就仿佛它们就在内存中一样。
+
 In addition to mapping regions to either the default or vnode pager, a VM object may also map regions to another VM object. The kernel uses this self referencing technique to implement copy-on-write regions. Copy-on-write regions allow different processes (or multiple blocks of code within a process) to share a page as long as none of them write to that page. When a process attempts to write to the page, a copy of the page is created in the logical address space of the process doing the writing. From that point forward, the writing process maintains its own separate copy of the page, which it can write to at any time. Copy-on-write regions let the system share large quantities of data efficiently in memory while still letting processes manipulate those pages directly (and safely) if needed. These types of regions are most commonly used for the data pages loaded from system frameworks.
+
 除了将区域映射到默认或虚拟节点寻页器，VM对象还会将区域映射到另一个VM对象。内存使用自引用技术实现拷贝-写（copy-on-write）区域。拷贝-写区域允许不同的进程（或者一个进程中的多个代码块）共享一个页，只要它们都没有写入这个页。当一个进程试图往该页中写入时，会在该进程做写操作的逻辑地址空间创建一个页面拷贝。从这一点开始，正在写的京城操作它自己单独的页面的拷贝，它可以随时写入。拷贝-写区域让系统在内存中有效的分享大量数据，同时仍然可以在需要的时候让进程直接（且安全的）操作这些页。这些类型的区域通常用于从系统框架中加载属于页。
+
 Each VM object contains several fields, as shown in Table 1.
+
 每个VM对象包含若干字段，如表1所示。
-Table 1  Fields of the VM object
-Field	Description
-Resident pages	A list of the pages of this region that are currently resident in physical memory.
-Size	The size of the region, in bytes.
-Pager	The pager responsible for tracking and handling the pages of this region in backing store.
-Shadow	Used for copy-on-write optimizations.
-Copy	Used for copy-on-write optimizations.
-Attributes	Flags indicating the state of various implementation details.
+
+Table 1  Fields of the VM object VM对象的字段
+
+| Field          | Description                              |
+| -------------- | ---------------------------------------- |
+| Resident pages </br> 常驻页 | A list of the pages of this region that are currently resident in physical memory. 当前常驻物理内存中的区域的页列表。 |
+| Size </br> 大小 | The size of the region, in bytes.  区域大小，单位是字节。    |
+| Pager </br> 寻页器 | The pager responsible for tracking and handling the pages of this region in backing store. 负责跟踪和处理备份存储区域的页的寻页器。 |
+| Shadow </br> 阴影 | Used for copy-on-write optimizations.  用于拷贝写的优化。 |
+| Copy </br> 拷贝 | Used for copy-on-write optimizations.  用于拷贝写的优化。  |
+| Attributes </br> 属性 | Flags indicating the state of various implementation details. 指出各种实现详情的状态的标识。 |
+
 If the VM object is involved in a copy-on-write (vm_copy) operation, the shadow and copy fields may point to other VM objects. Otherwise both fields are usually NULL.
+
 如果在拷贝-写（vm_copy）操作中涉及VM对象，shadow和copy字段可能指向另一个VM对象。否则这两个字段通常是NULL。
-2.3 Wired Memory联动内存
+
+## 2.3 Wired Memory 联动内存
+
 Wired memory (also called resident memory) stores kernel code and data structures that must never be paged out to disk. Applications, frameworks, and other user-level software cannot allocate wired memory. However, they can affect how much wired memory exists at any time. For example, an application that creates threads and ports implicitly allocates wired memory for the required kernel resources that are associated with them.
+
 联动内存（也被称为常驻内存）存储了永远不能换出到磁盘的内核代码和数据结构。应用程序、框架和其他用户级别的软件不能分配联动内存。但是，它们可以随时影响存在多少联动内存。例如，创建线程和端口的线程的应用程序会隐式的为所需的内核资源分配联动内存
+
 Table 2 lists some of the wired-memory costs for application-generated entities.
 表2列举了应用生成实体时的联动内存花费。
+
 Table 2  Wired memory generated by user-level software
-Resource	Wired Memory Used by Kernel
-Process	16 kilobytes
-Thread	blocked in a continuation—5 kilobytes; blocked—21 kilobytes
-Mach port	116 bytes
-Mapping	32 bytes
-Library	2 kilobytes plus 200 bytes for each task that uses it
-Memory region	160 bytes
-Note: These measurements may change with each new release of the operating system. They are provided here to give you a rough estimate of the relative cost of system resource usage.
-注意：这些值在新的操作系统版本中可能改变。它们在此仅提供给你一个系统资源使用相对成本的粗略的估计。
+
+| Resource      | Wired Memory Used by Kernel              |
+| ------------- | ---------------------------------------- |
+| Process       | 16 kilobytes                             |
+| Thread        | blocked in a continuation—5 kilobytes; blocked—21 kilobytes |
+| Mach port     | 116 bytes                                |
+| Mapping       | 32 bytes                                 |
+| Library       | 2 kilobytes plus 200 bytes for each task that uses it |
+| Memory region | 160 bytes                                |
+
+> **Note:** These measurements may change with each new release of the operating system. They are provided here to give you a rough estimate of the relative cost of system resource usage.
+
+> **注意：** 这些值在新的操作系统版本中可能改变。它们在此仅提供给你一个系统资源使用相对成本的粗略的估计。
 As you can see, every thread, process, and library contributes to the resident footprint of the system. In addition to your application using wired memory, however, the kernel itself requires wired memory for the following entities:
+
 正如你所知的，每个线程、进程和库都会增加系统的常驻占用。然而，除了应用会使用联动内存，内核自己也会在下列实体中用到联动内存：
+
 •	VM objects
 •	the virtual memory buffer cache
 •	I/O buffer caches
 •	drivers
+
 Wired data structures are also associated with the physical page and map tables used to store virtual-memory mapping information, Both of these entities scale with the amount of available physical memory. Consequently, when you add memory to a system, the amount of wired memory increases even if nothing else changes. When a computer is first booted into the Finder, with no other applications running, wired memory can consume approximately 14 megabytes of a 64 megabyte system and 17 megabytes of a 128 megabyte system.
+
 联动数据结构与物理页和用于存储虚拟内存映射信息的映射表相关联。这些实体都与可用物理内存的数量成正比。因此，当你将内存添加到系统中，即使没有其他事情改变联动内存的数量也是增加的。当计算机第一次启动进入Finder，没有运行任何程序的时候，联动内存的消耗大约是64MB系统14MB，128M系统17MB。
+
 Wired memory pages are not immediately moved back to the free list when they become invalid. Instead they are “garbage collected” when the free-page count falls below the threshold that triggers page out events.
+
 当联动内存页不可用的时候，它们不会立即被移动到空闲列表。而是当空闲页的数量低于触发换出事件的阈值时被“垃圾回收（garbage collected）”。
+
 2.4 Page Lists in the Kernel内核中的页表
 The kernel maintains and queries three system-wide lists of physical memory pages:
 内核维护和查询了三个全系统的物理内存页的列表：
