@@ -1,32 +1,40 @@
-#Memory Usage Performance Guidelines
+# Memory Usage Performance Guidelines
 内存使用编程指南
 
 原文链接：
 
 [https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/ManagingMemory.html#//apple_ref/doc/uid/10000160i](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/ManagingMemory.html#//apple_ref/doc/uid/10000160i)
 
-1 Introduction概述
+# 0 Introduction概述
+
 Memory is an important system resource that all programs use. Programs must be loaded into memory before they can run and, while running, they allocate additional memory (both explicitly and implicitly) to store and manipulate program-level data. Making room in memory for a program’s code and data requires time and resources and therefore affect the overall performance of the system. Although you cannot avoid using memory altogether, there are ways to minimize the impact your memory usage has on the rest of the system.
+
 内存是所有程序使用的重要系统资源。在应用运行之前程序必须被加载到内存中，并且在运行中它们可以（显式的或隐式的）分配额外的内存以存储和操作程序级别的数据。在内存中为程序的代码和数据创造空间，需要消耗时间和资源，因此会影响到整个系统的性能。虽然你不能完全避免使用内存，但有办法最小化你的内存使用对系统其他部分的影响。
+
 This document provides background information about the memory systems of OS X and iOS and how you use them efficiently. You can use this information to tune your program’s memory usage by ensuring you are allocating the right amount of memory at the right time. This document also provides tips on how to detect memory-related performance issues in your program.
+
 本文提供了关于OS X和iOS内存系统的背景信息以及如何有效的使用它们。你可以利用这些信息，通过确保在正确的时间分配正确的内存数，调整你的程序的内存使用。本文还提供了关于如何在程序中检测内存相关问题的建议。
-1.1 Organization of This Document本文的结构
+
+## 0.1 Organization of This Document本文的结构
+
 This programming topic includes the following articles:
-本程序主题包括以下文章：
-•	About the Virtual Memory System introduces the terminology and provides a high-level overview of the virtual memory systems of OS X and iOS.
-•	《关于虚拟内存》介绍了一些术语并提供了OS X和iOS的虚拟内存系统的高级概述。
-•	Tips for Allocating Memory describes the best techniques for allocating, initializing, and copying memory. It also describes the proper ways to respond to low-memory notifications in iOS.
-•	《分配内存建议》描述了分配、初始化和复制内存的最佳技术。并介绍了在iOS中响应低内存通知的适当方法。
-•	Caching and Purgeable Memory discusses the benefits of caching, and how to avoid some of the problems that can arise from implementing caches. It also details the advantages of implementing purgeable memory into a caching system and how to successfully implement this beneficial technology.
-•	《缓存和可清除的内存》讨论了缓存的好处以及如何避免在实现缓存中可能遇到的问题。同时，还详述了在缓存系统中实现可清除内存的优点以及如何成功的实现这种有益的技术。
-•	Tracking Memory Usage describes the tools and techniques for analyzing your application’s memory usage.
-•	《跟踪内存使用》讲述了分析应用内存使用的工具和技术。
-•	Finding Memory Leaks describes the tools and techniques for finding memory leaks in your application.
-•	《找到内存泄露》讲述了在应用中找到内存泄露的工具和技术。
-•	Enabling the Malloc Debugging Features describes the environment variables used to enable malloc history logging. You must set some of these variables before using some of the memory analysis tools.
-•	《启用分配内存调试特性》讲述了用于启用分配内存历史日志的环境变量。你必须在使用内存分析工具之前设置其中的一些变量。
-•	Viewing Virtual Memory Usage describes the tools and techniques for analyzing your application’s in-memory footprint.
-•	《查看虚拟内存使用》讲述了分析应用程序内存占用的工具和技术。
+
+本课程主题包括以下文章：
+
+•	[About the Virtual Memory System](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html#//apple_ref/doc/uid/20001880-BCICIHAB) introduces the terminology and provides a high-level overview of the virtual memory systems of OS X and iOS.
+•	《[关于虚拟内存](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html#//apple_ref/doc/uid/20001880-BCICIHAB)》介绍了一些术语并提供了OS X和iOS的虚拟内存系统的高度概括。
+•	[Tips for Allocating Memory](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html#//apple_ref/doc/uid/20001881-CJBCFDGA) describes the best techniques for allocating, initializing, and copying memory. It also describes the proper ways to respond to low-memory notifications in iOS.
+•	《[分配内存建议](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html#//apple_ref/doc/uid/20001881-CJBCFDGA)》描述了分配、初始化和复制内存的最佳技术。并介绍了在iOS中响应低内存通知的适当方法。
+•	[Caching and Purgeable Memory](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/CachingandPurgeableMemory.html#//apple_ref/doc/uid/TP40013104-SW1) discusses the benefits of caching, and how to avoid some of the problems that can arise from implementing caches. It also details the advantages of implementing purgeable memory into a caching system and how to successfully implement this beneficial technology.
+•	《[缓存和可清除的内存](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/CachingandPurgeableMemory.html#//apple_ref/doc/uid/TP40013104-SW1)》讨论了缓存的好处以及如何避免在实现缓存中可能遇到的问题。同时，还详述了在缓存系统中实现可清除内存的优点以及如何成功的实现这种有益的技术。
+•	[Tracking Memory Usage](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingPatterns.html#//apple_ref/doc/uid/20001882-CJBJFIDD) describes the tools and techniques for analyzing your application’s memory usage.
+•	《[跟踪内存使用](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingPatterns.html#//apple_ref/doc/uid/20001882-CJBJFIDD)》讲述了分析应用内存使用的工具和技术。
+•	[Finding Memory Leaks](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html#//apple_ref/doc/uid/20001883-CJBJFIDD) describes the tools and techniques for finding memory leaks in your application.
+•	《[找到内存泄露](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html#//apple_ref/doc/uid/20001883-CJBJFIDD)》讲述了在应用中找到内存泄露的工具和技术。
+•	[Enabling the Malloc Debugging Features](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html#//apple_ref/doc/uid/20001884-CJBJFIDD) describes the environment variables used to enable malloc history logging. You must set some of these variables before using some of the memory analysis tools.
+•	《[启用分配内存调试特性](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html#//apple_ref/doc/uid/20001884-CJBJFIDD)》讲述了用于启用分配内存历史日志的环境变量。你必须在使用内存分析工具之前设置其中的一些变量。
+•	[Viewing Virtual Memory Usage](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/VMPages.html#//apple_ref/doc/uid/20001985-CJBJFIDD) describes the tools and techniques for analyzing your application’s in-memory footprint.
+•	《[查看虚拟内存使用](https://developer.apple.com/library/content/documentation/Performance/Conceptual/ManagingMemory/Articles/VMPages.html#//apple_ref/doc/uid/20001985-CJBJFIDD)》讲述了分析应用程序内存占用的工具和技术。
 
 
 
@@ -319,248 +327,4 @@ if([data beginContentAccess]) { //YES if data has not been discarded and counter
 //data is able to be discarded at this point if memory is tight
 4.2.3 Purgeable Memory and NSCache 可擦除内存和NSCache
 When objects that implement the NSDiscardableContent protocol are put in NSCache objects, the cache keeps a strong reference to the object. However, if an object’s content has been discarded and the cache’s evictsObjectsWithDiscardedContent value is set to YES, the object is automatically removed from the cache and is not found by a lookup call.
-4.2.4 Some Warnings About Purgeable Memory 关于可擦除内存的一些警告
-A caveat to using purgeable memory is that only large objects or chunks of memory can use it directly. The purgeable memory API acts on multi page virtual memory objects, which makes it hard to mark a single small cache element as purgeable. The caching API will do the required bookkeeping to allow small cache elements to use purgeable memory. Likewise, there will be cases where it is awkward to allocate the memory for cache elements through the API directly, such as when a convenience method is used to allocate an object or when an object is allocated in a different layer than the layer doing the caching. In such cases, it is not possible to use purgeable memory.
-4.3 When to Use Purgeable Memory 什么时候使用可擦除内存
-It makes sense to use purgeable memory when the expected cost of purging is less than the expected cost of paging — when the cost of paging is greater than the cost of recomputing the particular data value times the probability that that data item is reused. Many caches fall into this category because their speculative nature makes it likely that the items will not be used again. Similarly, cache items that are easily recomputed are prime candidates for purgeable memory, because the application will not take a huge performance hit if their values have to be recalculated.
-5 Tracking Memory Usage 跟踪内存使用
-If you suspect your code is not using memory as efficiently as it could, the first step in determining if there is a problem is to gather some baseline data. Monitoring your code using one of the Apple-provided performance tools can give you a picture of your code’s memory usage and may highlight potential problems or point to areas that need further examination. The following sections describe the tools most commonly used for memory analysis and when you might want to use them.
-如果你怀疑你的代码没有最有效的使用内存，判断代码中是否有问题的第一步是收集一些基础数据。使用一个苹果提供的性能工具监测你的代码就可以得出你代码的内存使用图，并且可以高亮标出潜在的问题或者指出需要进一步检查的区域。接下来的章节介绍了最常用的内存分析工具，以及什么时候可以使用它们。
-5.1 Tracking Allocations With Instruments 使用Instruments跟踪分配
-The Instruments application is always a good starting point for doing any sort of performance analysis. Instruments is an integrated, data-gathering environment that uses special modules (called instruments) to gather all sorts of information about a process. Instruments can operate on your application’s shipping binary file—you do not need to compile special modules into your application to use it. The library of the Instruments application contains four modules that are designed specifically for gathering memory-related data. These modules are as follows:
-对于任何种类的性能分析，Instruments应用程序都是一个不错的开始。Instruments是一个集成的数据收集环境，可以使用指定的模块（被称为instrument）收集一个进程的各种信息。Instruments可以在你的程序的运行着的二进制文件上操作——不需要将指定模块编译到你的程序中就可以使用。Instruments应用的库包含了4个专为收集内存相关数据而设计的模块。它们是：
-•	The ObjectAlloc instrument records and displays a history of all memory allocations since the launch of your application.
-•	ObjectAlloc仪器记录和显示了从你的应用启动开始的所有内存分配历史。
-•	The Leaks instrument looks for allocated memory that is no longer referenced by your program’s code; see Finding Leaks Using Instruments.
-•	Leaks仪器可以查找你的程序代码中已分配却不再被引用的内存；参见《使用Instruments找到内存泄露》。
-•	The Shared Memory instrument monitors the opening and unlinking of shared memory regions.
-•	Shared Memory仪器监测了共享内存区域的打开和分离。
-•	The Memory Monitor instrument measures and records the system’s overall memory usage.
-•	Memory Monitor仪器测量和记录了系统的全部内存使用。
-You can add any or all of these instruments to a single trace document and gather data for each of them simultaneously. Being able to gather the data all at once lets you correlate information from one instrument with the others. For example, the Leaks instrument is often combined with the ObjectAlloc instrument so that you can both track the allocations and find out which ones were leaked.
-你可以添加任意或者全部仪器到同一个跟踪文件中，并同时为每个仪器收集数据。一次收集所有数据的能力让你可以将一个仪器的信息与其他的相互关联。例如，Leaks仪器通常与ObjectAlloc仪器相关联，这样你就可以在跟踪内存分配的同时找出哪一个被泄露了。
-After gathering data for your application, you need to analyze it. The following sections provide tips on how to analyze data using several of the memory-related instruments. For information on how to use the Leaks instrument, see Finding Leaks Using Instruments.
-在为应用程序收集了数据之后，还需要分析它。以下章节提供了如何使用若干内存相关一起分析数据的建议。关于如何使用Leaks仪器的信息，参见《使用Instruments找到内存泄露》。
-5.1.1 Analyzing Memory Allocations with the ObjectAlloc Instrument 使用ObjectAlloc 仪器分析内存分配
-You use the ObjectAlloc instrument to track the memory allocation activity for your application. This instrument tracks memory allocations from the time your application is launched until you stop recording data. The instrument shows you the allocations in terms of the number of objects created and the size (or type) of the objects that were created. In the icon viewing mode, the instrument displays a real-time histogram that lets you see changes and trends directly as they occur. It also retains a history of allocations and deallocations, giving you an opportunity to go back and see where those objects were allocated.
-你使用ObjectAlloc仪器来跟踪应用程序的内存分配活动。该仪器从应用开始时跟踪内存分配，直到你停止记录数据。该仪器按照创建的对象数量和大小（或类型）向你展示内存分配。在图标查看模式下，该仪器显示实时的直方图，让你在分配发生时直接看到变化和趋势。它还保留了分配和销毁的历史，给你一个机会回去看看这些对象是在哪儿分配的。
-The information displayed by the ObjectAlloc instrument is recorded by an allocation statistics facility built into the Core Foundation framework. When this facility is active, every allocation and deallocation is recorded as it happens.
-ObjectAlloc仪器显示的信息由编入Core Foundation框架的分配统计模块记录。当这个模块活跃时，每个分配和销毁发生时都会被记录。
-5.1.2 Analyzing Shared Memory Usage 分析共享内存使用
-For Mac apps, the Shared Memory instrument tracks calls to any shm_open and shm_unlink functions, which are used for opening and closing regions of shared memory in the system. You can use this information to find out where your application is getting references to shared memory regions and to examine how often those calls are being made. The detail pane displays the list of each function call along with information about the calling environment at the time of the call. Specifically, the pane lists the executable that initiated the call and the function parameters. Opening the Extended Detail pane shows the stack trace associated with the call.
-对于Mac应用，Shared Memory仪器跟踪了所有shm_open和shm_unlink方法的调用，这两个方法用于打开和关闭系统中的共享内存区域。你可以使用该仪器来找出你的应用在哪儿引用了共享内存区域以及检查这些方法被调用的频率。详情窗格显示了每一个方法调用的列表以及调用时的调用环境信息。特别需要指出的是，该窗格还列出了发起调用的可执行程序和方法参数。打开扩展详情窗格可以展示关联到调用的栈轨迹。
-5.1.3 Analyzing Data from the Memory Monitor Instrument 通过Memory Monitor仪器分析数据
-For Mac apps, the Memory Monitor instrument displays assorted statistics about system memory usage. You can use this instrument to view the memory usage trends in your application or on the entire system. For example, you can see how much memory is currently active, inactive, wired, and free. You can also see the amount of memory that has been paged in or out. You might use this instrument in conjunction with other instruments to track the amount of memory your application uses with respect to specific operations.
-对于Mac应用，Memory Monitor仪器显示了有关系统内存使用的各种统计数据。你可以使用该仪器查看你的应用或实体系统中的内存使用趋势。例如，你可以看到当前有多少内存是活动的、失活的、联动的和空闲的。你也能看到被换入或换出的内存数量。你可以使用该仪器与其他仪器协作，以跟踪某个特定操作时应用程序的内存使用量。
-5.2 Tracking Memory Allocations With malloc_history 使用malloc_history跟踪内存分配
-In OS X, the malloc_history tool displays backtrace data showing exactly where your program made calls to the malloc and free functions. If you specify an address when calling malloc_history, the tool tracks memory allocations occurring at that address only. If you specify the -all_by_size or -all_by_count options, the tool displays all allocations, grouping frequent allocations together.
-Before using the malloc_history tool on your program, you must first enable the malloc library logging features by setting the MallocStackLogging to 1. You may also want to set the MallocStackLoggingNoCompact environment variable to retain information about freed blocks. For more information on these variables, see Enabling the Malloc Debugging Features.
-The malloc_history tool is best used in situations where you need to find the previous owner of a block of memory. If you determine that a particular data is somehow becoming corrupted, you can put checks into your code to print the address of the block when the corruption occurs. You can then use malloc_history to find out who owns the block and identify any stale pointers.
-The malloc_history tool is also suited for situations where Sampler or MallocDebug cannot be used. For example, you might use this tool from a remote computer or in situations where you want a minimal impact on the behavior of your program.
-For more information on using the malloc_history tool, see a target="_self" malloc_history/a man page.
-5.3 Examining Memory With the heap Tool 使用heap工具检查内存
-In OS X, the heap command-line tool displays a snapshot of the memory allocated by the malloc library and located in the address space of a specified process. For Cocoa applications, this tool identifies Objective-C objects by name. For both memory blocks and objects, the tool organizes the information by heap, showing all items in the same heap together.
-The heap tool provides much of the same information as the ObjectAlloc instrument, but does so in a much less intrusive manner. You can use this tool from a remote session or in situations where the use of Instruments might slow the system down enough to affect the resulting output.
-For more information about using the heap tool, see a target="_self" heap(1)/a man page.
-6 Finding Memory Leaks 找到内存泄露
-Memory leaks are blocks of allocated memory that the program no longer references. Leaks waste space by filling up pages of memory with inaccessible data and waste time due to extra paging activity. Leaked memory eventually forces the system to allocate additional virtual memory pages for the application, the allocation of which could have been avoided by reclaiming the leaked memory.
-For apps that use malloc, memory leaks are bugs and should always be fixed. For apps that use only Objective-C objects, the compiler’s ARC feature deallocates objects for you and generally avoids the problem of memory leaks. However, apps that mix the use of Objective-C objects and C-based structures must manage the ownership of objects more directly to ensure that the objects are not leaked.
-The malloc library can only reclaim the memory you tell it to reclaim. If you call malloc or any routine that allocates memory, you must balance that call with a corresponding free. A typical memory leak occurs when you forget to deallocate memory for a pointer embedded in a data structure. If you allocate memory for embedded pointers in your code, make sure you release the memory for that pointer prior to deallocating the data structure itself.
-Another typical memory leak example occurs when you allocate memory, assign it to a pointer, and then assign a different value to the pointer without freeing the first block of memory. In this example, overwriting the address in the pointer erases the reference to the original block of memory, making it impossible to release.
-6.1 Finding Leaks Using Instruments 使用Instruments找到内存泄露
-The Instruments application can be used to find leaks in both OS X and iPhone applications. To find leaks, create a new document template in Instruments and add the Leaks instrument to it. The Leaks instrument provides leak-detection capabilities identical to those in the leaks command-line tool. The Leaks instrument records all allocation events that occur in your application and then periodically searches the application’s writable memory, registers, and stack for references to any active memory blocks. If it does not find a reference to a block in one of these places, it deems the block a “leak” and displays the relevant information in the Detail pane.
-In the Detail pane, you can view leaked memory blocks using Table and Outline modes. In Table mode, Instruments displays the complete list of leaked blocks, sorted by size. Selecting an entry in the table and clicking the arrow button next to the memory address shows the allocation history for the memory block at that address. Selecting an entry from this allocation history then shows the stack trace for that event in the Extended Detail pane of the document window. In Outline mode, the Leaks instrument displays leaks organized by call tree, which you can use to get information about the leaks in a particular branch of your code.
-For more information about using the Instruments application, including more information about the information displayed by the Leaks instrument, see Instruments User Guide.
-6.2 Using the leaks Tool 使用内存泄露工具
-In OS X, the leaks command-line tool searches the virtual memory space of a process for buffers that were allocated by malloc but are no longer referenced. For each leaked buffer it finds, leaks displays the following information:
-•	the address of the leaked memory
-•	the size of the leak (in bytes)
-•	the contents of the leaked buffer
-If leaks can determine that the object is an instance of an Objective-C or Core Foundation object, it also displays the name of the object. If you do not want to view the contents of each leaked buffer, you can specify the -nocontext option when calling leaks. If the MallocStackLogging environment variable is set and you are running your application in gdb, leaks displays a stack trace describing where the buffer was allocated. For more information on malloc debugging options, see Enabling the Malloc Debugging Features.
-Note: The leaks command-line tool is located in /usr/bin.
-6.3 Tips for Improving Leak Detection 提升内存泄露侦测能力的窍门
-The following guidelines can help you find memory leaks quickly in your program. Most of these guidelines are intended to be used with the leaks tool but some are also applicable for use with MallocDebug and general use.
-1	Run leaks during unit testing. Because unit testing exercises all code paths in a repeatable manner, you are more likely to find leaks than you would be if you were testing your code in a production environment.
-2	Use the -exclude option of leaks to filter out leaks in functions with known memory leaks. This option helps reduce the amount of extraneous information reported by leaks.
-3	If leaks reports a leak intermittently, set up a loop around the target code path and run the code hundreds or thousands of times. This increases the likelihood of the leak reappearing more regularly.
-4	Run your program against libgmalloc.dylib in gdb. This library is an aggressive debugging malloc library that can help track down insidious bugs in your code. For more information, see the libgmalloc man page.
-5	For Cocoa and iPhone applications, if you fix a leak and your program starts crashing, your code is probably trying to use an already-freed object or memory buffer. Set the NSZombieEnabled environment variable to YES to find messages to already freed objects.
-Most unit testing code executes the desired code paths and exits. Although this is perfectly normal for unit testing, it creates a problem for the leaks tool, which needs time to analyze the process memory space. To fix this problem, you should make sure your unit-testing code does not exit immediately upon completing its tests. You can do this by putting the process to sleep indefinitely instead of exiting normally.
-7 Enabling the Malloc Debugging Features 开启Malloc调试特性
-Debugging memory-related bugs can be time consuming if you do not know where to start looking. This is usually compounded by the problem that many memory bugs occur well after the memory in question was manipulated by the code. Fortunately, Xcode includes options for identifying memory problems closer to when those problems actually happen.
-7.1 Enabling Guard Malloc 启用Guard Malloc
-Guard Malloc is a special version of the malloc library that replaces the standard library during debugging. Guard Malloc uses several techniques to try and crash your application at the specific point where a memory error occurs. For example, it places separate memory allocations on different virtual memory pages and then deletes the entire page when the memory is freed. Subsequent attempts to access the deallocated memory cause an immediate memory exception rather than a blind access into memory that might now hold other data. When the crash occurs, you can then go and inspect the point of failure in the debugger to identify the problem.
-To enable debugging using Guard Malloc, configure your project to run with Guard Malloc in Xcode’s scheme editor. You can use this option for Mac apps and iOS apps running in the simulator.
-For more information about the types of memory problems that Guard Malloc can help you track down, see the a target="_self" libgmalloc/a man page in a target="_self" OS X Man Pages/a.
-7.2 Configuring the Malloc Environment Variables 配置Malloc环境变量
-The malloc library provides debugging features to help you track down memory smashing bugs, heap corruption, references to freed memory, and buffer overruns. You enable these debugging options through a set of environment variables. With the exception of MallocCheckHeapStart and MallocCheckHeapEach, the value for most of these environment variables is ignored. To disable a variable from Terminal, use the a target="_self" unset/a command. Table 1 lists some of the key environment variables and describes their basic function. For a complete list of variables, see the malloc man page.
-Table 1  Malloc environment variables
-Variable	Description
-MallocStackLogging	If set, malloc remembers the function call stack at the time of each allocation.
-MallocStackLoggingNoCompact	This option is similar to MallocStackLogging but makes sure that all allocations are logged, no matter how small or how short lived the buffer may be.
-MallocScribble	If set, free sets each byte of every released block to the value 0x55.
-MallocPreScribble	If set, malloc sets each byte of a newly allocated block to the value 0xAA. This increases the likelihood that a program making assumptions about freshly allocated memory fails.
-MallocGuardEdges	If set, malloc adds guard pages before and after large allocations.
-MallocDoNotProtectPrelude	Fine-grain control over the behavior of MallocGuardEdges: If set, malloc does not place a guard page at the head of each large block allocation.
-MallocDoNotProtectPostlude	Fine-grain control over the behavior of MallocGuardEdges: If set, malloc does not place a guard page at the tail of each large block allocation.
-MallocCheckHeapStart	Set this variable to the number of allocations before malloc will begin validating the heap. If not set, malloc does not validate the heap.
-MallocCheckHeapEach	Set this variable to the number of allocations before malloc should validate the heap. If not set, malloc does not validate the heap.
-The following example enables stack logging and heap checking in the current shell before running an application. The value for MallocCheckHeapStart is set to 1 but is irrelevant and can be set to any value you want. You could also set these variables from your shell’s startup file, although if you do be sure to a target="_self" export/a each variable.
-% MallocStackLogging=1
-% MallocCheckHeapStart=1000
-% MallocCheckHeapEach=100
-% ./my_tool
-If you want to run your program in gdb, you can set environment variables from the Xcode debugging console using the command set env, as shown in the following example:
-% gdb
-(gdb) set env MallocStackLogging 1
-(gdb) run
-Some of the performance tools require these options to be set in order to gather their data. For example, the malloc_history tool can identify the allocation site of specific blocks if the MallocStackLogging flag is set. This tool can also describe the blocks previously allocated at an address if the MallocStackLoggingNoCompact environment variable is set. The leaks command line tool will name the allocation site of a leaked buffer if MallocStackLogging is set. See the man pages for leaks and malloc_history for more details.
-7.2.1 Detecting Double Freed Memory 侦测二次释放的内存
-The malloc library reports attempts to call free on a buffer that has already been freed. If you have enabled the MallocStackLoggingNoCompact option, you can use the logged stack information to find out where in your code the second free call was made. You can then use this information to set up an appropriate breakpoint in the debugger and track down the problem.
-The malloc library reports information to stderr.
-7.2.2 Detecting Heap Corruption 侦测堆腐化
-To enable heap checking, assign values to the MallocCheckHeapStart and MallocCheckHeapEach environment variables. You must set both of these variables to enable heap checking. The MallocCheckHeapStart variable tells the malloc library how many malloc calls to process before initiating the first heap check. Set the second to the number of malloc calls to process between heap checks.
-The MallocCheckHeapStart variable is useful when the heap corruption occurs at a predictable time. Once it hits the appropriate start point, the malloc library starts logging allocation messages to the Terminal window. You can watch the number of allocations and use that information to determine approximately where the heap is being corrupted. Adjust the values for MallocCheckHeapStart and MallocCheckHeapEach as necessary to narrow down the actual point of corruption.
-7.2.3 Detecting Memory Smashing Bugs 侦测内存损毁的错误
-To find memory smashing bugs, enable the MallocScribble variable. This variable writes invalid data to freed memory blocks, the execution of which causes an exception to occur. When using this variable, you should also set the MallocStackLogging and MallocStackLoggingNoCompact variables to log the location of the exception. When the exception occurs, you can then use the malloc_history command to track down the code that allocated the memory block. You can then use this information to track through your code and look for any lingering pointers to this block.
-8 Viewing Virtual Memory Usage 查看虚拟内存使用
-If you need more detailed information about virtual memory usage, you can use the top, vm_stat, pagestuff, and vmmap command-line tools for analyzing your Mac apps. The information returned by these tools ranges from summary information about all the system processes to detailed information about a specific process.
-The following sections provide information on using the vm_stat, pagestuff, and vmmap tools to gather detailed memory information. For more information on using Instruments to analyze memory, see Instruments User Guide and the other articles in this document. For information on how to use the top tool, see Performance Overview.
-8.1 Viewing Virtual Memory Statistics 查看虚拟内存统计
-The vm_stat tool displays high-level statistics about the current virtual memory usage of the system. By default, vm_stat displays these statistics once, but you can specify an interval value (in seconds) to update these statistics continuously. For information on the usage of this tool, see the a target="_self" vm_stat/a man page.
-Listing 1 shows an example of the output from vm_stat.
-Listing 1  Output of vm_stat tool
-Mach Virtual Memory Statistics: (page size of 4096 bytes)
-Pages free:                     3194.
-Pages active:                  34594.
-Pages inactive:                17870.
-Pages wired down:               9878.
-"Translation faults":        6333197.
-Pages copy-on-write:           81385.
-Pages zero filled:           3180051.
-Pages reactivated:            343961.
-Pageins:                       33043.
-Pageouts:                      78496.
-Object cache: 66227 hits of 96952 lookups (68% hit rate)
-8.2 Viewing Mach-O Code Pages 查看Mach-O代码页
-The pagestufftool displays information about the specified logical pages of a file conforming to the Mach-O executable format. For each specified page of code, symbols (function and static data structure names) are displayed. All pages in the __TEXT, __text section are displayed if no page numbers are given.
-Listing 2 shows part of the output from pagestuff for the TextEdit application. This output is the result of running the tool with the -a option, which prints information about all of the executable’s code pages. It includes the virtual address locations of each page and the type of information on that page.
-Listing 2  Partial output of pagestuff tool
-File Page 0 contains Mach-O headers
-File Page 1 contains Mach-O headers
-File Page 2 contains contents of section (__TEXT,__text)
-Symbols on file page 2 virtual address 0x3a08 to 0x4000
-File Page 3 contains contents of section (__TEXT,__text)
-Symbols on file page 3 virtual address 0x4000 to 0x5000
-File Page 4 contains contents of section (__TEXT,__text)
-Symbols on file page 4 virtual address 0x5000 to 0x6000
- 
-...
- 
-File Page 22 contains contents of section (__TEXT,__cstring)
-File Page 22 contains contents of section (__TEXT,__literal4)
-File Page 22 contains contents of section (__TEXT,__literal8)
-File Page 22 contains contents of section (__TEXT,__const)
-Symbols on file page 22 virtual address 0x17000 to 0x17ffc
-File Page 23 contains contents of section (__DATA,__data)
-File Page 23 contains contents of section (__DATA,__la_symbol_ptr)
-File Page 23 contains contents of section (__DATA,__nl_symbol_ptr)
-File Page 23 contains contents of section (__DATA,__dyld)
-File Page 23 contains contents of section (__DATA,__cfstring)
-File Page 23 contains contents of section (__DATA,__bss)
-File Page 23 contains contents of section (__DATA,__common)
-Symbols on file page 23 virtual address 0x18000 to 0x18d48
- 0x00018000 _NXArgc
- 0x00018004 _NXArgv
- 0x00018008 _environ
- 0x0001800c ___progname
-...
-In the preceding listing, if a page exports any symbols, those symbols are also displayed by the -a option. If you want to view the symbols for a single page, pass in the desired page number instead of the -a option. For more information about the pagestuff tool and its supported options, see the a target="_self" pagestuff/a man page.
-8.3 Viewing Virtual Memory Regions 查看虚拟内存区域
-The vmmap and vmmap64 tools display the virtual memory regions allocated for a specified process. These tools provide access to the virtual memory of 32-bit and 64-bit applications, respectively. You can use them to understand the purpose of memory at a given address and how that memory is being used. For each virtual-memory region, these tools display the type of page, the starting address, region size (in kilobytes), read/write permissions, sharing mode, and the purpose of the pages in that region.
-The following sections show you how to interpret the output from the vmmap tool. For more information about the vmmap and vmmap64 tools, see the a target="_self" vmmap/a or a target="_self" vmmap64/a man pages.
-8.3.1 Sample Output From vmmap 从vmmap采样输出
-Listing 3 shows some sample output from the vmmap tool. This example is not a full listing of the tool’s output but is an abbreviated version showing the primary sections.
-Listing 3  Typical output of vmmap
-==== Non-writable regions for process 313
-__PAGEZERO              0 [   4K] ---/--- SM=NUL ...ts/MacOS/Clock
-__TEXT               1000 [  40K] r-x/rwx SM=COW ...ts/MacOS/Clock
-__LINKEDIT           e000 [   4K] r--/rwx SM=COW ...ts/w/Clock
-                    90000 [   4K] r--/r-- SM=SHM
-                   340000 [3228K] r--/rwx SM=COW 00000100 00320...
-                   789000 [3228K] r--/rwx SM=COW 00000100 00320...
-Submap           90000000-9fffffff r--/r-- machine-wide submap
-__TEXT           90000000  [ 932K] r-x/r-x SM=COW /usr/lib/libSystem.B.dylib
-__LINKEDIT       900e9000   [ 260K] r--/r-- SM=COW /usr/lib/libSystem.B.dylib
-__TEXT           90130000 [ 740K] r-x/r-x SM=COW .../Versions/A/CoreFoundation
-__LINKEDIT       901e9000 [ 188K] r--/r-- SM=COW .../Versions/A/CoreFoundation
-__TEXT           90220000 [2144K] r-x/r-x SM=COW .../Versions/A/CarbonCore
-__LINKEDIT       90438000 [ 296K] r--/r-- SM=COW .../Versions/A/CarbonCore
- 
-[...data omitted...]
- 
-==== Writable regions for process 606
-__DATA             18000 [   4K] rw-/rwx SM=PRV /Contents/MacOS/TextEdit
-__OBJC             19000 [   8K] rw-/rwx SM=COW /Contents/MacOS/TextEdit
-MALLOC_OTHER       1d000 [ 256K] rw-/rwx SM=PRV
-MALLOC_USED(DefaultMallocZone_0x5d2c0)     5d000 [ 256K] rw-/rwx SM=PRV
-                   9d000 [ 372K] rw-/rwx SM=COW 33320000 00000020 00000000 00001b84...
-VALLOC_USED(DefaultMallocZone_0x5d2c0)     ff000 [  36K] rw-/rwx SM=PRV
-MALLOC_USED(CoreGraphicsDefaultZone_0x10  108000 [ 256K] rw-/rwx SM=PRV
-MALLOC_USED(CoreGraphicsRegionZone_0x148  148000 [ 256K] rw-/rwx SM=PRV
- 
-[...data omitted...]
- 
-Submap           a000b000-a012ffff r--/r-- process-only submap
-__DATA           a0130000 [  28K] rw-/rw- SM=COW .../Versions/A/CoreFoundation
-Submap           a0137000-a021ffff r--/r-- process-only submap
-__DATA           a0220000 [  20K] rw-/rw- SM=COW .../Versions/A/CarbonCore
-Submap           a0225000-a048ffff r--/r-- process-only submap
-__DATA           a0490000 [  12K] rw-/rw- SM=COW .../IOKit.framework/Versions/A/IOKit
-Submap           a0493000-a050ffff r--/r-- process-only submap
-__DATA           a0510000 [  36K] rw-/rw- SM=COW .../Versions/A/OSServices
-                 b959e000 [   4K] rw-/rw- SM=SHM
-                 b95a0000 [   4K] rw-/rw- SM=SHM
-                 b9630000 [ 164K] rw-/rw- SM=SHM
-                 b965a000 [ 896K] rw-/rw- SM=SHM
-                 bff80000 [ 504K] rw-/rwx SM=ZER
-STACK[0]         bfffe000 [   4K] rw-/rwx SM=PRV
-                 bffff000 [   4K] rw-/rwx SM=PRV
-__DATA           c000c000 [   4K] rw-/rwx SM=PRV .../Versions/A/ApplicationEnhancer
-STACK[1]         f0001000 [ 512K] rw-/rwx SM=PRV
-                 ff002000 [12272K] rw-/rw- SM=SHM
- 
-==== Legend
-SM=sharing mode:
-    COW=copy_on_write PRV=private NUL=empty ALI=aliased
-    SHM=shared ZER=zero_filled S/A=shared_alias
- 
-==== Summary for process 313
-ReadOnly portion of Libraries: Total=27420KB resident=12416KB(45%) swapped_out_or_unallocated=15004KB(55%)
-Writable regions: Total=21632KB written=536KB(2%) resident=1916KB(9%) swapped_out=0KB(0%) unallocated=19716KB(91%)
-If you specify the -d parameter (plus an interval in seconds), vmmap takes two snapshots of virtual-memory usage—one at the beginning of a specified interval and the other at the end—and displays the differences. It shows three sets of differences:
-•	individual differences
-•	regions in the first snapshot that are not in the second
-•	regions in the second snapshot that are not in the first
-8.3.2 Interpreting vmmap’s Output 解释vmmap的输出
-The columns of vmmap output have no headings. Instead you can interpret the type of data in each column by its format. Table 1 describes these columns.
-Table 1  Column descriptions for vmmap
-Column Number	Example	Description
-1	__TEXT, __LINKEDIT, MALLOC_USED, STACK, and so on	The purpose of the memory. This column can contain the name of a Mach-O segment or the memory allocation technique.
-2	(DefaultMallocZone_0x5d2c0)	If present, the zone used for allocation.
-3	4eee000	The virtual memory address of the region.
-4	[ 124K]	The size of the region, measured in kilobytes
-5	rw-/rwx	Read, write and execution permissions for the region. The first set of flags specifies the current protection for the region. The second set of values specifies the maximum protection for the region. If an entry contains a dash (-), the process does not have the target permission.
-6	SM=PRV	Sharing mode for the region, either COW (copy-on-write), PRV (private), NUL (empty), ALI (aliased), or SHM (shared).
-7	...ts/MacOS/Clock	The end of the pathname identifying the executable mapped into this region of virtual memory. If the region is stack or heap memory, nothing is displayed in this column.
-Column 1 identifies the purpose of the memory. A __TEXT segment contains read-only code and data. A __DATA segment contains data that may be both readable and writable. For allocated data, this column shows how the memory was allocated, such as on the stack, using malloc, and so on. For regions loaded from a library, the far right column shows the name of the library loaded into memory.
-The size of the virtual memory region (column 4) represents the total size reserved for that region. This number may not reflect the actual number of memory pages allocated for the region. For example, calling vm_allocate reserves a set of memory pages but does not allocate any physical memory until the pages are actually touched. Similarly, a memory-mapped file may reserve a set of pages, but the system does not load pages until a read or write event occurs on the file.
-The protection mode (column 5) describes the access restrictions for the memory region. A memory region contains separate flags for read, write, and execution permissions. Each virtual memory region has a current permission, and a maximum permission. In the output from vmmap, the current permission appears first followed by the maximum permission. Thus, if the permissions are “r--/rwx“ the page is currently read-only but allows read, write, and execution access as its maximum allowed permissions. Typically, the current permissions do not permit writing to a region. However, these permissions may change under certain circumstances. For example, a debugger may request write access to a page in order to set a breakpoint.
-Note: Pages representing part of a Mach-O executable are usually not writable. The first page (__PAGEZERO, starting at address 0x00000000) has no permissions set. This ensures that any reference to a NULL pointer immediately causes an error. The page just before the stack is similarly protected so that stack overflows cause the application to crash immediately.
-
-The sharing mode (SM= field) tells you whether pages are shared between processes and what happens when pages are modified. Private pages (PRV) are visible only to the process and are allocated as they are used. Private pages can also be paged out to disk. Copy-on-write (COW) pages are shared by multiple processes (or shared by a single process in multiple locations). When the page is modified, the writing process then receives its own copy of the page. Empty (NUL) sharing implies that the page does not really exist in physical memory. Aliased (ALI) and shared (SHM) memory are shared between processes.
-The sharing mode typically describes the general mode controlling the region. For example, as copy-on-write pages are modified, they become private to the application. However, the region containing those private pages is still copy-on-write until all pages become private. Once all pages are private, the sharing mode changes to private.
-Some lines in the output of vmmap describe submaps. A submap is a shared set of virtual memory page descriptions that the operating system can reuse between multiple processes. For example, the memory between 0x90000000 and 0xAFFFFFFF is a submap containing the most common dynamic libraries. Submaps minimize the operating system’s memory usage by representing the virtual memory regions only once. Submaps can either be shared by all processes (machine-wide) or be local to the process (process-only). If the contents of a machine-wide submap are changed—for example, the debugger makes a section of memory for a dynamic library writable so it can insert debugging traps—then the submap becomes local, and the kernel allocates memory to store the extra copy.
-
-
-
+4.2.4 Some Warnings About Purgeable Memory 关于可擦除内存的 
