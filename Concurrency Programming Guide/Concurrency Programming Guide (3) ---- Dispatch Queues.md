@@ -271,7 +271,7 @@ Although you should add tasks asynchronously whenever possible, there may still 
 
 >**Important:** You should never call the `dispatch_sync` or `dispatch_sync_f` function from a task that is executing in the same queue that you are planning to pass to the function. This is particularly important for serial queues, which are guaranteed to deadlock, but should also be avoided for concurrent queues. 
 >
->**重要：**你永远不要在你计划传入函数的队列中的正在执行的任务中调用`dispatch_sync`或`dispatch_sync_f`函数。这对于串行队列尤其重要，这肯定会死锁；而且也要避免在并行队列中这样用。
+>**重要：**在一个正在队列中执行的任务中，如果你想要调用`dispatch_sync`或`dispatch_sync_f`函数，永远不要把这个任务所在的队列传入这两个函数。这对于串行队列尤其重要，这肯定会死锁；而且也要避免在并行队列中这样用。
 
 The following example shows how to use the block-based variants for dispatching tasks asynchronously and synchronously: 
 
@@ -368,34 +368,61 @@ You should make sure that your task code does a reasonable amount of work throug
 
 Grand Central Dispatch provides a special dispatch queue that you can use to execute tasks on your application’s main thread. This queue is provided automatically for all applications and is drained automatically by any application that sets up a run loop (managed by either a `CFRunLoopRef` type or `NSRunLoop` object) on its main thread. If you are not creating a Cocoa application and do not want to set up a run loop explicitly, you must call the `dispatch_main` function to drain the main dispatch queue explicitly. You can still add tasks to the queue, but if you do not call this function those tasks are never executed. 
 
+GCD提供了特殊的调度队列，你可以用其在程序的主线程执行任务。该队列为所有程序自动提供，并且被任何在主线程设置了run loop（由`CFRunLoopRef`类型或`NSRunLoop`对象管理）的程序自动放干。如果你不是在创建Cocoa程序并且不想显式的建立一个run loop，你必须调用`dispatch_main`函数显式的放干主调度队列。你仍然可以添加任务到这个队列，但是如果你没有调用这个函数，那些任务永远不会被执行。
+
 You can get the dispatch queue for your application’s main thread by calling the `dispatch_get_main_queue` function. Tasks added to this queue are performed serially on the main thread itself. Therefore, you can use this queue as a synchronization point for work being done in other parts of your application.
 
-###3.5.5 Using Objective-C Objects in Your Tasks
+你可以通过调用`dispatch_get_main_queue`函数为你程序的主线程获得调度队列。添加到这个队列的任务在主线程上串行的执行。因此，你可以使用这个队列作为程序中其他部分的工作完成的同步点。
+
+###3.5.5 Using Objective-C Objects in Your Tasks 在任务中使用Objective-C
 
 GCD provides built-in support for Cocoa memory management techniques so you may freely use Objective-C objects in the blocks you submit to dispatch queues. Each dispatch queue maintains its own autorelease pool to ensure that autoreleased objects are released at some point; queues make no guarantee about when they actually release those objects.
 
+GCD为Cocoa内存管理技术提供嵌入式支持，所以你可以在你提交到调度队列的block中自由的使用Objective-C对象。每个调度队列维持自己的自动释放池，确保自动释放对象在某些节点能被释放；但队列并不保证这些对象合适真正释放了。
+
 If your application is memory constrained and your block creates more than a few autoreleased objects, creating your own autorelease pool is the only way to ensure that your objects are released in a timely manner. If your block creates hundreds of objects, you might want to create more than one autorelease pool or drain your pool at regular intervals.
+
+如果你程序的内存受限，而你的block又创建了较多自动释放对象，创建你自己的自动释放池是确保你的对象及时释放的唯一方法。如果你的block创建了几百个对象，你可能要创建不止一个自动释放池，或者隔一定时间就放干你的池子。
 
 For more information about autorelease pools and Objective-C memory management, see *Advanced Memory Management Programming Guide*. 
 
-##3.6 Suspending and Resuming Queues
+关于自动释放池和Objective-C内存管理的更多信息，参见《Advanced Memory Management Programming Guide》。
+
+##3.6 Suspending and Resuming Queues 暂停和恢复队列
 
 You can prevent a queue from executing [block objects]() temporarily by suspending it. You suspend a dispatch queue using the `dispatch_suspend`function and resume it using the `dispatch_resume` function. Calling `dispatch_suspend` increments the queue’s suspension reference count, and calling `dispatch_resume` decrements the reference count. While the reference count is greater than zero, the queue remains suspended. Therefore, you must balance all suspend calls with a matching resume call in order to resume processing blocks. 
 
->**Important:** Suspend and resume calls are asynchronous and take effect only between the execution of blocks. Suspending a queue does not cause an already executing block to stop.
+你可以通过暂停暂时阻止一个队列执行block对象。你使用`dispatch_suspend`函数暂停一个调度队列，并使用`dispatch_resume`函数恢复它。调用`dispatch_suspend`会增加队列的暂停引用计数，而调用`dispatch_resume`会减少该引用计数。当暂停引用计数大于0时，队列会保持暂停。因此，你必须保证所有的暂停调用和相匹配的恢复调用次数一致才能够恢复处理block。
 
-##3.7 Using Dispatch Semaphores to Regulate the Use of Finite Resources
+>**Important:** Suspend and resume calls are asynchronous and take effect only between the execution of blocks. Suspending a queue does not cause an already executing block to stop.
+>
+>**重要：**暂停和恢复调用都是异步的，并且只在block的执行之间生效。暂停队列不会导致已经在执行的block停下来。
+
+##3.7 Using Dispatch Semaphores to Regulate the Use of Finite Resources 使用调度信号量控制有限资源的使用
 
 If the tasks you are submitting to dispatch queues access some finite resource, you may want to use a dispatch semaphore to regulate the number of tasks simultaneously accessing that resource. A dispatch semaphore works like a regular semaphore with one exception. When resources are available, it takes less time to acquire a dispatch semaphore than it does to acquire a traditional system semaphore. This is because Grand Central Dispatch does not call down into the kernel for this particular case. The only time it calls down into the kernel is when the resource is not available and the system needs to park your thread until the semaphore is signaled.
 
+如果你提交到队列的任务访问了一些有限资源，你可能想用调度信号量控制同时访问该资源的任务的数量。调度信号量的工作方式就像带有一个异常的普通信号量。当资源可用时，获得一个调度信号量所花费的事件比获得传统系统信号量要少。这是因为GCD在这个特殊案例中并没有调用内核。它调用内核的唯一时间是资源不可用而系统需要停下你的线程知道信号量被发出。
+
 The semantics for using a dispatch semaphore are as follows:
+
+使用调度信号量的方法如下：
 
 1. When you create the semaphore (using the `dispatch_semaphore_create` function), you can specify a positive integer indicating the number of resources available. 
 2. In each task, call `dispatch_semaphore_wait` to wait on the semaphore.
 3. When the wait call returns, acquire the resource and do your work.
 4. When you are done with the resource, release it and signal the semaphore by calling the `dispatch_semaphore_signal` function.
 
+>
+
+1. 当你创建信号量（使用`dispatch_semaphore_create`函数）的时候，你可以指定一个正整数表示可用资源的数量。
+2. 在每个任务中，调用`dispatch_semaphore_wait`等待信号量。
+3. 当等待调用返回时，获得资源，并完成你的工作。
+4. 当你用完了资源，释放它，并通过调用`dispatch_semaphore_signal`函数发出信号量。
+
 For an example of how these steps work, consider the use of file descriptors on the system. Each application is given a limited number of file descriptors to use. If you have a task that processes large numbers of files, you do not want to open so many files at one time that you run out of file descriptors. Instead, you can use a semaphore to limit the number of file descriptors in use at any one time by your file-processing code. The basic pieces of code you would incorporate into your tasks is as follows: 
+
+举个如何逐步完成这些工作的例子，假设在系统中使用文件描述符。每个程序只有有限数量的文件描述符可以使用。如果你有一个要处理大量文件的任务，你不想一下子打开这么多文件，这会用光文件描述符。取而代之的是，你可以使用信号量限制有你的文件处理代码同时使用的文件描述符的数量。你可以合并到你的任务中的基本代码片段如下：
 
 	// Create the semaphore, specifying the initial pool size
 	dispatch_semaphore_t fd_sema = dispatch_semaphore_create(getdtablesize() / 2);
@@ -410,38 +437,57 @@ For an example of how these steps work, consider the use of file descriptors on 
 
 When you create the semaphore, you specify the number of available resources. This value becomes the initial count variable for the semaphore. Each time you wait on the semaphore, the `dispatch_semaphore_wait` function decrements that count variable by 1. If the resulting value is negative, the function tells the kernel to block your thread. On the other end, the `dispatch_semaphore_signal` function increments the count variable by 1 to indicate that a resource has been freed up. If there are tasks blocked and waiting for a resource, one of them is subsequently unblocked and allowed to do its work. 
 
-##3.8 Waiting on Groups of Queued Tasks
+当你创建信号量时，你要指定可用资源的数量。这个值成为这个信号量的初始化计数变量。每次你等待信号量，`dispatch_semaphore_wait`函数会将计数变量减少1.如果结果值是负数，函数会让你喝阻塞你的线程。当另一个任务结束时，`dispatch_semaphore_signal`函数会将计数变量增加1，表示一个资源被释放了。如果有任务被阻塞并在等待资源，它们中的一个随后会停止阻塞，并允许做它的工作。
+
+##3.8 Waiting on Groups of Queued Tasks 等待队列任务组
 
 Dispatch groups are a way to block a thread until one or more tasks finish executing. You can use this behavior in places where you cannot make progress until all of the specified tasks are complete. For example, after dispatching several tasks to compute some data, you might use a group to wait on those tasks and then process the results when they are done. Another way to use dispatch groups is as an alternative to thread joins. Instead of starting several child threads and then joining with each of them, you could add the corresponding tasks to a dispatch group and wait on the entire group. 
 
+调度组是阻塞一个线程知道一个或多个任务完成执行的方法。在某些地方，你无法取得进展，直到所有特定任务已完成，那么你可以使用这个行为。例如，在调度若干任务计算一些数据之后，你可以使用一个组等待那些任务完成，然后当它们完成了再处理结果。另一个使用调度组的方法是作为线程关联的替代方法。不再是开启若干子线程然后与他们关联，你可以添加相应的任务到调度组并等待全部组。
+
 Listing 3-6 shows the basic process for setting up a group, dispatching tasks to it, and waiting on the results. Instead of dispatching tasks to a queue using the `dispatch_async` function, you use the `dispatch_group_async` function instead. This function associates the task with the group and queues it for execution. To wait on a group of tasks to finish, you then use the `dispatch_group_wait` function, passing in the appropriate group.
 
-**Listing 3-6**  Waiting on asynchronous tasks
+表3-6展示了设置一个组，调度任务到这个组，并等待结果的基本过程。不再使用`dispatch_async`函数调度任务到队列，而要用`dispatch_group_async`函数。这个函数会把任务与组关联，并放入队列执行。要等待一组任务完成，然后你要使用`dispatch_group_wait`函数，传入相关的组。
+
+**Listing 3-6**  Waiting on asynchronous tasks 等待异步任务
 
 	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 	dispatch_group_t group = dispatch_group_create();
 	 
 	// Add a task to the group
+	// 添加任务到组
 	dispatch_group_async(group, queue, ^{
 	   // Some asynchronous work
+	   // 一些异步操作
 	});
 	 
 	// Do some other work while the tasks execute.
+	// 当任务执行时做些其他工作
 	 
 	// When you cannot make any more forward progress,
 	// wait on the group to block the current thread.
+	// 当你无法取得更多进展，等待分组会阻塞当前线程。
 	dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 	 
 	// Release the group when it is no longer needed.
+	// 当不再需要组时释放它。
 	dispatch_release(group);
 
-##3.9 Dispatch Queues and Thread Safety
+##3.9 Dispatch Queues and Thread Safety 调度队列与线程安全
 
 It might seem odd to talk about thread safety in the context of dispatch queues, but thread safety is still a relevant topic. Any time you are implementing concurrency in your application, there are a few things you should know: 
 
+在调度队列的上下文中讨论线程安全似乎有点器官，但是线程安全仍然是一个重要的话题。任何时候你在程序中实现并发，都应该知道这些事情：
+
 - Dispatch queues themselves are thread safe. In other words, you can submit tasks to a dispatch queue from any thread on the system without first taking a lock or synchronizing access to the queue.
+- 调度队列自己是线程安全的。换句话说，你可以从系统中的任意线程提交任务到调度队列，而不用首先设置一个锁或者同步访问队列。
 - Do not call the `dispatch_sync` function from a task that is executing on the same queue that you pass to your function call. Doing so will deadlock the queue. If you need to dispatch to the current queue, do so asynchronously using the `dispatch_async` function. 
+- 不要在任务中调用`dispatch_sync`函数时传入任务执行所在的队列。这么多会导致队列死锁。如果你需要调度到当前队列，使用`dispatch_async`函数异步完成。
 - Avoid taking locks from the tasks you submit to a dispatch queue. Although it is safe to use locks from your tasks, when you acquire the lock, you risk blocking a serial queue entirely if that lock is unavailable. Similarly, for concurrent queues, waiting on a lock might prevent other tasks from executing instead. If you need to synchronize parts of your code, use a serial dispatch queue instead of a lock.
+- 避免在你提交到调度队列的任务中设置锁。尽管在任务中使用锁也是安全的，但是当你获取锁时，如果锁不可用，你就有可能阻塞整个串行队列。类似的，对于并行队列，等待一个锁可能阻止其他任务执行。如果你需要同步你的一部分代码，使用串行队列而不是锁。
 - Although you can obtain information about the underlying thread running a task, it is better to avoid doing so. For more information about the compatibility of dispatch queues with threads, see [Compatibility with POSIX Threads](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW18).
+- 尽管你可以获得关于基础线程运行任务的信息，最好避免这么做。关于线程和调度队列共存的更多信息，参见《[Compatibility with POSIX Threads](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW18)》。
 
 For additional tips on how to change your existing threaded code to use dispatch queues, see [Migrating Away from Threads](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1).
+
+关于如何将已有的基于线程的代码换成使用调度队列的更多建议，参见《[Migrating Away from Threads](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1)》。
