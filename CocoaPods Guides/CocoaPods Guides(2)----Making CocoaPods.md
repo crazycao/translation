@@ -412,21 +412,31 @@ pod repo push SPEC_REPO *.podspec --verbose
 
 👍
 
-#3 [Getting setup with Trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk.html)
+#3 [Getting setup with Trunk](https://guides.cocoapods.org/making/getting-setup-with-trunk.html) 通过Trunk获取设置
 
 Instructions for creating a CocoaPods user account
 
-##3.1 CocoaPods Trunk
+创建CocoaPods用户账户的使用说明
+
+##3.1 CocoaPods Trunk 
 
 CocoaPods Trunk is an authentication and CocoaPods API service. To publish new or updated libraries to CocoaPods for public release you will need to be registered with Trunk and have a valid Trunk session on your current device. You can read about Trunk's history and development on [the blog](https://blog.cocoapods.org/CocoaPods-Trunk/), and about [private pods](https://guides.cocoapods.org/making/private-cocoapods.html) for yourself or your team.
 
+CocoaPods Trunk是认证和CocoaPods API服务。要发布新的或更新的库到CocoaPods作为公开发行版，你需要在Trunk注册并且在你当前设备上有一个可用的Trunk会话。你可以在[博客](https://blog.cocoapods.org/CocoaPods-Trunk/)看到关于Trunk的历史和发展，以及你自己或你的团队的[私有pods](https://guides.cocoapods.org/making/private-cocoapods.html)。
+
 CocoaPods Trunk is available starting with CocoaPods 0.33. A collection of commands under `pod trunk` automate the deployment and management of your Podspecs. At any time you can run `pod trunk [command] --help` to see inline help.
 
-###3.1.1 [Getting started](https://guides.cocoapods.org/making/#getting-started)
+CocoaPods Trunk从CocoaPods 0.33版本开始可用。`pod trunk`下的一系列命令可以自动化部署和管理你的Podspecs。任何时候你都可以运行`pod trunk [command] --help`查看在线帮助。
+
+###3.1.1 [Getting started](https://guides.cocoapods.org/making/#getting-started) 开始
 
 First sign up for an account with your email address. This begins a session on your current device.
 
+首先用你的邮箱注册一个账号。这会在你的当前设备上开始一个会话。
+
 We recommend including a description with your session to give some context when you list your sessions later. For example:
+
+我们建议在你的会话中包含一个说明，以后当你列出所有会话时可以得到一些上下文信息。例如：
 
 ```
 $ pod trunk register orta@cocoapods.org 'Orta Therox' --description='macbook air'
@@ -435,23 +445,38 @@ $ pod trunk register orta@cocoapods.org 'Orta Therox' --description='macbook air
 
 You must click a link in an email Trunk sends you to verify the connection between your Trunk account and the current computer. You can list your sessions by running `pod trunk me`.
 
+你必须在Trunk发给你的邮件中点击一个连接，证实你的Trunk账号和当前计算机之间的连接。你可以通过运行`pod trunk me`列出你的会话。
+
 Trunk accounts do not have passwords, only per-computer session tokens.
 
-###3.1.2 [Deploying a library](https://guides.cocoapods.org/making/#deploying-a-library)
+Trunk账户没有密码，只有每台计算机唯一的会话令牌。
+
+###3.1.2 [Deploying a library](https://guides.cocoapods.org/making/#deploying-a-library) 部署一个库
 
 `pod trunk push [NAME.podspec]` will deploy your Podspec to Trunk and make it publicly available. You can also deploy Podspecs to your own private specs repo with `pod repo push REPO [NAME.podspec]`.
 
+`pod trunk push [NAME.podspec]`将部署你的Podspec到Trunk并使其公开可用。你也可以部署Podspecs到你自己的私有specs仓库，使用`pod repo push REPO [NAME.podspec]`。
+
 Deploying with `push`:
+
+使用`push`部署：
 
 - Lints your Podspec locally. You can lint at any time with `pod spec lint [NAME.podspec]`
 - A successful lint pushes your Podspec to Trunk or your private specs repo
 - Trunk will publish a canonical JSON representation of your Podspec
+- 在本地lint你的Podspec。你可以在任何时候使用`pod spec lint [NAME.podspec]`命令进行lint。
+- 成功的lint会推送你的Podspec到Trunk或你的私有spec仓库。
+- Trunk将会发布你的Podspec的标注JSON表达式。
 
 Trunk will also post a web hook to other services alerting them of a new CocoaPod, for example [CocoaDocs.org](http://cocoadocs.org) and [@CocoaPodsFeed](https://twitter.com/cocoapodsfeed).
 
-###3.1.3 [Adding other people as contributors](https://guides.cocoapods.org/making/#adding-other-people-as-contributors)
+Trunk也会发送一个web hook到其他服务器，如[CocoaDocs.org](http://cocoadocs.org)和[@CocoaPodsFeed](https://twitter.com/cocoapodsfeed)，通知它们有新的CocoaPod。
+
+###3.1.3 [Adding other people as contributors](https://guides.cocoapods.org/making/#adding-other-people-as-contributors) 添加其他人作为贡献者
 
 The first person to push a Podspec version to Trunk can add other maintainers. For example, to add `kyle@cocoapods.org` to the library `ARAnalytics`:
+
+第一个推送Podspec版本到Trunk的人可以添加其他维护者。例如，添加`kyle@cocoapods.org`到`ARAnalytics`库：
 
 ```
 $ pod trunk add-owner ARAnalytics kyle@cocoapods.org
@@ -460,27 +485,43 @@ $ pod trunk add-owner ARAnalytics kyle@cocoapods.org
 
 This will then list all the known library owners. Note: they need to already have registered an account set up on trunk in order for you to add them to a library.
 
-###3.1.5 [Claiming an existing library](https://guides.cocoapods.org/making/#claiming-an-existing-library)
+这然后会列出所有已知的库拥有者。注意：他们需要已经在建立的trunk上注册账户，你才能添加他们到库。
+
+###3.1.5 [Claiming an existing library](https://guides.cocoapods.org/making/#claiming-an-existing-library) 认领一个已存在的库
 
 If you want to claim a library that someone has already claimed, then you can use [our Claims form](https://trunk.cocoapods.org/claims/new)to say that you are the owner or maintainer of a collection of libraries. Any issues regarding ownership of libraries will be arbitrated by the CocoaPods dev team.
 
-#4 [Quality Indexes](https://guides.cocoapods.org/making/quality-indexes.html)
+如果你想要认领一个其他人已经认领的库，你可以使用[我们的Claims形式](https://trunk.cocoapods.org/claims/new)声明你是一些库的拥有者或维护者。任何关于库的所有权的问题将由CocoaPods开发团队裁决。
 
-Increasing your CocoaPod's Search Rank
+#4 [Quality Indexes](https://guides.cocoapods.org/making/quality-indexes.html) 质量索引
 
-After the submission of a Podspec to [Trunk](https://guides.cocoapods.org/making/making/getting-setup-with-trunk.html), the documentation service CocoaDocs generates a collection of metrics for the Pod. You can look these metrics for any Pod on [metrics.cocoapods.org/api/v1/pods/[Pod\]](http://metrics.cocoapods.org/api/v1/pods/ORStackView). These metrics are used to generate a variety of Quality Modifiers which eventually turns into a single number called the Quality Index.
+Increasing your CocoaPod's Search Rank 提升你的CocoaPod的搜索排名
+
+After the submission of a Podspec to [Trunk](https://guides.cocoapods.org/making/making/getting-setup-with-trunk.html), the documentation service CocoaDocs generates a collection of metrics for the Pod. You can look these metrics for any Pod on [metrics.cocoapods.org/api/v1/pods/\[Pod\]](http://metrics.cocoapods.org/api/v1/pods/ORStackView). These metrics are used to generate a variety of Quality Modifiers which eventually turns into a single number called the Quality Index.
+
+在提交Podspec到[Trunk](https://guides.cocoapods.org/making/making/getting-setup-with-trunk.html)之后，文档服务CocoaDocs会为Pod生成一系列的衡量标准。你可以在[metrics.cocoapods.org/api/v1/pods/\[Pod\]](http://metrics.cocoapods.org/api/v1/pods/ORStackView)查看任意Pod的这些衡量标准。这些度量用于生成各种各样的质量修饰符，质量修饰符又最终转为一个简单的数字，即被称为质量索引。
 
 This document is a form of [literate programming](https://en.wikipedia.org/wiki/Literate_programming#cite_note-19) within the [CocoaDocs-API](https://github.com/CocoaPods/cocoadocs-api/blob/master/quality_modifiers.rb). As such it contains the actual ruby code that is ran in order to generate the individual scores. Plus, Swift looks like Ruby anyway - so you can read it ;).
 
+本文是一种在[CocoaDocs-API](https://github.com/CocoaPods/cocoadocs-api/blob/master/quality_modifiers.rb)范围内的[literate programming](https://en.wikipedia.org/wiki/Literate_programming#cite_note-19)文学编程。因此，它包含了运行以产生个人得分的实际的ruby代码。此外，Swift看起来和Ruby很像——所以你可以读懂它的;)。
+
 The aim of the Quality Index is to highlight postive metrics, and downplay the negative. It is very possible to have a Pod for which no modifier is actually applied. Meaning the Index stays at the default number of 50. This is a pretty reasonable score.
+
+质量索引的目标是突出正向指标，而淡化负面的。非常可能有一个Pod并没有实际接受的修饰符。意味着索引停留在默认值50。这是一个非常合理的得分。
 
 A good example of the mentality we have towards the modifiers is to think of a Pod with a majority of it's code in Swift. It gets a boost, while an Objective-C one doesn't get modified. It's not about reducing points for Objective-C, but highlighting that right now a Swift library represents forward thinking best practices.
 
+我们面对修改者的心态的一个很好的例子是，把Pod想成用Swift写的一堆代码。它升级了，而Objective-C写的地方不会被修改。这并不是要减少Objective-C的点，而是要突出现在Swift库代表未来认可的最佳实践。
+
 Finally, before we get started. These metrics are not set in stone, they have been evolving since their unveiling and will continue to do so in the future. Feedback is appreciated, ideally in [issues](https://github.com/CocoaPods/cocoapods.org/issues/new) - so they can be discussed.
 
-##4.1 Popularity Metrics
+最后，让我们开始吧。这些衡量标准并不是固定的，它们从揭晓之后就一直在进化，并将在未来持续进化。如有反馈我们会很感激，放在[issues](https://github.com/CocoaPods/cocoapods.org/issues/new)中是会合适——这样就可以讨论它们了。
+
+##4.1 Popularity Metrics 流行度标准
 
 It's a pretty safe bet that an extremely popular library is going to be a well looked after, and maintained library. We weighed different metrics according to how much more valuable the individual metric is rather than just using stars as the core metric.
+
+这是一个非常安全的推测，一个非常流行的库将会是一个被很好的照看和维护的库。我们会依据单个标准有多少价值来权衡不同的标准，而不是只使用打星作为核心标准。
 
 ```
  Modifier.new("Very Popular", "The popularity of a project is a useful way of discovering if it is useful, and well maintained.", 30, { |...|
@@ -492,6 +533,8 @@ It's a pretty safe bet that an extremely popular library is going to be a well l
 
 However, not every idea needs to be big enough to warrent such high metrics. A high amount of engagement is useful in it's own right.
 
+然而，不是每个点子都需要很大才能承担如此高的标准。在它自己的权限中大量的参与也是有用的。
+
 ```
  Modifier.new("Popular", "A popular library means there can be a community to help improve and maintain a project.", 10, { |...|
    value = stats[:contributors].to_i * 90 +  stats[:subscribers].to_i * 20 +  stats[:forks].to_i * 10 + stats[:stargazers].to_i
@@ -502,9 +545,13 @@ However, not every idea needs to be big enough to warrent such high metrics. A h
 
 At the moment this is entirely focused on libraries that are coming from GitHub. In the future, once Stats for downloads/installs are mature then we will move over to that in order to accomodate libraries not using GitHub.
 
-##4.2 Swift Package Manager
+现在，完全关注来自GitHub的库。未来，一旦下载/安装的统计功能成熟，我们将越过它，也可以适应不使用GitHub的库。
+
+##4.2 Swift Package Manager Swift包管理器
 
 We want to encourage support of Apple's Swift Package Manager, it's better for the community to be unified. For more information see our [FAQ](https://guides.cocoapods.org/using/faq.html). This currently checks for the existence of `Package.swift`, once SPM development has slowed down, we may transistion to testing that it supports the latest release.
+
+我们想要鼓励对苹果的Swift Package Manager的支持，这对团队统一更好。更多信息请看我们的[FAQ](https://guides.cocoapods.org/using/faq.html)。现在会检查`Package.swift`的存在，一旦SPM开发放缓，我们可能过度到测试其是否支持最近的版本。
 
 ```
  Modifier.new("Supports Swift Package Manager", "Supports Apple's official package manager for Swift.", 10, { |...|
@@ -513,7 +560,7 @@ We want to encourage support of Apple's Swift Package Manager, it's better for t
 
 ```
 
-##4.3 Inline Documentation
+##4.3 Inline Documentation 在线文档
 
 A lot of the generated documentation comes from inside the library itself. These metrics are about the usage of [Appledoc](http://nshipster.com/documentation/) and [Headerdoc](http://nshipster.com/swift-documentation/) within your public API. This means either from the parts of Swift that you have classed as `public` or from the public headers.
 
