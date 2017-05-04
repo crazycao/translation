@@ -179,7 +179,7 @@ Token-based provider trust employs a certificate of type “Apple Push Notificat
 
 - 一个证书可以用于为你的账户关联的每个app发送推送通知请求。
 
-  这个证书也可以用于解决你的app到Apple Watch的连接的难题，以及你的app的voice-over-Internet Protocol (VoIP)状态通知。即使当这些东西在后台运行时APNs也会发送这些通知。详见《[APNs Provider Certificates](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW5)》和《[*Energy Efficiency Guide for iOS Apps*](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/index.html#//apple_ref/doc/uid/TP40015243)》中的《[Voice Over IP (VoIP) Best Practices](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/OptimizeVoIP.html#//apple_ref/doc/uid/TP40015243-CH30)》。
+  这个证书也可以用于到你的app的Apple Watch complications，以及你的app的voice-over-Internet Protocol (VoIP)状态通知的连接。即使当这些东西在后台运行时APNs也会发送这些通知。详见《[APNs Provider Certificates](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW5)》和《[*Energy Efficiency Guide for iOS Apps*](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/index.html#//apple_ref/doc/uid/TP40015243)》中的《[Voice Over IP (VoIP) Best Practices](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/OptimizeVoIP.html#//apple_ref/doc/uid/TP40015243-CH30)》。
 
 - 当你通过一个JWT基于令牌的APNs连接发送推送通知请求，你必须包含你的提供者的验证令牌。
 
@@ -187,7 +187,7 @@ Token-based provider trust employs a certificate of type “Apple Push Notificat
 
 Figure 6-3 illustrates using the HTTP/2-based APNs provider API to establish trust, and using JWT provider authentication tokens for sending notifications.
 
-图6-3说明了使用基于HTTP/2的APNs提供者API建立信任，并使用JWT提供者验证令牌发送通知的过程。
+图6-3描绘了使用基于HTTP/2的APNs提供者API建立信任，并使用JWT提供者验证令牌发送通知的过程。
 
 **Figure 6-3** Establishing and using token-based provider connection trust - 建立和使用基于令牌的提供者连接信任
 
@@ -211,26 +211,53 @@ As shown in Figure 6-3, token-based provider trust works as follows:
 
 1. 你的提供者使用传输层安全（TLS）请求与APNs的安全连接，如图中写着“TLS initiation”的箭头所示。
 
-2. 然后APNs给你的提供者一个APNs证书，如图中的下一个箭头（写着“APNs certificate”）所示
+2. 然后APNs给你的提供者一个APNs证书，如图中的下一个箭头（写着“APNs certificate”）所示，然后你的提供者会对它进行校验。
 
+	在这个时候，连接信任已经建立起来，你的提供者服务器可以发送基于令牌的远程推送通知请求到APNs。
+	
+3. 你的提供者发送的每一个请求都必须伴随着一个JWT验证令牌，如图中写着“Notification push”的箭头所示。
+
+4. APNs会回应每个push，如写着“HTTP/2 response”的箭头所示。
+
+	关于你的提供者在这一步可以收到的响应的详情，参见《[HTTP/2 Response from APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW2)》。
+ 
 #### 2.1.4.3 Certificate-Based Provider-to-APNs Trust - 基于证书的提供者到APNs信任
 
 A certificate-based provider connection is valid for delivery to one specific app, identified by the topic (the app bundle ID) specified in the provider certificate (which you must have previously created, as explained in “[Generate a universal APNs client SSL certificate](http://help.apple.com/xcode/mac/current/#/dev11b059073?sub=dev2178d70ae)” in Xcode Help). Depending on how you configure and provision the certificate, the trusted connection can also be valid for delivery of remote notifications to other items associated with your app, including Apple Watch complications for your apps, and for voice-over-Internet Protocol (VoIP) status notifications for your apps. APNs delivers these notifications even when those items are running in the background. See [Communicating with APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1) for details, and see [Voice Over IP (VoIP) Best Practices](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/OptimizeVoIP.html#//apple_ref/doc/uid/TP40015243-CH30) in [*Energy Efficiency Guide for iOS Apps*](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/index.html#//apple_ref/doc/uid/TP40015243).
 
+基于证书的提供者连接可以用于发送到某个特定的app，由提供者证书（你必须提前创建，如Xcode帮助中的“[Generate a universal APNs client SSL certificate](http://help.apple.com/xcode/mac/current/#/dev11b059073?sub=dev2178d70ae)”解释的那样）中指出的主题（app的bundle ID）来识别。根据你如何配置和提供该证书，信任的连接也可以用于关联到你的app的其他项目的远程通知的发送，包括你的app的Apple Watch complications和你的app的voice-over-Internet Protocol (VoIP)状态通知。即使在那些项目正在后台运行，APNs也会发送通知。详情见《[Communicating with APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1)》，以及《[*Energy Efficiency Guide for iOS Apps*](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/index.html#//apple_ref/doc/uid/TP40015243)》中的《[Communicating with APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1)》。
+
 With certificate-based trust, APNs maintains a certificate revocation list; if a provider’s certificate is on the revocation list, APNs can revoke provider trust (that is, APNs can refuse the TLS initiation connection).
+
+使用基于证书的信任，APNs管理了一份证书注销列表；如果一个提供者的证书在这份注销列表中，APNs可以废弃提供者信任（也就是说，APNs可以拒绝TLS初始连接）。
 
 Figure 6-4 illustrates the use of an Apple-issued SSL certificate to establish trust between a provider and APNs. Unlike Figure 6-3, this figure does not show a notification push itself, but stops at the establishment of a Transport Layer Security (TLS) connection. In the certificate-based trust scheme, push notification requests are not authenticated but they are validated using the accompanying device token.
 
-**Figure 6-4**Establishing certificate-based provider connection trust
+图6-4描绘了使用苹果发行的SSL证书建立提供者和APNs之间的信任的过程。不像图6-3，这张图并没有展示通知推送自身，而是停在了传输层安全(TLS)连接的建立。在这个基于证书的信任方案中，推送通知请求不需要验证，而是使用伴随的设备令牌进行校验。
+
+**Figure 6-4** Establishing certificate-based provider connection trust - 建立基于证书的提供者连接信任
 ![6-4](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Art/service_provider_ct_certificate_2x.png)
 
 As shown in Figure 6-4, certificate-based provider-to-APNs trust works as follows:
+
+如图6-4中所示，基于证书的提供者到APNs信任按如下步骤工作：
 
 1. Your provider asks for a secure connection with APNs using transport layer security (TLS), represented as the arrow labeled “TLS initiation” in the figure. 
 2. APNs then gives your provider an APNs certificate, represented by the next arrow in the figure (labeled “APNs certificate”), which your provider then validates. 
 3. Your provider must then send its Apple-provisioned provider certificate (which you have previously obtained from your online [developer account](https://developer.apple.com/account/), as explained in “[Generate a universal APNs client SSL certificate](http://help.apple.com/xcode/mac/current/#/dev11b059073?sub=dev2178d70ae)” in Xcode Help) back to APNs, represented as the arrow labeled “Provider certificate.” 
 4. APNs then validates your provider certificate, thereby confirming that the connection request originated from a legitimate provider, and establishes your TLS connection. 
+
    At this point, connection trust is established and your provider server is enabled to send certificate-based remote push notification requests to APNs. 
+
+1. 你的提供者使用传输层安全（TLS）请求与APNs的安全连接，如图中写着“TLS initiation”的箭头所示。
+
+2. 然后APNs给你的提供者一个APNs证书，如图中下一个箭头（写着“APNs certificate”）所示，然后你的提供者对其进行校验。
+
+3. 然后你的提供者必须将它的苹果准备的提供者证书（你先前从你的在线[开发者账户](https://developer.apple.com/account/)获取，如Xcode帮助中的“[Generate a universal APNs client SSL certificate](http://help.apple.com/xcode/mac/current/#/dev11b059073?sub=dev2178d70ae)”中解释的那样）发回给APNs，如写着“Provider certificate”的箭头所示。
+
+4. 然后APNs会校验你的提供者证书，因此证实改连接请求是源自一个合法的提供者，并建立你的TLS连接。
+
+	在这个时候，连接信任已经建立，你的提供者服务器可以发送基于证书的远程推送通知请求到APNs。
 
 #### 2.1.4.4 APNs-to-Device Connection Trust and Device Tokens - APNs到设备的连接信任及设备令牌
 
