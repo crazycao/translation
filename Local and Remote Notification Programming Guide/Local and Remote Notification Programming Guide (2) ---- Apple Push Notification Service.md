@@ -9,36 +9,59 @@
 
 *Apple Push Notification service* (APNs) is the centerpiece of the remote notifications feature. It is a robust, secure, and highly efficient service for app developers to propagate information to iOS (and, indirectly, watchOS), tvOS, and macOS devices.
 
+*Apple Push Notification service*（APNs）是远程通知特性的核心。它是一个强壮的，安全的，高效的服务，让app开发者可以发送信息给iOS（并间接给watchOS）、tvOS和macOS设备。
+
 On initial launch of your app on a user’s device, the system automatically establishes an accredited, encrypted, and persistent IP connection between your app and APNs. This connection allows your app to perform setup to enable it to receive notifications, as explained in [Configuring Remote Notification Support](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW1).
+
+当在用户设备上初次启动你的app时，系统会在你的app和APNs之间自动建立一个认可的、编码的且持久的IP连接。该连接允许你的app执行设置以启用接收通知的功能，详细解释见《[Configuring Remote Notification Support](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW1)》。
 
 The other half of the connection for sending notifications—the persistent, secure channel between a provider server and APNs—requires configuration in your online [developer account](https://developer.apple.com/account/) and the use of Apple-supplied cryptographic certificates. A *provider* is a server, that you deploy and manage, that you configure to work with APNs. Figure 6-1 shows the path of delivery for a remote notification.
 
-**Figure 6-1**Delivering a remote notification from a provider to an app
+用于发送通知的另一半连接——在提供者服务器和APNs之间的持久的安全的渠道——需要在你的在线[开发者账户](https://developer.apple.com/account/)中配置，并且使用苹果提供的密码证书。*提供者*是一个由你部署和管理的服务器，你配置它与APNs一起工作。图6-1展示了远程通知的投递路径。
+
+**Figure 6-1** Delivering a remote notification from a provider to an app - 从提供者发送一个远程通知到app
 ![6-1](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Art/remote_notif_simple_2x.png)
 
 With push notification setup complete on your providers and in your app, your providers can then send notification requests to APNs. APNs conveys corresponding notification payloads to each targeted device. On receipt of a notification, the system delivers the payload to the appropriate app on the device, and manages interactions with the user.
 
-If a notification for your app arrives with the device powered on but with the app not running, the system can still display the notification. If the device is powered off when APNs sends a notification, APNs holds on to the notification and tries again later (for details, see Quality of Service, Store-and-Forward, and Coalesced Notifications).
+当在你的提供者和在你的app中的推送通知配置完成，你的提供者就可以发送通知请求到APNs了。APNs传达相应的通知负载到每一个目标设备。收到通知以后，系统发送负载到设备上的相关app，并管理与用户的交互。
+
+If a notification for your app arrives with the device powered on but with the app not running, the system can still display the notification. If the device is powered off when APNs sends a notification, APNs holds on to the notification and tries again later (for details, see [Quality of Service, Store-and-Forward, and Coalesced Notifications](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW5)).
+
+如果你app的通知到达时，设备是开启的但是app并没有运行，系统仍然会显示通知。如果在APNs发送通知时设备是关闭的，APNs会保留该通知，并在稍后再次尝试（详情参见《[Quality of Service, Store-and-Forward, and Coalesced Notifications](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW5)》）。
 
 ### 2.1.1 Provider Responsibilities - 提供者责任
 
 Your provider servers have the following responsibilities for participating with APNs:
 
+参与到APNs的提供者服务器有以下责任：
+
 - Receiving, via APNs, globally-unique, app-specific device tokens and other relevant data from instances of your app on user devices. This allows a provider to know about each running instance your app. 
 - Determining, according to the design of your notification system, when remote notifications need to be sent to each device. 
 - Building and sending notification requests to APNs, each request containing a notification payload and delivery information; APNs then delivers corresponding notifications to the intended devices on your behalf. 
+- 从用户设备上的你的app的实例，接收通过APNs产生的，全局唯一的，每个app不同的设备令牌以及其他有关数据。这让提供者知道你app的每个运行的实例。
+- 根据你的通知系统设计，决定合适需要发送远程通知到每个设备。
+- 构建和发送通知请求到APNs，每个请求包括通知负载和发送的信息；然后APNs代表你发送相应的通知到期望的设备。
 
 For each remote notification request a provider sends, it must:
 
 1. Construct a JSON dictionary containing the notification’s payload, as described in [Creating the Remote Notification Payload](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1). 
-2. Add the payload, a globally-unique device token, and other delivery information to an HTTP/2 request. For information about device tokens, see APNs-to-Device Connection Trust and Device Tokens. For information about the HTTP/2 request format, and the possible responses and errors from APNs, see [Communicating with APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1). 
-3. Send the HTTP/2 request to APNs, including cryptographic credentials in the form of a token or a certificate, over a persistent, secure channel. Establishing this secure channel is described in Security Architecture. 
+2. Add the payload, a globally-unique device token, and other delivery information to an HTTP/2 request. For information about device tokens, see [APNs-to-Device Connection Trust and Device Tokens](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW13). For information about the HTTP/2 request format, and the possible responses and errors from APNs, see [Communicating with APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1). 
+3. Send the HTTP/2 request to APNs, including cryptographic credentials in the form of a token or a certificate, over a persistent, secure channel. Establishing this secure channel is described in [Security Architecture](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW9). 
+
+对于提供者发送的每一条远程通知请求，它必须：
+
+1. 构造一个包含通知负载的JSON字典，如《[Creating the Remote Notification Payload](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1)》中描述的那样。
+2. 添加负载，全局唯一的设备令牌，以及其他发送信息到一个HTTP/2请求。关于设备令牌的信息，参见《[APNs-to-Device Connection Trust and Device Tokens](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW13)》。关于HTTP/2请求格式的信息，以及来自APNs的可能的响应和错误，参见《[Communicating with APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1)》。
+3. 通过一个持久的安全的渠道，发送HTTP/2请求到APNs，包括令牌或证书形式的编码资质。这种安全渠道的建立在《[Security Architecture](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW9)》中进行了介绍。
 
 ### 2.1.2 Using Multiple Providers - 使用多个提供者
 
 Figure 6-2 depicts the sort of virtual network that APNs enables for the devices running your apps. To handle the notification load, you would typically deploy multiple providers, each one with its own persistent and secure connection to APNs. Each provider can then send notification requests targeting any device for which the provider has a valid device token.
 
-**Figure 6-2**Pushing remote notifications from multiple providers to multiple devices
+图6-2描绘了APNs为了运行你的app的设备启用的虚拟网络种类。要处理通知加载，你通常可能部署多个提供者，每一个都有自己的持久且稳定的连接连到APNs。然后每个提供者可以发送通知请求到任意设备，只要这个提供者有一个可用的设备令牌
+
+**Figure 6-2** Pushing remote notifications from multiple providers to multiple devices - 从多个提供者推送远程通知到多个设备
 
 ![6-2](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Art/remote_notif_multiple_2x.png)
 
@@ -46,58 +69,107 @@ Figure 6-2 depicts the sort of virtual network that APNs enables for the devices
 
 Apple Push Notification service includes a Quality of Service (QoS) component that performs a store-and-forward function. If APNs attempts to deliver a notification and the destination device is offline, APNs stores the notification for a limited period of time and delivers it when the device becomes available again. This component stores only the most recent notification per device and per app. If a device is offline, sending a notification request targeting that device causes the previous request to be discarded. If a device remains offline for a long time, all its stored notifications in APNs are discarded.
 
-To allow the coalescing of similar notifications, you can include a *collapse identifier* within a notification request. Normally, when a device is online, each notification request that you send to APNs results in a notification delivered to the device. However, when the apns-collapse-id key is present in your HTTP/2 request header, APNs coalesces requests whose value for that key is the same. For example, a news service that sends the same headline twice could use the same collapse identifier value for both requests. APNs would then coalesce the two requests into a single notification for delivery to the device. For details on the `apns-collapse-id` key, see [Table 8-2](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW13).
+苹果推送通知服务包括一个质量服务（QoS）组件，可以执行存储转发功能。如果APNs尝试发送一个通知，而目的设备正在离线状态，APNs会将这个通知存储一段有限的时间，并当该设备变成可用时再次发送它。这个组件只会为每个设备的每个app存储最近的通知。如果设备离线，发送一个通知请求到这个设备会导致之前的请求被抛弃。如果设备长时间的处在离线状态，APNs中储存的所有通知都会被抛弃。
+
+To allow the coalescing of similar notifications, you can include a *collapse identifier* within a notification request. Normally, when a device is online, each notification request that you send to APNs results in a notification delivered to the device. However, when the `apns-collapse-id` key is present in your HTTP/2 request header, APNs coalesces requests whose value for that key is the same. For example, a news service that sends the same headline twice could use the same collapse identifier value for both requests. APNs would then coalesce the two requests into a single notification for delivery to the device. For details on the `apns-collapse-id` key, see [Table 8-2](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW13).
+
+为了合并类似的通知，你可以在通知请求中包含一个*合并标识*。通常，当设备在线，每个发送到APNs的通知请求最终都会变成发送到设备的通知。然而，当你在HTTP/2请求头中放入`apns-collapse-id`关键字时，APNs会合并该关键字的值相同的请求。例如，一个新闻服务发送了两次相同的标题，可以在两个请求中使用相同的合并标识值。然后APNs会合并两个请求到一个通知再发送给设备。关于`apns-collapse-id`关键字的详情，参见[表 8-2](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW13)。
 
 ### 2.1.4 Security Architecture - 安全架构
 
 APNs enforces end-to-end, cryptographic validation and authentication using two levels of trust: *connection trust* and *device token trust*.
 
+APNs加强了端到端的加密认证和验证，使用两种级别的信任：*连接信任*和*设备令牌信任*。
+
 *Connection trust* works between providers and APNs, and between APNs and devices.
+
+*连接信任*在提供者和APNs之间，以及APNs和设备之间工作。
 
 - **Provider-to-APNs connection trust** establishes certainty that connection between a provider and APNs is possible only for an authorized provider, owned by a company that has an agreement with Apple for push notification delivery. You must take steps to ensure connection trust exists between your provider servers and APNs, as described in this section. 
 - **APNs-to-device connection trust** ensures that only authorized devices can connect to APNs to receive notifications. APNs automatically enforces connection trust with each device to ensure the legitimacy of the device. 
+- **提供者到APNs的连接信任**确保了提供者到APNs之间的连接只能发生在已授权的提供者上，这个提供者必定由与苹果为推送通知投递达成协议的公司所拥有。你必须采取措施确保在你的提供者服务器和APNs之间存在连接信任，正如按照本节描述的那样。
+- **APNs到设备的连接信任**确保只有已授权的设备可以连接到APNs以接收通知。APNs自动的加强了与每个设备之间的连接信任，以确保设备的合法性。
 
-For a provider to communicate with APNs, it must employ a valid authentication key certificate (for token-based connection trust) or SSL certificate (for certificate-based connection trust). You obtain either of these certificates from your online [developer account](https://developer.apple.com/account/), as explained in “[Configure push notifications](http://help.apple.com/xcode/mac/current/#/dev11b059073)” in Xcode Help. To choose between the two certificate types, read Provider-to-APNs Connection Trust. Whichever certificate type you choose, provider connection trust is prerequisite to a provider sending push notification requests to APNs.
+For a provider to communicate with APNs, it must employ a valid authentication key certificate (for token-based connection trust) or SSL certificate (for certificate-based connection trust). You obtain either of these certificates from your online [developer account](https://developer.apple.com/account/), as explained in “[Configure push notifications](http://help.apple.com/xcode/mac/current/#/dev11b059073)” in Xcode Help. To choose between the two certificate types, read [Provider-to-APNs Connection Trust](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW4). Whichever certificate type you choose, provider connection trust is prerequisite to a provider sending push notification requests to APNs.
+
+对于与APNs交流的提供者，它必须使用可用的验证钥匙证书（基于设备的连接信任）或者SSL证书（基于证书的连接信任）。你可以从你的在线[开发者账户](https://developer.apple.com/account/)中获得者两种证书，如Xcode帮助中的“[Configure push notifications](http://help.apple.com/xcode/mac/current/#/dev11b059073)”所述。要在这两种证书类型之间选择，请阅读《[Provider-to-APNs Connection Trust](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW4)》。无论你选择哪个证书类型，提供者的连接信任都是提供者发送推送通知请求到APNs的先决条件。
 
 *Device token trust* works end-to-end for each remote notification. It ensures that notifications are routed only between the correct start (provider) and end (device) points.
 
+*设备令牌信任*为每个远程通知进行端到端的工作。它确保通知只能再正确的起点（提供者）和终点（设备）之间路由。
+
 A device token is an opaque [NSData](https://developer.apple.com/reference/foundation/nsdata) instance that contains a unique identifier assigned by Apple to a specific app on a specific device. Only APNs can decode and read the contents of a device token. Each app instance receives its unique device token when it registers with APNs, and must then forward the token to its provider, as described in [Configuring Remote Notification Support](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW1). The provider must include the device token in each push notification request that targets the associated device; APNs uses the device token to ensure the notification is delivered only to the unique app-device combination for which it is intended.
 
+设备令牌是一个不透明的[NSData](https://developer.apple.com/reference/foundation/nsdata)实例，包含了由苹果分配的特定设备上的特定app的唯一标识。只有APNs可以解码并阅读设备令牌的内容。每个app实例都会在它注册到APNs时收到其唯一的设备令牌，并且必须随后将令牌转发至其提供者，如《[Configuring Remote Notification Support](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW1)》中所述。提供者必须在每个推送通知请求中包含该设备令牌才能把关联的设备作为目标；APNs使用设备令牌确保通知只被发送到期望的唯一的app-设备组合。
+
 APNs can issue a new device token for a variety of reasons:
+
+APNs可能由于各种原因下发新的设备令牌：
 
 - User installs your app on a new device 
 - User restores device from a backup 
 - User reinstalls the operating system 
 - Other system-defined events 
+- 用户在新设备上安装你的app
+- 用户从备份恢复了设备
+- 用户重装了操作系统
+- 其他系统定义的事件
 
-As a result, apps must request the device token at launch time, as described in APNs-to-Device Connection Trust and Device Tokens. For code examples, see [Registering to Receive Remote Notifications](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW3).
+As a result, apps must request the device token at launch time, as described in [APNs-to-Device Connection Trust and Device Tokens](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW13). For code examples, see [Registering to Receive Remote Notifications](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW3).
+
+结果就是，app必须在启动时请求设备令牌，如《[APNs-to-Device Connection Trust and Device Tokens](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW13)》中所述。代码例子见《[Registering to Receive Remote Notifications](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/HandlingRemoteNotifications.html#//apple_ref/doc/uid/TP40008194-CH6-SW3)》。
 
 >IMPORTANT
 >
 >To protect user privacy, do not use device tokens to identify user devices.
+>
+>重要
+>
+>为了保护用户隐私，不要使用设备令牌来识别用户设备。
 
 #### 2.1.4.1 Provider-to-APNs Connection Trust - 提供者到APNs的连接信任
 
 There are two schemes available for negotiating connection trust between your provider servers and Apple Push Notification service:
+
+在你的提供者服务器和苹果推送通知服务之间有两种方案可以达成连接信任：
 
 - **Token-based provider connection trust**: A provider using the HTTP/2-based API can use *JSON web tokens* (JWT) to provide validation credentials for connection with APNs. In this scheme, you provision a public key to be retained by Apple, and a private key which you retain and protect. Your providers then use your private key to generate and sign JWT *provider authentication tokens*. Each of your push notification requests must include a provider authentication token. 
   
   You can use a single, token-based connection between a provider and APNs can to send push notification requests to *all the apps* whose bundle IDs are listed in your online [developer account](https://developer.apple.com/account/). 
   
   Every push notification request results in an HTTP/2 response from APNs, returning details on success or failure to your provider. 
+  
+- **基于令牌的提供者连接信任**：使用基于HTTP/2 API的提供者可以使用*JSON网络令牌*（JWT）提供认证资格到与APNs的连接。在这种方案中，你准备一个由苹果持有的公钥，和一个你自己持有并保护起来的私钥。然后你的提供者使用你的私钥产生JWT*提供者验证令牌*并签名。每个你的推送通知请求都必须包含提供者验证令牌。
+  
+  你可以在提供者和APNs之间使用单独的基于令牌的连接，可以发送推送通知请求到*所有*bundleID列在你的在线[开发者账户](https://developer.apple.com/account/)中的app。
+  
+  每个推送通知请求都会收到来自APNs的HTTP/2响应，返回关于成功或失败的详情到你的提供者。
+
 - **Certificate-based provider connection trust**: A provider can, alternatively, employ a unique *provider certificate and private cryptographic key*. The provider certificate, provisioned by Apple when you establish your push service in your online [developer account](https://developer.apple.com/account/), identifies one *topic*, which is the bundle ID for one of your apps. 
   
   You can use a certificate-based connection between a provider and APNs to send push notification requests to *exactly one app*, which you specify when configuring the certificate in your online [developer account](https://developer.apple.com/account/). 
+  
+- **基于证书的提供者连接信任**：或者，提供者可以使用唯一的*提供者证书和私有秘钥*。提供者证书由苹果准备，当你在你的在线[开发者账户](https://developer.apple.com/account/)中创建推送服务时就会生成，每个app有一个*主题*作为标识，这个主题也就是bundle ID。
+
+  你可以在提供者和APNs之间使用基于证书的连接发送推送通知请求到*准确的某个app*，具体你可以在你的在线[开发者账户](https://developer.apple.com/account/)中配置证书时进行指定。
 
 >IMPORTANT
 >
 >To establish HTTP/2-based TLS sessions with APNs, you must ensure that a GeoTrust Global CA root certificate is installed on each of your providers. If a provider is running macOS, this root certificate is in the keychain by default. On other systems, this certificate might require explicit installation. You can download this certificate from the [GeoTrust Root Certificates website](https://www.geotrust.com/resources/root-certificates/). Here is a [direct link to the certificate](https://www.geotrust.com/resources/root_certificates/certificates/GeoTrust_Global_CA.pem).
 >
 >If you are instead using the legacy binary interface to APNs, you must ensure that each of your providers has an Entrust Certification Authority (2048) root certificate, available from the [Entrust SSL Certificates website](https://www.entrust.com/ssl-certificates/).
+>
+>重要
+>
+>要与APNs建立基于HTTP/2的TLS会话，你必须确保在你的每个提供者上都安装了 GeoTrust Global CA 根证书。如果提供者运行在macOS上，那根证书是默认在钥匙串中的。在其他系统，这个证书可能要明确的安装。你可以从[GeoTrust Root Certificates 网站](https://www.geotrust.com/resources/root-certificates/)下载该证书。这是[证书的直达链接](https://www.geotrust.com/resources/root_certificates/certificates/GeoTrust_Global_CA.pem)。
+>
+>如果你使用旧版的二进制接口连接到APNs，你必须确保你的每个提供者都有一个Entrust Certification Authority (2048)根证书，该证书从[Entrust SSL Certificates 网站](https://www.entrust.com/ssl-certificates/)获取。
 
 #### 2.1.4.2 Token-Based Provider-to-APNs Trust - 基于令牌的提供者到APNs信任
 
 Token-based provider trust employs a certificate of type “Apple Push Notification Authentication Key (Sandbox & Production).” You configure and obtain this certificate using your online [developer account](https://developer.apple.com/account/), as explained in “[Generate a universal provider token signing key](http://help.apple.com/xcode/mac/current/#/dev11b059073?sub=dev1eb5dfe65)” in Xcode Help. This certificate has the following characteristics:
+
+基于令牌的提供者信任使用一种“Apple Push Notification Authentication Key (Sandbox & Production)”类型的证书。你可以使用你的在线[开发者账户](https://developer.apple.com/account/)配置和获取该证书，在Xcode帮助中的“[Generate a universal provider token signing key](http://help.apple.com/xcode/mac/current/#/dev11b059073?sub=dev1eb5dfe65)”中有相应的解释。该证书有以下特征：
 
 - The one certificate is valid for sending push notification requests for every app associated with your account. 
   
@@ -105,20 +177,41 @@ Token-based provider trust employs a certificate of type “Apple Push Notificat
 - When you send a push notification request over a JWT token-based APNs connection, you must include your provider authentication token. 
 - The APNs authentication key certificate never expires, but you can revoke it permanently using your online [developer account](https://developer.apple.com/account/); once revoked, the certificate can never be used again 
 
+- 一个证书可以用于为你的账户关联的每个app发送推送通知请求。
+
+  这个证书也可以用于解决你的app到Apple Watch的连接的难题，以及你的app的voice-over-Internet Protocol (VoIP)状态通知。即使当这些东西在后台运行时APNs也会发送这些通知。详见《[APNs Provider Certificates](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW5)》和《[*Energy Efficiency Guide for iOS Apps*](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/index.html#//apple_ref/doc/uid/TP40015243)》中的《[Voice Over IP (VoIP) Best Practices](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/OptimizeVoIP.html#//apple_ref/doc/uid/TP40015243-CH30)》。
+
+- 当你通过一个JWT基于令牌的APNs连接发送推送通知请求，你必须包含你的提供者的验证令牌。
+
+- APNs验证钥匙证书永远不会过期，但你可以使用你的在线[开发者账户](https://developer.apple.com/account/)永久的废除它；一旦被废除，证书将永远不能再次使用。
+
 Figure 6-3 illustrates using the HTTP/2-based APNs provider API to establish trust, and using JWT provider authentication tokens for sending notifications.
 
-**Figure 6-3**Establishing and using token-based provider connection trust
+图6-3说明了使用基于HTTP/2的APNs提供者API建立信任，并使用JWT提供者验证令牌发送通知的过程。
+
+**Figure 6-3** Establishing and using token-based provider connection trust - 建立和使用基于令牌的提供者连接信任
 
 ![6-3](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Art/service_provider_ct_2x.png)
 
 As shown in Figure 6-3, token-based provider trust works as follows:
 
 1. Your provider asks for a secure connection with APNs using transport layer security (TLS), represented as the arrow labeled “TLS initiation” in the figure. 
+
 2. APNs then gives your provider an APNs certificate, represented by the next arrow in the figure (labeled “APNs certificate”), which your provider then validates. 
+
    At this point, connection trust is established and your provider server is enabled to send token-based remote push notification requests to APNs. 
+
 3. Each notification request that your provider sends must be accompanied by a JWT authentication token, represented in the figure as the arrow labeled “Notification push.” 
+
 4. APNs replies to each push, represented in the figure as the arrow labeled “HTTP/2 response.” 
+   
    For specifics on the responses your provider can receive for this step, see [HTTP/2 Response from APNs](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW2). 
+   
+如图6-3中所示，基于令牌的提供者信任按下面的步骤工作：
+
+1. 你的提供者使用传输层安全（TLS）请求与APNs的安全连接，如图中写着“TLS initiation”的箭头所示。
+
+2. 然后APNs给你的提供者一个APNs证书，如图中的下一个箭头（写着“APNs certificate”）所示
 
 #### 2.1.4.3 Certificate-Based Provider-to-APNs Trust - 基于证书的提供者到APNs信任
 
