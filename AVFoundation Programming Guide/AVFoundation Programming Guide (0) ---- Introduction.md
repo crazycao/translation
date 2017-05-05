@@ -64,7 +64,7 @@ A vital concept in AV Foundation is that initializing an asset or a track does n
 >**Relevant Chapters:** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1), [Time and Media Representations](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/06_MediaRepresentations.html#//apple_ref/doc/uid/TP40010188-CH2-SW1)
 >**相关章节：** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1), [Time and Media Representations](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/06_MediaRepresentations.html#//apple_ref/doc/uid/TP40010188-CH2-SW1)
 
-#### 0.1.1.1 Playback 播放
+#### 0.1.1.1 Playback - 播放
 
 AVFoundation allows you to manage the playback of asset in sophisticated ways. To support this, it separates the presentation state of an asset from the asset itself. This allows you to, for example, play two different segments of the same asset at the same time rendered at different resolutions. The presentation state for an asset is managed by a *player item* object; the presentation state for each track within an asset is managed by a *player item track* object. Using the player item and player item tracks you can, for example, set the size at which the visual portion of the item is presented by the player, set the audio mix parameters and video composition settings to be applied during playback, or disable components of the asset during playback.
 
@@ -78,7 +78,7 @@ You play player items using a *player* object, and direct the output of a player
 >
 >**相关章节：** [Playback](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/02_Playback.html#//apple_ref/doc/uid/TP40010188-CH3-SW1)
 
-#### 0.1.1.2 Reading, Writing, and Reencoding Assets 对asset进行读、写和重编吗
+#### 0.1.1.2 - Reading, Writing, and Reencoding Assets 对asset进行读、写和重编吗
 
 AVFoundation allows you to create new representations of an asset in several ways. You can simply reencode an existing asset, or—in iOS 4.1 and later—you can perform operations on the contents of an asset and save the result as a new asset.
 
@@ -90,57 +90,100 @@ You use an *export session* to reencode an existing asset into a format defined 
 
 To produce a visual representation of the waveform, you use an asset reader to read the audio track of an asset.
 
-**Relevant Chapter:** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1)
+为了产生波形的可视化表示，你可以使用asset reader去读取asset中的音频轨道。
 
-#### Thumbnails
+>**Relevant Chapter:** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1)
+>
+>**相关章节：** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1)
 
-To create thumbnail images of video presentations, you initialize an instance of `AVAssetImageGenerator` using the asset from which you want to generate thumbnails. `AVAssetImageGenerator` uses the default enabled video tracks to generate images. 
+#### 0.1.1.3 Thumbnails - 缩略图
 
-**Relevant Chapter:** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1)
+To create thumbnail images of video presentations, you initialize an instance of [AVAssetImageGenerator](https://developer.apple.com/reference/avfoundation/avassetimagegenerator) using the asset from which you want to generate thumbnails. `AVAssetImageGenerator` uses the default enabled video tracks to generate images. 
 
-#### Editing
+创建视频演示图像的缩略图，可以使用想要生成缩略图的asset初始化一个 [AVAssetImageGenerator](https://developer.apple.com/reference/avfoundation/avassetimagegenerator)的实例。`AVAssetImageGenerator`使用默认开启的视频轨道来生成图像。
+
+>**Relevant Chapter:** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1)
+>
+>**相关章节：** [Using Assets](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/01_UsingAssets.html#//apple_ref/doc/uid/TP40010188-CH7-SW1)
+
+#### 0.1.1.4 Editing - 编辑
 
 AVFoundation uses *compositions* to create new assets from existing pieces of media (typically, one or more video and audio tracks). You use a mutable composition to add and remove tracks, and adjust their temporal orderings. You can also set the relative volumes and ramping of audio tracks; and set the opacity, and opacity ramps, of video tracks. A composition is an assemblage of pieces of media held in memory. When you export a composition using an *export session*, it’s collapsed to a file. 
 
+AVFoundation 使用 *compositions* 从现有的媒体片段（通常是一个或多个视频和音频轨道）创建新的 assets 。你可以使用一个可变 composition 去添加和删除轨道，并调整它们的时间排序。你也可以设置相对音量和音频轨道的坡度；并且设置不透明度，和视频轨道的不透明坡度。一个 composition，是一种在内存中持有的媒体片段的组合。当你使用 *export session* 导出一个 composition，它会合并到一个文件中。
+
 You can also create an asset from media such as sample buffers or still images using an *asset writer*. 
 
-**Relevant Chapter:** [Editing](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html#//apple_ref/doc/uid/TP40010188-CH8-SW1)
+你也可以使用*asset writer*从比如采样缓存或静态图像等媒体创建一个 asset。
 
-#### Still and Video Media Capture
+>**Relevant Chapter:** [Editing](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html#//apple_ref/doc/uid/TP40010188-CH8-SW1)
+>
+>**相关章节：** [Editing](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html#//apple_ref/doc/uid/TP40010188-CH8-SW1)
+
+#### 0.1.1.5 Still and Video Media Capture - 静态和视频媒体采集
 
 Recording input from cameras and microphones is managed by a *capture session*. A capture session coordinates the flow of data from input devices to outputs such as a movie file. You can configure multiple inputs and outputs for a single session, even when the session is running. You send messages to the session to start and stop data flow.
 
+从摄像头和麦克风记录的输入有*capture session*管理。Capture session 协调从输入设备到输出的数据流，比如一个电影文件。你可以为一个单独的 session 配置多个输入和输出，甚至 session 正在运行的时候也可以。你发送消息到 session 以开始和停止数据流。
+
 In addition, you can use an instance of a *preview layer* to show the user what a camera is recording.
 
-**Relevant Chapter:** [Still and Video Media Capture](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/04_MediaCapture.html#//apple_ref/doc/uid/TP40010188-CH5-SW2)
+另外，你可以使用*preview layer*的实例向用户展示摄像头正在记录什么。
 
-### Concurrent Programming with AVFoundation
+>**Relevant Chapter:** [Still and Video Media Capture](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/04_MediaCapture.html#//apple_ref/doc/uid/TP40010188-CH5-SW2)
+>
+>**相关章节：** [Still and Video Media Capture](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/04_MediaCapture.html#//apple_ref/doc/uid/TP40010188-CH5-SW2)
+
+### 0.1.2 Concurrent Programming with AVFoundation - 使用AVFoundation的并发编程
 
 Callbacks from AVFoundation—invocations of [blocks](), [key-value observers](), and [notification]() handlers—are not guaranteed to be made on any particular thread or queue. Instead, AVFoundation invokes these handlers on threads or queues on which it performs its internal tasks. 
 
+来自AVFoundation的回调——[blocks]()的调用，[key-value observers]()，以及[通知]()句柄——都不能保证在哪个特别的线程或队列上发生。相反的，AVFoundation会在其执行内部任务的线程或队列调用这些句柄。
+
 There are two general guidelines as far as notifications and threading:
+
+这里有两个关于通知和线程的通用的准则：
 
 - UI related notifications occur on the main thread.
 - Classes or methods that require you create and/or specify a queue will return notifications on that queue.
+- UI相关的通知在主线程发生。
+- 需要你创建且/或指定队列的类或方法将会在该队列返回通知。
 
 Beyond those two guidelines (and there are exceptions, which are noted in the reference documentation) you should not assume that a notification will be returned on any specific thread.
 
-If you’re writing a multithreaded application, you can use the `NSThread` method `isMainThread` or `[[NSThread currentThread] isEqual:<#A stored thread reference#>]` to test whether the invocation thread is a thread you expect to perform your work on. You can redirect messages to appropriate threads using methods such as `performSelectorOnMainThread:withObject:waitUntilDone:` and `performSelector:onThread:withObject:waitUntilDone:modes:`. You could also use `dispatch_async` to “bounce” to your blocks on an appropriate queue, either the main queue for UI tasks or a queue you have up for concurrent operations. For more about concurrent operations, see *Concurrency Programming Guide*; for more about blocks, see *Blocks Programming Topics*. The *AVCam-iOS: Using AVFoundation to Capture Images and Movies* sample code is considered the primary example for all AVFoundation functionality and can be consulted for examples of thread and queue usage with AVFoundation.
+除了这两个准则（当然是有一些例外，在参考文档中会被指出），你不应该假设一个通知将在任何特定的线程返回。
 
-## Prerequisites
+If you’re writing a multithreaded application, you can use the `NSThread` method [isMainThread](https://developer.apple.com/reference/foundation/thread/1408455-ismainthread) or `[[NSThread currentThread] isEqual:<#A stored thread reference#>]` to test whether the invocation thread is a thread you expect to perform your work on. You can redirect messages to appropriate threads using methods such as [performSelectorOnMainThread:withObject:waitUntilDone:](https://developer.apple.com/reference/objectivec/nsobject/1414900-performselectoronmainthread) and [performSelector:onThread:withObject:waitUntilDone:modes:](https://developer.apple.com/reference/objectivec/nsobject/1417922-perform). You could also use [dispatch_async](https://developer.apple.com/reference/dispatch/1453057-dispatch_async) to “bounce” to your blocks on an appropriate queue, either the main queue for UI tasks or a queue you have up for concurrent operations. For more about concurrent operations, see [Concurrency Programming Guide](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008091); for more about blocks, see [Blocks Programming Topics](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Blocks/Articles/00_Introduction.html#//apple_ref/doc/uid/TP40007502). The [AVCam-iOS: Using AVFoundation to Capture Images and Movies](https://developer.apple.com/library/content/samplecode/AVCam/Introduction/Intro.html#//apple_ref/doc/uid/DTS40010112) sample code is considered the primary example for all AVFoundation functionality and can be consulted for examples of thread and queue usage with AVFoundation.
+
+如果你在写一个多线程的应用程序，你可以使用 `NSThread` 方法 [isMainThread](https://developer.apple.com/reference/foundation/thread/1408455-ismainthread)  或者 `[[NSThread currentThread] isEqual:<#A stored thread reference#>]` 去测试是否调用了你期望执行你任务的线程。你可以使用方法将消息重定向给适合的线程，比如 [performSelectorOnMainThread:withObject:waitUntilDone:](https://developer.apple.com/reference/objectivec/nsobject/1414900-performselectoronmainthread) 和 [performSelector:onThread:withObject:waitUntilDone:modes:](https://developer.apple.com/reference/objectivec/nsobject/1417922-perform)。你也可以使用 [dispatch_async](https://developer.apple.com/reference/dispatch/1453057-dispatch_async) “弹回”到适当队列的 blocks 中，无论是在处理UI任务的主队列还是用于并发操作的队列。关于并发操作的更多信息，请查看 《[Concurrency Programming Guide](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008091)》；关于block的更多信息，请查看 《[Blocks Programming Topics](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Blocks/Articles/00_Introduction.html#//apple_ref/doc/uid/TP40007502)》。[AVCam-iOS: Using AVFoundation to Capture Images and Movies](https://developer.apple.com/library/content/samplecode/AVCam/Introduction/Intro.html#//apple_ref/doc/uid/DTS40010112) 示例代码是所有 AVFoundation 功能的最主要的例子，可以供带 AVFoundation 的线程和队列使用作为实例参考。
+
+## 0.2 Prerequisites - 预备知识
 
 AVFoundation is an advanced Cocoa framework. To use it effectively, you must have:
 
 - A solid understanding of fundamental Cocoa development tools and techniques
 - A basic grasp of [blocks]()
 - A basic understanding of [key-value coding]() and [key-value observing]()
-- For playback, a basic understanding of Core Animation (see *Core Animation Programming Guide* or, for basic playback, the *AVKit Framework Reference*.
+- For playback, a basic understanding of Core Animation (see [Core Animation Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514) or, for basic playback, the [AVKit Framework Reference](https://developer.apple.com/reference/avkit).
 
-## See Also
+AVFoundation是高级Cocoa框架。要有效的使用它，你必须有：
+
+- 深入理解基本Cocoa开发工具和技术
+- 基本掌握[blocks]()
+- 基本理解[key-value coding]() 和 [key-value observing]()
+- 对于播放，要基本理解Core Animation（见《[Core Animation Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514)》，或者，对于基本播放，见《[AVKit Framework Reference](https://developer.apple.com/reference/avkit)》。）
+
+## 0.3 See Also - 其他参考
 
 There are several AVFoundation examples including two that are key to understanding and implementation Camera capture functionality:
 
-- *AVCam-iOS: Using AVFoundation to Capture Images and Movies* is the canonical sample code for implementing any program that uses the camera functionality. It is a complete sample, well documented, and covers the majority of the functionality showing the best practices.
-- *AVCamManual: Extending AVCam to Use Manual Capture API* is the companion application to AVCam. It implements Camera functionality using the manual camera controls. It is also a complete example, well documented, and should be considered the canonical example for creating camera applications that take advantage of manual controls.
-- *RosyWriter* is an example that demonstrates real time frame processing and in particular how to apply filters to video content. This is a very common developer requirement and this example covers that functionality.
-- *AVLocationPlayer: Using AVFoundation Metadata Reading APIs* demonstrates using the metadata APIs.
+这里有若干AVFoundation的例子，其中两个是理解和实现摄像头捕获功能的关键：
+
+- [AVCam-iOS: Using AVFoundation to Capture Images and Movies](https://developer.apple.com/library/content/samplecode/AVCam/Introduction/Intro.html#//apple_ref/doc/uid/DTS40010112) is the canonical sample code for implementing any program that uses the camera functionality. It is a complete sample, well documented, and covers the majority of the functionality showing the best practices.
+- [AVCam-iOS: Using AVFoundation to Capture Images and Movies](https://developer.apple.com/library/content/samplecode/AVCam/Introduction/Intro.html#//apple_ref/doc/uid/DTS40010112)是实现任何使用摄像头功能的程序的权威示例代码。它是一个完整的范例，写得很好，并涵盖了展示最佳实践的主要的功能。
+- [AVCamManual: Extending AVCam to Use Manual Capture API](https://developer.apple.com/library/content/samplecode/AVCamManual/Introduction/Intro.html#//apple_ref/doc/uid/TP40014578) is the companion application to AVCam. It implements Camera functionality using the manual camera controls. It is also a complete example, well documented, and should be considered the canonical example for creating camera applications that take advantage of manual controls.
+- [AVCamManual: Extending AVCam to Use Manual Capture API](https://developer.apple.com/library/content/samplecode/AVCamManual/Introduction/Intro.html#//apple_ref/doc/uid/TP40014578)是AVCam的兄弟程序。它使用手动摄像头控制实现了摄像头功能。它也是一个完整的例子，写得很好，并应该被认为是利用手动控制创建摄像头程序的权威例子。
+- [RosyWriter](https://developer.apple.com/library/content/samplecode/RosyWriter/Introduction/Intro.html#//apple_ref/doc/uid/DTS40011110) is an example that demonstrates real time frame processing and in particular how to apply filters to video content. This is a very common developer requirement and this example covers that functionality.
+- [RosyWriter](https://developer.apple.com/library/content/samplecode/RosyWriter/Introduction/Intro.html#//apple_ref/doc/uid/DTS40011110)是一个演示实时帧处理的例子，以及特别介绍了如何将过滤器应用到视频内容。这是一个非常常见的开发者需求，而这个例子涵盖了该功能。
+- [AVLocationPlayer: Using AVFoundation Metadata Reading APIs](https://developer.apple.com/library/content/samplecode/AVLocationPlayer/Introduction/Intro.html#//apple_ref/doc/uid/TP40014495) demonstrates using the metadata APIs.
+- [AVLocationPlayer: Using AVFoundation Metadata Reading APIs](https://developer.apple.com/library/content/samplecode/AVLocationPlayer/Introduction/Intro.html#//apple_ref/doc/uid/TP40014495)演示了元数据API的使用。
