@@ -560,11 +560,15 @@ We want to encourage support of Apple's Swift Package Manager, it's better for t
 
 ```
 
-##4.3 Inline Documentation 在线文档
+##4.3 Inline Documentation 内联文档
 
 A lot of the generated documentation comes from inside the library itself. These metrics are about the usage of [Appledoc](http://nshipster.com/documentation/) and [Headerdoc](http://nshipster.com/swift-documentation/) within your public API. This means either from the parts of Swift that you have classed as `public` or from the public headers.
 
+许多已生成的文档来自于库自己的内部。这些衡量标准是在你的公开API中[Appledoc](http://nshipster.com/documentation/)和 [Headerdoc](http://nshipster.com/swift-documentation/)的使用。这意味着来自于你已经归为`public`的Swift的部分或者公共的头文件。
+
 Xcode uses this documentation to give inline hints, and CocoaDocs will create online documentation based on this documentation. Making it much easier for anyone using your library to work with.
+
+Xcode使用这些文档提供内联提示，而CocoaDocs将创建基于该文档的在线文档。尽量让每个用你的库工作的人都觉得它简单易懂。
 
 ```
  Modifier.new("Great Documentation", "A full suite of documentation makes it easier to use a library.", 3, { |...|
@@ -579,6 +583,8 @@ Xcode uses this documentation to give inline hints, and CocoaDocs will create on
 
 Providing no inline comments can make it tough for people to work with your code without having to juggle between multiple contexts. We use -1 to determine that no value was generated.
 
+提供不带内联的注解会让这变得很难，因为用你的代码工作的人无法在多个上下文之间跳转。我们使用-1来确定没有生成。
+
 ```
  Modifier.new("Badly Documented", "Small amounts of documentation generally means the project is immature.", -8, { |...|
    cd_stats[:doc_percent].to_i < 20 && cd_stats[:doc_percent].to_i != -1
@@ -586,7 +592,7 @@ Providing no inline comments can make it tough for people to work with your code
 
 ```
 
-##4.4 README Scoring
+##4.4 README Scoring README得分
 
 The README score is based on an algorithm that looks at the variety of the *bundled* README. You can run the algorithm against any URL here on [clayallsopp.github.io/readme-score](http://clayallsopp.github.io/readme-score). A README is the front-page of your library, it can provide an overview of API or show what the library can do.
 
@@ -609,7 +615,7 @@ Strange as it sounds, if you are providing a binary CocoaPod, it is worth embedd
 
 ```
 
-##4.5 CHANGELOG
+##4.5 CHANGELOG 修改日志
 
 Having a CHANGELOG means that its easier for people for compare older verions, as a metric of quality this generally shows a more mature library with care taken by the maintainer to show changes. We look for a `CHANGELOG{,.md,.markdown}` for two directories from the root of your project.
 
@@ -620,7 +626,7 @@ Having a CHANGELOG means that its easier for people for compare older verions, a
 
 ```
 
-##4.6 Language Choices
+##4.6 Language Choices 语言选择
 
 Swift is slowly happening. We wanted to positively discriminate people writing libraries in Swift.
 
@@ -640,7 +646,7 @@ Objective-C++ libraries can be difficult to integrate with Swift, and can requir
 
 ```
 
-##4.7 Licensing Issues
+##4.7 Licensing Issues 许可问题
 
 The GPL is a legitimate license to use for your code. However it is [incompatible](http://www.fsf.org/blogs/licensing/more-about-the-app-store-gpl-enforcement) with putting an App on the App Store, which most people would end up doing. To protect against this case we detract points from GPL'd libraries.
 
@@ -660,7 +666,7 @@ There were also quite a few libraries using the WTFPL, which is a license that a
 
 ```
 
-##4.8 Code Calls
+##4.8 Code Calls 代码调用
 
 Testing a library is important. When you have a library that people are relying on, being able to validate that what you expected to work works increases the quality.
 
@@ -704,7 +710,7 @@ CocoaPods makes it easy to create a library with multiple files, we wanted to en
 
 ```
 
-##4.9 Ownership
+##4.9 Ownership 所有权
 
 The CocoaPods Specs Repo isn't curated, and for the larger SDKs people will create un-official Pods. We needed a way to state that this Pod has come for the authors of the library, so, we have verified accounts. These are useful for the companies the size of; Google, Facebook, Amazon and Dropbox. We are applying this very sparingly, and have been reaching out to companies individually.
 
@@ -715,7 +721,7 @@ The CocoaPods Specs Repo isn't curated, and for the larger SDKs people will crea
 
 ```
 
-##4.10 Maintainance
+##4.10 Maintainance 维护
 
 We want to encourage people to ship semantic versions with their libraries. It can be hard to know what to expect from a library that is not yet at 1.0.0 given there is no social contract there. This is because before v1.0.0 a library author makes no promise on backwards compatability.
 
@@ -735,7 +741,7 @@ When it's time to deprecate a library, we should reflect that in the search resu
 
 ```
 
-##4.11 Misc - GitHub specific
+##4.11 Misc - GitHub specific Misc-GitHub详情
 
 This is an experiment in figuring out if a project is abandoned. Issues could be used as a TODO list, but leaving 50+ un-opened feels a bit off. It's more likely that the project has been sunsetted.
 
