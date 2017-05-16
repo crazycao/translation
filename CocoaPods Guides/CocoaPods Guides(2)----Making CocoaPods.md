@@ -751,30 +751,46 @@ This is an experiment in figuring out if a project is abandoned. Issues could be
  })
 ```
 
-#5 [Private Pods](https://guides.cocoapods.org/making/private-cocoapods.html)
+#5 [Private Pods](https://guides.cocoapods.org/making/private-cocoapods.html) 私有Pod
 
 How to setup a private Podspec repo for maintaining internal libraries.
 
-##5.1 Private Pods
+如何设置一个私有Podspec仓库以维护内部库。
+
+##5.1 Private Pods 私有Pod
 
 CocoaPods is a great tool not only for adding open source code to your project, but also for sharing components across projects. You can use a private Spec Repo to do this.
 
+CocoaPods是一个伟大的工具，不仅仅是因为可以将开源代码添加到你的工程中，它也可以穿过工程共享组件。你可以使用私有Spec Repo来实现。
+
 There are a few steps to getting a private pods setup for your project; creating a private repository for them, letting CocoaPods know where to find it and adding the podspecs to the repository.
 
-###5.1.1 [1. Create a Private Spec Repo](https://guides.cocoapods.org/making/#-create-a-private-spec-repo)
+经过几个步骤就可以获得你的工程的私有库设置；为它们创建私有仓库，让CocoaPods知道哪里可以找到它，以及添加Podspec到仓库。
+
+###5.1.1 [1. Create a Private Spec Repo](https://guides.cocoapods.org/making/#-create-a-private-spec-repo) 创建私有Spec仓库
 
 To work with your collection of private pods, we suggest creating your own Spec repo. This should be in a location that is accessible to all who will use the repo.
 
+为了用你的一些私有pod工作，我们建议创建你自己的Spec仓库。它应该被放在所有将使用这个仓库的人都能访问到的地方。
+
 **You do not need to fork the CocoaPods/Specs Master repo.** Make sure that everyone on your team has access to this repo, but it does not need to be public.
 
-###5.1.2 [2. Add your Private Repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-private-repo-to-your-cocoapods-installation)
+**你不需要从CocoaPods/Specs Master仓库建立分支。**只要确保你团队中的每个人可以访问这个仓库就行，而不需要做成公有的。
+
+###5.1.2 [2. Add your Private Repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-private-repo-to-your-cocoapods-installation) 添加你的私有仓库到你的CocoaPods安装列表
 
 ```
 $ pod repo add REPO_NAME SOURCE_URL
 
 ```
 
-Note: If you plan on creating pods locally, you should have push access to SOURCE_URLTo check if your installation is successful and ready to go:
+Note: If you plan on creating pods locally, you should have push access to SOURCE_URL.
+
+注意：如果你计划在本地创建pod，你应该推送访问权限到SOURCE_URL。
+
+>To check if your installation is successful and ready to go:
+
+>要检查你是否安装成功并准备好实用：
 
 ```
 $ cd ~/.cocoapods/repos/REPO_NAME
@@ -782,9 +798,11 @@ $ pod repo lint .
 
 ```
 
-###5.1.3 [3. Add your Podspec to your repo](https://guides.cocoapods.org/making/#-add-your-podspec-to-your-repo)
+###5.1.3 [3. Add your Podspec to your repo](https://guides.cocoapods.org/making/#-add-your-podspec-to-your-repo) 添加你的Podspec到你的仓库
 
 > Make sure you've tagged and versioned your source appropriately, then run:
+> 
+> 确保你已经正确的给你的源码打好标签和版本号，然后运行：
 
 ```
 $ pod repo push REPO_NAME SPEC_NAME.podspec
@@ -793,7 +811,11 @@ $ pod repo push REPO_NAME SPEC_NAME.podspec
 
 This will run `pod spec lint`, and take care of all the little details for setting up the spec in your private repo.
 
+这将会运行`pod spec lint`，并照顾到在你的私有仓库中设置spec的所有小细节。
+
 > The structure of your repo should mirror this:
+> 
+> 你仓库的结构应该像这样：
 
 ```
 .
@@ -804,20 +826,24 @@ This will run `pod spec lint`, and take care of all the little details for setti
 
 ```
 
-##5.2 [That's it!](https://guides.cocoapods.org/making/#thats-it)
+##5.2 [That's it!](https://guides.cocoapods.org/making/#thats-it) 就是这样
 
-Your private Pod is ready to be used in a Podfile. You can use the spec repository with the [`source`directive](https://guides.cocoapods.org/syntax/podfile.html#source) in your Podfile as shown in the following example:
+Your private Pod is ready to be used in a Podfile. You can use the spec repository with the [`source` directive](https://guides.cocoapods.org/syntax/podfile.html#source) in your Podfile as shown in the following example:
+
+你的私有Pod已经准备好在一个Podfile中使用。你可以在你的Podfile中使用带[`source`命令](https://guides.cocoapods.org/syntax/podfile.html#source)的spec仓库，如下面的例子展示的：
 
 ```
 source 'URL_TO_REPOSITORY'
 
 ```
 
-##5.3 [An Example](https://guides.cocoapods.org/making/#an-example)
+##5.3 [An Example](https://guides.cocoapods.org/making/#an-example) 一个例子
 
-###5.3.1 [1. Create a Private Spec Repo](https://guides.cocoapods.org/making/#-create-a-private-spec-repo)
+###5.3.1 [1. Create a Private Spec Repo](https://guides.cocoapods.org/making/#-create-a-private-spec-repo) 创建一个私有Spec仓库
 
 > Create a repo on your server. This can be achieved on Github or on your own server as follows
+> 
+> 在你的服务器上创建一个仓库。这可以在Github上或你自己的服务器上实现，如下：
 
 ```
 $ cd /opt/git
@@ -829,9 +855,13 @@ $ git init --bare
 
 (The rest of this example uses the repo at [https://github.com/artsy/Specs](https://github.com/artsy/Specs))
 
-###5.3.2 [2. Add your repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-repo-to-your-cocoapods-installation)
+（这个例子其余部分都使用在[https://github.com/artsy/Specs](https://github.com/artsy/Specs)的仓库）
+
+###5.3.2 [2. Add your repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-repo-to-your-cocoapods-installation) 添加你的仓库到CocoaPods安装列表
 
 > Using the URL of your repo on your server, add your repo using
+> 
+> 使用在你的服务器上的仓库的URL，使用下面的命令添加你的仓库：
 
 ```
 $ pod repo add artsy-specs git@github:artsy/Specs.git
@@ -839,6 +869,8 @@ $ pod repo add artsy-specs git@github:artsy/Specs.git
 ```
 
 > Check your installation is successful and ready to go:
+> 
+> 检查你的安装是否成功并准备好使用：
 
 ```
 $ cd ~/.cocoapods/repos/artsy-specs
@@ -846,9 +878,11 @@ $ pod repo lint .
 
 ```
 
-###5.3.3 [3. Add your Podspec to your repo](https://guides.cocoapods.org/making/#-add-your-podspec-to-your-repo)
+###5.3.3 [3. Add your Podspec to your repo](https://guides.cocoapods.org/making/#-add-your-podspec-to-your-repo) 添加你的Podspec到你的仓库
 
 > Create your Podspec
+> 
+> 创建你的Podspec
 
 ```
 cd ~/Desktop
@@ -856,7 +890,9 @@ touch Artsy+OSSUIFonts.podspec
 
 ```
 
-> Artsy+OSSUIFonts.podspec should be opened in the text editor of your choice. Typical contents are 
+> `Artsy+OSSUIFonts.podspec` should be opened in the text editor of your choice. Typical contents are 
+> 
+> `Artsy+OSSUIFonts.podspec`应该在你选择的文本编辑器中打开，典型的内容是：
 
 ```
 Pod::Spec.new do |s|
@@ -882,6 +918,8 @@ end
 ```
 
 > Save your Podspec and add to the repo
+> 
+> 保存你的Podspec并添加到repo
 
 ```
 pod repo push artsy-specs ~/Desktop/Artsy+OSSUIFonts.podspec
@@ -889,6 +927,8 @@ pod repo push artsy-specs ~/Desktop/Artsy+OSSUIFonts.podspec
 ```
 
 > Assuming your Podspec validates, it will be added to the repo. The repo will now look like this
+> 
+> 假设你的Podspec生效了，将会被添加到仓库，仓库现在将看起来像这样：
 
 ```
 .
@@ -900,12 +940,14 @@ pod repo push artsy-specs ~/Desktop/Artsy+OSSUIFonts.podspec
 ```
 
 > See this [Podfile](https://github.com/artsy/eigen/blob/master/Podfile) for an example of how the repo URL is included
+> 
+> 关于仓库URL如何被包含的例子，参见[Podfile](https://github.com/artsy/eigen/blob/master/Podfile)。
 
-##5.4 [How to remove a Private Repo](https://guides.cocoapods.org/making/#how-to-remove-a-private-repo)
+##5.4 [How to remove a Private Repo](https://guides.cocoapods.org/making/#how-to-remove-a-private-repo) 如何移除一个私有仓库
 
 `pod repo remove [name]`
 
-##5.5 [External resources](https://guides.cocoapods.org/making/#external-resources)
+##5.5 [External resources](https://guides.cocoapods.org/making/#external-resources) 扩展资源，额外资源
 
 - [Using CocoaPods to Modularise a Big iOS App by @aroldan](http://dev.hubspot.com/blog/architecting-a-large-ios-app-with-cocoapods)
 
