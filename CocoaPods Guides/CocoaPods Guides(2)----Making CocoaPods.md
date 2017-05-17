@@ -777,7 +777,7 @@ To work with your collection of private pods, we suggest creating your own Spec 
 
 **你不需要从CocoaPods/Specs Master仓库建立分支。**只要确保你团队中的每个人可以访问这个仓库就行，而不需要做成公有的。
 
-###5.1.2 [2. Add your Private Repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-private-repo-to-your-cocoapods-installation) 添加你的私有仓库到你的CocoaPods安装列表
+###5.1.2 [2. Add your Private Repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-private-repo-to-your-cocoapods-installation) 添加你的私有仓库到你的CocoaPods安装包
 
 ```
 $ pod repo add REPO_NAME SOURCE_URL
@@ -790,7 +790,7 @@ Note: If you plan on creating pods locally, you should have push access to SOURC
 
 >To check if your installation is successful and ready to go:
 
->要检查你是否安装成功并准备好实用：
+>要检查你的安装包是否制作成功并准备投入使用：
 
 ```
 $ cd ~/.cocoapods/repos/REPO_NAME
@@ -857,7 +857,7 @@ $ git init --bare
 
 （这个例子其余部分都使用在[https://github.com/artsy/Specs](https://github.com/artsy/Specs)的仓库）
 
-###5.3.2 [2. Add your repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-repo-to-your-cocoapods-installation) 添加你的仓库到CocoaPods安装列表
+###5.3.2 [2. Add your repo to your CocoaPods installation](https://guides.cocoapods.org/making/#-add-your-repo-to-your-cocoapods-installation) 添加你的仓库到CocoaPods安装包
 
 > Using the URL of your repo on your server, add your repo using
 > 
@@ -870,7 +870,7 @@ $ pod repo add artsy-specs git@github:artsy/Specs.git
 
 > Check your installation is successful and ready to go:
 > 
-> 检查你的安装是否成功并准备好使用：
+> 检查你的安装包是否成功并准备好使用：
 
 ```
 $ cd ~/.cocoapods/repos/artsy-specs
@@ -951,15 +951,23 @@ pod repo push artsy-specs ~/Desktop/Artsy+OSSUIFonts.podspec
 
 - [Using CocoaPods to Modularise a Big iOS App by @aroldan](http://dev.hubspot.com/blog/architecting-a-large-ios-app-with-cocoapods)
 
-#6 [Specs and the Specs Repo](https://guides.cocoapods.org/making/specs-and-specs-repo.html)
+#6 [Specs and the Specs Repo](https://guides.cocoapods.org/making/specs-and-specs-repo.html) Spec和Spec仓库
 
 Learn about creating Podspec's and the Spec repo.
 
+学习如何创建Podspec和Spec仓库
+
 A Podspec, or Spec, describes a version of a Pod library. One Pod, over the course of time, will have many Specs. It includes details about where the source should be fetched from, what files to use, the build settings to apply, and other general metadata such as its name, version, and description.
+
+一个Podspec或者Spec描述了一个Pod库的版本。一个Pod，随着时间的过程，将有许多Spec。包括关于从哪里获取资源，使用什么文件，应用的build设置，及其他通用元数据如名称、版本和描述。
 
 You can create one by hand, or run `pod spec create` to generate a stub. Podspecs are ruby files.
 
+你可以手动创建，或者运行`pod spec create`生成一份存根。Podspec是ruby文件。
+
 > Here is an example spec:
+> 
+> 这里是一个spec的例子：
 
 ```
 Pod::Spec.new do |spec|
@@ -979,11 +987,17 @@ end
 
 The [Specs Repo](https://github.com/CocoaPods/Specs) is the repository on GitHub that contains the list of all available pods. Every library has an individual folder, which contains sub folders of the available versions of that pod. 
 
+[Specs Repo](https://github.com/CocoaPods/Specs)是GitHub上的仓库，包含了所有可用pod的列表。每个库由一个独立的文件夹，包含了pod可用版本的子文件夹。
+
 See the [Private Pods](https://guides.cocoapods.org/making/private-cocoapods.html) section for an explanation of the Spec repo's file structure.
 
-##6.1 [Examples of Specifications](https://guides.cocoapods.org/making/#examples-of-specifications)
+参见[Private Pods](https://guides.cocoapods.org/making/private-cocoapods.html)章节获取Spec仓库的文件结构的说明。
 
-> A Simple specification.
+##6.1 [Examples of Specifications](https://guides.cocoapods.org/making/#examples-of-specifications) 说明文件的例子
+
+> A Simple specification. 
+> 
+> 一个简单的说明文件。
 
 ```
 Pod::Spec.new do |spec|
@@ -1002,6 +1016,8 @@ end
 ```
 
 > A specification with subspecs
+> 
+> 一个带有子说明的说明文件。
 
 ```
 Pod::Spec.new do |spec|
@@ -1025,11 +1041,17 @@ end
 
 [Subspecs](https://guides.cocoapods.org/syntax/podspec.html#group_subspecs) are a way of chopping up the functionality of a Podspec, allowing people to install a subset of your library. 
 
+[Subspecs](https://guides.cocoapods.org/syntax/podspec.html#group_subspecs)是一种将Podspec的功能拆分的方法，允许别人安装你的库的子集。
+
 With the above example a Podfile using `pod 'ShareKit'` results in the inclusion of the whole library, while `pod 'ShareKit/Facebook'` can be used if you are interested only in the Facebook specific parts.
 
-###6.1.1 [A specification with subspecs within submodules](https://guides.cocoapods.org/making/#a-specification-with-subspecs-within-submodules)
+在上面例子的Podfile中，使用`pod 'ShareKit'`会得到包含整个库的项目，而如果你只对Facebook说明部分感兴趣可以使用`pod 'ShareKit/Facebook'`。
+
+###6.1.1 [A specification with subspecs within submodules](https://guides.cocoapods.org/making/#a-specification-with-subspecs-within-submodules) 在子模块中用子说明的说明文件
 
 If you have some submodules in the repository you need to set the `:submodules` key of the `s.source` hash to true. Then you'll be able to specify subspec like above.
+
+如果在你的仓库中有一些子模块，你需要设置`s.source`哈希的`:submodules`关键字的值为`true`。然后你就可以像上面那样指定子说明。
 
 ```
 Pod::Spec.new do |spec|
@@ -1050,31 +1072,57 @@ end
 
 ```
 
-##6.2 [How does the Specs Repo work?](https://guides.cocoapods.org/making/#how-does-the-specs-repo-work)
+##6.2 [How does the Specs Repo work?](https://guides.cocoapods.org/making/#how-does-the-specs-repo-work) 如何完成Specs Repo的工作？
 
 To ensure a high quality, reliable collection of Pods, the Specs Repo is strict about the podspecs added. One of the primary purposes of this repo is to guarantee the integrity of existing CocoaPods installations.
 
+为了确保有一个高质量的可靠的Pod集合，Specs Repo在podspec的添加上非常严格。这个仓库的主要目的之一就是去报已存在的CocoaPods安装包的完整性。
+
 When you are preparing a podspec for submission, you should make sure to do the following:
+
+当你准备提交一个podspec时，你应该确保做了下面的工作：
 
 1. Run `pod spec lint`. This is used to validate specifications. Your podspec should pass without any errors or warnings.
 2. Update your library to use [Semantic Versioning](http://semver.org/), if it already does not follow that scheme. See our [wiki on cross dependency resolution](https://github.com/CocoaPods/Specs/wiki/Cross-dependencies-resolution-example) for more details. Essentially it makes everyone's life easier.
 3. Make sure any updates you submit do not break previous installations.
 4. Perform manual testing of your Podspec by [including the local Podspec](https://guides.cocoapods.org/syntax/podfile.html#pod) in the Podfile of a real application and/or your demo application, and ensuring it works as expected. **You alone** are responsible for ensuring your Podspec functions properly for your users.
 
+>
+
+1. 运行`pod spec lint`。这是用来验证说明我呢间。有任何错误或警告的podspec都将被pass。
+2. 如果已经没有遵从这个方案的话，使用[Semantic Versioning](http://semver.org/)更新你的库。参见我们的[关于跨依赖解决的wiki](https://github.com/CocoaPods/Specs/wiki/Cross-dependencies-resolution-example)查看更多详情。它大体上会让每个人的生活更简单。
+3. 确保你提交的任何更新都不会破坏之前的安装包。
+4. 通过在真实的应用和/或demo应用中[包含本地Podspec](https://guides.cocoapods.org/syntax/podfile.html#pod)来对你的Podspec进行手工测试，并确保它如期望的那样工作。
+
 In general this means that:
+
+总的来说这意味着：
 
 - A specification cannot be deleted.
 - Specifications can be updated only if they don't affect existing installations.
   - Broken specifications can be updated.
   - Subspecs can be added as they are included by the parent specification by default.
 - Only authoritative versions are accepted.
+- 说明文件不能被删除。
+- 说明文件只能在不影响已存在的安装包时被更新。
+	- 破损的说明文件可以被更新。
+	- 子说明可以添加，因为它们默认由父说明文件所包含。
+- 只有权威的版本会被接受。
 
-##6.3 [How do I update an existing Pod?](https://guides.cocoapods.org/making/#how-do-i-update-an-existing-pod)
+##6.3 [How do I update an existing Pod?](https://guides.cocoapods.org/making/#how-do-i-update-an-existing-pod) 如何更新一个已存在的Pod?
 
 1. Create your Podspec as described above.
 2. Run `pod spec lint` to check for errors.
 3. Submit your Podspec to Trunk with `pod trunk push NAME.podspec`
 
-##6.4 [How do I get my library on CocoaDocs?](https://guides.cocoapods.org/making/#how-do-i-get-my-library-on-cocoadocs)
+>
 
-[CocoaDocs](http://cocoadocs.org) receives notifications from the [CocoaPods/Specs](https://github.com/CocoaPods/Specs) repo on GitHub whenever a CocoaPod is updated. This triggers a process that will generate documentation for *objective-c*projects via [appledoc](http://gentlebytes.com/appledoc/) and host them for the community. This process can take around 15 minutes after your Podspec is merged. If you host your own documentation, you can use the [documentation_url](https://guides.cocoapods.org/syntax/podspec.html#documentation_url).
+1. 按上面描述的方法创建你的Podspec。
+2. 运行`pod spec lint`检查错误。
+3. 使用`pod trunk push NAME.podspec`提交你的Podspec到Trunk。
+
+##6.4 [How do I get my library on CocoaDocs?](https://guides.cocoapods.org/making/#how-do-i-get-my-library-on-cocoadocs) 我如何获得我在CocoaDocs上的库？
+
+[CocoaDocs](http://cocoadocs.org) receives notifications from the [CocoaPods/Specs](https://github.com/CocoaPods/Specs) repo on GitHub whenever a CocoaPod is updated. This triggers a process that will generate documentation for *objective-c* projects via [appledoc](http://gentlebytes.com/appledoc/) and host them for the community. This process can take around 15 minutes after your Podspec is merged. If you host your own documentation, you can use the [documentation_url](https://guides.cocoapods.org/syntax/podspec.html#documentation_url).
+
+每当CocoaPod被更新，[CocoaDocs](http://cocoadocs.org)都会收到来自于GitHub上的[CocoaPods/Specs](https://github.com/CocoaPods/Specs)仓库的通知。这会出发通过[appledoc](http://gentlebytes.com/appledoc/)为*objective-c*工程生成文档的过程，并为团队管理它们。这个过程在你的Podspec合并之后，大约花费15分钟。如果你要管理自己的文档，你可以使用[documentation_url](https://guides.cocoapods.org/syntax/podspec.html#documentation_url)。
