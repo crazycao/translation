@@ -596,9 +596,15 @@ Providing no inline comments can make it tough for people to work with your code
 
 The README score is based on an algorithm that looks at the variety of the *bundled* README. You can run the algorithm against any URL here on [clayallsopp.github.io/readme-score](http://clayallsopp.github.io/readme-score). A README is the front-page of your library, it can provide an overview of API or show what the library can do.
 
-Strange as it sounds, if you are providing a binary CocoaPod, it is worth embedding your README.md inside the zip. This means CocoaPods can use it to generate your Pod page. We look for a `README{,.md,.markdown}` for two directories from the root of your project.
+README得分基于一个算法，看*已打包的*README的种类。你可以对任意URL运行该算法，在这里[clayallsopp.github.io/readme-score](http://clayallsopp.github.io/readme-score)。README是你的库的首页，它可以提供API的概述或者展示这个库能做什么。
 
-*Note:* These modifiers are still in flux a bit, as we want to take a Podspec's `documentation_url`into account.
+Strange as it sounds, if you are providing a binary CocoaPod, it is worth embedding your `README.md` inside the zip. This means CocoaPods can use it to generate your Pod page. We look for a `README{,.md,.markdown}` for two directories from the root of your project.
+
+这听起来很奇怪，如果你提供一个二进制的CocoaPod，就有必要在zip包里面嵌入你的`README.md`文件。这意味着CocoaPods可以使用它来生成你的Pod页。我们会从你工程的根目录下查找两个目录的`README{,.md,.markdown}`。
+
+*Note:* These modifiers are still in flux a bit, as we want to take a Podspec's `documentation_url` into account.
+
+*注意：*这些说法仍然在一点点的变化，因为我们想要把Podspec的`documentation_url`放到账户里。
 
 ```
  Modifier.new("Great README", "A well written README gives a lot of context for the library, providing enough information to get started. ", 5, { |...|
@@ -619,6 +625,8 @@ Strange as it sounds, if you are providing a binary CocoaPod, it is worth embedd
 
 Having a CHANGELOG means that its easier for people for compare older verions, as a metric of quality this generally shows a more mature library with care taken by the maintainer to show changes. We look for a `CHANGELOG{,.md,.markdown}` for two directories from the root of your project.
 
+有一份*修改日志*意味着人们会更容易与老版本相比较，作为一个质量标准，这通常展示了一个被维护者更加精心照料的成熟的库。我们会从你工程的根目录下查找两个目录的`CHANGELOG{,.md,.markdown}`。
+
 ```
  Modifier.new("Has a CHANGELOG", "CHANGELOGs make it easy to see the differences between versions of your library.", 5, { |...|
    cd_stats[:rendered_changelog_url] != nil
@@ -630,6 +638,8 @@ Having a CHANGELOG means that its easier for people for compare older verions, a
 
 Swift is slowly happening. We wanted to positively discriminate people writing libraries in Swift.
 
+Swift慢慢的推广。我们想要正向鼓励用Swift写库的人。
+
 ```
  Modifier.new("Built in Swift", "Swift is where things are heading.", 5, { |...|
    cd_stats[:dominant_language] == "Swift"
@@ -638,6 +648,8 @@ Swift is slowly happening. We wanted to positively discriminate people writing l
 ```
 
 Objective-C++ libraries can be difficult to integrate with Swift, and can require a different paradigm of programming from what the majority of projects are used to.
+
+Objective-C++库会很难与Swift合并，并会需要来自工程主要用于的内容的不同的编程例子。
 
 ```
  Modifier.new("Built in Objective-C++", "Usage of Objective-C++ makes it difficult for others to contribute.", -5, { |...|
@@ -650,6 +662,8 @@ Objective-C++ libraries can be difficult to integrate with Swift, and can requir
 
 The GPL is a legitimate license to use for your code. However it is [incompatible](http://www.fsf.org/blogs/licensing/more-about-the-app-store-gpl-enforcement) with putting an App on the App Store, which most people would end up doing. To protect against this case we detract points from GPL'd libraries.
 
+GPL是用于你的代码的合法的许可。然而它与把App提交到App Store是[相冲突的](http://www.fsf.org/blogs/licensing/more-about-the-app-store-gpl-enforcement)，而大部分人最终还是要提交到App Store。为了保护以避免这种情况，我们会减少来自GPL的库的得分。
+
 ```
  Modifier.new("Uses GPL", "There are legal issues around distributing GPL'd code in App Store environments.", -20, { |...|
    cd_stats[:license_short_name] =~ /GPL/i || false
@@ -658,6 +672,8 @@ The GPL is a legitimate license to use for your code. However it is [incompatibl
 ```
 
 There were also quite a few libraries using the WTFPL, which is a license that aims to not be a license. It was rejected by the [OSI](http://opensource.org/) ( An open source licensing body. ) as being no different than not including a license. If you want to do that, use a [public domain](http://choosealicense.com/licenses/unlicense/) license.
+
+也有很少一些库是使用WTFPL的，这是一个以不是许可为目标的许可。它被[OSI](http://opensource.org/)（一个开源许可组织）所拒绝，因为这与没有包含许可没什么区别。如果你想要这么做，请使用[公共域](http://choosealicense.com/licenses/unlicense/)的许可。
 
 ```
  Modifier.new("Uses WTFPL", "WTFPL was denied as an OSI approved license. Thus it is not classed as code license.", -5, { |...|
@@ -669,6 +685,8 @@ There were also quite a few libraries using the WTFPL, which is a license that a
 ##4.8 Code Calls 代码调用
 
 Testing a library is important. When you have a library that people are relying on, being able to validate that what you expected to work works increases the quality.
+
+对一个库进行测试是重要的。当你有一个人们信赖的库时，能够验证你所期望的工作的工作情况将会提升库的质量。
 
 ```
  Modifier.new("Has Tests", "Testing a library shows that the developers care about long term quality on a project as internalized logic is made explicit via testing.", 4, { |...|
@@ -689,6 +707,8 @@ Testing a library is important. When you have a library that people are relying 
 
 A larger library will increase the size of other people's application. Making them slower to launch. CocoaDocs look at the folder size of the library after CocoaPods has removed anything that is not to be integrated in the app.
 
+更大的库将会增加其他人的程序的大小。让它们启动更慢。在CocoaPods已经移除了所有不用集成到app中的东西之后，CocoaDocs会看库的文件夹的大小。
+
 ```
  Modifier.new("Install size", "Too big of a library (usually caused by media assets) can impact an app's startup time.", -10, { |...|
    cd_stats[:install_size].to_i > 10000
@@ -697,6 +717,8 @@ A larger library will increase the size of other people's application. Making th
 ```
 
 CocoaPods makes it easy to create a library with multiple files, we wanted to encourage adoption of smaller more composable libraries.
+
+CocoaPods是的用多个文件创建一个库变得很简单，我们想要鼓励采用更小的更加可组合的库。
 
 ```
  Modifier.new("Lines of Code / File", "Smaller, more composeable classes tend to be easier to understand.", -8, { |...|
@@ -714,6 +736,8 @@ CocoaPods makes it easy to create a library with multiple files, we wanted to en
 
 The CocoaPods Specs Repo isn't curated, and for the larger SDKs people will create un-official Pods. We needed a way to state that this Pod has come for the authors of the library, so, we have verified accounts. These are useful for the companies the size of; Google, Facebook, Amazon and Dropbox. We are applying this very sparingly, and have been reaching out to companies individually.
 
+CocoaPods Specs Repo并没有做这件事，而人们为了更大的SDK会创建非官方的库。我们需要一种方法来说明这个Pod的来自于的库的作者，因此我们核实了账户。这对于如谷歌、Facebook、亚马逊和Dropbox这样大的公司是非常有用的。我们非常谨慎的应用这一点，并已经单独的和各个公司接触。
+
 ```
  Modifier.new("Verified Owner", "When a pod comes from a large company with an official account.", 20, { |...|
    owners.find { |owner| owner.owner.is_verified } != nil
@@ -725,6 +749,8 @@ The CocoaPods Specs Repo isn't curated, and for the larger SDKs people will crea
 
 We want to encourage people to ship semantic versions with their libraries. It can be hard to know what to expect from a library that is not yet at 1.0.0 given there is no social contract there. This is because before v1.0.0 a library author makes no promise on backwards compatability.
 
+我们想要鼓励人们在它们的库中带上标准的版本号。很难知道一个不再是1.0.0版本的库会变成什么样子，在这里也没有社会化的约定。这是因为在1.0.0版本之前，库的作者并没有承诺向后兼容。
+
 ```
  Modifier.new("Post-1.0.0", "Has a Semantic Version that is above 1.0.0", 5, { |...|
    Pod::Version.new("1.0.0") < Pod::Version.new(spec.version)
@@ -733,6 +759,8 @@ We want to encourage people to ship semantic versions with their libraries. It c
 ```
 
 When it's time to deprecate a library, we should reflect that in the search results.
+
+当不赞成某个库时，我们会拒绝将它显示在搜索结果中。
 
 ```
  Modifier.new("Is Deprecated", "Latest Podspec is declared to be deprecated", -20, { |...|
@@ -744,6 +772,8 @@ When it's time to deprecate a library, we should reflect that in the search resu
 ##4.11 Misc - GitHub specific Misc-GitHub详情
 
 This is an experiment in figuring out if a project is abandoned. Issues could be used as a TODO list, but leaving 50+ un-opened feels a bit off. It's more likely that the project has been sunsetted.
+
+这是一个为了弄明白某个工程是否被抛弃了的实验。问题可以被看作一份TODO列表，但是遗留了50+个未打开的问题让人感觉有一点像关闭了。更大的可能是工程已经被废止了。
 
 ```
  Modifier.new("Lots of open issues", "A project with a lot of open issues is generally abandoned. If it is a popular library, then it is usually offset by the popularity modifiers.", -8, { |...|
@@ -1125,4 +1155,4 @@ In general this means that:
 
 [CocoaDocs](http://cocoadocs.org) receives notifications from the [CocoaPods/Specs](https://github.com/CocoaPods/Specs) repo on GitHub whenever a CocoaPod is updated. This triggers a process that will generate documentation for *objective-c* projects via [appledoc](http://gentlebytes.com/appledoc/) and host them for the community. This process can take around 15 minutes after your Podspec is merged. If you host your own documentation, you can use the [documentation_url](https://guides.cocoapods.org/syntax/podspec.html#documentation_url).
 
-每当CocoaPod被更新，[CocoaDocs](http://cocoadocs.org)都会收到来自于GitHub上的[CocoaPods/Specs](https://github.com/CocoaPods/Specs)仓库的通知。这会出发通过[appledoc](http://gentlebytes.com/appledoc/)为*objective-c*工程生成文档的过程，并为团队管理它们。这个过程在你的Podspec合并之后，大约花费15分钟。如果你要管理自己的文档，你可以使用[documentation_url](https://guides.cocoapods.org/syntax/podspec.html#documentation_url)。
+每当CocoaPod被更新，[CocoaDocs](http://cocoadocs.org)都会收到来自于GitHub上的[CocoaPods/Specs](https://github.com/CocoaPods/Specs)仓库的通知。这会出发通过[appledoc](http://gentlebytes.com/appledoc/)为*objective-c*工程生成文档的过程，并为团队管理它们。这个过程在你的Podspec合并之后，大约花费15分钟。如果你管理自己的文档，你可以使用[documentation_url](https://guides.cocoapods.org/syntax/podspec.html#documentation_url)。
