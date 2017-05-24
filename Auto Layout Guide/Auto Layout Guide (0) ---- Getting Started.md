@@ -8,11 +8,17 @@ Auto Layout Guide (0) ---- Getting Started
 
 Auto Layout dynamically calculates the size and position of all the views in your view hierarchy, based on constraints placed on those views. For example, you can constrain a button so that it is horizontally centered with an Image view and so that the button’s top edge always remains 8 points below the image’s bottom. If the image view’s size or position changes, the button’s position automatically adjusts to match.
 
+自动布局自动的计算你的视图层级中的所有视图的尺寸和位置，基于放置在那些视图上的约束。例如，你可以约束一个按钮，让它与一个图像视图水平居中，并让这个按钮的顶部边沿始终少于这个按钮的底部8个点。如果图像视图的尺寸或位置改变，按钮的位置也自动的调节以匹配。
+
 This constraint-based approach to design allows you to build user interfaces that dynamically respond to both internal and external changes.
 
-### 0.1.1 External Changes - 外部的改变
+这种基于约束的设计方法让你可以建立动态响应内部和外部变化的用户界面。
+
+### 0.1.1 External Changes - 外部变化
 
 External changes occur when the size or shape of your superview changes. With each change, you must update the layout of your view hierarchy to best use the available space. Here are some common sources of external change:
+
+当父视图的尺寸或形状改变时，外部变化就发生了。每一次变更，你都必须更新你的视图层级的布局以最好的使用可用空间。这里是一些外部变化的普通来源：
 
 - The user resizes the window (OS X). 
 - The user enters or leaves Split View on an iPad (iOS). 
@@ -20,59 +26,105 @@ External changes occur when the size or shape of your superview changes. With ea
 - The active call and audio recording bars appear or disappear (iOS). 
 - You want to support different size classes. 
 - You want to support different screen sizes. 
+- 用户改变了窗口的尺寸（OS X）。
+- 用户在iPad上进入或离开Split View（iOS）。
+- 设备旋转（iOS）。
+- 电话通话中和音频录音中的提示栏出现或消失（iOS）。
+- 你想要支持不同的尺寸类型。
+- 你想要支持不同的屏幕尺寸。
 
 Most of these changes can occur at runtime, and they require a dynamic response from your app. Others, like support for different screen sizes, represent the app adapting to different environments. Even through the screen size won’t typically change at runtime, creating an adaptive interface lets your app run equally well on an iPhone 4S, an iPhone 6 Plus, or even an iPad. Auto Layout is also a key component for supporting Slide Over and Split Views on the iPad.
 
-### 0.1.2 Internal Changes - 内部的改变
+这些变化大部分发生在运行时，它们需要一个来自你的app的动态响应。另外，就像要支持不同的屏幕尺寸一样，也要让app适应不同的环境。即使屏幕尺寸在运行时通常也不会改变，但创建一个有适应性的界面可以让你的app在iPhone 4S、iPhone 6 Plus、甚至iPad上运行得一样好。自动布局也是在iPad上支持Slide Over和Split Views的关键组件。
+
+### 0.1.2 Internal Changes - 内部变化
 
 Internal changes occur when the size of the views or controls in your user interface change.
 
+当你的用户界面里的视图或控件的尺寸变化时，内部变化就发生了。
+
 Here are some common sources of internal change:
+
+这是一些内部变化的普通来源：
 
 - The content displayed by the app changes. 
 - The app supports internationalization. 
 - The app supports Dynamic Type (iOS). 
+- 内容显示被app修改。
+- App支持国际化。
+- App支持动态类型（iOS）。
 
 When your app’s content changes, the new content may require a different layout than the old. This commonly occurs in apps that display text or images. For example, a news app needs to adjust its layout based on the size of the individual news articles. Similarly, a photo collage must handle a wide range of image sizes and aspect ratios.
 
+当你的app的内容变化，新的内容可能需要一个与之前不同的布局。这通常会发生在显示文本或图片的app中。例如，一个新闻app需要基于单个新闻文章的尺寸调整其布局。类似的，照片拼贴类app必须处理大范围的图像尺寸和高宽比。
+
 Internationalization is the process of making your app able to adapt to different languages, regions, and cultures. The layout of an internationalized app must take these differences into account and appear correctly in all the languages and regions that the app supports.
+
+国际化就是让你的app能够适配不同的语言、地域和文化的过程。国际化的app的布局必须把这些不同放到账户里，并在app支持的所有的语言和地域都正确的显示。
 
 Internationalization has three main effects on layout. First, when you translate your user interface into a different language, the labels require a different amount of space. German, for example, typically requires considerably more space than English. Japanese frequently requires much less.
 
+国际化有三个主要的与布局有关的影响。首先，当你翻译你的用户界面到不同的语言时，标签需要不同大小的空间。德语，例如，通常需要比英语多得多的空间。日语则经常需要很少的空间。
+
 Second, the format used to represent dates and numbers can change from region to region, even if the language does not change. Although these changes are typically more subtle than the language changes, the user interface still needs to adapt to the slight variation in size.
+
+第二，用于展示日期和数字的格式可能随着地域不同而变化，即使语言并没有改变。尽管这些变化比语言的变化通常更微小，但是用户界面仍然需要在尺寸上适应这些细微的差异。
 
 Third, changing the language can affect not just the size of the text, but the organization of the layout as well. Different languages use different layout directions. English, for example, uses a left-to-right layout direction, and Arabic and Hebrew use a right-to-left layout direction. In general, the order of the user interface elements should match the layout direction. If a button is in the bottom-right corner of the view in English, it should be in the bottom left in Arabic.
 
+第三，变更语言影响的不仅仅是文本的尺寸，布局的组织也会有影响。不同的语言使用不同的布局方向。英语，例如，使用从左到右的布局方向，而阿拉伯语和希伯来语使用从右到左的布局方向。通常，用户界面元素的顺序应该匹配布局方向。如果一个按钮在英语中是在视图的右下角，那么它在阿拉伯语中应该是在左下角。
+
 Finally, if your iOS app supports dynamic type, the user can change the font size used in your app. This can change both the height and the width of any textual elements in your user interface. If the user changes the font size while your app is running, both the fonts and the layout must adapt.
+
+最后，如果你的iOS app支持动态类型，用户可以修改用在你的app中的字体大小。这就会改变你的用户界面上所有文本元素的高和宽。如果用户在你的app正在运行时改变字体大小，那么字体和布局都必须适配。
 
 ### 0.1.3 Auto Layout Versus Frame-Based Layout - 自动布局与基于框架的布局
 
 There are three main approaches to laying out a user interface. You can programmatically lay out the user interface, you can use autoresizing masks to automate some of the responses to external change, or you can use Auto Layout.
 
+有三种主要的方法可以布局用户界面。你可以编程布局用户界面，可以使用autoresizing masks自动化响应一些外部变化，或者你可以使用Auto Layout。
+
 Traditionally, apps laid out their user interface by programmatically setting the frame for each view in a view hierarchy. The frame defined the view’s origin, height, and width in the superview’s coordinate system.
+
+传统的方式是，app通过编程在视图层级中设置每一个视图的frame来布局它们的用户界面。这个frame地应为视图在其父视图坐标系统中的起始点、高度和宽度。
 
 ![Figure 0-1](layout_views_2x.png)
 
 To lay out your user interface, you had to calculate the size and position for every view in your view hierarchy. Then, if a change occurred, you had to recalculate the frame for all the effected views.
 
+要布局你的用户界面，你不得不计算视图层级中每个视图的尺寸和位置。然后，如果发生变化，你不得不重新计算所有影响到的视图的frame。
+
 In many ways, programmatically defining a view’s frame provides the most flexibility and power. When a change occurs, you can literally make any change you want. Yet because you must also manage all the changes yourself, laying out a simple user interface requires a considerable amount of effort to design, debug, and maintain. Creating a truly adaptive user interface increases the difficulty by an order of magnitude.
+
+在许多方法中，编程定义视图的frame提供了最大的灵活度和能力。当发生变化，你可以逐一做出任何想要的改变。但也正因为你必须自己管理所有的修改，布局一个简单的用户界面都需要花费相当打的精力来设计、调试和管理。创建一个真正自适应的用户界面会增加一个数量级的难度。
 
 You can use autoresizing masks to help alleviate some of this effort. An autoresizing mask defines how a view’s frame changes when its superview’s frame changes. This simplifies the creation of layouts that adapt to external changes.
 
+你可以使用autoresizing masks帮助减轻一些努力工作。Autoresizing masks定义了当父视图的frame变化时子视图的frame如何变化。这简化了适应外部变化的布局的创建工作。
+
 However, autoresizing masks support a relatively small subset of possible layouts. For complex user interfaces, you typically need to augment the autoresizing masks with your own programmatic changes. Additionally, autoresizing masks adapt only to external changes. They do not support internal changes.
+
+然而，autoresizing masks只支持可能的布局的一个相对小的子集。对于复杂的用户界面，你通常需要在autoresizing masks之外增加你自己的程序化的改变。另外，autoresizing masks只能适配外部变化。它们不支持内部变化。
 
 Although autoresizing masks are just an iterative improvement on programmatic layouts, Auto Layout represents an entirely new paradigm. Instead of thinking about a view’s frame, you think about its relationships.
 
+尽管autoresizing masks只是逐渐改善了程序化布局，Auto Layout则展示了一个全新的样式。不再考虑视图的frame，而是考虑视图的关系。
+
 Auto Layout defines your user interface using a series of constraints. Constraints typically represent a relationship between two views. Auto Layout then calculates the size and location of each view based on these constraints. This produces layouts that dynamically respond to both internal and external changes.
+
+Auto Layout使用一系列约束定义你的用户界面。约束通常表示两个视图之间的关系。然后Auto Layout基于这些约束计算每个视图的尺寸和定位。这会产生能动态响应内部和外部变化的布局。
 
 ![Figure 0-2](layout_constraints_2x.png)
 
 The logic used to design a set of constraints to create specific behaviors is very different from the logic used to write procedural or object-oriented code. Fortunately, mastering Auto Layout is no different from mastering any other programming task. There are two basic steps: First you need to understand the logic behind constraint-based layouts, and then you need to learn the API. You’ve successfully performed these steps when learning other programming tasks. Auto Layout is no exception.
 
+用于设计一些约束以创建具体行为的逻辑，与用于编写程序上的或面向对象的代码的逻辑，是非常的不同的。幸运的是，掌握Auto Layout与掌握任何其他编程任务并没有不同。有两个基本的步骤：首先你需要理解基于约束的布局背后的逻辑，然后你需要学习API。在学习其他编程任务时你已经成功的执行了这些步骤。那么Auto Layout没有例外。
+
 The rest of this guide is designed to help ease your transition to Auto Layout. The [Auto Layout Without Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/AutoLayoutWithoutConstraints.html#//apple_ref/doc/uid/TP40010853-CH8-SW1) chapter describes a high-level abstraction that simplifies the creation of Auto Layout backed user interfaces. The [Anatomy of a Constraint](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/AnatomyofaConstraint.html#//apple_ref/doc/uid/TP40010853-CH9-SW1) chapter provides the background theory you need to understand to successfully interact with Auto Layout on your own. [Working with Constraints in Interface Builder](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithConstraintsinInterfaceBuidler.html#//apple_ref/doc/uid/TP40010853-CH10-SW1) describes the tools for designing Auto Layout, and the [Programmatically Creating Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html#//apple_ref/doc/uid/TP40010853-CH16-SW1) and [Auto Layout Cookbook](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/LayoutUsingStackViews.html#//apple_ref/doc/uid/TP40010853-CH3-SW1) chapters describe the API in detail. Finally, the [Auto Layout Cookbook](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/LayoutUsingStackViews.html#//apple_ref/doc/uid/TP40010853-CH3-SW1) presents a wide range of sample layouts of varying levels of complexity, you can study and use in your own projects, and [Debugging Auto Layout](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/TypesofErrors.html#//apple_ref/doc/uid/TP40010853-CH22-SW1) offers advice and tools for fixing things if anything goes wrong.
 
+本指南的其余部分旨在帮助你轻松的过渡到Auto Layout。[Auto Layout Without Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/AutoLayoutWithoutConstraints.html#//apple_ref/doc/uid/TP40010853-CH8-SW1)章节高度抽象的介绍了简化支持用户界面的Auto Layout的创建。[Anatomy of a Constraint](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/AnatomyofaConstraint.html#//apple_ref/doc/uid/TP40010853-CH9-SW1)章节提供了你需要理解的背景理论，才能成功的自己与Auto Layout交互。[Working with Constraints in Interface Builder](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithConstraintsinInterfaceBuidler.html#//apple_ref/doc/uid/TP40010853-CH10-SW1)介绍了设计Auto Layout的工具，而[Programmatically Creating Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html#//apple_ref/doc/uid/TP40010853-CH16-SW1)和[Auto Layout Cookbook](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/LayoutUsingStackViews.html#//apple_ref/doc/uid/TP40010853-CH3-SW1)章节详细的介绍了API。最后[Auto Layout Cookbook](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/LayoutUsingStackViews.html#//apple_ref/doc/uid/TP40010853-CH3-SW1)提供了广泛的不同复杂度的样例布局，你可以在你自己的工程中学习和使用，[Debugging Auto Layout](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/TypesofErrors.html#//apple_ref/doc/uid/TP40010853-CH22-SW1)提供一些发生问题时进行修复的建议和工具。
 
-## 0.2 Auto Layout Without Constraints
+## 0.2 Auto Layout Without Constraints - 不带约束的自动布局
 
 Stack views provide an easy way to leverage the power of Auto Layout without introducing the complexity of constraints. A single stack view defines a row or column of user interface elements. The stack view arranges these elements based on its properties.
 
