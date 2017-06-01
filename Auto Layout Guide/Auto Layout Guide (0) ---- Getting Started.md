@@ -128,37 +128,66 @@ The rest of this guide is designed to help ease your transition to Auto Layout. 
 
 Stack views provide an easy way to leverage the power of Auto Layout without introducing the complexity of constraints. A single stack view defines a row or column of user interface elements. The stack view arranges these elements based on its properties.
 
+堆栈视图（Stack views）提供了一种简单的方法不用移入复杂的约束就可以影响自动布局的能力。一个简单的堆栈视图定义了一行或一列用户界面元素。堆栈视图按照这些元素的属性对它们进行排列。
+
 - [axis](https://developer.apple.com/reference/uikit/uistackview/1616223-axis): ([UIStackView](https://developer.apple.com/reference/uikit/uistackview) only) defines the stack view’s orientation, either vertical or horizontal. 
 - [orientation](https://developer.apple.com/reference/appkit/nsstackview/1488950-orientation): ([NSStackView](https://developer.apple.com/reference/appkit/nsstackview) only) defines the stack view’s orientation, either vertical or horizontal. 
 - [distribution](https://developer.apple.com/reference/uikit/uistackview/1616233-distribution): defines the layout of the views along the axis. 
 - [alignment](https://developer.apple.com/reference/uikit/uistackview/1616243-alignment): defines the layout of the views perpendicular to the stack view’s axis. 
 - [spacing](https://developer.apple.com/reference/uikit/uistackview/1616225-spacing): defines the space between adjacent views. 
+- [轴（axis）](https://developer.apple.com/reference/uikit/uistackview/1616223-axis)：（仅[UIStackView](https://developer.apple.com/reference/uikit/uistackview)）定义了堆栈视图的方向，垂直或水平。
+- [方向（orientation）](https://developer.apple.com/reference/appkit/nsstackview/1488950-orientation)：（仅[NSStackView](https://developer.apple.com/reference/appkit/nsstackview)）定义了堆栈视图的方向，垂直或水平。
+- [分布（distribution）](https://developer.apple.com/reference/uikit/uistackview/1616233-distribution)：定义了沿着轴的方向的视图的布局。 
+- [准线（alignment）](https://developer.apple.com/reference/uikit/uistackview/1616243-alignment)：定义了视图布局到堆栈视图轴的垂直距离。
+- [间距（spacing）](https://developer.apple.com/reference/uikit/uistackview/1616225-spacing)：定义了两个相邻视图之间的间隔。 
 
 To use a stack view, in Interface Builder drag either a vertical or horizontal stack view onto the canvas. Then drag out the content and drop it into the stack.
 
+要使用堆栈视图，在Interface Builder中拖动一个垂直或水平的堆栈视图到画布上。然后拖出内容将其丢入堆栈。
+
 If an object has an intrinsic content size, it appears in the stack at that size. If it does not have an intrinsic content size, Interface Builder provides a default size. You can resize the object, and Interface Builder adds constraints to maintain its size.
 
+如果一个对象有其固有的内容尺寸，它在堆栈中就会以该尺寸展示。如果没有固有内容尺寸，Interface Builder会提供一个默认尺寸。你可以重新确定该对象的大小，Interface Builder会添加约束控制其大小。
+
 To further fine-tune the layout, you can modify the stack view’s properties using the Attributes inspector. For example, the following example uses an 8-point spacing and a Fills Equally distribution.
+
+要进一步微调布局，你可以使用Attributes检查器修改堆栈视图的属性。例如，下面的例子使用8个点的间距和Fills Equally分布。
 
 ![Figure 0-3](IB_StackView_Simple_2x.png)
 
 The stack view also bases its layout on the arranged views’ content-hugging and compression-resistance priorities. You can modify these using the Size inspector.
 
+堆栈视图也会基于已排列视图的内容紧靠和压缩阻力属性设置其布局。你可以使用Size检查器修改它们。
+
 >NOTE
 >
 >You can further modify the layout by adding constraints directly to the arranged views; however, you want to avoid any possible conflicts: As a general rule of thumb, if a view’s size defaults back to its intrinsic content size for a given dimension, you can safely add a constraint for that dimension. For more information on conflicting constraints, see [Unsatisfiable Layouts](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ConflictingLayouts.html#//apple_ref/doc/uid/TP40010853-CH19-SW1).
+>
+>注意
+>
+>你可以通过直接在以排列的视图上添加约束来进一步修改布局；然而，你必须避免任何可能的冲突：作为一个概述的通用规则，如果一个视图的尺寸默认会回到给定范围的固有内容尺寸，你可以安全的添加一个该范围的约束。关于有冲突的约束的更多信息，参见[Unsatisfiable Layouts](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ConflictingLayouts.html#//apple_ref/doc/uid/TP40010853-CH19-SW1)。
 
 Additionally, you can nest stack views inside other stack views to build more complex layouts.
+
+另外，你可以将一个堆栈视图嵌入另一个堆栈视图，以创建更加复杂的布局。
 
 ![Figure 0-4](IB_StackView_NestedStacks_2x.png)
 
 In general, use stack views to manage as much of your layout as possible. Resort to creating constraints only when you cannot achieve your goals with stack views alone.
 
+通常，应该尽可能多的使用堆栈视图管理你的布局。只有当你无法单独通过堆栈视图达到目的时才使用创造约束的招数。
+
 For more information on using stack views, see [*UIStackView Class Reference*](https://developer.apple.com/reference/uikit/uistackview) or [*NSStackView Class Reference*](https://developer.apple.com/reference/appkit/nsstackview).
+
+关于使用堆栈视图的更多信息，参见[*UIStackView Class Reference*](https://developer.apple.com/reference/uikit/uistackview)或[*NSStackView Class Reference*](https://developer.apple.com/reference/appkit/nsstackview)。
 
 >NOTE
 >
 >Although the creative use of nested stack views can produce complex user interfaces, you cannot completely escape the need for constraints. At a bare minimum, you always need constraints to define the position (and possibly the size) of the outermost stack.
+>
+>注意
+>
+>尽管创造性的使用嵌入的堆栈视图可以制作复杂用户界面，但是你无法完全避开约束的需求。最低限度的情况下，你也总是需要约束来确定最外层堆栈视图的位置（可能还有大小）。
 
 ## 0.3 Anatomy of a Constraint - 约束剖析
 
