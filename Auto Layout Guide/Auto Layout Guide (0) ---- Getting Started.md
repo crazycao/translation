@@ -193,11 +193,17 @@ For more information on using stack views, see [*UIStackView Class Reference*](h
 
 The layout of your view hierarchy is defined as a series of linear equations. Each constraint represents a single equation. Your goal is to declare a series of equations that has one and only one possible solution.
 
+你的视图层级被定义为一系列线性方程。每一个约束表示了一个方程。你的目标是声明一系列有且只有一个可能的解决方案的方程。
+
 A sample equation is shown below.
+
+下面是一个方程样例。
 
 ![view_formula_2x.png](view_formula_2x.png)
 
 This constraint states that the red view’s leading edge must be 8.0 points after the blue view’s trailing edge. Its equation has a number of parts:
+
+这个约束说明了红色的视图的前部边沿必须在蓝色视图的尾部边沿8个点之后。这个方程由以下部分组成：
 
 - **Item 1**. The first item in the equation—in this case, the red view. The item must be either a view or a layout guide. 
 - **Attribute 1**. The attribute to be constrained on the first item—in this case, the red view’s leading edge. 
@@ -206,119 +212,188 @@ This constraint states that the red view’s leading edge must be 8.0 points aft
 - **Item 2**. The second item in the equation—in this case, the blue view. Unlike the first item, this can be left blank. 
 - **Attribute 2**. The attribute to be constrained on the second item—in this case, the blue view’s trailing edge. If the second item is left blank, this must be Not an Attribute. 
 - **Constant**. A constant, floating-point offset—in this case, 8.0. This value is added to the value of attribute 2. 
+- **Item 1**。方程中的第一个项目——这个例子中，就是红色的视图。这个项目必须是一个视图或者一个布局引导。 
+- **Attribute 1**。第一个项目中被约束的属性——在这个例子中，就是红色视图的前部边沿。 
+- **Relationship**。左边和右边之间的关系。这个关系可以是下面三种情况之一：等于，大于等于，或小于等于。在这个例子中，左边和右边是相等的。 
+- **Multiplier**。属性2的值需要乘以这个浮点数。在这个例子中，这个乘数是1.0。 
+- **Item 2**。方程中的第二个项目——在这个例子中，就是蓝色的视图。与第一项不同，它可以留空。
+- **Attribute 2**。第二个项目中被约束的视图——在这个例子总，就是蓝色视图的尾部边沿。如果第二个项目留空，那这里必须是 Not An Attribute。 
+- **Constant**。 一个固定的，浮点型的偏移量——在这个例子中，是8.0。这个值会被添加到属性2的值。
 
 Most constraints define a relationship between two items in our user interface. These items can represent either views or layout guides. Constraints can also define the relationship between two different attributes of a single item, for example, setting an aspect ratio between an item’s height and width. You can also assign constant values to an item’s height or width. When working with constant values, the second item is left blank, the second attribute is set to Not An Attribute, and the multiplier is set to 0.0.
+
+大部分约束定义了我们的用户界面上的两个项目的关系。这些项目可以表示视图或布局引导。约束也可以定义一个单独项目的两个不同属性之间的关系，例如，设置一个项目的高和宽之间的纵横比。你也可以把一个项目的高或库看设置成固定的值。当采用固定值时，第二个项目被留空，第二个属性被设置成 Not An Attribute，乘数被设置成 0.0。
 
 ### 0.3.1 Auto Layout Attributes - 自动布局属性
 
 In Auto Layout, the attributes define a feature that can be constrained. In general, this includes the four edges (leading, trailing, top, and bottom), as well as the height, width, and vertical and horizontal centers. Text items also have one or more baseline attributes.
 
+在自动布局中，属性定义了可以被约束的特性。通常，包括四个边沿（前部、尾部、顶部和底部），以及高、宽、垂直中心和水平中心。文本项目也有一个或多个基本属性。
+
 ![attributes_2x.png](attributes_2x.png)
 
 For the complete list of attributes, see the [NSLayoutAttribute](https://developer.apple.com/reference/appkit/nslayoutattribute) enum.
 
+关于属性的完整列表，参见[NSLayoutAttribute](https://developer.apple.com/reference/appkit/nslayoutattribute)枚举。
+
 >NOTE
 >
->Although both OS X and iOS use the NSLayoutAttribute enum, they define slightly different sets of values. To see the full list of attributes, be sure you are looking at the correct platform’s documentation.
+>Although both OS X and iOS use the `NSLayoutAttribute` enum, they define slightly different sets of values. To see the full list of attributes, be sure you are looking at the correct platform’s documentation.
+>
+>注意
+>
+>尽管 OS X 和 iOS 都使用`NSLayoutAttribute`枚举，它们对值的定义略有不同。要查看属性的完整列表，确保你正在查看正确平台的文档。
 
 ### 0.3.2 Sample Equations - 样本方程
 
 The wide range of parameters and attributes available to these equations lets you create many different types of constraints. You can define the space between views, align the edge of views, define the relative size of two views, or even define a view’s aspect ratio. However, not all attributes are compatible.
 
+可用于这些方程的参数和属性的范围很大，可以创建许多不同类型的约束。你可以定义视图之间的间隔，对齐视图的边沿，定义两个视图的相关尺寸，或者甚至定义一个视图的宽高比。然而，并不是所有的属性都是兼容的。
+
 There are two basic types of attributes. Size attributes (for example, Height and Width) and location attributes (for example, Leading, Left, and Top). Size attributes are used to specify how large an item is, without any indication of its location. Location attributes are used to specify the location of an item relative to something else. However, they carry no indication of the item’s size.
 
+有两种基本属性类型。尺寸属性（例如，Height和Width）和位置属性（例如，Leading、Left和Top）。尺寸属性用于指明一个项目有多大，并不暗含其位置。位置属性用于指明一个项目区其他东西之间的位置关系。但是，它们会暗含项目的大小。
+
 With these differences in mind, the following rules apply:
+
+考虑到这些差异，可以应用以下规则：
 
 - You cannot constrain a size attribute to a location attribute. 
 - You cannot assign constant values to location attributes. 
 - You cannot use a nonidentity multiplier (a value other than 1.0) with location attributes. 
 - For location attributes, you cannot constrain vertical attributes to horizontal attributes. 
 - For location attributes, you cannot constrain Leading or Trailing attributes to Left or Right attributes. 
+- 你不能约束一个尺寸属性到位置属性。
+- 你不能设置一个固定值到位置属性。
+- 你不能对位置属性使用一个非同一性乘数（不等于1.0的值）。
+- 对于位置属性，你不能约束垂直属性到水平属性。
+- 对于位置属性，你不能约束 Leading 或 Trailing 属性到 Left 或 Right 属性。
 
-For example, setting an item’s Top to the constant value 20.0 has no meaning without additional context. You must always define an item’s location attributes in relation to other items, for example, 20.0 points below the superview’s Top. However, setting an item’s Height to 20.0 is perfectly valid. For more information, see Interpreting Values.
+For example, setting an item’s Top to the constant value 20.0 has no meaning without additional context. You must always define an item’s location attributes in relation to other items, for example, 20.0 points below the superview’s Top. However, setting an item’s Height to 20.0 is perfectly valid. For more information, see [Interpreting Values](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/AnatomyofaConstraint.html#//apple_ref/doc/uid/TP40010853-CH9-SW22).
+
+例如，设置一个项目的 Top 到固定值 20.0 而没有其他上下文是没有意义的。你必须总是定义一个项目与其他项目关系的位置属性，例如，在父视图的 Top 以下 20.0 点。然而，设置一个项目的 Height 为 20.0 就非常完美。更多信息，参见[Interpreting Values](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/AnatomyofaConstraint.html#//apple_ref/doc/uid/TP40010853-CH9-SW22)。
 
 Listing 3-1 shows sample equations for a variety of common constraints.
+
+表3-1展示了一些常见类型的约束的样例方程。
 
 >NOTE
 >
 >All the example equations in this chapter are presented using pseudocode. To see real constraints using real code, see [Programmatically Creating Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html#//apple_ref/doc/uid/TP40010853-CH16-SW1) or [Auto Layout Cookbook](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/LayoutUsingStackViews.html#//apple_ref/doc/uid/TP40010853-CH3-SW1).
+>
+>注意
+>
+>本章中所有的例子方程都是用伪代码表示的。要使用真实代码查看真正的约束，参见[Programmatically Creating Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html#//apple_ref/doc/uid/TP40010853-CH16-SW1) or [Auto Layout Cookbook](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/LayoutUsingStackViews.html#//apple_ref/doc/uid/TP40010853-CH3-SW1)。
 
-**Listing 3-1**Sample equations for common constraints
+**Listing 3-1**Sample equations for common constraints 常见约束的样例方程
 
-- // Setting a constant height
+- // Setting a constant height 设置固定高度
 - View.height = 0.0 * NotAnAttribute + 40.0
 - ​
-- // Setting a fixed distance between two buttons
+- // Setting a fixed distance between two buttons 在两个按钮中设置一个固定的距离
 - Button_2.leading = 1.0 * Button_1.trailing + 8.0
 - ​
-- // Aligning the leading edge of two buttons
+- // Aligning the leading edge of two buttons 对齐两个按钮的前部边沿
 - Button_1.leading = 1.0 * Button_2.leading + 0.0
 - ​
-- // Give two buttons the same width
+- // Give two buttons the same width 把两个按钮设置成相同的宽度
 - Button_1.width = 1.0 * Button_2.width + 0.0
 - ​
-- // Center a view in its superview
+- // Center a view in its superview 把一个视图放在其父视图的中心
 - View.centerX = 1.0 * Superview.centerX + 0.0
 - View.centerY = 1.0 * Superview.centerY + 0.0
 - ​
-- // Give a view a constant aspect ratio
+- // Give a view a constant aspect ratio 给一个视图固定宽高比
 - View.height = 2.0 * View.width + 0.0
 
 ### 0.3.3 Equality, Not Assignment - 相等，而不是赋值
 
 It’s important to note that the equations shown in Note represent equality, not assignment.
 
+需要特别注意的是，在Note中展示的方程表示相等，而不是赋值。
+
 When Auto Layout solves these equations, it does not just assign the value of the right side to the left. Instead, it calculates the value for both attribute 1 and attribute 2 that makes the relationship true. This means we can often freely reorder the items in the equation. For example, the equations in Listing 3-2 are identical to their counterparts in Note.
 
-**Listing 3-2**Inverted equations
+当 Auto Layout 处理这些方程时，它不是仅仅将右边的值赋给左边。相反，它计算属性1和属性2的值让这个关系成立。这意味着我们通常可以自由的调整方程中项目的顺序。例如，表3-2中的方程与注释中对应的方程相同。
 
-- // Setting a fixed distance between two buttons
+**Listing 3-2**Inverted equations 倒置的方程
+
+- // Setting a fixed distance between two buttons 在两个按钮中设置一个固定的距离
 - Button_1.trailing = 1.0 * Button_2.leading - 8.0
 - ​
-- // Aligning the leading edge of two buttons
+- // Aligning the leading edge of two buttons 对齐两个按钮的前部边沿
 - Button_2.leading = 1.0 * Button_1.leading + 0.0
 - ​
-- // Give two buttons the same width
+- // Give two buttons the same width 把两个按钮设置成相同的宽度
 - Button_2.width = 1.0 * Button.width + 0.0
 - ​
-- // Center a view in its superview
+- // Center a view in its superview 把一个视图放在其父视图的中心
 - Superview.centerX = 1.0 * View.centerX + 0.0
 - Superview.centerY = 1.0 * View.centerY + 0.0
 - ​
-- // Give a view a constant aspect ratio
+- // Give a view a constant aspect ratio 给一个视图固定宽高比
 - View.width = 0.5 * View.height + 0.0
 
 >NOTE
 >
 >When reordering the items, make sure you invert the multiplier and the constant. For example, a constant of 8.0 becomes -8.0. A multiplier of 2.0 becomes 0.5. Constants of 0.0 and multipliers of 1.0 remain unchanged.
+>
+>注意
+>
+>当你调整项目的顺序时，确保你将乘数和常量倒置了。例如，常量 8.0 变成了 -8.0。乘数 2.0 变成了 0.5。常量 0.0 和乘数 1.0 保持不变。
 
 You will find that Auto Layout frequently provides multiple ways to solve the same problem. Ideally, you should choose the solution that most clearly describes your intent. However, different developers will undoubtedly disagree about which solution is best. Here, being consistent is better than being right. You will experience fewer problems in the long run if you choose an approach and always stick with it. For example, this guide uses the following rules of thumb:
+
+你会发现 Auto Layout 经常提供乘法解决相同的问题。理想的情况下，你应该选择能最清楚的描述你的意图的解决方案。然而，不同的开发者毫无疑问的会不同意哪个解决方案才是最好的。在这里，保持一致比保持正确要更好。如果你选择一个方法，并且总是粘贴它，在长时间运行中你会遇到更少的问题。例如，本指南使用下面的缩略规则：
 
 1. Whole number multipliers are favored over fractional multipliers. 
 2. Positive constants are favored over negative constants. 
 3. Wherever possible, views should appear in layout order: leading to trailing, top to bottom. 
 
-### 0.3.4 Creating Nonambiguous, Satisfiable Layouts - 创建单值的，可满足的布局
+>
+
+1. 整数乘数优于分数乘数。
+2. 正数乘数优于负数乘数。
+3. 无论是否可能，视图都会按照布局顺序展示：从前部到尾部，从顶部到底部。
+
+### 0.3.4 Creating Nonambiguous, Satisfiable Layouts - 创建无歧义的，可满足的布局
 
 When using Auto Layout, the goal is to provide a series of equations that have one and only one possible solution. Ambiguous constraints have more than one possible solution. Unsatisfiable constraints don’t have valid solutions.
 
+当使用 Auto Layout 时，目标是提供一系列有且只有一种可能解决方案的方程。有歧义的约束会导致有布置一种可能解决方案。无法满足的约束将没有可用的解决方案。
+
 In general, the constraints must define both the size and the position of each view. Assuming the superview’s size is already set (for example, the root view of a scene in iOS), a nonambiguous, satisfiable layout requires two constraints per view per dimension (not counting the superview). However, you have a wide range of options when it comes to choosing which constraints you want to use. For example, the following three layouts all produce nonambiguous, satisfiable layouts (only the horizontal constraints are shown):
+
+通常，约束必须定义每个视图的尺寸和位置。假如父视图的尺寸已经设置好（例如，iOS中一个场景的根视图），无歧义的、可满足的布局需要对每个视图每个维度有两条约束（不算父视图的）。但是，在选择要使用哪个约束时，你有广泛的选择权。例如，下面三个布局都做出了无歧义、可满足的布局（只展示了水平的约束）：
 
 ![constraint_examples_2x.png](constraint_examples_2x.png)
 
 - The first layout constrains the view’s leading edge relative to its superview’s leading edge. It also gives the view a fixed width. The position of the trailing edge can then be calculated based on the superview’s size and the other constraints. 
 - The second layout constrains the view’s leading edge relative to its superview’s leading edge. It also constrains the view’s trailing edge relative to the superview’s trailing edge. The view’s width can then be calculated based on the superview’s size and the other constraints. 
 - The third layout constrains the view’s leading edge relative to its superview’s leading edge. It also center aligns the view and superview. Both the width and trailing edge’s position can then be calculated based on the superview’s size and the other constraints. 
+- 第一个布局约束了视图的前部边沿与其父视图的前部边沿的关系。并给了视图一个固定的宽度。然后尾部边沿的位置就可以基于父视图的尺寸和其他约束计算出来。
+- 第二个布局约束了视图的前部边沿与其父视图的前部边沿的关系。并约束了该视图的尾部边沿与其父视图的尾部边沿的关系。然后视图的宽度就可以基于父视图的尺寸和其他约束计算出来。
+- 第三个布局约束了视图的前部边沿与其父视图的前部边沿的关系。并将该视图与父视图中心对齐。那么宽度和尾部边沿的位置都可以基于父视图的尺寸和其他约束计算出来。
 
 Notice that each layout has one view and two horizontal constraints. In each case, the constraints fully define both the width and the horizontal position of the view. That means all of the layouts produce a nonambiguous, satisfiable layout along the horizontal axis. However, these layouts are not equally useful. Consider what happens when the superview’s width changes.
 
+注意，每个布局有一个视图和两个水平的约束。在每个例子中，约束完全的定义出了该视图的宽度和水平位置。这意味着所有这些布局都在水平轴上做出了无歧义的、可满足的布局。但是这些布局并不是同样有用。可以设想当父视图的宽度变化时会发生什么。
+
 In the first layout, the view’s width does not change. Most of the time, this is not what you want. In fact, as a general rule, you should avoid assigning constant sizes to views. Auto Layout is designed to create layouts that dynamically adapt to their environment. Whenever you give a view a fixed size, you short circuiting that ability.
+
+在第一个布局中，视图的宽度不会变化。大部分时候，这不是你想要的。实际上，作为一个通用的规则，你应该避免给视图设置常量尺寸。Auto Layout被设计出来就是用于创建可以动态适配它们的环境的布局。无论何时你把一个视图定成固定的尺寸，你都会丧失这个能力。
 
 It may not be obvious, but the second and third layouts produce identical behaviors: They both maintain a fixed margin between the view and its superview as the superview’s width changes. However, they are not necessarily equal. In general, the second example is easier to understand, but the third example may be more useful, especially when you are center aligning a number of items. As always, choose the best approach for your particular layout.
 
+这可能并不明显，但是第二个和第三个布局就会产生相同的行为：在父视图的宽度变化时，它们在视图和它的父视图之间都保持了固定的缩进。但是它们也并非必定相等。通常，第二个例子更容易理解，但是第三个例子可能更有用，特别是当你将多个项目中心对齐时。一如既往，希望你为你的特殊的布局选择最好的方法。
+
 Now consider something a little more complicated. Imagine you want to display two views, side by side, on an iPhone. You want to make sure that they have a nice margin on all sides and that they always have the same width. They should also correctly resize as the device rotates.
 
+现在假设更复杂一点的情况。想象你要显示两个视图，一个接一个，在iPhone上。你想要确保它们在所有的边都有一个良好的缩进，并且它们有相同的宽度。当设备旋转时它们也应该正确的调整大小。
+
 The following illustrations show the views, in portrait and landscape orientation:
+
+下面的插图展示了在横向和竖向时的视图：
 
 ![Blocks_Portrait_2x.png](Blocks_Portrait_2x.png)
 
@@ -326,17 +401,21 @@ The following illustrations show the views, in portrait and landscape orientatio
 
 So what should these constraints look like? The following illustration shows one straightforward solution:
 
+那么这些约束应该像什么样呢？下面的插图展示了一个简单的解决方案：
+
 The above solution uses the following constraints:
+
+上面的解决方案使用了下面的约束：
 
 ![two_view_example_1_2x.png](two_view_example_1_2x.png)
 
-- // Vertical Constraints
+- // Vertical Constraints 垂直约束
 - Red.top = 1.0 * Superview.top + 20.0
 - Superview.bottom = 1.0 * Red.bottom + 20.0
 - Blue.top = 1.0 * Superview.top + 20.0
 - Superview.bottom = 1.0 * Blue.bottom + 20.0
 - ​
-- // Horizontal Constraints
+- // Horizontal Constraints 垂直约束
 - Red.leading = 1.0 * Superview.leading + 20.0
 - Blue.leading = 1.0 * Red.trailing + 8.0
 - Superview.trailing = 1.0 * Blue.trailing + 20.0
@@ -344,19 +423,25 @@ The above solution uses the following constraints:
 
 Following the earlier rule of thumb, this layout has two views, four horizontal constraints, and four vertical constraints. While this isn’t an infallible guide, it is a quick indication that you’re on the right track. More importantly, the constraints uniquely specify both the size and the location of both of the views, producing a nonambiguous, satisfiable layout. Remove any of these constraints, and the layout becomes ambiguous. Add additional constraints, and you risk introducing conflicts.
 
+按照前面的简略规则，这个布局有两个视图，四条水平约束和四条垂直约束。虽然这不是一个可靠的指南，但它可以快速的引导你到正确的轨道上。更重要的是，这些约束唯一的指定了这两个视图的尺寸和位置，产生了无歧义的、可满足的布局。移除这些约束的任意一个，这个布局就会变得有歧义。添加额外的约束，你就会有引入冲突的风险。
+
 Still, this is not the only possible solution. Here is an equally valid approach:
+
+不过，这仍不是唯一的解决方案。这也有一个同样的可用方法：
 
 ![two_view_example_2_2x.png](two_view_example_2_2x.png)
 
 Instead of pinning the top and bottom of the blue box to its superview, you align the top of the blue box with the top of the red box. Similarly, you align the bottom of the blue box with the bottom of the red box. The constraints are shown below.
 
-- // Vertical Constraints
+不再关注蓝色盒子到其父视图的顶部和底部，而是将蓝色盒子的顶部与红色盒子的顶部对齐。类似的，你可以将蓝色盒子和底部与红色盒子的底部对齐。下面是约束的展示。
+
+- // Vertical Constraints 垂直约束
 - Red.top = 1.0 * Superview.top + 20.0
 - Superview.bottom = 1.0 * Red.bottom + 20.0
 - Red.top = 1.0 * Blue.top + 0.0
 - Red.bottom = 1.0 * Blue.bottom + 0.0
 - ​
-- //Horizontal Constraints
+- //Horizontal Constraints 水平约束
 - Red.leading = 1.0 * Superview.leading + 20.0
 - Blue.leading = 1.0 * Red.trailing + 8.0
 - Superview.trailing = 1.0 * Blue.trailing + 20.0
@@ -364,15 +449,27 @@ Instead of pinning the top and bottom of the blue box to its superview, you alig
 
 The example still has two views, four horizontal constraints, and four vertical constraints. It still produces a nonambiguous, satisfiable layout.
 
+这个例子仍然有两个视图，四条水平约束，以及四条垂直约束。这仍然产生了一个无歧义的、可满足的布局。
+
 >BUT WHICH IS BETTER?
+>
+>哪个更好？
 >
 >These solutions both produce valid layouts. So which is better?
 >
+>这些解决方案都产生了可用的布局。那么哪个更好呢？
+>
 >Unfortunately, it is virtually impossible to objectively prove that one approach is strictly superior to the other. Each has its own strengths and weaknesses.
+>
+>很不幸的是，实际上不可能客观的证明一种方法严格的优于另一种方法。每个方法都有它的的长处和弱点。
 >
 >The first solution is more robust when a view is removed. Removing a view from the view hierarchy also removes all the constraints that reference that view. So, if you remove the red view, the blue view is left with three constraints holding it in place. You need to add only a single constraint and you have a valid layout again. In the second solution, removing the red view would leave the blue view with only a single constraint.
 >
+>第一个解决方案当视图被移动是会更强强壮。从视图层级移除一个视图也会移除关联到这个视图的所有约束。那么，如果你移除红色的视图，蓝色的视图会被三条约束控制保持在那个位置上。你只需要添加一条约束，你就再次有了一个可用的布局。在第二个解决方案中，移除红色视图将导致蓝色视图只有一个约束。
+>
 >On the other hand, in the first solution, If you want the top and bottom of the views to align, you must make sure their top and bottom constraints use the same constant value. If you change one constant, you must remember to change the other as well.
+>
+>从另一个方案面，在第一个解决方案中，如果你想要视图的顶部和底部对齐，你必须确保它们的顶部和底部使用相同的常量值。如果你修改了一个常量，你不许记得也去改其他代码。
 
 ### 0.3.5 Constraint Inequalities - 约束不等式
 
