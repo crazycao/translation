@@ -475,46 +475,70 @@ The example still has two views, four horizontal constraints, and four vertical 
 
 So far, all of the samples have shown constraints as equalities, but this is only part of the story. Constraints can represent inequalities as well. Specifically, the constraint’s relationship can be equal to, greater than or equal to, or less than or equal to.
 
+到现在为止，所有的样例展示的约束都是等式，但是这只是冰山一角。约束也可以代表不等式。特别的，约束的关系可以是相等，大于等于，或者小于等于。
+
 For example, you can use constraints to define the minimum or maximum size for a view (Listing 3-3).
+
+例如，你可以使用约束定义视图的最大或最小尺寸（表3-3）。
 
 **Listing 3-3**Assigning a minimum and maximum size
 
-- // Setting the minimum width
+- // Setting the minimum width 设置最小宽度
 - View.width >= 0.0 * NotAnAttribute + 40.0
 - ​
-- // Setting the maximum width
+- // Setting the maximum width 设置最大宽度
 - View.width <= 0.0 * NotAnAttribute + 280.0
 
 As soon as you start using inequalities, the two constraints per view per dimension rule breaks down. You can always replace a single equality relationship with two inequalities. In Listing 3-4, the single equal relationship and the pair of inequalities produce the same behavior.
 
+当你开始使用不等式，每个视图每个维度两条约束的规则就被打破了。你可以将一个相等关系替换成两个不等式。在表3-4中，单个相等关系和那一对不等式产生了相同的行为。
+
 **Listing 3-4**Replacing a single equal relationship with two inequalities
 
-- // A single equal relationship
+- // A single equal relationship 一个相等关系
 - Blue.leading = 1.0 * Red.trailing + 8.0
 - ​
-- // Can be replaced with two inequality relationships
+- // Can be replaced with two inequality relationships 可以替换成两个不等关系
 - Blue.leading >= 1.0 * Red.trailing + 8.0
 - Blue.leading <= 1.0 * Red.trailing + 8.0
 
 The inverse is not always true, because two inequalities are not always equivalent to a single equals relationship. For example, the inequalities in Listing 3-3 limit the range of possible values for the view’s width—but by themselves, they do not define the width. You still need additional horizontal constraints to define the view’s position and size within this range.
 
+反过来则总是不能成立，因为两个不等式并不是总是等价于一个相等关系。例如，在表3-3中的不等式限制了视图宽度的可能值范围——但是仅靠它们自己，它们并没有定义宽度。你仍然需要附加水平约束以定义视图的位置和在这个范围内的尺寸。
+
 ### 0.3.6 Constraint Priorities - 约束优先级
 
 By default, all constraints are required. Auto Layout must calculate a solution that satisfies all the constraints. If it cannot, there is an error. Auto Layout prints information about the unsatisfiable constraints to the console, and chooses one of the constraints to break. It then recalculates the solution without the broken constraint. For more information, see [Unsatisfiable Layouts](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ConflictingLayouts.html#//apple_ref/doc/uid/TP40010853-CH19-SW1).
 
+默认情况下，所有的约束都是必须的。Auto Layout必须计算满足所有约束的解决方案。如果不能实现，那就有错了。Auto Layout会在控制台打印出无法满足的约束的相关信息，并且选择其中一条约束断开它。然后重新计算没有已断开约束的解决方案。更多信息，参见[Unsatisfiable Layouts](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ConflictingLayouts.html#//apple_ref/doc/uid/TP40010853-CH19-SW1)。
+
 You can also create optional constraints. All constraints have a priority between 1 and 1000. Constraints with a priority of 1000 are required. All other constraints are optional.
+
+你也可以创建可选的约束。所有约束有一个1-1000之间的权重。权重为1000的约束是必须的。所有其他约束都是可选的。
 
 When calculating solutions, Auto Layout attempts to satisfy all the constraints in priority order from highest to lowest. If it cannot satisfy an optional constraint, that constraint is skipped and it continues on to the next constraint.
 
+当计算解决方案时，Auto Layout试图按照权重从高到低的顺序满足所有约束。如果不能满足一条可选约束，这个约束就会被跳过，并从下一条约束继续。
+
 Even if an optional constraint cannot be satisfied, it can still influence the layout. If there is any ambiguity in the layout after skipping the constraint, the system selects the solution that comes closest to the constraint. In this way, unsatisfied optional constraints act as a force pulling views towards them.
 
+即使一条可选约束不能被满足，它仍然可以影响布局。如果在跳过该约束之后布局中有任何歧义，系统都会选择最接近约束的方案。以这种方式，无法满足的可选约束会强制将视图拉向它们。
+
 Optional constraints and inequalities often work hand-in-hand. For example, in Listing 3-4 you can provide different priorities for the two inequalities. The greater-than-or-equal relationship could be required (priority of 1000), and the less-than-or-equal relationship has a lower priority (priority 250). This means that the blue view cannot be closer than 8.0 points from the red. However, other constraints could pull it farther away. Still, the optional constraint pulls the blue view towards the red view, ensuring that it is as close as possible to the 8.0-point spacing, given the other constraints in the layout.
+
+可选约束和不等式通常一起工作。例如，在表3-4中你可以给两个不等式提供不同的权重。大于等于的关系可以是必须的（权重为1000），而小于等于的关系有一个更低的权重（权重为250）。这意味着蓝色的视图与红色的距离不能小于8.0。但是，其他约束可能将其拉得更远。不过可选约束仍然会将蓝色的视图拉向红色的视图，在给定布局中其他约束时，确保它尽可能的靠近8.0个点的距离。
 
 >NOTE
 >
 >Don’t feel obligated to use all 1000 priority values. In fact, priorities should general cluster around the system-defined low (250), medium (500), high (750), and required (1000) priorities. You may need to make constraints that are one or two points higher or lower than these values, to help prevent ties. If you’re going much beyond that, you probably want to reexamine your layout’s logic.
 >
 >For a list of the predefined constraint constants on iOS, see the [UILayoutPriority](https://developer.apple.com/reference/uikit/uilayoutpriority) enum. For OS X, see the Layout Priorities constants.
+>
+>注意
+>
+>不要觉得应该全部都使用1000权重值。事实上，权重通常应该是系统定义的集合：低（250），中（500），高（750），以及必须（1000）。你可能需要让约束比这些值高或低一两个点，以避免纠结。如果你要做的不止于此，那么你可能要重新检查你的布局逻辑了。
+>
+>关于在iOS上预定义的约束常量列表，参见[UILayoutPriority](https://developer.apple.com/reference/uikit/uilayoutpriority)枚举。在OS X上，参见 Layout Priorities 常量。
 
 ### 0.3.7 Intrinsic Content Size - 固有的内容尺寸
 
