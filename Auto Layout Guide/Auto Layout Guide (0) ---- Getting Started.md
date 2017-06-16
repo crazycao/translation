@@ -634,23 +634,33 @@ Whenever possible, use the view’s intrinsic content size in your layout. It le
 
 The intrinsic content size acts as an input to Auto Layout. When a view has an intrinsic content size, the system generates constraints to represent that size and the constraints are used to calculate the layout.
 
+固有内容尺寸作为Auto Layout的一个输入发生作用。当视图有了一个固有内容尺寸，系统会产生约束来表达该尺寸，并且这些约束将用于计算布局。
+
 The fitting size, on the other hand, is an output from the Auto Layout engine. It is the size calculated for a view based on the view’s constraints. If the view lays out its subviews using Auto Layout, then the system may be able to calculate a fitting size for the view based on its content.
+
+另一方面，适应尺寸，是来自于Auto Layout引擎的一个输出。这是基于视图的约束为视图计算出的尺寸。如果视图使用Auto Layout布局其子视图，那么系统可能可以基于其内容为该视图计算一个适应尺寸。
 
 The stack view is a good example. Barring any other constraints, the system calculates the stack view’s size based on its content and attributes. In many ways, the stack view acts as if it had an intrinsic content size: You can create a valid layout using only a single vertical and a single horizontal constraint to define its position. But its size is calculated by Auto Layout—it is not an input into Auto Layout. Setting the stack view’s CHCR priorities has no effect, because the stack view does not have an intrinsic content size.
 
+堆栈视图是一个很好的例子。不包括任何其他约束，系统基于堆栈视图的内容和属性计算其尺寸。在许多方面，堆栈视图的行为都仿佛它有一个固有内容尺寸：你只使用一个垂直的和一个水平的约束来定义它的位置，就可以创建一个可用的布局。而它的尺寸则由Auto Layout计算出来——它不是Auto Layout的输入。设置堆栈视图的CHCR优先级没有效果，因为堆栈视图实际并没有固有内容尺寸。
+
 If you need to adjust the stack view’s fitting size relative to items outside the stack view, either create explicit constraints to capture those relationships or modify the CHCR priorities of the stack’s contents relative to the items outside the stack.
+
+如果你需要调整堆栈视图相对于堆栈视图之外的项目的适应尺寸，可以创建明确的约束来捕获那些关系，或者修改堆栈的内容相对于堆栈之外的项目的CHCR优先级。
 
 ### 0.3.8 Interpreting Values - 值的解释
 
 Values in Auto Layout are always in points. However, the exact meaning of these measurements can vary depending on the attributes involved and the view’s layout direction.
 
+在自动布局中的值总是一个要点。但是，这些测量标准的准确含义可以根据涉及的属性和视图的布局方向而变化。
+
 | Auto Layout Attributes | Value                                    | Notes                                    |
 | ---------------------- | ---------------------------------------- | ---------------------------------------- |
-| Height</br>Width            | The size of the view.                    | These attributes can be assigned constant values or combined with other Height and Width attributes. These values cannot be negative. |
-| Top</br>Bottom</br>Baseline      | The values increase as you move down the screen. | These attributes can be combined only with Center Y, Top, Bottom, and Baseline attributes. |
-| Leading</br>Trailing        | The values increase as you move towards the trailing edge. For a left-to-right layout directions, the values increase as you move to the right. For a right-to-left layout direction, the values increase as you move left. | These attributes can be combined only with Leading, Trailing, or Center X attributes. |
-| Left</br>Right              | The values increase as you move to the right. | These attributes can be combined only with Left, Right, and Center X attributes.Avoid using Left and Right attributes. Use Leading and Trailing instead. This allows the layout to adapt to the view’s reading direction.By default the reading direction is determined based on the current language set by the user. However, you can override this where necessary. In iOS, set the [semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute) property on the view holding the constraint (the nearest common ancestor of all views affected by the constraint) to specify whether the content’s layout should be flipped when switching between left-to-right and right-to-left languages. |
-| Center X</br>Center Y       | The interpretation is based on the other attribute in the equation. | Center X can be combined with Center X, Leading, Trailing, Right, and Left attributes.Center Y can be combined with Center Y, Top, Bottom, and Baseline attributes. |
+| Height</br>Width            | The size of the view.  </br>视图的尺寸。                  | These attributes can be assigned constant values or combined with other Height and Width attributes. These values cannot be negative.</br>这些属性可以被设成常量或者与其他Height和Width属性相结合。这些值不能是负数。 |
+| Top</br>Bottom</br>Baseline      | The values increase as you move down the screen. </br>这些值随着你向下移动屏幕而增加。| These attributes can be combined only with Center Y, Top, Bottom, and Baseline attributes. </br> 这些值只能与Center Y，Top，Bottom和Baseline属性相结合。|
+| Leading</br>Trailing        | The values increase as you move towards the trailing edge. For a left-to-right layout directions, the values increase as you move to the right. For a right-to-left layout direction, the values increase as you move left.</br>这些值随着你移向尾部边沿而增加。对于从左到右的布局方向，这些值当你移到右边时增加。对于从右到左的布局防线个，这些值当你移到左边时增加。 | These attributes can be combined only with Leading, Trailing, or Center X attributes.</br>这些属性只能与Leading，Trailing，或者Center X属性相结合。 |
+| Left</br>Right              | The values increase as you move to the right. </br>这些值随着你移到右边而增加。 | These attributes can be combined only with Left, Right, and Center X attributes.Avoid using Left and Right attributes. Use Leading and Trailing instead. This allows the layout to adapt to the view’s reading direction.By default the reading direction is determined based on the current language set by the user. However, you can override this where necessary. In iOS, set the [semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute) property on the view holding the constraint (the nearest common ancestor of all views affected by the constraint) to specify whether the content’s layout should be flipped when switching between left-to-right and right-to-left languages. </br>这些属性只可以与Left，Right和Center X属性相结合。避免使用Left和Right属性。使用Leading和Trailing代替。这允许布局适应视图的阅读方向。默认阅读方向基于用户当前设置的语言来决定。然而，在必要的地方，你可以重写它。在iOS中，在带有约束的视图（受约束影响的所有视图的最近共同祖先）上设置[semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute)属性，以指明当在从左到右和从右到左之间切换时内容的布局是否应该被抛弃。 |
+| Center X</br>Center Y       | The interpretation is based on the other attribute in the equation.</br>它的理解基于方程中的另一个属性。 | Center X can be combined with Center X, Leading, Trailing, Right, and Left attributes.Center Y can be combined with Center Y, Top, Bottom, and Baseline attributes. </br>Center X可以与Center X，Leading，Trailing，Right和Left属性相结合。Center Y可以与Center Y，Top，Bottom和Baseline属性相结合。|
 
 ## 0.4 Working with Constraints in Interface Builder - 在Interface Builder中用约束工作
 
