@@ -544,9 +544,13 @@ Optional constraints and inequalities often work hand-in-hand. For example, in L
 
 So far, all of the examples have used constraints to define both the view’s position and its size. However, some views have a natural size given their current content. This is referred to as their *intrinsic content size*. For example, a button’s intrinsic content size is the size of its title plus a small margin.
 
+到目前为止，所有的例子都使用了约束定义视图的位置和尺寸。然而，某些视图由它们的当前内容给出一个自然尺寸。这被称之为它们的*固有内容尺寸*。例如，一个按钮的固有内容尺寸是它的标题的尺寸加上一个小的页边留白。
+
 Not all views have an intrinsic content size. For views that do, the intrinsic content size can define the view’s height, its width, or both. Some examples are listed in Table 3-1.
 
-**Table 3-1**Intrinsic content size for common controls
+并不是所有的视图都有固有内容尺寸。对于有固有内容尺寸的视图，这个尺寸可以定义视图的高，宽，或者高和宽。表3-1中列出了一些例子。
+
+**Table 3-1**Intrinsic content size for common controls 常见控件的固有内容尺寸
 
 | View                                     | Intrinsic content size                   |
 | ---------------------------------------- | ---------------------------------------- |
@@ -555,37 +559,76 @@ Not all views have an intrinsic content size. For views that do, the intrinsic c
 | Labels, buttons, switches, and text fields | Defines both the height and the width.   |
 | Text views and image views               | Intrinsic content size can vary.         |
 
+| 视图                                      | 固有内容尺寸                   |
+| ---------------------------------------- | ---------------------------------------- |
+| UIView and NSView                        | 没有固有内容尺寸。             |
+| Sliders                                  | 只定义了宽度（iOS）。定义了宽度、高度、或两者都有——取决于滑块的类型（OS X）。|
+| Labels, buttons, switches, and text fields | 定义了宽度和高度。   |
+| Text views and image views               | 固有内容大小可变化。        |
+
 The intrinsic content size is based on the view’s current content. A label or button’s intrinsic content size is based on the amount of text shown and the font used. For other views, the intrinsic content size is even more complex. For example, an empty image view does not have an intrinsic content size. As soon as you add an image, though, its intrinsic content size is set to the image’s size.
+
+固有内容尺寸是基于视图的当前内容的。标签或按钮的固有内容尺寸基于展示的文本的数量和使用的字体。对于其他视图，固有内容尺寸甚至更加复杂。例如，空的图像视图并没有固有内容尺寸。当你添加图像的时候，它的固有内容尺寸就被设置成了图像的尺寸。
 
 A text view’s intrinsic content size varies depending on the content, on whether or not it has scrolling enabled, and on the other constraints applied to the view. For example, with scrolling enabled, the view does not have an intrinsic content size. With scrolling disabled, by default the view’s intrinsic content size is calculated based on the size of the text without any line wrapping. For example, if there are no returns in the text, it calculates the height and width needed to layout the content as a single line of text. If you add constraints to specify the view’s width, the intrinsic content size defines the height required to display the text given its width.
 
+文本视图的固有内容尺寸可以变化，取决于内容、是否启用滚动以及其他应用在视图上的约束。例如，当启用滚动时，视图就没有固有内容尺寸。当禁用滚动时，视图的固有内容尺寸默认基于不含任何换行的文本尺寸计算。例如，如果在文本中没有回车，它会按照单行文本布局内容计算所需的宽度和高度。如果你添加约束指定视图的宽度，固有内容尺寸仅定义了按照给定宽度显示文本所需的高度。
+
 Auto Layout represents a view’s intrinsic content size using a pair of constraints for each dimension. The content hugging pulls the view inward so that it fits snugly around the content. The compression resistance pushes the view outward so that it does not clip the content.
+
+Auto Layout 为每个尺寸使用一对约束表示视图的固有内容尺寸。内容紧靠会将视图拉近，以致于它会紧紧的贴着内容。压缩阻力会将视图推远，以致于它不会裁剪内容。
 
 ![intrinsic_content_size_2x.png](intrinsic_content_size_2x.png)
 
 These constraints are defined using the inequalities shown in Listing 3-5. Here, the `IntrinsicHeight` and `IntrinsicWidth` constants represent the height and width values from the view’s intrinsic content size.
 
-**Listing 3-5**Compression-Resistance and Content-Hugging equations
+这些约束使用表3-5中展示的不等式定义。这里，`IntrinsicHeight`和`IntrinsicWidth`常量表示来自于视图的固有内容尺寸的高度和宽度值。
 
-- // Compression Resistance
+**Listing 3-5**Compression-Resistance and Content-Hugging equations 压缩阻力和内容紧靠
+
+- // Compression Resistance 压缩阻力
 - View.height >= 0.0 * NotAnAttribute + IntrinsicHeight
 - View.width >= 0.0 * NotAnAttribute + IntrinsicWidth
 - ​
-- // Content Hugging
+- // Content Hugging 内容紧靠
 - View.height <= 0.0 * NotAnAttribute + IntrinsicHeight
 - View.width <= 0.0 * NotAnAttribute + IntrinsicWidth
 
 Each of these constraints can have its own priority. By default, views use a 250 priority for their content hugging, and a 750 priority for their compression resistance. Therefore, it’s easier to stretch a view than it is to shrink it. For most controls, this is the desired behavior. For example, you can safely stretch a button larger than its intrinsic content size; however, if you shrink it, its content may become clipped. Note that Interface Builder may occasionally modify these priorities to help prevent ties. For more information, see [Setting Content-Hugging and Compression-Resistance Priorities](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithConstraintsinInterfaceBuidler.html#//apple_ref/doc/uid/TP40010853-CH10-SW2).
 
+这些约束的每一个都可以有它自己的优先级。默认情况下，视图对它们的内容紧靠使用250优先级，对它们的压缩阻力使用750优先级。因此，拉伸视图比压缩它更容易。对于大部分的控件，这是希望的行为。例如，你可以安全的将一个按钮拉到比它的固有内容尺寸更大；但是，如果你压缩它，它的内容就可能被裁剪。注意 Interface Builder 可能偶尔修改这些优先级以帮助防止打结。更多信息，参见[Setting Content-Hugging and Compression-Resistance Priorities](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithConstraintsinInterfaceBuidler.html#//apple_ref/doc/uid/TP40010853-CH10-SW2)。
+
 Whenever possible, use the view’s intrinsic content size in your layout. It lets your layout dynamically adapt as the view’s content changes. It also reduces the number of constraints you need to create a nonambiguous, nonconflicting layout, but you will need to manage the view’s content-hugging and compression-resistance (CHCR) priorities. Here are some guidelines for handling intrinsic content sizes:
 
+无论何时尽可能在你的布局中使用视图的固有内容尺寸。它让你的布局动态的适应视图的内容变化。它也会减少你创建的无歧义、无冲突的布局所需的约束的条数，不过你将要管理视图的内容紧靠和压缩阻力（CHCR）优先级。这里是处理固有内容尺寸的一些指南：
+
 - When stretching a series of views to fill a space, if all the views have an identical content-hugging priority, the layout is ambiguous. Auto Layout doesn’t know which view should be stretched. 
+
   A common example is a label and text field pair. Typically, you want the text field to stretch to fill the extra space while the label remains at its intrinsic content size. To ensure this, make sure the text field’s horizontal content-hugging priority is lower than the label’s. 
+  
   In fact, this example is so common that Interface Builder automatically handles it for you, setting the content-hugging priority for all labels to 251. If you are programmatically creating the layout, you need to modify the content-hugging priority yourself. 
+  
+- 当拉伸一系列视图以填满空间时，如果所有视图都有相同的内容紧靠优先级，布局就是有歧义的。Auto Layout 不知道该拉伸哪个视图。
+
+  常见的例子是标签和文本框的组合。通常，你想要文本框被拉伸以填满额外的空间，而标签保留在它的固定内容尺寸。要保证这个，请确保文本框的水平内容紧靠优先级比标签的要低。
+  
+  实际上，这个例子是如此常见，以致于 Interface Builder 自动的帮你处理了，将所有的标签的内容紧靠优先级设置成251。如果你编程创建布局，你就需要自己修改内容紧靠优先级。
+  
 - Odd and unexpected layouts often occur when views with invisible backgrounds (like buttons or labels) are accidentally stretched beyond their intrinsic content size. The actual problem may not be obvious, because the text simply appears in the wrong location. To prevent unwanted stretching, increase the content-hugging priority. 
+
+- 当有不可见背景的视图（如按钮或标签）偶然拉伸超过它们的固有内容尺寸时，往往会出现奇怪和意外的布局。实际问题通常不会很明显，因为文本会简单的显示在错误的位置上。为了避免不想要的拉伸，可以增加内容紧靠优先级。
+
 - Baseline constraints work only with views that are at their intrinsic content height. If a view is vertically stretched or compressed, the baseline constraints no longer align properly. 
+
+- 基线约束只适用于正处在于它们的固有内容高度上的视图。如果视图被垂直拉伸或压缩，基线约束就不再正确对齐了。
+
 - Some views, like switches, should always be displayed at their intrinsic content size. Increase their CHCR priorities as needed to prevent stretching or compressing. 
+
+- 某些视图，如开关，将总是显示在它们的固有内容尺寸上。要避免拉伸或压缩，需要增加它们的CHCR。
+
 - Avoid giving views required CHCR priorities. It’s usually better for a view to be the wrong size than for it to accidentally create a conflict. If a view should always be its intrinsic content size, consider using a very high priority (999) instead. This approach generally keeps the view from being stretched or compressed but still provides an emergency pressure valve, just in case your view is displayed in an environment that is bigger or smaller than you expected. 
+
+- 避免将视图CHCR优先级设成必需的。通常对于视图来说错误的尺寸比偶然发生冲突要更好。如果视图需要总是在它的固有内容尺寸上，那么可以考虑使用一个非常高的优先级（999）代替。这个方法通常让视图避免拉伸或压缩，但仍然提供了一个紧急压力阀，以防万一你的视图被显示在了一个比你预期更大或更小的环境中。
 
 #### 0.3.7.1 Intrinsic Content Size Versus Fitting Size - 固定内容尺寸与适应尺寸
 
