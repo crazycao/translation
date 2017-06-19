@@ -666,15 +666,27 @@ Values in Auto Layout are always in points. However, the exact meaning of these 
 
 There are three main options for setting up Auto Layout constraints in Interface Builder: You can control-drag between views, you can use the Pin and Align tools, and you can let Interface Builder set up the constraints for you and then edit or modify the results. Each of these approaches has its own set of strengths and weaknesses. Most developers find that they prefer one approach over the others; however, being familiar with all three approaches lets you quickly switch between tools based on the task at hand.
 
+在Interface Builder中要设置Auto Layout约束主要有三个选择：你可以按住Control并在两个视图之间拖动，你可以使用Pin和Align工具，你可以让Interface Builder为你设置好约束然后在编辑或修改这些结果。其中的每个方法都有它自己的长处和短处。大部分开发者发现他们会更喜欢使用其中一种方法胜过其他；然而，熟悉所有的三个方法可以让你基于手头上的任务快速的在各种工具之间切换。
+
 For all three options, start by dragging your views and controls from the Object library onto the scene. Resize and position them as needed. When you place a view on the canvas, Interface Builder automatically creates a set of prototyping constraints that define the view’s current size and position relative to the upper left corner.
+
+对于这三个选择，首先都要将你的视图和控件从Object库拖到场景中。按需设置好它们的尺寸和位置。当你把一个视图放在画布上，Interface Builder会自动的创建一系列的原型约束，它们定义了该视图的大小和相对于左上角的位置。
 
 The app can build and run with the prototyping constraints. Use these constraints to quickly visualize and test a user interface, but then replace the implicit constraints with your own explicit constraints. Never ship an app with prototyping constraints.
 
+App可以使用原型约束构建和运行。使用这些约束可以快速的可视化和测试用户界面，然后在使用你自己的精确的约束替换隐含的约束。永远不要发布带有原型约束的app。
+
 As soon as you create your first constraint, the system removes all the prototyping constraints from the views referred to by the constraint. Without the prototyping constraints, your layout no longer has enough constraints to uniquely size and position all the views. It becomes an ambiguous layout. The affected constraints suddenly appear in red, and Xcode generates a number of warnings.
+
+当你创建你的第一个约束时，系统会从该约束所有引用的视图中移除所有原型约束。没有了原型约束，你的布局就不再有足够的约束以唯一确定所有视图的尺寸和位置。它变成了一个有歧义的布局。受影响的约束突然显示成了红色，而Xcode也产生了许多警告。
 
 Don’t panic. Just keep adding your constraints until your layout is complete. As soon as you add one constraint, you are responsible for adding all the constraints needed to create a nonambiguous, satisfiable layout.
 
+不要惊慌。只要继续添加你的约束直到布局完成。当你添加一条约束，你就要负责添加所有的约束以创建一个没有歧义的可以满足的布局。
+
 For more information on fixing layout warnings and errors, see [Debugging Auto Layout](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/TypesofErrors.html#//apple_ref/doc/uid/TP40010853-CH22-SW1).
+
+关于修复布局警告和错误的更多信息，参见[Debugging Auto Layout](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/TypesofErrors.html#//apple_ref/doc/uid/TP40010853-CH22-SW1)。
 
 ## 0.4.1 Control-Dragging Constraints - Control-拖动约束
 
