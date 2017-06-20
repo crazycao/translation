@@ -692,31 +692,51 @@ For more information on fixing layout warnings and errors, see [Debugging Auto L
 
 To create a constraint between two views, Control-click one of the views and drag to the other.
 
+要在两个视图之间创建一个约束，按住Control并点击其中一个视图然后拖动到另一个视图。
+
 ![ControlDrag_2x.png](ControlDrag_2x.png)
 
 When you release the mouse, Interface Builder displays a HUD menu with a list of possible constraints.
+
+当你释放鼠标时，Interface Builder会显示一个带有可能约束列表的HUD菜单。
 
 ![Popup_Menu_2x.png](Popup_Menu_2x.png)
 
 Interface Builder intelligently selects the set of constraints based on the items you are constraining and the direction of your drag gesture. If you drag more or less horizontally, you get options to set the horizontal spacing between the views, and options to vertically align the views. If you drag more or less vertically, you get options to set the vertical spacing, and options to align the views horizontally. Both gestures may include other options (such as setting the view’s relative size).
 
+Interface Builder会基于你正约束的对象和你拖动手势的方向智能的选择约束集合。如果你的拖动差不多是水平的，那你就会获得设置两个视图之间水平间隔的选项，和两个视图垂直对齐的选项。如果你的拖动差不多是垂直的，那你就会获得设置垂直间隔的选项，和水平对齐视图的选项。这两种手势也可能包含其他选项（如设置视图的相对尺寸）。
+
 >NOTE
 >
 >You can use the Control-drag gesture both on items in the canvas and on icons in the scene’s document outline. This is often useful when trying to draw constraints to hard-to-find items, like the top or bottom layout guides. When dragging to or from the document outline, Interface Builder does not filter the list of possible constraints based on the gesture’s direction.
+>
+>注意
+>
+>你可以在幕布中的两个项目之间和场景的文档缩略图中的icon之间使用Control+拖动的手势。这在你试图给难以找到的项目，比如顶部或底部的布局引导，绘制约束时通常很有用。当你拖动到文档缩略图或从中拖出时，Interface Builder就不会基于手势方向过滤可能约束的列表。
 
 Interface Builder creates the constraints based on the views’ current frames. Therefore, you need to position the views carefully before you draw the constraints. If you line up the views based on Interface Builder’s guidelines, you should end up with a reasonable set of constraints. If necessary, you can always edit the constraints afterward.
 
+Interface Builder基于视图的当前框架创建约束。因此，在你绘制约束之前你就需要小心的放置好视图的位置。如果你基于Interface Builder的引导来排列视图，那你应该以合理数量的约束集合来结束。如果有必要，你以后总可以编辑这些约束。
+
 Control-dragging provides a very quick way to set a constraint; however, because the constraint’s values are inferred from the scene’s current layout, it is easy to end up off by a point. If you want finer control, review and edit the constraints after you create them, or use the Pin and Align tools.
 
+Control+拖动提供了非常快捷的方法设置约束；然而，因为约束的值是从场景的当前布局推断的，它很容易就在一个点结束了。如果你想要极好的控制，那么在创建它们之后查看和编辑这些约束，或则使用Pin和Align工具。
+
 For more information on Control-dragging constraints, see Adding Layout Constraints by Control-Dragging in Auto Layout Help.
+
+关于Control+拖动约束的更多信息，在Auto Layout Help中参见《Adding Layout Constraints by Control-Dragging》。
 
 ### 0.4.2 Using the Stack, Align, Pin and Resolve Tools - 使用叠放、对齐、偏移和处理问题工具
 
 Interface Builder provides four Auto Layout tools in the bottom-right corner of the Editor window. These are the Stack, Align, Pin, and Resolve Auto Layout Issues tools.
 
+Interface Builder提供了四种自动布局工具，在Editor窗口的右下角。它们是Stack，Align，Pin和Resolve Auto Layout Issues工具。
+
 ![Auto_Layout_Tools_2x.png](Auto_Layout_Tools_2x.png)
 
 Use the Pin and Align tools when you want fine control when making constraints or when you want to make multiple constraints at once. As an added advantage, when you use these tools, you don’t need to precisely place your views before creating the constraint. Instead, you can roughly set the relative position of the views, add your constraints, and then update the frames. This lets Auto Layout calculate the correct positions for you.
+
+当你想要在制作约束很好的控制时，或当你想要一次创建许多约束时，使用Pin和Align工具。作为一个额外的优点，当你使用这些工具时，你不需要在创建约束之前就预先放置好你的视图。相反，你可以粗略的设置视图的相对位置，添加约束，然后在更新框架。这是Auto Layout为你计算了正确的位置。
 
 #### 0.4.2.1 Stack Tool - 叠放工具
 
