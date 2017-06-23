@@ -738,44 +738,64 @@ Use the Pin and Align tools when you want fine control when making constraints o
 
 当你想要在制作约束很好的控制时，或当你想要一次创建许多约束时，使用Pin和Align工具。作为一个额外的优点，当你使用这些工具时，你不需要在创建约束之前就预先放置好你的视图。相反，你可以粗略的设置视图的相对位置，添加约束，然后在更新框架。这是Auto Layout为你计算了正确的位置。
 
-#### 0.4.2.1 Stack Tool - 叠放工具
+#### 0.4.2.1 Stack Tool - 堆栈工具
 
 The Stack tool allows you to quickly create a stack view. Select one or more items in your layout, and then click on the Stack tool. Interface Builder embeds the selected items in a stack view and resizes the stack to its current fitting size based on its contents.
+
+Stack 工具让你可以快速的创建一个堆栈视图。在你的布局中选择一个或多个项目，然后点击Stack工具。Interface Builder 会将选中的项目嵌入到堆栈视图，并基于其内容重新调整堆栈尺寸到它当前的合适尺寸。
 
 >NOTE
 >
 >The system infers the stack’s axis and alignment from the initial relative position of the views. You can modify the axis and alignment (and set the distribution and spacing) using the Attributes inspector.
+>
+>注意
+>
+>系统会从视图的初始相对位置推断堆栈的轴向和对齐方式。你可以使用 Attributes 检查器修改轴向和对齐方式（并设置分配和间距）。
 
 #### 0.4.2.2 Align Tool - 对齐工具
 
 The Align tool lets you quickly align items in your layout. Select the items you want to align, and then click the Align tool. Interface Builder presents a popover view containing a number of possible alignments.
 
+Align 工具让你可以快速的在布局中对齐项目。选中你想要对齐的项目，然后点击 Align 工具。Interface Builder 会显示一个包含一些可能的对齐方式的弹出视图。
+
 ![Align_Tool_Popup_2x.png](Align_Tool_Popup_2x.png)
 
 Select the options for aligning the selected views, and click the Add Constraints button. Interface Builder creates the constraints needed to ensure those alignments. By default, the constraints do not have any offset (the edges or centers are aligned with each other) and none of the frames are updated when the constraints are added. You can change any of these settings before creating the constraints.
 
+选择选项以对齐选中的视图，然后点击 Add Constraints 按钮。Interface Builder 会创建确保那些对齐所需要的约束。默认情况下，这些约束没有任何偏移（边沿或中心是互相对齐的），当约束添加时也没有任何边框被更新。你可以在创建约束之前修改其中的任意设置。
+
 You typically select two or more views before using the Align tool. However, the Horizontally in Container or Vertically in Container constraints can be added to a single view. You can use the popover to create any number of constraints at once—though it rarely makes sense to create more than one or two at a time.
 
+你通常胡在使用 Align 工具之前选择两个或更多的视图。但是，Horizontally in Container 或 Vertically in Container 约束只能被添加到单个视图上。你可以使用弹出视图一次创建任意数量的约束——尽管者比一次创建一条或两条约束也没有什么更多的意义。
+
 For more information, see Adding Auto Layout Constraints with the Pin and Align Tools in Auto Layout Help .
+
+更多信息，参见《Auto Layout Help》中的《Adding Auto Layout Constraints with the Pin and Align Tools》。
 
 #### 0.4.2.3 Pin Tool - 偏移工具
 
 The Pin tool lets you quickly define a view’s position relative to its neighbors or quickly define its size. Select the item whose position or size you want to pin, and click the Pin tool. Interface Builder presents a popover view containing a number of options.
 
+Pin 工具让你可以快速的定义视图相对于其相邻视图的位置或者快速的定义其尺寸。选择你想要设置其位置或尺寸的项目，并点击 Pin 工具。Interface Builder 会显示一个包含一些可能选项的弹出视图。
+
 ![Pin_Popover_View_2x.png](Pin_Popover_View_2x.png)
 
 The top portion of the popover lets you pin the selected item’s Leading, Top, Trailing, or Bottom edge to its nearest neighbor. The associated number indicates the current spacing between the items in the canvas. You can type in a custom spacing, or you can click the disclosure triangle to set which view it should be constrained to or to select the standard spacing. The “Constrain to margins” checkbox determines whether constraints to the superview use the superview’s margins or its edges.
 
+弹出视图的上半部分让你可以设置选中项目到它最近的相邻项目的 Leading、Top、Trailing 或 Bottom 偏移。相关联的数字指出了在幕布上两个项目之间的当前间距。你可以写入一个自定义的间距，或者可以点击下拉箭头设置哪个视图应该被约束或者选择标准间距。“Constrain to margins” 勾选框决定了设置到父视图的约束时是使用父视图的留白还是到其边沿。
+
 ![Pin_Settings_2x.png](Pin_Settings_2x.png)
 
 The lower portion of the popover lets you set the item’s width or height. The Width and Height constraints default to the current canvas size, though you can type in different values. The Aspect Ratio constraint also uses the item’s current aspect ratio; however, if you want to change this ratio, you need to review and edit the constraint after creating it.
+
+弹出视图的下半部分让你可以设置项目的宽度或高度。
 
 Typically, you select a single view to pin; however, you can select two or more views and give them equal widths or equal heights. You can also create multiple constraints at once, or you can update the frames as you add the constraints. After you’ve set the options you want, click the Add Constraints button to create your constraints.
 
 For more information, see Adding Auto Layout Constraints with the Pin and Align Tools in Auto Layout Help.
 
 #### 0.4.2.4 Resolve Auto Layout Issues Tool - 解决自动布局问题的工具
-
+  
 The Resolve Auto Layout Issues tool provides a number of options for fixing common Auto Layout issues. The options in the upper half of the menu affect only the currently selected views. The options in the bottom half affect all views in the scene.
 
 ![Resolve_Auto_Layout_Popup_2x.png](Resolve_Auto_Layout_Popup_2x.png)
