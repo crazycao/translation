@@ -788,39 +788,61 @@ The top portion of the popover lets you pin the selected item’s Leading, Top, 
 
 The lower portion of the popover lets you set the item’s width or height. The Width and Height constraints default to the current canvas size, though you can type in different values. The Aspect Ratio constraint also uses the item’s current aspect ratio; however, if you want to change this ratio, you need to review and edit the constraint after creating it.
 
-弹出视图的下半部分让你可以设置项目的宽度或高度。
+弹出视图的下半部分让你可以设置项目的宽度或高度。Width 和 Height 约束默认是当前幕布尺寸，而你可以写入不同的值。Aspect Ratio 约束也可以使用项目的当前宽高比；但是如果你想要改变这个比例，你需要在创建约束之后重新查看和编辑它。
 
 Typically, you select a single view to pin; however, you can select two or more views and give them equal widths or equal heights. You can also create multiple constraints at once, or you can update the frames as you add the constraints. After you’ve set the options you want, click the Add Constraints button to create your constraints.
 
+通常，你选择一个的视图来设置；不过，你也可以选择两个以上的视图并给定他们相同的宽度或相同的高度。你也可以一次创建多个约束，或者你可以按照你添加的约束更新视图的外框。在你设置好你想要的选项之后，点击 Add Contraints 按钮创建你的约束。
+
 For more information, see Adding Auto Layout Constraints with the Pin and Align Tools in Auto Layout Help.
+
+更多信息参见《Auto Layout Help》中的《Adding Auto Layout Constraints with the Pin and Align Tools》。
 
 #### 0.4.2.4 Resolve Auto Layout Issues Tool - 解决自动布局问题的工具
   
 The Resolve Auto Layout Issues tool provides a number of options for fixing common Auto Layout issues. The options in the upper half of the menu affect only the currently selected views. The options in the bottom half affect all views in the scene.
 
+Resolve Auto Layout Issues 工具提供了一些修正常见自动布局问题的选项。菜单的上半部分中的选项只影响当前选中的视图。下半部分中的选项会影响场景中的所有视图。
+
 ![Resolve_Auto_Layout_Popup_2x.png](Resolve_Auto_Layout_Popup_2x.png)
 
 You can use this tool to update the views’ frames based on the current constraints, or you can update the constraints based on the views’ current location in the canvas. You can also add missing constraints, clear constraints, or reset the views to a set of constraints recommended by Interface Builder.
 
+你可以使用这个工具基于当前的约束更新视图的外框，或者基于幕布中视图的当前位置更新约束。你也可以添加丢失的约束，清除约束，或者重置视图到 Interface Builder 推荐的约束。
+
 The commands to add or reset constraints are discussed in greater detail in Letting Interface Builder Create Constraints.
+
+添加或重置约束的命令在《Letting Interface Builder Create Constraints》中做了非常详细的讨论。
 
 ### 0.4.3 Letting Interface Builder Create Constraints - 让Interface Builder创建约束
 
 Interface Builder can create some or all of the constraints for you. When using this approach, Interface Builder attempts to infer the best constraints given the view’s current size and position in the canvas. Be sure to position your views carefully—small differences in spacing can result in significantly different layouts.
 
+Interface Builder 可以为你创建一些或者所有的约束。当使用这种方法时，Interface Builder 按照幕布中给出的视图的当前尺寸和位置尝试推测最佳的约束。确保小心的放置你的视图——间距上小小的不同都可能导致显著不同的布局。
+
 To let Interface Builder create all the constraints, click Resolve Auto Layout Issues tool > Reset to Suggested Constraints. Interface Builder creates all the required constraints for the selected views (or for all the views in the scene).
+
+要让 Interface Builder 创建所有的约束，点击 Resolve Auto Layout Issues 工具 ==> Reset to Suggested Constraints。 Interface Builder 会为选中的视图（或者场景下所有的视图）创建必要的约束。
 
 Alternatively, you can add a few constraints yourself, and then click the Resolve Auto Layout Issues tool > Add Missing Constraints. This option adds the constraints needed to have a nonambiguous layout. Again, you can add constraints either to the selected view or to all the views in the scene.
 
+或者，你可以先自己添加一些约束，然后再点击 Resolve Auto Layout Issues 工具 ==> Add Missing Constraints。这个选项会添加创建无歧义布局所需的约束。你可以再次添加约束到选中的视图或者场景内的所有视图。
+
 This approach lets you rapidly build a nonambiguous, satisfiable layout, but unless the user interface is straightforward, the resulting layout may not behave the way you want. Always test the user interface and modify the constraints until you get the intended results.
+
+这个方法让你快速的创建一个无歧义的可满足的布局，但是除非用户界面非常简单，布局结果可能不会是像你想要的那样。请记得总是测试一下用户界面并修改那些约束，直到获得预期的结果。
 
 ### 0.4.4 Finding and Editing Constraints - 查找和编辑约束
 
-After you’ve added a constraint, you need to be able to find it, view it, and edit it. There are a number of options for accessing the constraints. Each option offers a unique method of organizing and presenting the constraints.
+After you’ve added a constraint, you need to be able to find it, view it, and edit it. There are a number of options for accessing the constraints. Each option offers a unique method of organising and presenting the constraints.
+
+在你添加一条约束之后，你需要能够找到它，查看它，编辑它。这里有一些访问该约束的选项。每一个选项都提供了一个独立组织和呈现. 该约束的方法。
 
 #### 0.4.4.1 Viewing Constraints in the Canvas - 在幕布中查看约束
 
 The editor displays all the constraints affecting the currently selected view as colored lines on the canvas. The shape, stroke type, and line color can tell you a lot about the current state of the constraint.
+
+编辑器在幕布上用有颜色的线条显示了影响当前选中视图的所有约束。形状，笔画类型和线条颜色都可以告诉你关于约束当前状态的许多信息。
 
 - **I-bars (lines with T-shaped end-caps).** I-bars show the size of a space. This space can be either the distance between two items, or the height or width of an item. 
 - **Plain lines (straight lines with no end-caps).** Plain lines show where edges align. For example, Interface Builder uses simple lines when aligning the leading edge of two or more views. These lines can also be used to connect items that have a 0-point space between them. 
@@ -831,6 +853,14 @@ The editor displays all the constraints affecting the currently selected view as
 - **Blue Lines.** The items affected by the constraint have a nonambiguous, satisfiable layout, and the item’s frame is in the correct position as calculated by the Auto Layout engine. 
 - **Equal Badges.** Interface Builder shows constraints that give two items an equal width or an equal height as a separate bar for each item. Both bars are tagged with a blue badge containing an equal (=) sign inside. 
 - **Greater-than-or-equal and less-than-or-equal badges.** Interface Builder marks all constraints representing greater-than-or-equal-to and less-than-or-equal-to relationships with a small blue badge with a >= or <= symbol inside. 
+- **I条（带有T形端部的线条）。**I条展示了间隔的尺寸。这个间隔可能是两个项目之间的距离，也可能是项目的宽或高。
+- **平线（没有端部的直线）。**平线展示了边沿对齐的地方。例如，Interface Builder 在对齐两个及以上视图的前部边沿时使用了简单的线。这些线也可以用于连接二者之间只有0个点的间隔的项目。
+- **实线。**实线表示必要的约束（优先级=1000）。
+- **虚线。**虚线表示可选的约束（优先级<1000）。
+- **橙色的线。**橙色的线指示受该约束影响的项目的一个边框不在正确的位置，基于当前约束集合来看的话。Interface Builder 也会用虚线轮廓线展示这个边框算出来的位置。你可以将这个项目移动到其算出来的位置，使用 Resolve Auto Layout Issues 工具 ==> Update Frames 命令。
+- **蓝色的线。**受该约束影响的项目有一个无歧义的可满足的布局，并且项目的边框正在由 Auto Layout 引擎计算出来的正确的位置。
+- **等号徽章。**Interface Builder 展示这样的约束，让两个项目有相等的宽度或相等的高度，作为每个项目的单独一个线条。每个线条都标有一个里面包含了等号（=）的蓝色徽章。
+- **大于等于和小于等于徽章。**Interface Builder 用里面带有>=或<=符号的蓝色小徽章标记所有约束，用于表示大于等于和小于等于关系。
 
 ![Constraints_In_The_Canvas_2x.png](Constraints_In_The_Canvas_2x.png)
 
