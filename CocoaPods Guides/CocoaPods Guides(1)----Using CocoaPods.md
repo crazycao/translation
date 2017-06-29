@@ -1,20 +1,103 @@
-#1 Using CocoaPods
+<span id = "1">
+# 1 Using CocoaPods
 原文链接：[https://guides.cocoapods.org/using/getting-started.html](https://guides.cocoapods.org/using/getting-started.html)
 
-#1.1 Using Unreleased Features
+# 目录
+- [1 Using CocoaPods - 使用CocoaPods](#1)
+	- [1.1 Using Unreleased Features - 使用未发布的特性](#1.1)
+		- [1.1.1 Using Unreleased Features - 使用未发布的特性](#1.1.1)
+		- [1.1.2 Two Options - 两个选择](#1.1.2)
+			- [1.1.2.1 Use a Gemfile - 使用Gemfile](#1.1.2.1) 
+			- [1.1.2.2 Set up a local dev copy of CocoaPods - 安装一个CocoaPods的本地开发备份](#1.1.2.2)
+		- [1.1.3 Real world walk-through - 走过现实世界](#1.1.3)
+			- [1.1.3.1 Clone a local copy - 克隆一个本地备份](#1.1.3.1)
+			- [1.1.3.2 Check out the branch, and run bundle install - 检出分支，并运行bundle install](#1.1.3.2)
+			- [1.1.3.3 Using the new version as your pod command - 使用新的版本作为你的pod命令](#1.1.3.3)
+			- [1.1.3.4 Aliasing the command - 给命令生成化名](#1.1.3.4)
+			- [1.1.3.5 Alternative options - 替代方案](#1.1.3.5)
+	- [1.2 Geting Started - 开始](#1.2)
+		- [1.2.1 What is CocoaPods - 什么是CocoaPods？](#1.2.1) 	
+		- [1.2.2 Prefer video? - 更喜欢视频？](#1.2.2)
+		- [1.2.3 Getting Started - 开始](#1.2.3)
+			- [1.2.3.1 Installation - 安装](#1.2.3.1)
+			- [1.2.3.2 Sudo-less installation - 不使用Sudo的安装](#1.2.3.2)
+			- [1.2.3.3 Updating CocoaPods - 更新CocoaPods](#1.2.3.3)
+			- [1.2.3.4 Using a CocoaPods Fork - 使用CocoaPods分支](#1.2.3.4)
+		- [1.2.4 External resources - 扩展资源](#1.2.4)
+	- [1.3 pod install vs. pod update](#1.3)
+		- [1.3.1 Introduction - 介绍](#1.3.1)
+		- [1.3.2 Detailed presentation of the commands - 这两个命令的详细表达式](#1.3.2)
+			- [1.3.2.1 pod install](#1.3.2.1)
+			- [1.3.2.2 pod outdated](#1.3.2.2)
+			- [1.3.2.3 pod update](#1.3.2.3)
+		- [1.3.3 Intended usage - 推荐用法](#1.3.3) 
+		- [1.3.4 Commit your Podfile.lock - 提交Podfile.lock文件](#1.3.4)
+		- [1.3.5 Scenario Example - 场景例子](#1.3.5)
+			- [1.3.5.1 Stage 1: User1 creates the project - 场景1：用户1创建工程](#1.3.5.1) 
+			- [1.3.5.2 Stage 2: User1 adds a new pod - 场景2：用户1添加了新的pod](#1.3.5.2)
+			- [1.3.5.3 Stage 3: User2 joins the project - 场景3：用户2加入到工程中](#1.3.5.3)
+			- [1.3.5.4 Stage 4: Checking for new versions of a pod - 场景4：检查pod的新版本](#1.3.5.4)
+		- [1.3.6 Using exact versions in the Podfile is not enough - 在Podfile中使用准确版本号是不够的](#1.3.6)
+	- [1.4 Using CocoaPods - 使用CocoaPods](#1.4)
+		- [1.4.1 Adding Pods to an Xcode project - 将Pods添加到Xcode工程](#1.4.1) 
+			- [1.4.1.1 Installation - 安装](#1.4.1.1)
+			- [1.4.1.2 Creating a new Xcode project with CocoaPods - 创建带CocoaPods的新Xcode工程](#1.4.1.2)
+			- [1.4.1.3 Integration with an existing workspace - 集成到一个已存在的工作空间](#1.4.1.3)
+		- [1.4.2 When to use *pod install* vs *pod update*? - 何时使用*pod install* 和 *pod update*?](#1.4.2) 
+		- [1.4.3 Should I check the Pods directory into source control? - 是否应该将Pods目录提交到源码管理中？](#1.4.3)
+			- [1.4.3.1 Benefits of checking in the Pods directory - 提交Pods目录的好处](#1.4.3.1)
+			- [1.4.3.2 Benefits of ignoring the Pods directory - 忽略Pods目录的好处](#1.4.3.2)
+		- [1.4.4 What is Podfile.lock? - 什么是Podfile.lock？](#1.4.4) 
+		- [1.4.5 What is happening behind the scenes? - 在下面的场景中发生了什么？](#1.4.5)
+		- [1.4.6 Pods and Submodules - Pods和子模块](#1.4.6)
+			- [1.4.6.1 Switching from submodules to CocoaPods - 从子模块切换到CocoaPods](#1.4.6.1) 
+	- [1.5 The Podfile - Podfile文件](#1.5)
+		- [1.5.1 What is a Podfile? - Podfile是什么？](#1.5.1)
+			- [1.5.1.1 Migrating from 0.x to 1.0 - 从0.x前移到1.0](#1.5.1.1)
+			- [1.5.1.2 Specifying pod versions - 指定pod版本](#1.5.1.2)
+		- [1.5.2 Using the files from a folder local to the machine - 从本地设备的文件夹路径使用文件](#1.5.2)
+			- [1.5.2.1 From a podspec in the root of a library repo - 从库repo的根节点里的podspec开始](#1.5.2.1)
+		- [1.5.3 External resources - 扩展资源](#1.5.3)
+	- [1.6 Troubleshooting - 问题处理](#1.6)
+		- [1.6.1 Installing CocoaPods - 安装CocoaPods](#1.6.1) 
+		- [1.6.2 Using the CocoaPods Project - 使用CocoaPods工程](#1.6.2)
+		- [1.6.3 Can I workaround ‘Duplicate Symbol’ errors with static libraries? - 有没有变通办法处理静态库中的‘符号重复‘问题？](#1.6.3)
+		- [1.6.4 I'm getting permission errors while running pod commands - 在运行pod命令时得到许可错误](#1.6.4)
+		- [1.6.5 The Fix I want is in master / a branch, but I'm blocked on this right now - 解决想要到主干/分支，但是被锁定在这里的问题](#1.6.5)
+		- [1.6.6 I didn't find the solution to my problem! - 我找不到问题的解决办法！](#1.6.6)
+		- [1.6.7 I think this is a bug with CocoaPods - 我认为这是CocoaPods的bug](#1.6.7)
+		- [1.6.8 I think this is a bug with CocoaPods - 我认为这是CocoaPods的bug](#1.6.8)
+	- [1.7 F.A.Q](#1.7)
+		- [1.7.1 "Will CocoaPods stop development now that Swift has a built-in package manager?" - “现在Swift已经有了内置的包管理器，CocoaPods会不会停止开发？”](#1.7.1)
+		- [1.7.2 "Why not just use git submodules?" - “为什么不只用git子模块？”](#1.7.2)
+		- [1.7.3 “How can I donate to CocoaPods?” - “如何向CocoaPods捐赠？”](#1.7.3)
+		- [1.7.4 “CocoaPods doesn’t do X, so it’s unusable.” - “CocoaPods做不了X，所以它没什么用。”](#1.7.4)
+		- [1.7.6 “CocoaPods is bad for the community, because it makes it too easy for users to add many dependencies.” - “CocoaPods对团队有害，因为它让用户太容易添加过多的依赖。”](#1.7.6)
+		- [1.7.7 “CocoaPods uses workspaces, which are considered user data. Why does it not use normal sub-projects?” -  “CocoaPods使用了工作空间，而工作空间被认为是用户数据。为什么不使用常见的子工程？”](#1.7.7)
+		- [1.7.8 “Why do I have to install Ruby to use CocoaPods?” - “为什么我在使用CocoaPods前不得不安装Ruby？”](#1.7.8)
+
+<span id = "1.1">
+# 1.1 Using Unreleased Features - 使用未发布的特性
 Instructions to use CocoaPods from a feature branch or a Work-in-progress fork
 
 从特性分支或开发中的分支使用CocoaPods的介绍。
-##1.1.1 Using Unreleased Features 使用未发布的特性
+
+<span id = "1.1.1">
+## 1.1.1 Using Unreleased Features - 使用未发布的特性
 There may be times when you may want to test an upcoming feature in CocoaPods. At times code for such features may be already available in a 'feature branch'. This document is based on an existing Pull Request which can/will change with time, as such it may be out of date slightly.
 
 你可能有好几次想要在CocoaPods中试试即将发布的特性。有时这些特性的代码已经存在于‘特性分支’中是可用的了。本节是基于现有的Pull请求的介绍，它可能/将会随时改变，因为它可能已经稍微过时了。
 
-##1.1.2 Two Options
-###1.1.2.1 Use a Gemfile
+<span id = "1.1.2">
+## 1.1.2 Two Options - 两个选择
+
+<span id = "1.1.2.1">
+### 1.1.2.1 Use a Gemfile - 使用Gemfile
 This isn't covered in this guide, but instead in Using a Gemfile. This is a simpler technique, but requires you to remember to use bundle exec before running any pod command.
 
-###1.1.2.2 Set up a local dev copy of CocoaPods
+<span id = "1.1.2.2">
+### 1.1.2.2 Set up a local dev copy of CocoaPods - 安装一个CocoaPods的本地开发备份
+
 The technique to run a branch version of CocoaPods is:
 
 * Clone a copy of CocoaPods locally.
@@ -24,22 +107,29 @@ The technique to run a branch version of CocoaPods is:
 
 Then when you want to update you go back to that local install and run git pull, then bundle install again.
 
-##1.1.3 Real world walk-through
+<span id = "1.1.3">
+## 1.1.3 Real world walk-through - 走过现实世界
 Let's use @mrackwitz's Swift Pull Request CocoaPods#2835 as a example. Note, the swift branch does not exist anymore. You can see all the current branches here.
 
-###1.1.3.1 Clone a local copy
+<span id = "1.1.3.1">
+### 1.1.3.1 Clone a local copy - 克隆一个本地备份
 By looking at the subheading mrackwitz wants to merge 85 commits into master from swift you can infer that this pull request comes from a branch on the CocoaPods repo. If it looked like Pull Request CocoaPods#2880 ([...] CocoaPods:master from samdmarshall:xclegacy-build-setting-build-dir-fix) then you could see that it comes from the samdmarshall fork and you would need to clone from that repo.
 
 	Cloning a local copy
 	cd projects/cocoapods/
 	git clone https://github.com/CocoaPods/CocoaPods.git
-###1.1.3.2 Check out the branch, and run bundle install
+
+<span id = "1.1.3.2">
+### 1.1.3.2 Check out the branch, and run bundle install - 检出分支，并运行bundle install
 This is easy for our pull request, we first need to cd in to the new folder :
 
 	cd CocoaPods
 	git checkout swift
 	bundle install
-###1.1.3.3 Using the new version as your pod command
+
+<span id = "1.1.3.3">
+### 1.1.3.3 Using the new version as your pod command - 使用新的版本作为你的pod命令
+
 The new pod command lives in the git repo you have just cloned. It can be found in the bin folder.
 
 To get the full path of the command for CocoaPods run:
@@ -51,20 +141,25 @@ This is the command you can use to run the branch version of CocoaPods:
 	cd ~/projects/dev/eidolon
 	/Users/orta/spiel/ruby/CocoaPods/bin/pod install
 
-###1.1.3.4 Aliasing the command
+<span id = "1.1.3.4">
+### 1.1.3.4 Aliasing the command - 给命令生成化名
 The terminal supports using aliases as a way of reducing the length of commands. The default terminal shell is called bash, if you'd like to learn how to set a bash alias I would recommend reading this StackOverflow. You can create an alias like spod that uses this folder:
 
 	alias spod='/Users/orta/spiel/ruby/CocoaPods/bin/pod'
 This means you can instead run spod install to use your custom version of CocoaPods.
 
-###1.1.3.5 Alternative options
+<span id = "1.1.3.5">
+### 1.1.3.5 Alternative options - 替代方案
 Another option is to use Bundler ( CocoaPods for ruby projects ) to maintain your own fork/branches, this is a better option if you are in a team and want to ensure consistency within developers. See CocoaPods Is Ready for Swift for an example of how to do this.
 
-#1.2 Geting Started
+<span id = "1.2">
+# 1.2 Geting Started - 开始
 This is a guide for setting up CocoaPods and working with your first project.
 
 搭建CocoaPods并在你的第一个工程中使用的引导。
-##1.2.1 What is CocoaPods 什么是CocoaPods？
+
+<span id = "1.2.1">
+## 1.2.1 What is CocoaPods - 什么是CocoaPods？
 CocoaPods manages library dependencies for your Xcode projects.
 
 CocoaPods管理了Xcode工程的库依赖。
@@ -77,15 +172,19 @@ Ultimately the goal is to improve discoverability of, and engagement in, third p
 
 最终目标是通过创建一个更集中化的生态系统提高第三方开源库的可发现度和嵌入便捷度。
 
-###1.2.2 Prefer video? 更喜欢视频？
+<span id = "1.2.2">
+## 1.2.2 Prefer video? - 更喜欢视频？
 Google have created a great overview for Route 85 video series going through this entire guide and more.
 
 谷歌已经创建了一个伟大的85路系列视频概述，贯穿整个指南和其他部分。
 
 [视频连接](https://www.youtube.com/watch?v=iEAjvNRdZa0&spfreload=10)
 
-###1.2.3 Getting Started 开始
-####1.2.3.1 Installation 安装
+<span id = "1.2.3">
+## 1.2.3 Getting Started - 开始
+
+<span id = "1.2.3.1">
+### 1.2.3.1 Installation - 安装
 
 CocoaPods is built with Ruby and it will be installable with the default Ruby available on macOS. You can use a Ruby Version manager, however we recommend that you use the standard Ruby available on macOS unless you know what you're doing.
 
@@ -101,7 +200,8 @@ If you encounter any problems during installation, please visit this guide.
 
 如果你在安装过程中遭遇任何问题，请参考本指南。
 
-####1.2.3.2 Sudo-less installation 不使用Sudo的安装
+<span id = "1.2.3.2">
+### 1.2.3.2 Sudo-less installation - 不使用Sudo的安装
 
 If you do not want to grant RubyGems admin privileges for this process, you can tell RubyGems to install into your user directory by passing either the --user-install flag to gem install or by configuring the RubyGems environment. The latter is in our opinion the best solution. To do this, create or edit the .profile file in your home directory and add or amend it to include these lines:
 
@@ -119,7 +219,8 @@ Note that if you choose to use the --user-install option, you will still have to
 	/Users/eloy/.gem/ruby/2.0.0/gems/cocoapods-0.29.0/lib/cocoapods.rb
 	$ /Users/eloy/.gem/ruby/2.0.0/bin/pod install
 
-####1.2.3.3 Updating CocoaPods 更新CocoaPods
+<span id = "1.2.3.3">
+### 1.2.3.3 Updating CocoaPods - 更新CocoaPods
 
 To update CocoaPods you simply install the gem again
 
@@ -141,21 +242,25 @@ Later on, when you're actively using CocoaPods by installing pods, you will be n
 
 在这以后，当时正在通过安装pods使用CocoaPods时，如果有新版本可用，你将会收到消息通知，*CocoaPods X.X.X is now available, please update*。
 
-####1.2.3.4 Using a CocoaPods Fork 使用CocoaPods分支
+<span id = "1.2.3.4">
+### 1.2.3.4 Using a CocoaPods Fork - 使用CocoaPods分支
 
 There are two ways to do this, using a Gemfile (recommended) or using a development build that are in discussion or in implementation stage.
 
 有两种方法可以实现，[using a Gemfile](https://guides.cocoapods.org/using/a-gemfile.html)（推荐），或者使用还在讨论或实现阶段的[development build](https://guides.cocoapods.org/using/unreleased-features)。
 
-###1.2.4 External resources 扩展资源
+<span id = "1.2.4">
+## 1.2.4 External resources - 扩展资源
 * [CocoaPods at Treehouse](http://teamtreehouse.com/library/ios-tools/cocoapods/cocoapods)
 
-###<span id="1">1.3 pod install vs. pod update  
+<span id="1.3">
+# 1.3 pod install vs. pod update  
 Explains the difference between pod install and pod update and when to use each.
 
 解释*pod install*和*pod update*的区别，以及什么时候该使用哪个。[id]
 
-###1.3.1 Introduction 介绍
+<span id = "1.3.1">
+## 1.3.1 Introduction - 介绍
 
 Many people starting with CocoaPods seem to think pod install is only used the first time you setup a project using CocoaPods and pod update is used afterwards. But that's not the case at all.
 
@@ -175,13 +280,15 @@ _TL;DR:_
 
    *只有在你想要更新pods到新的版本时才使用*pod update [PODNAME]*。
 
-###1.3.2 Detailed presentation of the commands 这两个命令的详细表达式
+<span id ="1.3.2">
+## 1.3.2 Detailed presentation of the commands - 这两个命令的详细表达式
 
 Note: the vocabulary of install vs. update is not actually specific to CocoaPods. It is inspired by a lot of other dependency managers like bundler, RubyGems or composer, which have similar commands, with the exact same behavior and intents as the one described in this document.
 
 注意：*install*和*update*这两个词实际上并不是CocoaPods独有的。它们也被许多其他依赖的管理器推荐使用，如bundler，RubyGems或者composer，它们都有类似的命令，并且有与本文描述完全相同的行为和意图。
 
-####1.3.2.1 pod install
+<span id = "1.3.2.1">
+### 1.3.2.1 pod install
 
 This is to be used the first time you want to retrieve the pods for the project, but also every time you edit your Podfile to add, update or remove a pod.
 
@@ -203,13 +310,15 @@ This is to be used the first time you want to retrieve the pods for the project,
 
   * 对于没有记录在**Podfile.lock**文件中的pods，会查找匹配**Podfile**中描述的版本（如*pod 'MyPod', '~>1.2'*）。
 
-####1.3.2.2 pod outdated
+<span id = "1.3.2.2">
+### 1.3.2.2 pod outdated
 
 When you run pod outdated, CocoaPods will list all pods which have newer versions than the ones listed in the Podfile.lock (the versions currently installed for each pod). This means that if you run pod update PODNAME on those pods, they will be updated — as long as the new version still matches the restrictions like pod 'MyPod', '~>x.y' set in your Podfile.
 
 当你运行*pod outdated*命令，CocoaPods会列出所有有新版本的pods，新版本是指比记录在**Podfile.lock**文件中的版本（即当前每个pod安装的版本）更新的版本。这意味着如果你对这些pod运行*pod update PODNAME*，它们将会更新——只要这些版本仍然满足如*pod 'MyPod', '~>x.y'*这样设置在**Podfile**中的约束。
 
-####1.3.2.3 pod update
+<span id = "1.3.2.3">
+### 1.3.2.3 pod update
 
 When you run pod update PODNAME, CocoaPods will try to find an updated version of the pod PODNAME, without taking into account the version listed in Podfile.lock. It will update the pod to the latest version possible (as long as it matches the version restrictions in your Podfile).
 
@@ -219,7 +328,8 @@ If you run pod update with no pod name, CocoaPods will update every pod listed i
 
 如果你运行*pod update*而不带pod名称，CocoaPods将会更新**Podfile**文件中记录的每一个pod到最新可用版本。
 
-###1.3.3 Intended usage 推荐用法
+<spand id = "1.3.3">
+## 1.3.3 Intended usage - 推荐用法
 
 With pod update PODNAME, you will be able to only update a specific pod (check if a new version exists and update the pod accordingly). As opposed to pod install which won't try to update versions of pods already installed.
 
@@ -233,7 +343,8 @@ You will only use pod update when you want to update the version of a specific p
 
 当你想要更新指定pod（或所有pod）的版本时，应该只使用*pod update*。
 
-###1.3.4 Commit your Podfile.lock 提交Podfile.lock文件
+<span id = "1.3.4">
+## 1.3.4 Commit your Podfile.lock - 提交Podfile.lock文件
 
 As a reminder, even if your policy is not to commit the Pods folder into your shared repository, you should always commit & push your Podfile.lock file.
 
@@ -243,13 +354,15 @@ Otherwise, it would break the whole logic explained above about pod install bein
 
 **否则，你将会打破上述关于*pod install*将会锁定你的pods的已安装版本的整个逻辑。**
 
-###1.3.5 Scenario Example 场景例子
+<span id = "1.3.5">
+## 1.3.5 Scenario Example - 场景例子
 
 Here is a scenario example to illustrate the various use cases one might encounter during the life of a project.
 
 以下是一些场景例子列举了在工程周期中可能遭遇的各种使用情况。
 
-####1.3.5.1 Stage 1: User1 creates the project 场景1：用户1创建工程
+<span id = "1.3.5.1">
+### 1.3.5.1 Stage 1: User1 creates the project - 场景1：用户1创建工程
 
 user1 creates a project and wants to use pods A,B,C. They create a Podfile with those pods, and run pod install.
 
@@ -267,7 +380,8 @@ The Podfile.lock will keep track of that and note that A,B and C are each instal
 
 >另外，由于这是第一次运行*pod install*，并且*Pods.xcodeproj*工程并不存在，该命令也会创建*Pods.xcodeproj*和*.xcworkspace*，但这只是该命令的副作用而非主要功能。
 
-####1.3.5.2 Stage 2: User1 adds a new pod 场景2：用户1添加了新的pod
+<span id = "1.3.5.2">
+### 1.3.5.2 Stage 2: User1 adds a new pod - 场景2：用户1添加了新的pod
 
 Later, user1 wants to add a pod D into their Podfile.
 
@@ -281,7 +395,8 @@ They should thus run pod install afterwards, so that even if the maintener of po
 
 >这就是某些人犯错的地方，因为他们在这里使用了*pod update*——可能认为这就是“用新的pods更新工程”的意思？——而不是使用*pod install*——才能在工程中安装新的pods。
 
-####1.3.5.3 Stage 3: User2 joins the project 场景3：用户2加入到工程中
+<span id = "1.3.5.3">
+### 1.3.5.3 Stage 3: User2 joins the project - 场景3：用户2加入到工程中
 
 Then user2, who never worked on the project before, joins the team. They clone the repository then use pod install.
 
@@ -295,7 +410,8 @@ Even if a version 1.2.0 of pod C is now available, user2 will get the pod C in v
 
 尽管**pod C**的**1.2.0**版本现在已经可用，用户2仍将获得**pod C**的**1.0.0**版本。因为这就是写在**Podfile.lock**中的内容。**pod C**被**Podfile.lock**文件锁在了**1.0.0**版本（因此这个文件叫这个名字）。
 
-####1.3.5.4 Stage 4: Checking for new versions of a pod 场景4：检查pod的新版本
+<span id = "1.3.5.4">
+### 1.3.5.4 Stage 4: Checking for new versions of a pod - 场景4：检查pod的新版本
 
 Later, user1 wants to check if any updates are available for the pods. They run pod outdated which will tell them that pod B have a new 1.1.0 version, and pod C have a new 1.2.0 version released.
 
@@ -305,7 +421,8 @@ user1 decides they want to update pod B, but not pod C; so they will run pod upd
 
 用户1决定他们要更新**pod B**，但是不更新**pod C**；因此他运行*pod update B*，让**B**从版本**1.0.0**升到版本**1.1.0**（同时**Podfile.lock**文件也随之更新），但是将**pod C**保持在**1.0.0**版本（不会更新到**1.2.0**）。
 
-###1.3.6 Using exact versions in the Podfile is not enough 在Podfile中使用准确版本号是不够的
+<span id = "1.3.6">
+## 1.3.6 Using exact versions in the Podfile is not enough - 在Podfile中使用准确版本号是不够的
 
 Some might think that by specifying exact versions of their pods in their Podfile, like pod 'A', '1.0.0', is enough to guarantee that every user will have the same version as other people on the team.
 
@@ -332,12 +449,14 @@ That's why the only way to ensure every team member work with the same versions 
 
 这就是为什么确保每一个团队成员都能在各自的电脑上使用相同版本的pod库的唯一方法就是使用**Podfile.lock**，并且正确的使用**pod install**和**pod update**。
 
-##1.4 Using CocoaPods
+<span id = "1.4">
+# 1.4 Using CocoaPods - 使用CocoaPods
 Integration instructions and best practices.
 
 集成指令和最佳实践。
 
-###1.4.1 Adding Pods to an Xcode project 将Pods添加到Xcode工程
+<span id = "1.4.1">
+## 1.4.1 Adding Pods to an Xcode project - 将Pods添加到Xcode工程
 **Before you begin**
 
 1. Check the Specs repository or cocoapods.org to make sure the libraries you would like to use are available.
@@ -348,7 +467,8 @@ Integration instructions and best practices.
 1. 检查确保你要用到的**Specs**仓库或者**cocoapods.org**是可用的。
 2. 将**CocoaPods**安装到你的电脑。
 
-####1.4.1.1 Installation 安装
+<span id = "1.4.1.1">
+### 1.4.1.1 Installation - 安装
 
 * Create a Podfile, and add your dependencies:
 
@@ -366,7 +486,8 @@ Integration instructions and best practices.
 * 在你的工程目录下运行*$ pod install*。
 * 打开*App.xcworkspace*并进行构建。
 
-####1.4.1.2 Creating a new Xcode project with CocoaPods 创建带CocoaPods的新Xcode工程
+<span id = "1.4.1.2">
+### 1.4.1.2 Creating a new Xcode project with CocoaPods - 创建带CocoaPods的新Xcode工程
 
 To create a new project with CocoaPods, follow these simple steps:
 
@@ -405,7 +526,8 @@ To create a new project with CocoaPods, follow these simple steps:
 * 运行*$ pod install*。
 * 打开创建的*MyApp.xcworkspace*。这就是你每天都要用到的来创建app的文件。
 
-####1.4.1.3 Integration with an existing workspace 集成到一个已存在的工作空间
+<span id = "1.4.1.3">
+### 1.4.1.3 Integration with an existing workspace - 集成到一个已存在的工作空间
 
 Integrating CocoaPods with an existing workspace requires one extra line in your Podfile. Simply specify the .xcworkspace filename in outside your target blocks like so:
 
@@ -413,22 +535,25 @@ Integrating CocoaPods with an existing workspace requires one extra line in your
 >
 	workspace 'MyWorkspace'
 
-###1.4.2 When to use *pod install* vs *pod update*? 何时使用*pod install* 和 *pod update*?
+<span id = "1.4.2">
+## 1.4.2 When to use *pod install* vs *pod update*? - 何时使用*pod install* 和 *pod update*?
 Many people are confused about when to use pod install and when to use pod update. Especially, they often use pod update where they should instead use pod install.
 
 许多人会将何时使用*pod install*和何时使用*pod update*混淆。特别是，他们经常在使用*pod install*的地方使用了*pod update*。
 
 You can find a detailed explanation about when to use each and what are the intended usage of each command in this dedicated guide.
 
-你可以在[给出的引导](#1)中找到关于何时使用哪一个以及每个命令的期望用途是什么的详细的解释。
+你可以在[给出的引导](#1.3)中找到关于何时使用哪一个以及每个命令的期望用途是什么的详细的解释。
 
-#### 1.4.3 Should I check the Pods directory into source control? 是否应该将Pods目录提交到源码管理中？
+<span id = "1.4.3">
+## 1.4.3 Should I check the Pods directory into source control? - 是否应该将Pods目录提交到源码管理中？
 
 Whether or not you check in your Pods folder is up to you, as workflows vary from project to project. We recommend that you keep the Pods directory under source control, and don't add it to your .gitignore. But ultimately this decision is up to you:
 
 是否将**Pods**文件夹提交取决于你自己，随着工程的不同而不同。我们推荐你将Pods目录保持在源码管理中，而不要添加到你的**.gitignore**中。但是这个决定最终还是取决于你自己：
 
-##### 1.4.3.1 Benefits of checking in the Pods directory 提交Pods目录的好处
+<span id = "1.4.3.1">
+### 1.4.3.1 Benefits of checking in the Pods directory - 提交Pods目录的好处
 
 - After cloning the repo, the project can immediately build and run, even without having CocoaPods installed on the machine. There is no need to run pod install, and no Internet connection is necessary.
 - 在克隆仓库之后，工程可以立即编译运行，甚至不需要再计算机上安装CocoaPods。不需要运行*pod install*，也不需要连接网络。
@@ -437,7 +562,8 @@ Whether or not you check in your Pods folder is up to you, as workflows vary fro
 - The Pod artifacts are guaranteed to be identical to those in the original installation after cloning the repo.
 - Pod工件可以保证跟克隆仓库之后的初始安装一模一样。
 
-##### 1.4.3.2 Benefits of ignoring the Pods directory 忽略Pods目录的好处
+<span id = "1.4.3.2">
+### 1.4.3.2 Benefits of ignoring the Pods directory - 忽略Pods目录的好处
 
 - The source control repo will be smaller and take up less space.
 - 源码管理仓库会更小，使用更少的空间。
@@ -450,7 +576,8 @@ Whether or not you check in the Pods directory, the Podfile and Podfile.lock sho
 
 无论你是否提交**Pods**目录，**Podfile**和**Podfile.lock**应该总保持在版本管理中。
 
-#### 1.4.4 What is Podfile.lock? 什么是Podfile.lock？
+<span id = "1.4.4">
+## 1.4.4 What is Podfile.lock? - 什么是Podfile.lock？
 
 This file is generated after the first run of pod install, and tracks the version of each Pod that was installed. For example, imagine the following dependency specified in the Podfile:
 
@@ -467,7 +594,8 @@ There's a great video from Google about how this works: ["CocoaPods and Lockfile
 
 下面是来自谷歌的视频，介绍了这是如何工作的： ["CocoaPods and Lockfiles (Route 85)"](https://www.youtube.com/watch?v=H-zK1mEwTe0)。
 
-#### 1.4.5 What is happening behind the scenes? 在下面的场景中发生了什么？
+<span id = "1.4.5">
+## 1.4.5 What is happening behind the scenes? - 在下面的场景中发生了什么？
 
 In Xcode, with references directly from the [ruby source](https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/installer/user_project_integrator.rb#L61-L65), it:
 
@@ -506,13 +634,15 @@ Note that steps 3 onwards are skipped if the CocoaPods static library is already
 
 注意如果CocoaPods静态库已经在你的工程中，第3步以前可能会被跳过。这大部分是基于Jonah Williams关于[Static Libraries](http://blog.carbonfive.com/2011/04/04/using-open-source-static-libraries-in-xcode-4)的工作。
 
-#### 1.4.6 Pods and Submodules Pods和子模块
+<span id = "1.4.6">
+## 1.4.6 Pods and Submodules - Pods和子模块
 
 CocoaPods and git submodules attempt to solve very similar problems. Both strive to simplify the process of including 3rd party code in your project. Submodules link to a specific commit of that project, while a CocoaPod is tied to a versioned developer release.
 
 CocoaPods和git子模块试图解决非常类似的问题。他们都力争简化将第三方代码引入你的工程的步骤。子模块连接到工程的特定提交，而CocoaPod绑定了开发者发布的版本。
 
-##### 1.4.6.1 Switching from submodules to CocoaPods 从子模块切换到CocoaPods
+<span id = "1.4.6.1">
+### 1.4.6.1 Switching from submodules to CocoaPods - 从子模块切换到CocoaPods
 
 Before you decide to make the full switch to CocoaPods, make sure that the libraries you are currently using are all available. It is also a good idea to record the versions of the libraries you are currently using, so that you can setup CocoaPods to use the same ones. It's also a good idea to do this incrementally, going dependency by dependency instead of one big move.
 
@@ -534,11 +664,13 @@ Before you decide to make the full switch to CocoaPods, make sure that the libra
 4. 在Podfile中添加对移除的库的引用
 5. 运行*pod install*
 
-##1.5 The Podfile
+<span id = "1.5">
+# 1.5 The Podfile - Podfile文件
 Learn all about the Podfile, which is used to declare dependencies for your project.
 学习关于Podfile的一切。Podfile用于在工程中声明依赖。
 
-###1.5.1 What is a Podfile? Podfile是什么？
+<span id = "1.5">
+## 1.5.1 What is a Podfile? - Podfile是什么？
 The Podfile is a specification that describes the dependencies of the targets of one or more Xcode projects. The file should simply be named Podfile. All the examples in the guides are based on CocoaPods version 1.0 and onwards.
 
 Podfile是描述一个或多个Xcode工程的目标的依赖的明确说明。这个文件被简单命名为**Podfile**。本指南中的所有例子都是基于CocoaPods1.0及以前版本的。
@@ -617,13 +749,15 @@ Podfile是描述一个或多个Xcode工程的目标的依赖的明确说明。�
 > 		pod 'ShowTVAuth'
 > 	end
 
-####1.5.1.1 Migrating from 0.x to 1.0 从0.x前移到1.0 
+<span id = "1.5.1.1">
+### 1.5.1.1 Migrating from 0.x to 1.0 - 从0.x前移到1.0 
 
 We have a [blog post](http://blog.cocoapods.org/CocoaPods-1.0/) explaining the changes in depth.
 
 我们有一个[博客帖子](http://blog.cocoapods.org/CocoaPods-1.0/)深入的解释了这个变化。
 
-##### 1.5.1.2 Specifying pod versions 指定pod版本
+<span id = "1.5.1.2">
+### 1.5.1.2 Specifying pod versions - 指定pod版本
 
 > When starting out with a project it is likely that you will want to use the latest version of a Pod. If this is the case, simply omit the version requirements.
 >
@@ -661,7 +795,8 @@ For more information, regarding versioning policy, see:
 - [RubyGems Versioning Policies](http://guides.rubygems.org/patterns/#semantic-versioning)
 - There's a great video from Google about how this works: ["CocoaPods and the Case of the Squiggly Arrow (Route 85)"](https://www.youtube.com/watch?v=x4ARXyovvPc).
 
-###1.5.2 Using the files from a folder local to the machine. 从本地设备的文件夹路径使用文件
+<span id = "1.5.2">
+## 1.5.2 Using the files from a folder local to the machine - 从本地设备的文件夹路径使用文件
 > If you would like to develop a Pod in tandem with its client project you can use *:path*.
 > 如果你想要联合开发一个Pod库及它的客户端工程，你可以使用*:path*。
 > 	pod 'Alamofire', :path => '~/Documents/Alamofire'
@@ -674,7 +809,8 @@ Note that the **podspec** of the Pod file is expected to be in that the designat
 
 注意Pod文件的**podspec**应该在指定的文件夹里。
 
-##### 1.5.2.1 From a podspec in the root of a library repo. 从库repo的根节点里的podspec开始
+<span id = "1.5.2.1">
+### 1.5.2.1 From a podspec in the root of a library repo - 从库repo的根节点里的podspec开始
 
 Sometimes you may want to use the bleeding edge version of a Pod, a specific revision or your own fork. If this is the case, you can specify that with your pod declaration.
 
@@ -701,16 +837,19 @@ The **podspec** file is expected to be in the root of the repo, if this library 
 
 **podspec**文件应该在repo的根节点，如果这个库在它的repo中没有**podspec**文件，你将不得不使用后面章节中介绍的方法之一。
 
-###1.5.3 External resources 扩展资源
+<span id = "1.5.3">
+## 1.5.3 External resources - 扩展资源
 - [Non-trivial Podfile in Artsy/Eigen](https://github.com/artsy/eigen/blob/master/Podfile)
 - [Podfile for a Swift project in Artsy/Eidolon](https://github.com/artsy/eidolon/blob/master/Podfile)
 
-##1.6 Troubleshooting
+<span id = "1.6">
+# 1.6 Troubleshooting - 问题处理
 The solutions to common problems.
 
 通用问题的处理。
 
-#### 1.6.1 Installing CocoaPods 安装CocoaPods
+<span id = "1.6.1">
+## 1.6.1 Installing CocoaPods - 安装CocoaPods
 
 - If you are installing on macOS 10.9.0-10.9.2, you may run into an issue when RubyGems tries to install the json gem. To fix this follow [these](https://gist.github.com/alloy/62326fcbc5b8ef987c17) instructions.
 - 如果你在MacOS 10.9.0-10.9.2版本上安装，你可能在RubyGems尝试安装**json** gem时遇到问题。请按照[这些](https://gist.github.com/alloy/62326fcbc5b8ef987c17)指导来解决这个问题。
@@ -730,11 +869,12 @@ The solutions to common problems.
 * If you get the error "ERROR: While executing gem ... (Errno::EPERM); Operation not permitted - /usr/bin/fuzzy_match" then try: $ sudo gem install -n /usr/local/bin cocoapods
 * 如果你得到一个错误“*ERROR: While executing gem ... (Errno::EPERM); Operation not permitted - /usr/bin/fuzzy_match*”，请尝试*$ sudo gem install -n /usr/local/bin cocoapods*。
 
-#### 1.6.2 Using the CocoaPods Project 使用CocoaPods工程
+<span id = "1.6.2">
+## 1.6.2 Using the CocoaPods Project - 使用CocoaPods工程
 
 1. If something doesn’t seem to work, first of all ensure that you are not completely overriding any options set from the Pods.xcconfig file in your project’s build settings. To add values to options from your project’s build settings, prepend the value list with $(inherited).
 
-   如果某些东西似乎不工作了，首先请确认你完全没有改动你工程构建设置中**Pods.xcconfig**文件里的任何设置。要在你的工程构建设置添加值，优先考虑值列表中的*$(inherited)*。
+   如果某些东西似乎不工作了，首先请确认你完全没有改动你工程构建设置中**Pods.xcconfig**文件里的任何设置。要在你的工程构建设置添加值，优先考虑值列表中的\$\(inherited)。
 
 2. If Xcode can’t find the headers of the dependencies:
 
@@ -781,7 +921,8 @@ The solutions to common problems.
 
 *不同的Xcode版本可能有各种各样的问题。可以向我们请求帮助，并告诉我们你正使用的版本。*
 
-###1.6.3 Can I workaround ‘Duplicate Symbol’ errors with static libraries? 有没有变通办法处理静态库中的‘符号重复‘问题？
+<span id = "1.6.3">
+## 1.6.3 Can I workaround ‘Duplicate Symbol’ errors with static libraries? - 有没有变通办法处理静态库中的‘符号重复‘问题？
 
 This usually occurs when you’re using a closed-source third-party library that includes a common dependency of your application. One brute-force workaround is to remove the dependency from the static library, as described [here](http://atnan.com/blog/2012/01/12/avoiding-duplicate-symbol-errors-during-linking-by-removing-classes-from-static-libraries)
 
@@ -791,7 +932,8 @@ However, in general, the vendor should really prefix any dependencies it include
 
 然而，通常情况下，提供者应该真正的预置它包含的所有依赖库，因此你不需要解决这个问题。当问题发生时，请联系提供者，让他们在他们那边修改，而使用上述方法只作为临时的变通方法。
 
-###1.6.4 I'm getting permission errors while running pod commands 在运行pod命令时得到许可错误
+<span id = "1.6.4">
+## 1.6.4 I'm getting permission errors while running pod commands - 在运行pod命令时得到许可错误
 
 As of CocoaPods 0.32.0 we have removed the ability to run the pod commands as root to prevent CocoaPods from getting into an inconsistent state when you mix and match running as root.
 
@@ -810,13 +952,15 @@ Alongside those global files, there may also be a Pods directory in any place yo
 
 >	$ sudo rm -fr Pods/
 
-#### 1.6.5 The Fix I want is in master / a branch, but I'm blocked on this right now 解决想要到主干/分支，但是被锁定在这里的问题
+<span id = "1.6.5">
+## 1.6.5 The Fix I want is in master / a branch, but I'm blocked on this right now - 解决想要到主干/分支，但是被锁定在这里的问题
 
 There is [a guide for using a version of CocoaPods to try new features](https://guides.cocoapods.org/using/unreleased-features) that are in discussion or in implementation stage.
 
 这是[一篇使用CocoaPods版本尝试新特性的指南](https://guides.cocoapods.org/using/unreleased-features)，不过还在讨论或实现阶段。
 
-#### 1.6.6 I didn't find the solution to my problem! 我找不到问题的解决办法！
+<span id = "1.6.6">
+## 1.6.6 I didn't find the solution to my problem! - 我找不到问题的解决办法！
 
 We have multiple avenues for support, here they are in the order we prefer.
 
@@ -829,7 +973,8 @@ We have multiple avenues for support, here they are in the order we prefer.
 - If your question is regarding a library (to be) distributed through CocoaPods, refer to the [spec repo](https://github.com/CocoaPods/Specs).
 - 如果你的问题是关于（即将）从CocoaPods发布的库，参考[spec repo](https://github.com/CocoaPods/Specs)。
 
-#### 1.6.7 I think this is a bug with CocoaPods 我认为这是CocoaPods的bug
+<span id = 1.6.8>
+## 1.6.8 I think this is a bug with CocoaPods - 我认为这是CocoaPods的bug
 
 In this case we want to get it on a GitHub issues tracker, we use this to keep track of the development work we have to do.
 
@@ -842,18 +987,21 @@ In this case we want to get it on a GitHub issues tracker, we use this to keep t
 - **Keep tickets short but sweet.** Make sure you include all the context needed to solve the issue. Don't overdo it. Great tickets allow us to focus on solving problems instead of discussing them.
 - **保持标签简单而清晰**。确保你包含了解决问题所需的所有内容。不要做过头了。好的标签会让我们关注对问题的的解决而不是讨论。
 
-##1.7 F.A.Q
+<span id = "1.7">
+# 1.7 F.A.Q
 Is CocoaPods ready for prime-time? Why not just use git submodules? etc. etc.
 
 CocoaPods是否已经准备进入黄金时段？为什么不只用git子模块？等等。
 
-#### 1.7.1 "Will CocoaPods stop development now that Swift has a built-in package manager?" “现在Swift已经有了内置的包管理器，CocoaPods会不会停止开发？”
+<span id = "1.7.1">
+## 1.7.1 "Will CocoaPods stop development now that Swift has a built-in package manager?" - “现在Swift已经有了内置的包管理器，CocoaPods会不会停止开发？”
 
 As of writing, the [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager) is in "early design and development" [[1\]](https://github.com/apple/swift-package-manager/blob/14f47ad34967c7e7808863fb29fa3f9baf5db7a4/README.md#a-work-in-progress). It does not currently support iOS, watch OS, or Objective-C [[2\]](https://github.com/apple/swift-package-manager/blob/14f47ad34967c7e7808863fb29fa3f9baf5db7a4/Documentation/Package.swift.md#depending-on-apple-modules-eg-foundation)[[3\]](https://github.com/apple/swift-package-manager/blob/14f47ad34967c7e7808863fb29fa3f9baf5db7a4/Documentation/PackageManagerCommunityProposal.md#support-for-other-languages). CocoaPods will continue development supporting both Swift and Objective-C while SPM develops. As SPM approaches maturity, we will evaluate the best course forward for CocoaPods and the CocoaPods community.
 
 到本文撰写为止，[Swift包管理器(SPM)](https://github.com/apple/swift-package-manager)还处在“早期设计和开发阶段”【[1](https://github.com/apple/swift-package-manager/blob/14f47ad34967c7e7808863fb29fa3f9baf5db7a4/README.md#a-work-in-progress)】。它当前并不支持iOS，watch OS，或者Objective-C【[2](https://github.com/apple/swift-package-manager/blob/14f47ad34967c7e7808863fb29fa3f9baf5db7a4/Documentation/Package.swift.md#depending-on-apple-modules-eg-foundation)】【[3](https://github.com/apple/swift-package-manager/blob/14f47ad34967c7e7808863fb29fa3f9baf5db7a4/Documentation/PackageManagerCommunityProposal.md#support-for-other-languages)】。在SPM开发的同时，CocoaPods也会持续开发以同时支持Swift和Objective-C。到SPM接近成熟的时候，我们将会评估CocoaPods和CocoaPods社区的最好的前进方向。
 
-#### 1.7.2 "Why not just use git submodules?"“为什么不只用git子模块？”
+<span id = "1.7.2">
+## 1.7.2 "Why not just use git submodules?" - “为什么不只用git子模块？”
 
 CocoaPods is **not** about downloading code. While it does do that, it’s arguably the least interesting part.
 
@@ -867,25 +1015,29 @@ Finally, even if you’re looking just for a downloader, consider that there are
 
 最后，即使你仅把CocoaPods看成一个下载器，实际上也使用了其他的SCMs而不只是git。从另一个角度来看，CocoaPods是个黑盒，从本地或HTTP位置控制子版本、Mercurial以及zip/tarball压缩。
 
-#### 1.7.3 “How can I donate to CocoaPods?” “如何向CocoaPods捐赠？”
+<span id = "1.7.3">
+## 1.7.3 “How can I donate to CocoaPods?” - “如何向CocoaPods捐赠？”
 
 TL;DR: While we very much appreciate the sentiment, the project (as an entity) does not accept financial donations. We have a [great blog post](https://blog.cocoapods.org/Why-we-dont-accept-donations/) on this.
 
 简单的说，我们非常感谢这份好意，本项目（作为一个实体）不接受经济捐赠。我们有一片关于这个的[博客帖子](https://blog.cocoapods.org/Why-we-dont-accept-donations/)。
 
-#### 1.7.4 “CocoaPods doesn’t do X, so it’s unusable.” “CocoaPods做不了X，所以它没什么用。”
+<span id = "1.7.4">
+## 1.7.4 “CocoaPods doesn’t do X, so it’s unusable.” - “CocoaPods做不了X，所以它没什么用。”
 
 First see point #2, then consider that unless you tell us about the missing feature and why it is important, it won’t happen at all. We don’t scour Twitter to look for work, so please file a [ticket](https://github.com/CocoaPods/CocoaPods/issues/new), or, better yet, in the form of a pull-request.
 
 请先看第二点（1.7.2），然后除非你告诉我们缺失了什么功能以及它为什么很重要，否则这种情况不可能存在。我们没有擦去Twitter以查看工作，因此请做一个 [标记](https://github.com/CocoaPods/CocoaPods/issues/new)，或者最好是以“拉取请求”的方式
 
-#### 1.7.5 “CocoaPods doesn’t do dependency resolution.” “CocoaPods并未做依赖解决方案。”
+<span id = "1.7.5">
+## 1.7.5 “CocoaPods doesn’t do dependency resolution.” - “CocoaPods并未做依赖解决方案。”
 
 CocoaPods has always done dependency resolution, but until version 0.35 it lacked automatic conflict resolution. As of now, CocoaPods can resolve any conflict that is possible to resolve.
 
 CocoaPods通常已经做了依赖解决，但在0.35版本之前都缺少自动处理冲突的解决方案。现在，CocoaPods已经能够解决所有可以解决的冲突。
 
-#### 1.7.6 “CocoaPods is bad for the community, because it makes it too easy for users to add many dependencies.” “CocoaPods对团队有害，因为它让用户太容易添加过多的依赖。”
+<span id = "1.7.6">
+## 1.7.6 “CocoaPods is bad for the community, because it makes it too easy for users to add many dependencies.” - “CocoaPods对团队有害，因为它让用户太容易添加过多的依赖。”
 
 This is akin to saying "we should not have cars", as they make us lazy and we forget walking/running. Or "we should not use [IDEs](http://programmers.stackexchange.com/questions/39798/being-ide-dependent-how-can-it-harm-me/39809#39809)" as they make us bad programmers, who can't code in editor and can't remember syntax. Furthermore, this reasoning applies to basically any means of fetching code (e.g. git) and as such is not a discussion worth having.
 
@@ -895,7 +1047,8 @@ What *is* worth discussing, however, is informing the user to be responsible. Ir
 
 然而值得讨论的东西是，要让用户负责任。非常讽刺的是，CocoaPods最初的开发者已经被说服了，也认为使用大量的依赖不是好主意。关于如何解决这个问题的切实可行的建议，你可以阅读[Manfred Stienstra](https://twitter.com/manfreds)写的[这篇博客帖子](http://www.fngtps.com/2013/a-quick-note-on-minimal-dependencies-in-ruby-on-rails/)。
 
-#### 1.7.7 “CocoaPods uses workspaces, which are considered user data. Why does it not use normal sub-projects?” “CocoaPods使用了工作空间，而工作空间被认为是用户数据。为什么不使用常见的子工程？”
+<span id = "1.7.7">
+## 1.7.7 “CocoaPods uses workspaces, which are considered user data. Why does it not use normal sub-projects?” -  “CocoaPods使用了工作空间，而工作空间被认为是用户数据。为什么不使用常见的子工程？”
 
 Starting from Xcode 4, [Apple introduced workspaces for this very purpose](http://developer.apple.com/library/ios/#featuredarticles/XcodeConcepts/Concept-Workspace.html).
 
@@ -909,7 +1062,8 @@ Note that CocoaPods itself does not require the use of a workspace. If you prefe
 
 注意CocoaPods自身并不需要使用工作空间。如果你更喜欢使用子工程，你也可以这么做，只要运行*pod install --no-integrat*，这将会让你可以按照你看着爽的方式将pod库整合到你的工程中。
 
-#### 1.7.8 “Why do I have to install Ruby to use CocoaPods?” “为什么我在使用CocoaPods前不得不安装Ruby？”
+<span id = "1.7.8">
+## 1.7.8 “Why do I have to install Ruby to use CocoaPods?” - “为什么我在使用CocoaPods前不得不安装Ruby？”
 
 You don’t, macOS comes with a Ruby 2.0.0 or newer pre-installed in /usr/bin/ruby which are our baselines and these should work out of the box.
 
