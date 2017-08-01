@@ -712,7 +712,7 @@ Interface Builder会基于你正约束的对象和你拖动手势的方向智能
 >
 >注意
 >
->你可以在幕布中的两个项目之间和场景的文档缩略图中的icon之间使用Control+拖动的手势。这在你试图给难以找到的项目，比如顶部或底部的布局引导，绘制约束时通常很有用。当你拖动到文档缩略图或从中拖出时，Interface Builder就不会基于手势方向过滤可能约束的列表。
+>你可以在幕布中的两个项目之间和场景的文档大纲中的icon之间使用Control+拖动的手势。这在你试图给难以找到的项目，比如顶部或底部的布局引导，绘制约束时通常很有用。当你拖动到文档大纲或从中拖出时，Interface Builder就不会基于手势方向过滤可能约束的列表。
 
 Interface Builder creates the constraints based on the views’ current frames. Therefore, you need to position the views carefully before you draw the constraints. If you line up the views based on Interface Builder’s guidelines, you should end up with a reasonable set of constraints. If necessary, you can always edit the constraints afterward.
 
@@ -864,15 +864,21 @@ The editor displays all the constraints affecting the currently selected view as
 
 ![Constraints_In_The_Canvas_2x.png](Constraints_In_The_Canvas_2x.png)
 
-#### 0.4.4.2 Listing Constraints in the Document Outline - 在文档结构中列出约束
+#### 0.4.4.2 Listing Constraints in the Document Outline - 在文档大纲中列出约束
 
 Interface Builder lists all the constraints in the document outline, grouping them under the view that holds them. Constraints are held by the closest view that contains both items in the constraint. For this calculation, each view contains itself and all its subviews, and the top and bottom layout guides are contained by the scene’s root view.
+
+Interface Builder 在文档大纲中列出了所有的约束，并将它们分组到持有它们的视图下面。约束由最近的视图持有，其中会包含约束中的两个项目。按照这个计算，每个视图包含了它自己和它的所有子视图，而顶部和底部布局指南由屏幕的根视图包含。
 
 ![Constraints_In_Document_Outline_2x.png](Constraints_In_Document_Outline_2x.png)
 
 Even though constraints could be spread around the outline, most constraints end up under the scene’s root view. If you want to make sure you’ve found all the constraints, expand the entire view hierarchy.
 
+尽管约束可以在结构图中展开，但大部分约束最后仍然在屏幕的根视图下面。如果你想要确保你已经找到了所有的约束，就展开整个视图层级。
+
 The constraints are listed using pseudocode. These listings are often long, and they frequently start with a similar set of views, so you may have to increase the width of the outline before you can see meaningful information. Selecting a constraint in the outline highlights that constraint in the canvas. Use this feature to help you quickly identify the constraint you want to examine.
+
+
 
 For simple scenes, the outline is a great place to glance over all the scene’s constraints. However, as the layout becomes more complex, it quickly becomes hard to find specific constraints. You are often better off examining the constraints one view at a time—either by selecting the view in the canvas or by examining the view in the Size inspector.
 
@@ -880,74 +886,126 @@ For simple scenes, the outline is a great place to glance over all the scene’s
 
 The Size inspector lists all the constraints affecting the currently selected view. Required constraints appear with a solid outline, and optional constraints appear with a dashed outline. The description lists important information about the constraint. It always includes the affected attribute and the other item in the constraint. It may also include the relationship, the constant value, and the multiplier or ratio.
 
+Size 检视板列出了所有影响当前选中视图的约束。必须的约束显示为实线轮廓，而可选的约束显示为虚线轮廓。描述列出了关于该约束的重要信息。它总是包括影响的属性和约束中的另一个项目。它也可能包括关系，常量，以及乘数或比例。
+
 ![Constraints_in_Size_Inspector_2x.png](Constraints_in_Size_Inspector_2x.png)
 
 The diagram at the top of the above screenshot shows which attributes are affected by constraints. You can filter the list of constraints by selecting one or more of the diagram’s attributes. The list then shows only those constraints affecting the selected attributes.
 
+在上面截屏的顶部的图像展示了哪些属性被约束影响了。你可以通过选择一条或多条图中的属性过滤约束的列表。然后列表只会展示那些影响选中属性的约束。
+
 For more information, see Viewing the Complete List of Layout Constraints for an Item in Auto Layout Help .
+
+更多信息参见 Auto Layout Help 中的 Viewing the Complete List of Layout Constraints for an Item 。
 
 #### 0.4.4.4 Examining and Editing Constraints - 检查和编辑约束
 
 When you select a constraint either in the canvas or in the document outline, the Attribute inspector shows all of the constraint’s attributes. This includes all the values from the constraint equation: the first item, the relation, the second item, the constant, and the multiplier. The Attribute inspector also shows the constraint’s priority and its identifier.
+
+当你在幕布或在文档大纲中选中一条约束时，Attribute 检视板展示了该约束的所有属性。这包括约束方程中的所有值：第一个项目、关系、第二个项目、常量和乘数。Attribute 检视板也展示了约束的优先级和标识符。
 
 ![Editing_Constraints_in_the_Attribute_Inspector_2x.png](Editing_Constraints_in_the_Attribute_Inspector_2x.png)
 
 >NOTE
 >
 >The constraint’s identifier property lets you provide a descriptive name so that you can more easily identify the constraint in console logs and other debugging tasks.
+>
+>注意
+>
+>约束的标识符属性让你可以提供一个描述性的名称，以便在控制台日志和其他调试任务中更容易的识别该约束。
 
 You can also mark the constraint as a placeholder. These constraints exist only at design time. They are not included in the layout when the app runs. You typically add placeholder constraints when you plan to dynamically add constraints at runtime. By temporarily adding the constraints needed to create a nonambiguous, satisfiable layout, you clear out any warnings or errors in Interface Builder.
 
+你也可以将约束标记为一个占位符。这些约束仅在设计时存在。当app运行时它们不会被包含在布局中。通常在计划在运行时动态的添加约束时添加占位符约束。通过暂时性的添加创建非歧义可满足的布局所需的约束，你可以在 Interface Builder 中清除任何警告和错误。
+
 You can freely modify the Constant, Priority, Multiplier, Relation, Identifier, and Placeholder attributes. For the first and second item, however, your options are more limited. You can swap the first and second item (inverting the multiplier and constant, as needed). You can also change the item’s attribute, but you cannot change the item itself. If you need to move the constraint to a completely different item, delete the constraint and replace it with a new constraint.
 
+你可以自由的修改 Constant、Priority、Multiplier、Relation、Identifier 和 Placeholder 属性。然而，对于第一个和第二个项目，你的可选操作就更加受限了。你可以交换第一个和第二个项目（必要时电刀乘数和常量）。你也可以变更项目的属性，但是不能变更项目自身。如果你需要将约束移到一个完全不同的项目，只有删除这个约束再用一个新的约束来代替它。
+
 Some editing is also possible directly from the Size inspector. Clicking the Edit button in any of the constraints brings up a popover where you can change the constraint’s relationship, constant, priority, or multiplier. To make additional changes, double-click the constraint to select it and open it in the Attribute inspector.
+
+某些编辑也可能直接在 Size 检视板中进行。在任何约束中点击 Edit 按钮会打开一个弹窗，在弹窗中你可以变更约束的关系、常量、优先级或者乘数。要做更多的修改，双击约束选中并在 Attribute 检视板中打开它。
 
 ![Editing_Constraints_in_the_Attribute_Inspector_2x.png](Editing_Constraints_in_the_Attribute_Inspector_2x.png)
 
 For more information, see Editing Auto Layout Constraints in Auto Layout Help .
 
+更多信息，参见 Auto Layout Help 中的 Editing Auto Layout Constraints。
+
 ### 0.4.5 Setting Content-Hugging and Compression-Resistance Priorities - 设置内容紧靠优先级和压缩阻力优先级
 
 To set a view’s content-hugging and compression-resistance priorities (CHCR priorities), select the view either in the canvas or in the document outline. Open the Size inspector, and scroll down until you find the Content Hugging Priority and Compression Resistance Priority settings.
+
+要设置一个视图的内容紧靠和压缩阻力优先级（CHCR优先级），就要在幕布或文档大纲中选中视图。打开 Size 检视板，向下滚动直到找到 Content Hugging Priority 和 Compression Resistance Priority 设置。
 
 ![CHCR_Priorities_2x.png](CHCR_Priorities_2x.png)
 
 You can also set the view’s intrinsic size in Interface Builder. By default, Interface Builder uses the size returned from the view’s [intrinsicContentSize](https://developer.apple.com/reference/uikit/uiview/1622600-intrinsiccontentsize) method. However, if you need a different size at design time, you can set a placeholder intrinsic content size. This placeholder affects the size of the view only in Interface Builder. It does not have any effect on the view at runtime.
 
+你也可以在 Interface Builder 中设置视图的固有尺寸。默认情况下，Interface Builder 使用从视图的 [intrinsicContentSize](https://developer.apple.com/reference/uikit/uiview/1622600-intrinsiccontentsize) 方法返回的尺寸。然而，如果你在设计时需要一个不同的尺寸，你可以设置一个占位符固有内容尺寸。这个占位符只影响在 Interface Builder 中的视图的尺寸。对于运行时的视图则没有任何影响。
+
 For more information, see Setting the Placeholder Intrinsic Size for a Custom View in Auto Layout Help .
+
+更多信息，参见 Auto Layout Help 中的 Setting the Placeholder Intrinsic Size for a Custom View。
 
 ### 0.4.6 iOS-Only Features - 仅iOS才有的特性
 
 iOS adds a few unique features that interact with Auto Layout. These include the top and bottom layout guides, a view’s layout margins, a view’s readable content guides, and a view’s semantic content.
 
-#### 0.4.6.1 Top and Bottom Layout Guides - 顶部和底部布局指南
+iOS 加入了一些与 Auto Layout 相互作用的独有特性。它们包括顶部和底部布局引导、视图的布局留边、视图的可读内容引导，以及视图的语义内容。
+
+#### 0.4.6.1 Top and Bottom Layout Guides - 顶部和底部布局引导
 
 The top and bottom layout guides represent the upper and lower edge of the visible content area for the currently active view controller. If you don’t want your content to extend under transparent or translucent UIKit bars (for example, a status bar, navigation bar, or tab bar), use Auto Layout to pin your content to the respective layout guide.
 
+顶部和底部布局引导表示当前活跃的视图控制器的可见内容区域的上下边缘。如果你不想你的内容扩展到透明或半透明的 UIKit 栏（如，状态栏、导航栏、或标签栏）的下方，就使用 Auto Layout 把你的内容偏移设置到相应的布局引导上。
+
 The layout guides adopt the [UILayoutSupport](https://developer.apple.com/reference/uikit/uilayoutsupport) protocol, giving the guide a `length` property, which measures the distance between the guide and the respective edge of the view. Specifically:
 
+布局引导遵从 [UILayoutSupport](https://developer.apple.com/reference/uikit/uilayoutsupport) 协议，该协议给引导一个 `length` 属性，这个属性测出了该引导和视图的相应的边缘的距离。特别的：
+
 - For the top layout guide, `length` indicates the distance, in points, between the top of a view controller’s view and the bottom of the bottommost bar that overlays the view. 
-- For the bottom layout guide, `length` indicates the distance, in points, between the bottom of a view controller’s view and the top the bar (such as a tab bar) that overlays the view. 
+- For the bottom layout guide, `length` indicates the distance, in points, between the bottom of a view controller’s view and the top of the bar (such as a tab bar) that overlays the view. 
+- 对于顶部布局引导，`length` 以点为单位，指示了视图控制器的视图的顶部和覆盖在视图上的最底部栏的底部之间的距离。
+- 对于底部布局引导，`length` 以点为单位，指示了视图控制器的视图的底部和覆盖在视图上的栏（如tab bar）的顶部的底部之间的距离。
 
 These guides can also act as items in a constraint, supporting the top, bottom, and height attributes. Typically, you constrain views to the top layout guide’s bottom attribute or to the bottom layout guide’s top attribute. The guides also provide `topAnchor`, `bottomAnchor`, and `heightAnchor` properties, to simplify the programmatic creation of constraints.
 
+这些引导也可以作为约束的项目，支持顶部、底部和高度属性。通常，你将视图约束到顶部布局引导的底部属性或者底部布局引导的顶部属性。这些引导也可以提供`topAnchor`、`bottomAnchor` 和 `heightAnchor` 属性，以简化约束的编程创建。
+
 Interface Builder automatically offers the top and bottom layout guides as options when creating constraints to the root view’s top or bottom edge as appropriate. If the layout guide is the view’s nearest neighbor, Interface Builder uses the guide by default. When using the Pin tool you can switch between the layout guide and the root view’s edge, as needed. Just click on the disclosure triangle.
+
+Interface Builder 在创建到根视图的顶部或底部边缘的约束时，适当的自动提供顶部和底部布局引导作为可选项。如果布局引导是视图的最近相邻视图，Interface Builder 默认就会使用这个引导。当使用 Pin 工具时，你可以在布局引导和根视图边缘按需切换。只需点击举报三角形。
 
 #### 0.4.6.2 Layout Margins - 布局留边
 
-Auto Layout defines margins for each view. These margins describe the preferred spacing between the edge of the view and its subviews. You can access the view’s margins using either the [layoutMargins](https://developer.apple.com/reference/uikit/uiview/1622566-layoutmargins) or [layoutMarginsGuide](https://developer.apple.com/reference/uikit/uiview/1622651-layoutmarginsguide) property. The layoutMargins property lets you get and set the margins as a [UIEdgeInsets](https://developer.apple.com/reference/uikit/uiedgeinsets) structure. The layoutMarginsGuide property provides read-only access to the margins as a [UILayoutGuide](https://developer.apple.com/reference/uikit/uilayoutguide) object. Additionally, use the [preservesSuperviewLayoutMargins](https://developer.apple.com/reference/uikit/uiview/1622653-preservessuperviewlayoutmargins) property to determine how the view’s margins interact with its superview’s margins.
+Auto Layout defines margins for each view. These margins describe the preferred spacing between the edge of the view and its subviews. You can access the view’s margins using either the [layoutMargins](https://developer.apple.com/reference/uikit/uiview/1622566-layoutmargins) or [layoutMarginsGuide](https://developer.apple.com/reference/uikit/uiview/1622651-layoutmarginsguide) property. The `layoutMargins` property lets you get and set the margins as a [UIEdgeInsets](https://developer.apple.com/reference/uikit/uiedgeinsets) structure. The `layoutMarginsGuide` property provides read-only access to the margins as a [UILayoutGuide](https://developer.apple.com/reference/uikit/uilayoutguide) object. Additionally, use the [preservesSuperviewLayoutMargins](https://developer.apple.com/reference/uikit/uiview/1622653-preservessuperviewlayoutmargins) property to determine how the view’s margins interact with its superview’s margins.
+
+Auto Layout 定义了每一个视图的留边。这些留边描述了视图的边缘与它的子视图之间的优选间隔。你可以使用 [layoutMargins](https://developer.apple.com/reference/uikit/uiview/1622566-layoutmargins) 或 [layoutMarginsGuide](https://developer.apple.com/reference/uikit/uiview/1622651-layoutmarginsguide) 属性访问视图的留边。`layoutMargins`属性让你可以按照 [UIEdgeInsets](https://developer.apple.com/reference/uikit/uiedgeinsets) 结构获取和设置留边。`layoutMarginsGuide`属性按照 [UILayoutGuide](https://developer.apple.com/reference/uikit/uilayoutguide) 对象只读的访问留边。另外，使用 [preservesSuperviewLayoutMargins](https://developer.apple.com/reference/uikit/uiview/1622653-preservessuperviewlayoutmargins) 属性可以决定视图的留边如何与它的子视图的留边交互。
 
 The default margins are 8 points on each side. You can modify these margins based on your app’s needs.
+
+在每条边上默认留边是8个点。你可以按照你的app的需求修改这些留边。
 
 >NOTE
 >
 >The system sets and manages the margins of a view controller’s root view. The top and bottom margins are set to zero points, making it easy to extend content under the bars (if any). The side margins vary depending on how and where the controller is presented, but can be either 16 or 20 points. You cannot change these margins.
+>
+>注意
+>
+>系统设置和管理视图控制器的根视图的留边。顶部和底部留边被设置成0个点，让它更好的在各种栏（如果有）以下扩展内容。两边的留边会根据视图控制器如何以及在哪儿展示而发生变化，但只可能是16或20个点。你不能变更这些留边。
 
 When constraining a view to its superview, you typically use the layout margins instead of the view’s edge. In UIKit, the [NSLayoutAttribute](https://developer.apple.com/reference/appkit/nslayoutattribute) enumeration defines a number of attributes to represent top, bottom, leading, trailing, left, and right margins. It also includes attributes for the center X and center Y relative to the margins.
 
+当把一个视图约束到它的父视图时，通常使用布局留边替代视图的边缘。在 UIKit 中， [NSLayoutAttribute](https://developer.apple.com/reference/appkit/nslayoutattribute) 枚举定义了一些属性表示顶部、底部、前部、后部、左边和右边的留边。它也包含相对于留边的X轴中心和Y轴中心的属性。
+
 In Interface Builder, Control-dragging a constraint between a view and its superview uses the margin attributes by default. When using the Pin tool, you can toggle the “Constrain to margins” checkbox. If it’s checked, the resulting constraints use the superview’s margin attributes. If it’s unchecked, they use the superview’s edges. Similarly, when editing a constraint in the Attribute inspector, the First Item and Second Item’s pop-down menus include a “Relative to margin” option. Select this item to use the margin attribute. Deselect it to use the edge.
 
-Finally, when programmatically creating constraints to the superview’s margins, use the layoutMarginsGuide property and create constraints to the layout guide directly. This lets you use the guide’s layout anchors to create your constraints, providing a streamlined API that is easier to read.
+在 Interface Builder 中，按住 Control 并在视图和它的父视图之间拖出约束时，会默认使用留边属性。当使用 Pin 工具时，你可以勾选 “Constrain to margins” 选择框。如果被选中，结果约束就会使用父视图的留边属性。如果没有选中，他们就会使用父视图的边缘。类似的，当在 Attribute 检视板中编辑约束时，First Item 和 Second Item 的下拉菜单都包括了一个 “Relative to margin” 选项。选中这个项目将使用留边属性。取消选中则使用边缘。
+
+Finally, when programmatically creating constraints to the superview’s margins, use the `layoutMarginsGuide` property and create constraints to the layout guide directly. This lets you use the guide’s layout anchors to create your constraints, providing a streamlined API that is easier to read.
+
+最后，当编程创建约束到父视图的留边时，就使用`layoutMarginsGuide`属性创建直接到布局引导的约束。这个让你可以使用引导的布局锚点创建你的约束，提供更易阅读的流线型的API。
 
 #### 0.4.6.3 Readable Content Guides - 可读内容指南
 
