@@ -1011,59 +1011,135 @@ Finally, when programmatically creating constraints to the superview’s margins
 
 The view’s [readableContentGuide](https://developer.apple.com/reference/uikit/uiview/1622644-readablecontentguide) property contains a layout guide that defines the maximum optimal width for text objects inside the view. Ideally, the content is narrow enough that users can read it without having to move their head.
 
+视图的 [readableContentGuide](https://developer.apple.com/reference/uikit/uiview/1622644-readablecontentguide) 属性包括一个定义视图内的文本对象的最大可选宽度的布局引导。理想情况下，内容应该足够窄以确保用户可以不用移动脑袋就读完它。
+
 This guide is always centered inside the view’s layout margin and never extends beyond those margins. The size of the guide also varies depending on the size of the system’s dynamic type. The system creates wider guides when the user selects larger fonts, because users typically hold the device farther from them while reading.
 
+这个引导总是在视图的布局留白内部的中心，并且永远不会超过那些留白。引导的尺寸也会根据系统的动态类型的尺寸发生变化。当用户选择更大的字体时，系统就创建更宽的引导，因为用户通常在阅读时会把设备放在更远的地方。
+
 In Interface Builder, you can set whether the view’s margins represent the layout margins or the readable content guide. Select the view (typically the view controller’s root view), and open the Size inspector. If you select the Follow Readable Width checkbox, any constraints drawn to the view’s margins use the readable content guide instead.
+
+在 Interface Builder 中，你可以设置视图的留边是否代表布局留边或者可读内容引导。选择视图（通常是视图控制器的根视图），然后打开 Size 检视板。如果你选中 Follow Readable Width 勾选框，任何画在视图的留边上的约束都会使用可读内容引导替代。
 
 >NOTE
 >
 >For most devices there is little or no difference between the readable content guides and the layout margins. The difference becomes obvious only when working on an iPad in landscape orientation.
+>
+>注意
+>
+>对于这里的大部分设备，在可读内容引导和布局留边之间没有或很少不同。只有当在iPad上工作并在横着时这个不同之处才会变得明显。
 
 #### 0.4.6.4 Semantic Content - 语义内容
 
 If you lay out your views using leading and trailing constraints, the views automatically flip positions when switching between left-to-right languages (like English) and right-to-left languages (like Arabic). However, some interface elements should not change their position based on the reading direction. For example, buttons that are based on physical directions (up, down, left, and right) should always stay in the same relative orientation.
 
+如果你使用前部和尾部约束布局你的视图，当在从左到右的语言（如英语）和从右向左的语言（如阿拉伯语）之间切换时视图会自动的翻转位置。然而，某些接口元素应该不要基于阅读方向变更位置。例如，基于物理方向（上、下、左、右）的按钮应该总是停留在相同的相对方向。
+
 The view’s [semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute) property determines whether the view’s content should flip when switching between left-to-right and right-to-left languages.
+
+视图的 [semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute) 属性决定视图内容在从左到右的语言和从右向左的语言之间切换时是否翻转。
 
 In Interface Builder, set the Semantic option in the Attribute inspector. If the value is Unspecified, the view’s content flips with the reading direction. If it is set to Spatial, Playback, or Force Left-to-Right, the content is always laid out with the leading edges to the left and trailing edges to the right. Force Right-to-Left always lays out the content with the leading edges to the right and the trailing edges to the left.
 
-### 0.4.7 Rules of Thumb - 缩略规则
+在 Interface Builder ，在 Attribute 检视板中设置 Semantic 选项。如果值是 Unspecified，视图的内容会随着阅读方向翻转。如果值被设置成 Spatial、Playback 或者 Force Left-to-Right，内容总是按照前部边缘是左边而尾部边缘是右边布局。Force Right-to-Left 总是按照前部边缘是右边而尾部边缘是左边布局内容。
+
+### 0.4.7 Rules of Thumb - 简单规则
 
 The following guidelines will help you succeed with Auto Layout. There are undoubtedly a number of legitimate exceptions for each of these rules. However, if you decide to veer from them, pause and carefully consider your approach before proceeding.
 
+下面的指南将帮助你成功的自动布局。毫无疑问下面每条规则都会有例外。然而，如果你决定做出与之不同的改变，请暂停下来，自己考虑你的方案再继续。
+
 - Never specify a view’s geometry using its frame, bounds, or center properties. 
+- 永远不要使用视图的frame、bounds 或者 center 属性指定视图的几何关系。
 
 - Use stack views wherever possible 
+
   Stack views manage the layout of their content, greatly simplifying the constraint logic needed for the rest of the layout. Resort to custom constraints only when a stack view doesn’t provide the behavior you need. 
+  
+- 尽可能的使用栈视图
+
+  栈视图管理了它们的内容的布局，极大的简化了其它布局所需的约束逻辑。只有当栈视图无法提供你需要的行为时才采用自定义约束。
 
 - Create constraints between a view and its nearest neighbor. 
+
   If you have two buttons next to each other, constrain the leading edge of the second button to the trailing edge of the first. The second button generally should not have a constraint that reaches across the first button to the view’s edge. 
 
+- 在一个视图和它最近的相邻视图之间创建约束。
+
+  如果你有两个相邻的按钮，就将第二个按钮的头部边缘约束到第一个按钮的尾部边缘。第二个按钮一般不应该穿过第一个按钮到达视图的边缘。
+
 - Avoid giving views a fixed height or width. 
+
   The whole point of Auto Layout is to dynamically respond to changes. Setting a fixed size removes the view’s ability to adapt. However, you may want to set a minimum or maximum size for the view. 
+
+- 避免给视图以固定的宽度或高度。
+
+  整个 Auto Layout 的点都是动态响应变化的。设置固定的尺寸会损失视图的适配能力。除非你想要设置视图的最小或最大尺寸。
 
 - If you are having trouble setting constraints, try using the Pin and Align tools. Although these tools can be somewhat slower than Control-dragging, they do let you verify the exact values and items involved before creating the constraint. This extra sanity check can be helpful, especially when you are first starting out. 
 
+- 如果你在设置约束时遇到困难，尝试使用 Pin 和 Align 工具。尽管这些工具可能比起 Control+拖动 有一点慢，然而它们让你在创建约束之前就可以核实所需的准确值和项目。这种超出正常的核实是有帮助的，特别是当你第一次开始布局时。
+
 - Be careful when automatically updating an item’s frame. If the item does not have enough constraints to fully specify its size and position, the update’s behavior is undefined. Views often disappear either because their height or width gets set to zero or because they are accidentally positioned off screen. 
+
   You can always try to update an item’s frame, and then undo the change, if necessary. 
 
+- 当自动更新项目的框架时请小心。如果项目没有足够的约束能完全指定其位置和尺寸，更新行为也是不确定的。视图常常会由于它们的高度或宽度被设置成0或者由于意外的被放到屏幕之外而消失。
+
 - Make sure all the views in your layout have meaningful names. This makes it much easier to identify your views when using the tools. 
+
   The system automatically names labels and buttons based on their text or title. For other views, you may need to set an Xcode specific label in the Identity inspector (or by double-clicking and editing the view’s name in the document outline). 
 
+- 确保你的布局中的所有视图都有有意义的名字。这会让你在使用工具时更容易辨识你的视图。
+
+  系统会自动基于其中的文本或标题命名标签和按钮。对于其他视图，你可能就要在 Identity 检视板中设置一个 Xcode 特殊标签（或者通过在文档大纲中双击并编辑视图的名字）。
+
 - Always use leading and trailing constraints instead of right and left. 
+
   You can always adjust how the view interprets its leading and trailing edges using its [semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute) property (iOS) or its [userInterfaceLayoutDirection](https://developer.apple.com/reference/appkit/nsview/1483254-userinterfacelayoutdirection) property (OS X). 
+
+- 总是使用前部和尾部约束而不是左和右。
+
+  你总是可以使用 [semanticContentAttribute](https://developer.apple.com/reference/uikit/uiview/1622461-semanticcontentattribute) 属性（iOS）或 [userInterfaceLayoutDirection](https://developer.apple.com/reference/appkit/nsview/1483254-userinterfacelayoutdirection) 属性（OS X）调整视图对其前部和尾部边缘的解释。
 
 - In iOS, when constraining an item to the edge of the view controller’s root view, use the following constraints: 
 
-  - **Horizontal constraints**. For most controls, use a zero-point constraint to the layout margins. The system automatically provides the correct spacing based on what the device is and how the app presents the view controller. 
-    For text objects that fill the root view from margin to margin, use the readable content guides instead of the layout margins. 
-    For items that need to fill the root view from edge to edge (for example, background images), use the view’s leading and trailing edges. 
-  - **Vertical constraints**. If the view extends under the bars, use the top and bottom margins. This is particularly common for scroll views, allowing the content to scroll under the bars. Note, however, that you may need to modify the scroll view’s [contentInset](https://developer.apple.com/reference/uikit/uiscrollview/1619406-contentinset) and [scrollIndicatorInsets](https://developer.apple.com/reference/uikit/uiscrollview/1619427-scrollindicatorinsets) properties to correctly set the content’s initial position. 
-    If the view does not extend under the bars, constrain the view to the top and bottom layout guides instead. 
+- 在 iOS 中，当把一个项目约束到视图控制器的根视图的边缘，请使用下面的约束：
+
+  - **Horizontal constraints**. 
+     - For most controls, use a zero-point constraint to the layout margins. The system automatically provides the correct spacing based on what the device is and how the app presents the view controller. 
+     - For text objects that fill the root view from margin to margin, use the readable content guides instead of the layout margins. 
+     - For items that need to fill the root view from edge to edge (for example, background images), use the view’s leading and trailing edges. 
+
+  - **水平约束**。
+     - 对于大多数控件，使用相对布局留白0个点的约束。系统会基于设备是什么以及app如何展示视图控制器自动提供正确的间隔。
+     - 对于从一边留白到另一边留白填充根视图的文本对象，使用可读内容引导取代布局留白。
+     - 对于需要从边缘到边缘填充根视图的项目（例如，背景图），使用视图的前部和尾部边缘。
+
+  - **Vertical constraints**. 
+     - If the view extends under the bars, use the top and bottom margins. This is particularly common for scroll views, allowing the content to scroll under the bars. Note, however, that you may need to modify the scroll view’s [contentInset](https://developer.apple.com/reference/uikit/uiscrollview/1619406-contentinset) and [scrollIndicatorInsets](https://developer.apple.com/reference/uikit/uiscrollview/1619427-scrollindicatorinsets) properties to correctly set the content’s initial position. 
+     - If the view does not extend under the bars, constrain the view to the top and bottom layout guides instead. 
+
+  - **垂直约束**。
+     - 如果视图扩展的栏下，就使用顶部和底部留白。这对于允许内容滚动到栏下的 scroll view 来说特别常见。但是，注意，你可能要修改 scroll view 的 [contentInset](https://developer.apple.com/reference/uikit/uiscrollview/1619406-contentinset) 和 [scrollIndicatorInsets](https://developer.apple.com/reference/uikit/uiscrollview/1619427-scrollindicatorinsets) 属性正确的设置内容的初始位置。
+     - 如果视图不扩展到栏下，则使用顶部和底部布局引导约束视图。
 
 - When programmatically instantiating views, be sure to set their [translatesAutoresizingMaskIntoConstraints](https://developer.apple.com/reference/uikit/uiview/1622572-translatesautoresizingmaskintoco) property to NO. By default, the system automatically creates a set of constraints based on the view’s frame and its autoresizing mask. When you add your own constraints, they inevitably conflict with the autogenerated constraints. This creates an unsatisfiable layout. 
 
+- 当以编程方式实例化视图时，确保将它们的 [translatesAutoresizingMaskIntoConstraints](https://developer.apple.com/reference/uikit/uiview/1622572-translatesautoresizingmaskintoco) 属性设置成 NO。默认情况下，系统会基于视图的 frame 和 autoresizing mask 自动的创建一组约束。当你添加你自己的约束时，它们必然会与自动生成的约束相冲突。这就会产生不可满足的布局。
+
 - Be aware that OS X and iOS calculate their layouts differently. 
+
   In OS X, Auto Layout can modify both the contents of a window and the window’s size. 
+
   In iOS, the system provides the size and layout of the scene. Auto Layout can modify only the contents of the scene. 
+
   These differences seem relatively minor, but they can have a profound impact on how you design your layout, especially on how you use priorities.
+  
+- 注意 OS X 和 iOS 计算布局时的不同。
+  
+  在 OS X 中，Auto Layout 可以修改 window 的内容和尺寸。
+  
+  在 iOS 中，系统会提供场景的尺寸和布局。Auto Layout 只能修改场景的内容。
+  
+  这些不同似乎相当微小，但是它们在你如何设计你的布局时有巨大的影响，尤其是在你如何使用优先级时。
