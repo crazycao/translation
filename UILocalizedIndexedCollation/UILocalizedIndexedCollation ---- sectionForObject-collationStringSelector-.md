@@ -26,7 +26,7 @@ A model object of the application that is part of the data model for the table v
 
 A selector that identifies a method returning an identifying string for object that is used in collation. The method should take no arguments and return an [NSString](https://developer.apple.com/documentation/foundation/nsstring?language=objc) object. For example, this could be a name property on the object.
 
-标识方法的选择器，返回用在整理中的对象的标识字符串 。这个方法应该没有参数并返回一个 [NSString](https://developer.apple.com/documentation/foundation/nsstring?language=objc) 对象。例如，可以是对象的名称属性。
+标识方法的选择器，返回在整理对象时使用的标识字符串。这个方法应该没有参数并返回一个 [NSString](https://developer.apple.com/documentation/foundation/nsstring?language=objc) 对象。例如，可以是对象的名称属性。
 
 ## Return Value
 
