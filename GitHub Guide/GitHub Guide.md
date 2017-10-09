@@ -1,4 +1,4 @@
-#GitHub Guides
+# GitHub Guides
 
 原文链接：[https://guides.github.com/activities/hello-world/](https://guides.github.com/activities/hello-world/)
 
@@ -20,7 +20,7 @@ The **Hello World** project is a time-honored tradition in computer programming.
 - 修改文件并通过提交推动改动到GitHub
 - 打开和合并一个拉取请求
 
-#What is GitHub? 什么是GitHub？
+## What is GitHub? 什么是GitHub？
 
 GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
 
@@ -30,7 +30,7 @@ This tutorial teaches you GitHub essentials like repositories, branches, commits
 
 该辅导将教会你GitHub的基本要素，如仓库、分支、提交以及拉取请求。你可以创建你自己的Hello World仓库并且学习GitHub的拉取请求工作流、创建和检查代码的常用方式。
 
-###No coding necessary 不需要编码
+### No coding necessary 不需要编码
 
 To complete this tutorial, you need a [GitHub.com account](http://github.com/) and Internet access. You don’t need to know how to code, use the command line, or install Git (the version control software GitHub is built on).
 
@@ -40,7 +40,7 @@ To complete this tutorial, you need a [GitHub.com account](http://github.com/) a
 
 >提示：在独立的浏览器窗口（或标签）打开这篇指南，这样你就能一边看着指南一边完成辅导中的步骤。
 
-#Step 1. Create a Repository 步骤1.创建仓库
+## Step 1. Create a Repository 步骤1.创建仓库
 A repository is usually used to organize a single project. Repositories can contain folders and files, images, videos, spreadsheets, and data sets – anything your project needs. We recommend including a *README*, or a file with information about your project. GitHub makes it easy to add one at the same time you create your new repository. It also offers other common options such as a license file.
 
 仓库通常用于组织一个工程。仓库可以包含文件夹和文件、图像、视频、电子表格以及数据集合——你的工程需要的任何东西。我们建议你包含一个*README*文件，或者一个记录关于工程信息的文件。GitHub为了方便帮你在创建新仓库时添加了一个（*README*文件）。它也可以提供其他通用设置，如许可文件。
@@ -49,7 +49,7 @@ Your *hello-world* repository can be a place where you store ideas, resources, o
 
 你的*hello-world*仓库可以是一个你想存放点子、资源，或者分支是与其他人分享和讨论内容的地方。
 
-###To create a new repository 创建一个新仓库
+### To create a new repository 创建一个新仓库
 
 1. In the upper right corner, next to your avatar or identicon, click **"+"** and then select **New repository**.
 2. Name your repository hello-world.
@@ -69,7 +69,7 @@ Click **Create repository**.
 
 点击**创建仓库**。
 
-#Step 2. Create a Branch 步骤2.创建分支
+## Step 2. Create a Branch 步骤2.创建分支
 Branching is the way to work on different versions of a repository at one time.
 
 分支是同时在仓库的不同版本上工作的方法。
@@ -116,7 +116,7 @@ Here at GitHub, our developers, writers, and designers use branches for keeping 
 
 在GitHub中，我们的开发者、编写者和设计者使用不同分支持续修正bug，在*master*（生产）分支之外专注工作。当修改准备好了，他们就将他们的分支合并到*master*。
 
-###To create a new branch 创建一个新分支
+### To create a new branch 创建一个新分支
 
 1. Go to your new repository *hello-world*.
 2. Click the drop down at the top of the file list that says **branch: master**.
@@ -136,7 +136,7 @@ Now you have two branches, *master* and *readme-edits*. They look exactly the sa
 
 现在你有两个分支了，*master*和*readme-edits*。它们看起来完全一样，但是不会太久！下一步我们就将添加我们的修改到新的分支。
 
-#Step 3. Make and commit changes 修改和提交改动
+## Step 3. Make and commit changes 修改和提交改动
 Bravo! Now, you’re on the code view for your *readme-edits* branch, which is a copy of *master*. Let’s make some edits.
 
 好的！现在你已经在*readme-edits*分支的代码界面了，这是*master*分支的一份拷贝。让我们来做一些编辑。
@@ -145,7 +145,7 @@ On GitHub, saved changes are called *commits*. Each commit has an associated *co
 
 在GitHub上，保存改动被称为*提交*。每一个提交有一个相关联的*提交消息*，它解释了为什么要做一个特别的改动。提交消息捕获你改动的历史，因此其他投稿人可以理解你做了什么以及为什么。
 
-###Make and commit changes 改动和提交改动
+### Make and commit changes 改动和提交改动
 
 1. Click the *README.md* file.
 2. Click the ✏️ pencil icon in the upper right corner of the file view to edit.
@@ -167,7 +167,7 @@ These changes will be made to just the *README* file on your *readme-edits* bran
 
 这些改动仅被放入了*readme-edits*分支的*README*文件，因此现在该分支与*master*包含不同的内容。
 
-#Step 4. Open a Pull Request 打开一个拉取请求
+## Step 4. Open a Pull Request 打开一个拉取请求
 Nice edits! Now that you have changes in a branch off of *master*, you can open a *pull request*.
 
 编辑好了！现在你已经修改了*master*之外的分支，你可以打开一个*拉取请求*。
@@ -188,7 +188,7 @@ You can even open pull requests in your own repository and merge them yourself. 
 
 你甚至可以在你自己的仓库中打开一个拉取请求并且自己合并它们。这是在为大工程工作之前学习GitHub流的重要方式。
 
-###Open a Pull Request for changes to the README 打开对README的修改的拉取请求
+### Open a Pull Request for changes to the README 打开对README的修改的拉取请求
 
 1.Click the **Pull Request** tab, then from the Pull Request page, click the green **New pull request** button. 
 
@@ -228,7 +228,7 @@ When you’re done with your message, click **Create pull request**!
 
 >提示：你可以使用表情，并可以拖动图像和gif放入注释和拉取请求。
 
-#Step 5. Merge your Pull Request 步骤5.合并你的拉取请求
+## Step 5. Merge your Pull Request 步骤5.合并你的拉取请求
 In this final step, it’s time to bring your changes together – merging your *readme-edits* branch into the *master* branch.
 
 在这最后的步骤里，是时候把你的改动放到一起了——合并你的*readme-edits*分支到*master*分支。
@@ -245,7 +245,7 @@ In this final step, it’s time to bring your changes together – merging your 
 
 ![merge-button.png](https://guides.github.com/activities/hello-world/merge-button.png)
 
-#Celebrate! 祝贺你！
+# Celebrate! 祝贺你！
 
 By completing this tutorial, you’ve learned to create a project and make a pull request on GitHub! 
 
