@@ -88,7 +88,7 @@ Traditionally, apps laid out their user interface by programmatically setting th
 
 传统的方式是，app通过编程在视图层级中设置每一个视图的frame来布局它们的用户界面。这个frame地应为视图在其父视图坐标系统中的起始点、高度和宽度。
 
-![Figure 0-1](layout_views_2x.png)
+![Figure 0-1](images/layout_views_2x.png)
 
 To lay out your user interface, you had to calculate the size and position for every view in your view hierarchy. Then, if a change occurred, you had to recalculate the frame for all the effected views.
 
@@ -114,7 +114,7 @@ Auto Layout defines your user interface using a series of constraints. Constrain
 
 Auto Layout使用一系列约束定义你的用户界面。约束通常表示两个视图之间的关系。然后Auto Layout基于这些约束计算每个视图的尺寸和定位。这会产生能动态响应内部和外部变化的布局。
 
-![Figure 0-2](layout_constraints_2x.png)
+![Figure 0-2](images/layout_constraints_2x.png)
 
 The logic used to design a set of constraints to create specific behaviors is very different from the logic used to write procedural or object-oriented code. Fortunately, mastering Auto Layout is no different from mastering any other programming task. There are two basic steps: First you need to understand the logic behind constraint-based layouts, and then you need to learn the API. You’ve successfully performed these steps when learning other programming tasks. Auto Layout is no exception.
 
@@ -153,7 +153,7 @@ To further fine-tune the layout, you can modify the stack view’s properties us
 
 要进一步微调布局，你可以使用Attributes检查器修改堆栈视图的属性。例如，下面的例子使用8个点的间距和Fills Equally分布。
 
-![Figure 0-3](IB_StackView_Simple_2x.png)
+![Figure 0-3](images/IB_StackView_Simple_2x.png)
 
 The stack view also bases its layout on the arranged views’ content-hugging and compression-resistance priorities. You can modify these using the Size inspector.
 
@@ -171,7 +171,7 @@ Additionally, you can nest stack views inside other stack views to build more co
 
 另外，你可以将一个堆栈视图嵌入另一个堆栈视图，以创建更加复杂的布局。
 
-![Figure 0-4](IB_StackView_NestedStacks_2x.png)
+![Figure 0-4](images/IB_StackView_NestedStacks_2x.png)
 
 In general, use stack views to manage as much of your layout as possible. Resort to creating constraints only when you cannot achieve your goals with stack views alone.
 
@@ -199,7 +199,7 @@ A sample equation is shown below.
 
 下面是一个方程样例。
 
-![view_formula_2x.png](view_formula_2x.png)
+![view_formula_2x.png](images/view_formula_2x.png)
 
 This constraint states that the red view’s leading edge must be 8.0 points after the blue view’s trailing edge. Its equation has a number of parts:
 
@@ -230,7 +230,7 @@ In Auto Layout, the attributes define a feature that can be constrained. In gene
 
 在自动布局中，属性定义了可以被约束的特性。通常，包括四个边沿（前部、尾部、顶部和底部），以及高、宽、垂直中心和水平中心。文本项目也有一个或多个基本属性。
 
-![attributes_2x.png](attributes_2x.png)
+![attributes_2x.png](images/attributes_2x.png)
 
 For the complete list of attributes, see the [NSLayoutAttribute](https://developer.apple.com/reference/appkit/nslayoutattribute) enum.
 
@@ -366,7 +366,7 @@ In general, the constraints must define both the size and the position of each v
 
 通常，约束必须定义每个视图的尺寸和位置。假如父视图的尺寸已经设置好（例如，iOS中一个场景的根视图），无歧义的、可满足的布局需要对每个视图每个维度有两条约束（不算父视图的）。但是，在选择要使用哪个约束时，你有广泛的选择权。例如，下面三个布局都做出了无歧义、可满足的布局（只展示了水平的约束）：
 
-![constraint_examples_2x.png](constraint_examples_2x.png)
+![constraint_examples_2x.png](images/constraint_examples_2x.png)
 
 - The first layout constrains the view’s leading edge relative to its superview’s leading edge. It also gives the view a fixed width. The position of the trailing edge can then be calculated based on the superview’s size and the other constraints. 
 - The second layout constrains the view’s leading edge relative to its superview’s leading edge. It also constrains the view’s trailing edge relative to the superview’s trailing edge. The view’s width can then be calculated based on the superview’s size and the other constraints. 
@@ -395,9 +395,9 @@ The following illustrations show the views, in portrait and landscape orientatio
 
 下面的插图展示了在横向和竖向时的视图：
 
-![Blocks_Portrait_2x.png](Blocks_Portrait_2x.png)
+![Blocks_Portrait_2x.png](images/Blocks_Portrait_2x.png)
 
-![Blocks_Landscape_2x.png](Blocks_Landscape_2x.png)
+![Blocks_Landscape_2x.png](images/Blocks_Landscape_2x.png)
 
 So what should these constraints look like? The following illustration shows one straightforward solution:
 
@@ -407,7 +407,7 @@ The above solution uses the following constraints:
 
 上面的解决方案使用了下面的约束：
 
-![two_view_example_1_2x.png](two_view_example_1_2x.png)
+![two_view_example_1_2x.png](images/two_view_example_1_2x.png)
 
 - // Vertical Constraints 垂直约束
 - Red.top = 1.0 * Superview.top + 20.0
@@ -429,7 +429,7 @@ Still, this is not the only possible solution. Here is an equally valid approach
 
 不过，这仍不是唯一的解决方案。这也有一个同样的可用方法：
 
-![two_view_example_2_2x.png](two_view_example_2_2x.png)
+![two_view_example_2_2x.png](images/two_view_example_2_2x.png)
 
 Instead of pinning the top and bottom of the blue box to its superview, you align the top of the blue box with the top of the red box. Similarly, you align the bottom of the blue box with the bottom of the red box. The constraints are shown below.
 
@@ -578,7 +578,7 @@ Auto Layout represents a view’s intrinsic content size using a pair of constra
 
 Auto Layout 为每个尺寸使用一对约束表示视图的固有内容尺寸。内容紧靠会将视图拉近，以致于它会紧紧的贴着内容。压缩阻力会将视图推远，以致于它不会裁剪内容。
 
-![intrinsic_content_size_2x.png](intrinsic_content_size_2x.png)
+![intrinsic_content_size_2x.png](images/intrinsic_content_size_2x.png)
 
 These constraints are defined using the inequalities shown in Listing 3-5. Here, the `IntrinsicHeight` and `IntrinsicWidth` constants represent the height and width values from the view’s intrinsic content size.
 
@@ -694,13 +694,13 @@ To create a constraint between two views, Control-click one of the views and dra
 
 要在两个视图之间创建一个约束，按住Control并点击其中一个视图然后拖动到另一个视图。
 
-![ControlDrag_2x.png](ControlDrag_2x.png)
+![ControlDrag_2x.png](images/ControlDrag_2x.png)
 
 When you release the mouse, Interface Builder displays a HUD menu with a list of possible constraints.
 
 当你释放鼠标时，Interface Builder会显示一个带有可能约束列表的HUD菜单。
 
-![Popup_Menu_2x.png](Popup_Menu_2x.png)
+![Popup_Menu_2x.png](images/Popup_Menu_2x.png)
 
 Interface Builder intelligently selects the set of constraints based on the items you are constraining and the direction of your drag gesture. If you drag more or less horizontally, you get options to set the horizontal spacing between the views, and options to vertically align the views. If you drag more or less vertically, you get options to set the vertical spacing, and options to align the views horizontally. Both gestures may include other options (such as setting the view’s relative size).
 
@@ -732,7 +732,7 @@ Interface Builder provides four Auto Layout tools in the bottom-right corner of 
 
 Interface Builder提供了四种自动布局工具，在Editor窗口的右下角。它们是Stack，Align，Pin和Resolve Auto Layout Issues工具。
 
-![Auto_Layout_Tools_2x.png](Auto_Layout_Tools_2x.png)
+![Auto_Layout_Tools_2x.png](images/Auto_Layout_Tools_2x.png)
 
 Use the Pin and Align tools when you want fine control when making constraints or when you want to make multiple constraints at once. As an added advantage, when you use these tools, you don’t need to precisely place your views before creating the constraint. Instead, you can roughly set the relative position of the views, add your constraints, and then update the frames. This lets Auto Layout calculate the correct positions for you.
 
@@ -758,7 +758,7 @@ The Align tool lets you quickly align items in your layout. Select the items you
 
 Align 工具让你可以快速的在布局中对齐项目。选中你想要对齐的项目，然后点击 Align 工具。Interface Builder 会显示一个包含一些可能的对齐方式的弹出视图。
 
-![Align_Tool_Popup_2x.png](Align_Tool_Popup_2x.png)
+![Align_Tool_Popup_2x.png](images/Align_Tool_Popup_2x.png)
 
 Select the options for aligning the selected views, and click the Add Constraints button. Interface Builder creates the constraints needed to ensure those alignments. By default, the constraints do not have any offset (the edges or centers are aligned with each other) and none of the frames are updated when the constraints are added. You can change any of these settings before creating the constraints.
 
@@ -778,13 +778,13 @@ The Pin tool lets you quickly define a view’s position relative to its neighbo
 
 Pin 工具让你可以快速的定义视图相对于其相邻视图的位置或者快速的定义其尺寸。选择你想要设置其位置或尺寸的项目，并点击 Pin 工具。Interface Builder 会显示一个包含一些可能选项的弹出视图。
 
-![Pin_Popover_View_2x.png](Pin_Popover_View_2x.png)
+![Pin_Popover_View_2x.png](images/Pin_Popover_View_2x.png)
 
 The top portion of the popover lets you pin the selected item’s Leading, Top, Trailing, or Bottom edge to its nearest neighbor. The associated number indicates the current spacing between the items in the canvas. You can type in a custom spacing, or you can click the disclosure triangle to set which view it should be constrained to or to select the standard spacing. The “Constrain to margins” checkbox determines whether constraints to the superview use the superview’s margins or its edges.
 
 弹出视图的上半部分让你可以设置选中项目到它最近的相邻项目的 Leading、Top、Trailing 或 Bottom 偏移。相关联的数字指出了在幕布上两个项目之间的当前间距。你可以写入一个自定义的间距，或者可以点击下拉箭头设置哪个视图应该被约束或者选择标准间距。“Constrain to margins” 勾选框决定了设置到父视图的约束时是使用父视图的留白还是到其边沿。
 
-![Pin_Settings_2x.png](Pin_Settings_2x.png)
+![Pin_Settings_2x.png](images/Pin_Settings_2x.png)
 
 The lower portion of the popover lets you set the item’s width or height. The Width and Height constraints default to the current canvas size, though you can type in different values. The Aspect Ratio constraint also uses the item’s current aspect ratio; however, if you want to change this ratio, you need to review and edit the constraint after creating it.
 
@@ -804,7 +804,7 @@ The Resolve Auto Layout Issues tool provides a number of options for fixing comm
 
 Resolve Auto Layout Issues 工具提供了一些修正常见自动布局问题的选项。菜单的上半部分中的选项只影响当前选中的视图。下半部分中的选项会影响场景中的所有视图。
 
-![Resolve_Auto_Layout_Popup_2x.png](Resolve_Auto_Layout_Popup_2x.png)
+![Resolve_Auto_Layout_Popup_2x.png](images/Resolve_Auto_Layout_Popup_2x.png)
 
 You can use this tool to update the views’ frames based on the current constraints, or you can update the constraints based on the views’ current location in the canvas. You can also add missing constraints, clear constraints, or reset the views to a set of constraints recommended by Interface Builder.
 
@@ -862,7 +862,7 @@ The editor displays all the constraints affecting the currently selected view as
 - **等号徽章。**Interface Builder 展示这样的约束，让两个项目有相等的宽度或相等的高度，作为每个项目的单独一个线条。每个线条都标有一个里面包含了等号（=）的蓝色徽章。
 - **大于等于和小于等于徽章。**Interface Builder 用里面带有>=或<=符号的蓝色小徽章标记所有约束，用于表示大于等于和小于等于关系。
 
-![Constraints_In_The_Canvas_2x.png](Constraints_In_The_Canvas_2x.png)
+![Constraints_In_The_Canvas_2x.png](images/Constraints_In_The_Canvas_2x.png)
 
 #### 0.4.4.2 Listing Constraints in the Document Outline - 在文档大纲中列出约束
 
@@ -870,7 +870,7 @@ Interface Builder lists all the constraints in the document outline, grouping th
 
 Interface Builder 在文档大纲中列出了所有的约束，并将它们分组到持有它们的视图下面。约束由最近的视图持有，其中会包含约束中的两个项目。按照这个计算，每个视图包含了它自己和它的所有子视图，而顶部和底部布局指南由屏幕的根视图包含。
 
-![Constraints_In_Document_Outline_2x.png](Constraints_In_Document_Outline_2x.png)
+![Constraints_In_Document_Outline_2x.png](images/Constraints_In_Document_Outline_2x.png)
 
 Even though constraints could be spread around the outline, most constraints end up under the scene’s root view. If you want to make sure you’ve found all the constraints, expand the entire view hierarchy.
 
@@ -888,7 +888,7 @@ The Size inspector lists all the constraints affecting the currently selected vi
 
 Size 检视板列出了所有影响当前选中视图的约束。必须的约束显示为实线轮廓，而可选的约束显示为虚线轮廓。描述列出了关于该约束的重要信息。它总是包括影响的属性和约束中的另一个项目。它也可能包括关系，常量，以及乘数或比例。
 
-![Constraints_in_Size_Inspector_2x.png](Constraints_in_Size_Inspector_2x.png)
+![Constraints_in_Size_Inspector_2x.png](images/Constraints_in_Size_Inspector_2x.png)
 
 The diagram at the top of the above screenshot shows which attributes are affected by constraints. You can filter the list of constraints by selecting one or more of the diagram’s attributes. The list then shows only those constraints affecting the selected attributes.
 
@@ -904,7 +904,7 @@ When you select a constraint either in the canvas or in the document outline, th
 
 当你在幕布或在文档大纲中选中一条约束时，Attribute 检视板展示了该约束的所有属性。这包括约束方程中的所有值：第一个项目、关系、第二个项目、常量和乘数。Attribute 检视板也展示了约束的优先级和标识符。
 
-![Editing_Constraints_in_the_Attribute_Inspector_2x.png](Editing_Constraints_in_the_Attribute_Inspector_2x.png)
+![Editing_Constraints_in_the_Attribute_Inspector_2x.png](images/Editing_Constraints_in_the_Attribute_Inspector_2x.png)
 
 >NOTE
 >
@@ -926,7 +926,7 @@ Some editing is also possible directly from the Size inspector. Clicking the Edi
 
 某些编辑也可能直接在 Size 检视板中进行。在任何约束中点击 Edit 按钮会打开一个弹窗，在弹窗中你可以变更约束的关系、常量、优先级或者乘数。要做更多的修改，双击约束选中并在 Attribute 检视板中打开它。
 
-![Editing_Constraints_in_the_Attribute_Inspector_2x.png](Editing_Constraints_in_the_Attribute_Inspector_2x.png)
+![Editing_Constraints_in_the_Attribute_Inspector_2x.png](images/Editing_Constraints_in_the_Attribute_Inspector_2x.png)
 
 For more information, see Editing Auto Layout Constraints in Auto Layout Help .
 
@@ -938,7 +938,7 @@ To set a view’s content-hugging and compression-resistance priorities (CHCR pr
 
 要设置一个视图的内容紧靠和压缩阻力优先级（CHCR优先级），就要在幕布或文档大纲中选中视图。打开 Size 检视板，向下滚动直到找到 Content Hugging Priority 和 Compression Resistance Priority 设置。
 
-![CHCR_Priorities_2x.png](CHCR_Priorities_2x.png)
+![CHCR_Priorities_2x.png](images/CHCR_Priorities_2x.png)
 
 You can also set the view’s intrinsic size in Interface Builder. By default, Interface Builder uses the size returned from the view’s [intrinsicContentSize](https://developer.apple.com/reference/uikit/uiview/1622600-intrinsiccontentsize) method. However, if you need a different size at design time, you can set a placeholder intrinsic content size. This placeholder affects the size of the view only in Interface Builder. It does not have any effect on the view at runtime.
 
