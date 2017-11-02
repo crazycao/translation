@@ -94,10 +94,18 @@ Figure 1-2  The layout object provides layout metrics
 
 Layout objects control more than just the size and position of their views. The layout object can specify other view-related attributes, such as its transparency, its transform in 3D space, and its visibility (if any) above or below other views. These attributes let you create more interesting layouts. For example, you might create stacks of cells by placing the views on top of one another and changing their z-ordering, or you might use a transform to rotate them on any axis.
 
-For detailed information about how a layout object fulfills its responsibilities to the collection view, see Creating Custom Layouts.
+布局对象不控制的不仅是它们的视图的尺寸和位置。布局对象可以指定其他与视图相关的属性，如它的透明度，它在3D空间的转换，以及它在其他视图上面或下面的能见度（如果有的话）。这些属性让你可以创建更有趣的布局。例如，你可以创建层层叠叠的 cell，通过把视图一个一个放在另一个的上面并改变它们的z顺序，或者你可以使用一个转换在任意轴上旋转它们。 
 
-Collection Views Initiate Animations Automatically
+For detailed information about how a layout object fulfills its responsibilities to the collection view, see [Creating Custom Layouts](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1).
+
+关于布局对象如何实现它对 collection view 的职责的详细信息，参见 [创建自定义布局](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1)。
+
+## 1.4 Collection Views Initiate Animations Automatically - Collection View 自动开启动画
 
 Collection views build in support for animations at a fundamental level. When you insert (or delete) items or sections, the collection view automatically animates any views impacted by the change. For example, when you insert an item, items after the insertion point are usually shifted to make room for the new item. The collection view can create these animations because it detects the current position of items and can calculate their final positions after the insertion takes place. Thus, it can animate each item from its initial position to its final position.
 
+Collection view 建立了对基本级别动画的支持。当你插入（或删除）项目或 section 时，collection view 自动的使被这个改变影响的视图具有动画。例如，当你插入一个项目，在这个插入点之后的项目总是要挪动才能给新的项目留出空间。Collection view 可以创建这些动画，因为它可以探测到项目的当前位置，并可以计算在插入发生之后的最终位置。那么，它就可以给每一个项目添加从初始位置到最终位置的动画。
+
 In addition to animating insertions, deletions, and move operations, you can invalidate the layout at any time and force it to recalculate its layout attributes. Invalidating the layout does not animate items directly; when you invalidate the layout, the collection view displays the items in their newly calculated positions without animating them. Instead in a custom layout, you might use this behavior to position cells at regular intervals and create an animated effect.
+
+除了给插入、删除和移动操作增加动画，你还可以在任何时候让布局失效并强制其重新计算布局属性。使布局失效并不会直接给项目启动动画；当你式布局失效时，collection view 会在项目最近计算的位置显示它们而没有动画。相反，在自定义布局中，你可以使用这个行为以均匀的时间间隔放置 cell 来创造一个动画效果。
