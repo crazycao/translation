@@ -1,0 +1,274 @@
+# Collection View Programming Guide for iOS (2) ---- Designing Your Data Source and Delegate
+
+原文地址：
+[https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCellsandViews/CreatingCellsandViews.html#//apple_ref/doc/uid/TP40012334-CH7-SW1](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCellsandViews/CreatingCellsandViews.html#//apple_ref/doc/uid/TP40012334-CH7-SW1)
+
+# 2 Designing Your Data Source and Delegate - 设计你的数据源和代理
+
+Every collection view must have a **data source object.** The data source object is the content that your app displays. It could be an object from your app’s data model, or it could be the view controller that manages the collection view. The only requirement of the data source is that it must be able to provide information that the collection view needs, such as how many items there are and which views to use when displaying those items.
+
+每一个 collection view 必须有一个**数据源对象**。数据源对象是你的app显示的内容。它可以是一个来自于你app的数据模型的对象，也可以是一个管理 collection view 的视图控制器。对数据源的唯一要求就是它必须能提供 collection view 需要的信息，比如有多少个项目以及当显示这些项目时使用哪个项目。
+
+The **delegate object** is an optional (but recommended) object that manages aspects related to the presentation of and interaction with your content. Although the delegate’s main job is to manage cell highlighting and selection, it can be extended to provide additional information. For example, the flow layout extends the basic delegate behavior to customize layout metrics, such as the size of cells and the spacing between them.
+
+**代理对象**是可选的对象（但是建议有一个），它管理了与内容的显示和交互相关的部分。尽管代理的主要工作时管理 cell 的高亮和选中，它仍可以扩展以提供更多信息。例如，流式布局扩展了基本代理行为来自定义布局矩阵，如 cell 的尺寸和它们之间的间距。
+
+## 2.1 The Data Source Manages Your Content - 数据源管理你的内容
+
+The data source object is the object responsible for managing the content you are presenting using a collection view. The data source object must conform to the `UICollectionViewDataSource` protocol, which defines the basic behavior and methods that you must support. The job of the data source is to provide the collection view with answers to the following questions:
+
+数据源对象是负责管理你正用 collection view 显示的内容的对象。数据源对象必须遵从 `UICollectionViewDataSource` 协议，这个协议定义了你必须支持的基本行为和方法。数据源的工作是向 collection view 提供下面问题的答案：
+
+- How many sections does the collection view contain?
+- For a given section, how many items does a section contain?
+- For a given section or item, what views should be used to display the corresponding content?
+- Collection view 包含了多少个 section ？
+- 对于给定的 section，每个 section 包含了多少个 item？
+- 对于给定的 section 或 item，应该用哪个视图来显示正确的内容？
+
+Sections and items are the fundamental organizing principle for collection view content. A collection view typically has at least one section and may contain more. Each section, in turn, contains zero or more items. Items represent the main content you want to present, whereas sections organize those items into logical groups. For example, a photo app might use sections to represent a single album of photos or a set of photos taken on the same day.
+
+Section 和 item 是 collection view 内容的基本组织理论。一个 collection view 通常有至少一个 section ，也可能包含更多。每个 section，相应的，包含零个或多个 item。Item 表示你想要展示的主要内容，而 section 将那些 item 组织成逻辑分组。例如，一个照片app可能使用 section 表示一个相册的照片，或者同一天拍摄的照片的集合。
+
+The collection view refers to the data it contains using `NSIndexPath` objects. When trying to locate an item, the collection view uses the index path information provided to it by the layout object. For items, the index path contains a section number and an item number. For supplementary and decoration views, the index path contains whichever values were provided by the layout object. The meaning of the index paths attached to supplementary and decoration views is dependent on your app, though the first index corresponds to a specific section in the data source. These views’ index paths are more about identification than meaning, identifying which view of what kind is currently being considered. So, if for example you have supplementary views that create headers and footers for your sections as seen in the flow layout, the relevant information provided by the index path is the section referenced.
+
+Collection view 使用 `NSIndexPath` 对象给它包含的数据做参考。当尝试定位一个 item 时，collection view 就会使用由布局对象向它提供的 index path 信息。对于 supplementary 和 decoration 视图，index path 包含了由布局对象提供的每一个值。加在 supplementary 和 decoration 视图上的 index path 的意义取决于你的app，尽管第一个索引对应数据源中的特定 section。这些视图的 index path 更重要的是辨识而不是意义，标识当前考虑的是哪种视图。所以，例如，如果你有一些 supplementary 视图按照流式布局中看到的那样为你的 section 创建 header 和 footer，那么 index path 提供的有关信息就是以 section 为参考的了。 
+
+> **Note:** Although standard index paths support multiple levels, the collection view’s cells only supports index paths that are 2-levels deep with “section” and “item” parameters, much like the index paths for the `UITableView` class. Supplementary views and decoration views can have more complex index paths if necessary. Elements whose index paths are > 1 is interpreted to correspond to the section designated by the first index in the path. Traditionally, only a second index is necessary, but supplementary and decoration views are not restricted to just two. Keep this in mind when designing your data source.
+>
+> **注意：**尽管标准 index path 支持多级，但是 collection view 的 cell 只支持带有 “section” 和 “item” 参数2级深度的 index path，就像 `UITableView` 类的 index path 一样。Supplementary 和 decoration 视图有更复杂的 index path，如果需要的话。Index path 大于1的元素是对 path 中第一个 index 所指定的相应 section 的解释。通常，只有第二个 index 是必须的，但是 supplementary 和 decoration 视图并不严格要求只有两个 index。当设计你的数据源时始终记住这一点。
+
+No matter how you arrange the sections and items in your data object, the visual presentation of those sections and items is still determined by the layout object. Different layout objects could present section and item data very differently, as shown in Figure 2-1. In this figure, the flow layout object arranges the sections vertically with each successive section below the previous one. A custom layout could position the sections in a nonlinear arrangement, demonstrating again the separation of the layout from the actual data.
+
+无论你在数据源中如何排布 section 和 item，这些 section 和 item 的视觉显示仍然由布局对象决定。不同的布局对象可以显示完全不同的 section 和 item，如图 2-1 所示。在这张图中，流式布局对象竖直的排布 section，每个 section 连续的接在前一个的下面。自定义布局可以让 section 以非线性的排布来放置，再次示范了布局与实际数据的分离。
+
+Figure 2-1  Sections arranged according to the arrangement of layout objects - 根据布局对象的排布来排布 section
+
+![cv_layout_sections_2x.png](images/cv_layout_sections_2x.png)
+
+### 2.1.1 Designing Your Data Objects - 设计你的数据对象
+
+An efficient data source uses sections and items to help organize its underlying data objects. Organizing your data into sections and items makes it much easier to implement your data source methods later. And because your data source methods are called frequently, you want to make sure that your implementations of those methods are able to retrieve data as quickly as possible.
+
+一个高效的数据源使用 section 和 item 帮助组织它们下面的数据对象。把你的数据组织到 section 和 item 让之后实现数据源方法更加简单。并且由于你的数据源方法会被频繁调用，你要确保那些方法的实现能够尽可能快的取回数据。
+
+One simple solution (but certainly not the only solution) is for your data source to use a set of nested arrays, as shown in Figure 2-2. In this configuration, a top-level array contains one or more arrays representing the sections of your data source. Each section array then contains the data items for that section. Finding an item in a section is a matter of retrieving its section array and then retrieving an item from that array. This type of arrangement makes it easy to manage moderately sized collections of items and retrieve individual items on demand.
+
+一个简单的解决方案（但肯定不是唯一方案）是对你的数据源使用一组嵌套数组，如图 2-2 所示。在这个配置下，顶级数组包含一个或多个表示数据源的 section 的数组。然后每个 section 数组包含了为该 section 准备的数据 item。在一个 section 中找到一个 item 就是先取回它的 section 数组，然后从那个数组总取回 item。这种排布让管理适度大小的 item 集合和取回想要的独立 item 都变得容易。
+
+Figure 2-2  Arranging data objects using nested arrays - 使用嵌套数组排布数据对象
+
+![ds_data_object_layout_2x.png](images/ds_data_object_layout_2x.png)
+
+When designing your data structures, you can always start with a simple set of arrays and move to a more efficient structure as needed. In general, your data objects should never be a performance bottleneck. The collection view usually accesses your data source only to calculate how many objects there are in total and to obtain views for elements that are currently onscreen. If the layout object relies only on data from your data objects, performance could be severely impacted when the data source contains thousands of objects.
+
+当设计你的数据结构时，你可以总是从一个数组的简单集合开始，在按需调整成更高效的结构。通常，你的数据对象永远不应该称为显示瓶颈。Collection view 往往访问你的数据源只为了计算总共有多少个对象和获取当前屏幕上的元素的视图。如果布局对象只依赖于你的数据对象的数据，当数据源包含成千上万个对象时就会严重影响性能。
+
+### 2.1.2 Telling the Collection View About Your Content - 告诉 collection view 你的内容
+
+Among the questions asked of your data source by the collection view are how many sections it contains and how many items each section contains. The collection view asks your data source to provide this information when any of the following actions occur:
+
+在被 collection view 向数据源问到的问题之中是包含了多少个 section 和每个 section 包含了多少个 item。当下面任意一个动作发生时，collection view 就会向你的数据源请求提供这个信息：
+
+- The collection view is displayed for the first time.
+- You assign a different data source object to the collection view.
+- You explicitly call the collection view’s [reloadData](https://developer.apple.com/documentation/uikit/uicollectionview/1618078-reloaddata) method.
+- The collection view delegate executes a block using [performBatchUpdates:completion:](https://developer.apple.com/documentation/uikit/uicollectionview/1618045-performbatchupdates) or any of the move, insert, or delete methods.
+- Collection view 首次显示。
+- 你把另一个数据源对象指派给 collection view。
+- 你显式的调用 collection view 的 [reloadData](https://developer.apple.com/documentation/uikit/uicollectionview/1618078-reloaddata) 方法。
+- Collection view 代理使用 [performBatchUpdates:completion:](https://developer.apple.com/documentation/uikit/uicollectionview/1618045-performbatchupdates) 或任何移动、插入或删除方法执行一个 block。
+
+You provide the number of sections using the [numberOfSectionsInCollectionView:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618023-numberofsectionsincollectionview) method, and the number of items in each section using the [collectionView:numberOfItemsInSection:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618058-collectionview) method. You must implement the `collectionView:numberOfItemsInSection:` method, but if your collection view has only one section, implementing the `numberOfSectionsInCollectionView:` method is optional. Both methods return integer values with the appropriate information.
+
+你使用 [numberOfSectionsInCollectionView:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618023-numberofsectionsincollectionview) 方法提供 section 的数量，并使用 [collectionView:numberOfItemsInSection:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618058-collectionview) 方法提供每个 section 中 item 的数量。你必须实现 `collectionView:numberOfItemsInSection:` 方法，但是如果你的 collection view 只有一个 section，是否实现 `numberOfSectionsInCollectionView:` 方法就是可选的了。这两个方法都是返回带有相关信息的整数值。
+
+If you implemented your data source as shown in Figure 2-2, the implementation of your data source methods could be as simple as those shown in Listing 2-1. In this code, the `_data` variable is a custom member variable of the data source that stores the top-level array of sections. Obtaining the count of that array yields the number of sections. Obtaining the count of one of the subarrays yields the number of items in the section. (Of course, your own code should do whatever error checking is needed to ensure that the values returned are valid.)
+
+如果你按照图 2-2 中所示实现了你的数据源，那么你的数据源的方法实现可能会像表 2-1 所示那样简单。在这个代码中，`_data` 变量是数据源的一个自定义成员变量，储存了 section 的顶级数组。获取数组的个数就得到了 section 的个数。获取一个子数组的元素个数就得到了该 section 中 item 的个数。（当然，你自己的代码可以做任何必要的错误校验，以确保返回值是可用的。）
+
+Listing 2-1  Providing the section and item counts - 提供 section 和 item 的数量
+
+```
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView*)collectionView {
+    // _data is a class member variable that contains one array per section.
+    return [_data count];
+}
+ 
+- (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSArray* sectionArray = [_data objectAtIndex:section];
+    return [sectionArray count];
+}
+```
+
+## 2.2 Configuring Cells and Supplementary Views - 配置 cell 和 supplementary 视图
+
+Another important task of your data source is to provide the views that the collection view uses to display your content. The collection view does not track your app’s content. It simply takes the views you give it and applies the current layout information to them. Therefore, everything that is displayed by the views is your responsibility.
+
+After your data source reports how many sections and items it manages, the collection view asks the layout object to provide layout attributes for the collection view’s content. At some point, the collection view asks the layout object to provide the list of elements in a specific rectangle (often this is the visible rectangle). The collection view uses that list to ask your data source for the corresponding cells and supplementary views. To provide those cells and supplementary views, your code must do the following:
+
+Embed your template cells and views in your storyboard file. (Alternatively, register a class or nib file for each type of supported cell or view.)
+In your data source, dequeue and configure the appropriate cell or view when asked.
+To ensure that cells and supplementary views are used in the most efficient way possible, the collection view assumes the responsibility of creating those objects for you. Each collection view maintains internal queues of currently unused cells and supplementary views. Instead of creating objects yourself, simply ask the collection view to provide you with the view you want. If one is waiting on a reuse queue, the collection view prepares it and returns it to you quickly. If one is not waiting, the collection view uses the registered class or nib file to create a new one and return it to you. Thus, every time you dequeue a cell or view, you always get a ready-to-use object.
+
+Reuse identifiers make it possible to register multiple types of cells and multiple types of supplementary views. A reuse identifier is a string that you use to distinguish between your registered cell and view types. The contents of the string are relevant only to your data source object. But when asked for a view or cell, you can use the provided index path to determine which type of view or cell you might want and then pass the appropriate reuse identifier to the dequeue method.
+
+Registering Your Cells and Supplementary Views
+You can configure the cells and views of your collection view programmatically or in your app’s storyboard file.
+
+Configure cells and views in your storyboard. When configuring cells and supplementary views in a storyboard, you do so by dragging the item onto your collection view and configuring it there. This creates a relationship between the collection view and the corresponding cell or view.
+
+For cells, drag a Collection View Cell from the object library and drop it on to your collection view. Set the custom class and the collection reusable view identifier of your cell to appropriate values.
+For supplementary views, drag a Collection Reusable View from the object library and drop it on to your collection view. Set the custom class and the collection reusable view identifier of your view to appropriate values.
+Configure cells programmatically. Use either the registerClass:forCellWithReuseIdentifier: or registerNib:forCellWithReuseIdentifier: method to associate your cell with a reuse identifier. You might call these methods as part of the parent view controller’s initialization process.
+
+Configure supplementary views programmatically. Use either the registerClass:forSupplementaryViewOfKind:withReuseIdentifier: or registerNib:forSupplementaryViewOfKind:withReuseIdentifier: method to associate each kind of view with a reuse identifier. You might call these methods as part of the parent view controller’s initialization process.
+
+Although you register cells using only a reuse identifier, supplementary views require that you specify an additional identifier known as a kind string. Each layout object is responsible for defining the kinds of supplementary views it supports. For example, the UICollectionViewFlowLayout class supports two kinds of supplementary views: a section header view and a section footer view. To identify these two types of views, it defines the string constants UICollectionElementKindSectionHeader and UICollectionElementKindSectionFooter. During layout, the layout object includes the kind string with the other layout attributes for that view type. The collection view then passes the information along to your data source. Your data source then uses both the kind string and the reuse identifier to decide which view object to dequeue and return.
+
+Note: If you implement your own custom layouts, you are responsible for defining the kinds of supplementary views your layout supports. A layout may support any number of supplementary views, each with its own kind string. For more information about defining custom layouts, see Creating Custom Layouts.
+Registration is a one-time event that must take place before you attempt to dequeue any cells or views. After you’ve registered, you can dequeue as many cells or views as needed without reregistering them. It’s not recommended that you change the registration information after dequeueing one or more items. It is better to register your cells and views once and be done with it.
+
+Dequeueing and Configuring Cells and Views
+Your data source object is responsible for providing cells and supplementary views when asked for them by the collection view. The UICollectionViewDataSource protocol contains two methods for this purpose: collectionView:cellForItemAtIndexPath: and collectionView:viewForSupplementaryElementOfKind:atIndexPath:. Because cells are a required element of a collection view, your data source must implement the collectionView:cellForItemAtIndexPath: method, but the collectionView:viewForSupplementaryElementOfKind:atIndexPath: method is optional and dependent on the type of layout in use. In both cases, your implementation of these methods follows a very simple pattern:
+
+Dequeue a cell or view of the appropriate type using the dequeueReusableCellWithReuseIdentifier:forIndexPath: or dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath: method.
+Configure the view using the data at the specified index path.
+Return the view.
+The dequeueing process is designed to relieve you of the responsibility of having to create a cell or view yourself. As long as you registered a cell or view previously, the dequeue methods are guaranteed to never return nil. If there is no cell or view of the given type on a reuse queue, the dequeue method simply creates one using your storyboard or using the class or nib file you registered.
+
+The cell returned to you from the dequeueing process should be in a pristine state and ready to be configured with new data. For a cell or view that must be created, the dequeueing process creates and initializes it using the normal processes—that is, by loading the view from a storyboard or nib file or by creating a new instance and initializing it using the initWithFrame: method. In contrast, an item that wasn’t created from scratch but that was instead retrieved from a reuse queue may already contain data from a previous usage. In that case, dequeue methods call the prepareForReuse method of the item to give it a chance to return itself to a pristine state. When you implement a custom cell or view class, you can override this method to reset properties to default values and perform any additional cleanup.
+
+After your data source dequeues the view, it configures the view with its new data. You can use the index path passed to your data source methods to locate the appropriate data object and then apply that object’s data to the view. After you configure the view, return it from your method and you are done. Listing 2-2 shows a simple example of how to configure a cell. After dequeueing the cell, the method sets the cell’s custom label using the information about the cell’s location and then returns the cell.
+
+Listing 2-2  Configuring a custom cell
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+   MyCustomCell* newCell = [self.collectionView dequeueReusableCellWithReuseIdentifier:MyCellID
+                                                                          forIndexPath:indexPath];
+ 
+   newCell.cellLabel.text = [NSString stringWithFormat:@"Section:%d, Item:%d", indexPath.section, indexPath.item];
+   return newCell;
+}
+Note: When returning views from your datasource, always return a valid view. Returning nil, even if for some reason the view that is being asked for should not be displayed, causes an assertion and your app terminates because the layout object expects valid views to be returned by these methods.
+Inserting, Deleting, and Moving Sections and Items
+
+To insert, delete, or move a single section or item, follow these steps:
+
+Update the data in your data source object.
+Call the appropriate method of the collection view to insert or delete the section or item.
+It is critical that you update your data source before notifying the collection view of any changes. The collection view methods assume that your data source contains the currently correct data. If it does not, the collection view might receive the wrong set of items from your data source or ask for items that are not there and crash your app.
+
+When you add, delete, or move a single item programmatically, the collection view’s methods automatically create animations to reflect the changes. If you want to animate multiple changes together, though, you must perform all insert, delete, or move calls inside a block and pass that block to the performBatchUpdates:completion: method. The batch update process then animates all of your changes at the same time and you can freely mix calls to insert, delete, or move items within the same block.
+
+Listing 2-3 shows a simple example of how to perform a batch update to delete the currently selected items. The block passed to the performBatchUpdates:completion: method first calls a custom method to update the data source. It then tells the collection view to delete the items. Both the update block and the completion block you provide are executed synchronously.
+
+Listing 2-3  Deleting the selected items
+[self.collectionView performBatchUpdates:^{
+   NSArray* itemPaths = [self.collectionView indexPathsForSelectedItems];
+ 
+   // Delete the items from the data source.
+   [self deleteItemsFromDataSourceAtIndexPaths:itemPaths];
+ 
+   // Now delete the items from the collection view.
+   [self.collectionView deleteItemsAtIndexPaths:itemPaths];
+} completion:nil];
+Managing the Visual State for Selections and Highlights
+
+Collection views support single-item selection by default and can be configured to support multiple-item selection or have selections disabled altogether. The collection view detects taps inside its bounds and highlights or selects the corresponding cell accordingly. For the most part, the collection view modifies only the properties of a cell to indicate that it is selected or highlighted; it does not change the visual appearance of your cells, with one exception. If a cell’s selectedBackgroundView property contains a valid view, the collection view shows that view when the cell is highlighted or selected.
+
+Listing 2-4 shows code that could be incorporated into your implementation of a custom collection view cell to facilitate a changing appearance for highlighted and selected states. The cell’s backgroundView property will always be the default view when the cell loads for the first time and when the cell is either not highlighted or not selected. The selectedBackgroundView property replaces the default background view whenever a cell is highlighted or selected. In this case, the cell’s background color would be changed from red to white when selected or highlighted.
+
+Listing 2-4  Setting the background views to indicate changed states
+UIView* backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+backgroundView.backgroundColor = [UIColor redColor];
+self.backgroundView = backgroundView;
+ 
+UIView* selectedBGView = [[UIView alloc] initWithFrame:self.bounds];
+selectedBGView.backgroundColor = [UIColor whiteColor];
+self.selectedBackgroundView = selectedBGView;
+The collection view’s delegate provides the collection view with the following methods to facilitate highlighting and selecting:
+
+collectionView:shouldSelectItemAtIndexPath:
+collectionView:shouldDeselectItemAtIndexPath:
+collectionView:didSelectItemAtIndexPath:
+collectionView:didDeselectItemAtIndexPath:
+collectionView:shouldHighlightItemAtIndexPath:
+collectionView:didHighlightItemAtIndexPath:
+collectionView:didUnhighlightItemAtIndexPath:
+These methods provide you with many opportunities to tweak the highlighting/selecting bahavior of your collection view to the exact desired specifications.
+
+For example, if you prefer to draw the selection state of a cell yourself, you can leave the selectedBackgroundView property set to nil and apply any visual changes to the cell using your delegate object. You would apply the visual changes in the collectionView:didSelectItemAtIndexPath:: method and remove them in the collectionView:didDeselectItemAtIndexPath: method.
+
+If you prefer to draw the highlight state yourself, you can override the collectionView:didHighlightItemAtIndexPath: and collectionView:didUnhighlightItemAtIndexPath: delegate methods and use them to apply your highlights. If you also specified a view in the selectedBackgroundView property, you should make your changes to the content view of the cell to ensure your changes are visible. Listing 2-5 shows a simple way of changing the highlight using the content view’s background color.
+
+Listing 2-5  Applying a temporary highlight to a cell
+- (void)collectionView:(UICollectionView *)colView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell* cell = [colView cellForItemAtIndexPath:indexPath];
+    cell.contentView.backgroundColor = [UIColor blueColor];
+}
+ 
+- (void)collectionView:(UICollectionView *)colView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell* cell = [colView cellForItemAtIndexPath:indexPath];
+    cell.contentView.backgroundColor = nil;
+}
+There is a subtle but important distinction between a cell’s highlighted state and its selected state. The highlighted state is a transitional state that you can use to apply visible highlights to the cell while the user’s finger is still touching the device. This state is set to YES only while the collection view is tracking touch events over the cell. When touch events stop, the highlighted state returns to the value NO. By contrast, the selected state changes only after a series of touch events has ended—specifically, when those touch events indicated that the user tried to select the cell.
+
+Figure 2-3 illustrates the series of steps that occurs when a user touches an unselected cell. The initial touch-down event causes the collection view to change the highlighted state of the cell to YES, although doing so does not automatically change the appearance of the cell. If the final touch up event occurs in the cell, the highlighted state returns to NO and the collection view changes the selected state to YES. When the user changes the selected state, the collection view displays the view in the cell’s selectedBackgroundView property, but this is the only visual change that the collection view makes to the cell. Any other visual changes must be made by your delegate object.
+
+Figure 2-3  Tracking touches in a cell
+
+Whether the user is selecting or deselecting a cell, the cell’s selected state is always the last thing to change. Taps in a cell always result in changes to the cell’s highlighted state first. Only after the tap sequence ends and any highlights applied during that sequence are removed, does the selected state of the cell change. When designing your cells, you should make sure that the visual appearance of your highlights and selected state do not conflict in unintended ways.
+
+Showing the Edit Menu for a Cell
+
+When the user performs a long-tap gesture on a cell, the collection view attempts to display an Edit menu for that cell. The Edit menu can be used to cut, copy, and paste cells in the collection view. Several conditions must be met before the Edit menu can be displayed:
+
+The delegate must implement all three methods related to handling actions:
+collectionView:shouldShowMenuForItemAtIndexPath:
+
+collectionView:canPerformAction:forItemAtIndexPath:withSender:
+
+collectionView:performAction:forItemAtIndexPath:withSender:
+
+The collectionView:shouldShowMenuForItemAtIndexPath: method must return YES for the indicated cell.
+The collectionView:canPerformAction:forItemAtIndexPath:withSender: method must return YES for at least one of the desired actions. The collection view supports the following actions:
+cut:
+
+copy:
+
+paste:
+
+If these conditions are met and the user chooses an action from the menu, the collection view calls the delegate’s collectionView:performAction:forItemAtIndexPath:withSender: method to perform the action on the indicated item.
+
+Listing 2-6 shows how to prevent one of the menu items from appearing. In this example, the collectionView:canPerformAction:forItemAtIndexPath:withSender: method prevents the Cut menu item from appearing in the Edit menu. It enables the Copy and Paste items so that the user can insert content.
+
+Listing 2-6  Selectively disabling actions in the Edit menu
+- (BOOL)collectionView:(UICollectionView *)collectionView
+        canPerformAction:(SEL)action
+        forItemAtIndexPath:(NSIndexPath *)indexPath
+        withSender:(id)sender {
+   // Support only copying and pasting of cells.
+   if ([NSStringFromSelector(action) isEqualToString:@"copy:"]
+      || [NSStringFromSelector(action) isEqualToString:@"paste:"])
+      return YES;
+ 
+   // Prevent all other actions.
+   return NO;
+}
+For more information on working with the pasteboard commands, see Text Programming Guide for iOS.
+
+Transitioning Between Layouts
+
+The easiest way to transition between layouts is by using the setCollectionViewLayout:animated: method. However, if you require control of the transition or want it to be interactive, use a UICollectionViewTransitionLayout object.
+
+The UICollectionViewTransitionLayout class is a special type of layout that gets installed as the collection view’s layout object when transitioning to a new layout. With a transition layout object, you can have objects follow a non linear path, use a different timing algorithm, or move according to incoming touch events. The standard class provides a linear transition to a new layout, but like the UICollectionViewLayout class, the UICollectionViewTransitionLayout class can be subclassed to create any desired effect. In doing so, you need to implement the same methods you would when creating a custom layout and allow your implementation to adapt to input from the user, most often from a gesture recognizer. For more information about creating custom layout objects, see Creating Custom Layouts.
+
+The UICollectionViewLayout class provides several methods for tracking the transition between layouts. UICollectionViewTransitionLayout objects track the completion of a transition through the transitionProgress property. As the transition occurs, your code updates this property periodically to indicate the completion percentage of the transition. For example, using the UICollectionViewTransitionLayout class in conjunction with objects like gesture recognizers, which you can use to transition between layouts, allows you to create interactive transitions. As well, if you implement a custom transition layout object, the UICollectionViewTransitionLayout class provides two methods for tracking values relevant to your layout: the updateValue:forAnimatedKey: and valueForAnimatedKey: methods. These methods track special floating point values that you can set and change during a transition to communicate to the layout important information. For example, if you transitioned between layouts using a pinch gesture, you could use these methods to tell the transition layout object at what offset the view’s need to be from one another.
+
+The steps for including a UICollectionViewTransitionLayout object in your app are as follows:
+
+Create an instance of the standard class or your own custom class using the initWithCurrentLayout:nextLayout: method.
+Communicate the progress of the transition by periodically modifying the transitionProgress property. Do not forget to invalidate the layout using the collection view’s invalidateLayout method after changing the transition’s progress.
+Implement the collectionView:transitionLayoutForOldLayout:newLayout: method in your collection view’s delegate and return your transition layout object.
+Optionally modify values for your layout using the updateValue:forAnimatedKey: method to indicate changed values relevant to your layout object. The stable value in this case is 0.
