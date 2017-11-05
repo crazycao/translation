@@ -105,42 +105,93 @@ Listing 2-1  Providing the section and item counts - 提供 section 和 item 的
 
 Another important task of your data source is to provide the views that the collection view uses to display your content. The collection view does not track your app’s content. It simply takes the views you give it and applies the current layout information to them. Therefore, everything that is displayed by the views is your responsibility.
 
+你的数据源的另一个重要的任务时提供 collection view 用来显示内容的视图。Collection view 不会跟踪你App的内容。它只是简单的拿着你给它的视图并将当前布局信息应用到上面。因此，这些视图显示的所有事情都是你的责任。
+
 After your data source reports how many sections and items it manages, the collection view asks the layout object to provide layout attributes for the collection view’s content. At some point, the collection view asks the layout object to provide the list of elements in a specific rectangle (often this is the visible rectangle). The collection view uses that list to ask your data source for the corresponding cells and supplementary views. To provide those cells and supplementary views, your code must do the following:
 
-Embed your template cells and views in your storyboard file. (Alternatively, register a class or nib file for each type of supported cell or view.)
-In your data source, dequeue and configure the appropriate cell or view when asked.
+在你的数据源报告它管理了多少个 section 和 item 之后，collection view 会让布局对象提供 collection view 的内容的布局属性。同时，collection view 让布局对象提供在特定矩形（通常是可见区域矩形）内的元素列表。Collection view 使用这个列表向你的数据源请求相应的 cell 和 supplementary 视图。要提供那些 cell 和 supplementary 视图，你的代码必须做下面这些事：
+
+1. Embed your template cells and views in your storyboard file. (Alternatively, register a class or nib file for each type of supported cell or view.)
+2. In your data source, dequeue and configure the appropriate cell or view when asked.
+
+>
+
+1. 将你的模板 cell 和 view 嵌入你的 storyboard 文件。（或者为每种支持的 cell 或 view 注册一个类或 nib 文件。）
+2. 在你的数据源中，当被请求时取出和配置适当的 cell 或 view。
+
 To ensure that cells and supplementary views are used in the most efficient way possible, the collection view assumes the responsibility of creating those objects for you. Each collection view maintains internal queues of currently unused cells and supplementary views. Instead of creating objects yourself, simply ask the collection view to provide you with the view you want. If one is waiting on a reuse queue, the collection view prepares it and returns it to you quickly. If one is not waiting, the collection view uses the registered class or nib file to create a new one and return it to you. Thus, every time you dequeue a cell or view, you always get a ready-to-use object.
+
+为了确保 cell 和 supplementary view 可以按最有效的方式使用，collection view 为你承担了创建那些对象的责任。每个 collection view 都持有了当前未使用的 cell 和 supplementary view 的队列。你自己不用创建对象，只要简单的让 collection view 提供你想要的视图。如果在重用队列中已经有一个视图在等着，collection view 会准备好它并快速将它返回给你。如果没有正在等着的，collection view 会使用注册的类或 nib 文件创建一个新的视图并将它返回给你。因此，每当你从队列中取出一个 cell 或 view，你总能获得一个准备好可用的对象。
 
 Reuse identifiers make it possible to register multiple types of cells and multiple types of supplementary views. A reuse identifier is a string that you use to distinguish between your registered cell and view types. The contents of the string are relevant only to your data source object. But when asked for a view or cell, you can use the provided index path to determine which type of view or cell you might want and then pass the appropriate reuse identifier to the dequeue method.
 
-Registering Your Cells and Supplementary Views
+重用标识使得可以注册多种 cell 和多种 supplementary view。重用标识是你用来区分已注册的 cell 和 view 的类型的字符串。这个字符串的内容只与你的数据源对象有关。但是当请求一个 view 或 cell 时，你可以使用提供的 index path 决定你想要哪种 view 或 cell，然后把适当的重用标识传给 dequeue 方法。
+
+### 2.2.1 Registering Your Cells and Supplementary Views - 注册你的 cell 和 supplementary view
+
 You can configure the cells and views of your collection view programmatically or in your app’s storyboard file.
 
-Configure cells and views in your storyboard. When configuring cells and supplementary views in a storyboard, you do so by dragging the item onto your collection view and configuring it there. This creates a relationship between the collection view and the corresponding cell or view.
+你可以通过编程方式或者在你的app的 storyboard 文件中配置 cell 和 view。
 
-For cells, drag a Collection View Cell from the object library and drop it on to your collection view. Set the custom class and the collection reusable view identifier of your cell to appropriate values.
-For supplementary views, drag a Collection Reusable View from the object library and drop it on to your collection view. Set the custom class and the collection reusable view identifier of your view to appropriate values.
-Configure cells programmatically. Use either the registerClass:forCellWithReuseIdentifier: or registerNib:forCellWithReuseIdentifier: method to associate your cell with a reuse identifier. You might call these methods as part of the parent view controller’s initialization process.
+**Configure cells and views in your storyboard.** When configuring cells and supplementary views in a storyboard, you do so by dragging the item onto your collection view and configuring it there. This creates a relationship between the collection view and the corresponding cell or view.
 
-Configure supplementary views programmatically. Use either the registerClass:forSupplementaryViewOfKind:withReuseIdentifier: or registerNib:forSupplementaryViewOfKind:withReuseIdentifier: method to associate each kind of view with a reuse identifier. You might call these methods as part of the parent view controller’s initialization process.
+**在你的 storyboard 中配置 cell 和 view。**当在 storyboard 中配置 cell 和 supplementary view 时，你要拖动 item 到你的 collection view 上面并在那里注册它。这会在 collection view 和对应的 cell 或 view 之间创建一种关系。
 
-Although you register cells using only a reuse identifier, supplementary views require that you specify an additional identifier known as a kind string. Each layout object is responsible for defining the kinds of supplementary views it supports. For example, the UICollectionViewFlowLayout class supports two kinds of supplementary views: a section header view and a section footer view. To identify these two types of views, it defines the string constants UICollectionElementKindSectionHeader and UICollectionElementKindSectionFooter. During layout, the layout object includes the kind string with the other layout attributes for that view type. The collection view then passes the information along to your data source. Your data source then uses both the kind string and the reuse identifier to decide which view object to dequeue and return.
+- For cells, drag a Collection View Cell from the object library and drop it on to your collection view. Set the custom class and the collection reusable view identifier of your cell to appropriate values.
+- For supplementary views, drag a Collection Reusable View from the object library and drop it on to your collection view. Set the custom class and the collection reusable view identifier of your view to appropriate values.
+- 对于 cell，从对象库中拖出一个 Collection View Cell 并将其放在你的 collection view 上面。将你的 cell 的自定义类和 collection reusable view identifier 设置为适当的值。
+- 对于 supplementary view，从对象库中拖出一个 Collection Reusable View 并将其放在你的 collection view 上面。将你的 view 的自定义类和 collection reusable view identifier 设置为适当的值。
 
-Note: If you implement your own custom layouts, you are responsible for defining the kinds of supplementary views your layout supports. A layout may support any number of supplementary views, each with its own kind string. For more information about defining custom layouts, see Creating Custom Layouts.
+**Configure cells programmatically.** Use either the [registerClass:forCellWithReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618089-registerclass) or [registerNib:forCellWithReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618083-register) method to associate your cell with a reuse identifier. You might call these methods as part of the parent view controller’s initialization process.
+
+**编程方式配置 cell。**使用 [registerClass:forCellWithReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618089-registerclass) 或 [registerNib:forCellWithReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618083-register) 方法将你的 cell 与重用标识进行关联。你可以调用这些方法作为其父视图控制器的初始化过程的一部分。
+
+**Configure supplementary views programmatically.** Use either the [registerClass:forSupplementaryViewOfKind:withReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618103-registerclass) or [registerNib:forSupplementaryViewOfKind:withReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618101-register) method to associate each kind of view with a reuse identifier. You might call these methods as part of the parent view controller’s initialization process.
+
+**编程方式配置 supplementary view。**使用 [registerClass:forSupplementaryViewOfKind:withReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618103-registerclass) 或 [registerNib:forSupplementaryViewOfKind:withReuseIdentifier:](https://developer.apple.com/documentation/uikit/uicollectionview/1618101-register) 方法将每种 view 与重用标识关联。你可以调用这些方法作为其父视图控制器的初始化过程的一部分。
+
+Although you register cells using only a reuse identifier, supplementary views require that you specify an additional identifier known as a kind string. Each layout object is responsible for defining the kinds of supplementary views it supports. For example, the `UICollectionViewFlowLayout` class supports two kinds of supplementary views: a section header view and a section footer view. To identify these two types of views, it defines the string constants `UICollectionElementKindSectionHeader` and `UICollectionElementKindSectionFooter`. During layout, the layout object includes the kind string with the other layout attributes for that view type. The collection view then passes the information along to your data source. Your data source then uses both the kind string and the reuse identifier to decide which view object to dequeue and return.
+
+虽然你只使用了重用标识注册 cell，但是 supplementary view 需要你指定一个额外的标识作为类型字符串。每个布局对象负责定义它支持的 supplementary view 的中俄李。例如，`UICollectionViewFlowLayout`类支持两种 supplementary view：section header view 和 section footer view。为了标识这两种视图，它定义了字符串常量 `UICollectionElementKindSectionHeader` 和 `UICollectionElementKindSectionFooter`。在布局，布局对象包含类型字符串和这种视图类型的其他布局属性。然后 collection view 接着传递这些信息给你的数据源。然后你的数据源使用类型字符串和重用标识一起决定要取出哪个 view 对象并返回。
+
+> **Note:** If you implement your own custom layouts, you are responsible for defining the kinds of supplementary views your layout supports. A layout may support any number of supplementary views, each with its own kind string. For more information about defining custom layouts, see [Creating Custom Layouts](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1).
+> 
+> **注意：**如果你实现你自己的自定义布局，你要负责定义你的布局支持的 supplementary view 的类型。一个布局可以支持任意数量的 supplementary view，每一种都有它自己的类型字符串。关于定义自定义布局的更多信息，参见 [创建自定义布局](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1)。
+
 Registration is a one-time event that must take place before you attempt to dequeue any cells or views. After you’ve registered, you can dequeue as many cells or views as needed without reregistering them. It’s not recommended that you change the registration information after dequeueing one or more items. It is better to register your cells and views once and be done with it.
 
-Dequeueing and Configuring Cells and Views
-Your data source object is responsible for providing cells and supplementary views when asked for them by the collection view. The UICollectionViewDataSource protocol contains two methods for this purpose: collectionView:cellForItemAtIndexPath: and collectionView:viewForSupplementaryElementOfKind:atIndexPath:. Because cells are a required element of a collection view, your data source must implement the collectionView:cellForItemAtIndexPath: method, but the collectionView:viewForSupplementaryElementOfKind:atIndexPath: method is optional and dependent on the type of layout in use. In both cases, your implementation of these methods follows a very simple pattern:
+注册是一次性的事件，必须放在你试图取出任何 cell 或 view 之前。在你已经注册之后，你可以想取出多少 cell 或 view 就取多少，都不用再注册它们。不推荐在取出一个或多个 item 之后再修改注册信息。最好一次注册好你的 cell 和 view，并完成这件事。
 
-Dequeue a cell or view of the appropriate type using the dequeueReusableCellWithReuseIdentifier:forIndexPath: or dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath: method.
-Configure the view using the data at the specified index path.
-Return the view.
-The dequeueing process is designed to relieve you of the responsibility of having to create a cell or view yourself. As long as you registered a cell or view previously, the dequeue methods are guaranteed to never return nil. If there is no cell or view of the given type on a reuse queue, the dequeue method simply creates one using your storyboard or using the class or nib file you registered.
+### 2.2.2 Dequeueing and Configuring Cells and Views - 取出和配置 cell 和 view
 
-The cell returned to you from the dequeueing process should be in a pristine state and ready to be configured with new data. For a cell or view that must be created, the dequeueing process creates and initializes it using the normal processes—that is, by loading the view from a storyboard or nib file or by creating a new instance and initializing it using the initWithFrame: method. In contrast, an item that wasn’t created from scratch but that was instead retrieved from a reuse queue may already contain data from a previous usage. In that case, dequeue methods call the prepareForReuse method of the item to give it a chance to return itself to a pristine state. When you implement a custom cell or view class, you can override this method to reset properties to default values and perform any additional cleanup.
+Your data source object is responsible for providing cells and supplementary views when asked for them by the collection view. The [UICollectionViewDataSource](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource) 
+protocol contains two methods for this purpose: [collectionView:cellForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618029-collectionview) and [collectionView:viewForSupplementaryElementOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618037-collectionview). Because cells are a required element of a collection view, your data source must implement the `collectionView:cellForItemAtIndexPath:` method, but the `collectionView:viewForSupplementaryElementOfKind:atIndexPath:` method is optional and dependent on the type of layout in use. In both cases, your implementation of these methods follows a very simple pattern:
+
+你的数据源对象负责在被 collection view 请求时提供 cell 和 supplementary view。[UICollectionViewDataSource](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource) 协议为这个目的包含了两个方法：[collectionView:cellForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618029-collectionview) 和 [collectionView:viewForSupplementaryElementOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdatasource/1618037-collectionview)。因为 cell 是 collection view 的必须元素，你的数据源必须实现 `collectionView:cellForItemAtIndexPath:` 方法，而 `collectionView:viewForSupplementaryElementOfKind:atIndexPath:` 方法是可选的，取决于正使用的布局的类型。在这两种情况下，你对这些方法的实现都只要遵照一个非常简单的模式：
+
+1. Dequeue a cell or view of the appropriate type using the [dequeueReusableCellWithReuseIdentifier:forIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionview/1618063-dequeuereusablecell) or [dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionview/1618068-dequeuereusablesupplementaryview) method.
+2. Configure the view using the data at the specified index path.
+3. Return the view.
+
+>
+
+1. 使用 [dequeueReusableCellWithReuseIdentifier:forIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionview/1618063-dequeuereusablecell) 或 [dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionview/1618068-dequeuereusablesupplementaryview) 方法取出 cell 或适当类型的 view。
+2. 使用特定 index path 上的数据配置这个 view。
+3. 返回这个 view。
+
+The dequeueing process is designed to relieve you of the responsibility of having to create a cell or view yourself. As long as you registered a cell or view previously, the dequeue methods are guaranteed to never return `nil`. If there is no cell or view of the given type on a reuse queue, the dequeue method simply creates one using your storyboard or using the class or nib file you registered.
+
+设计 dequeue 过程是为了减轻你不得不自己创建一个 cell 或 view 的工作。只要你预先注册了 cell 或 view，dequeue 方法就能保证永远不会返回 `nil`。如果在重用队列中没有 cell 或给定类型的 view，dequeue 方法会使用你的 storyboard 或使用你注册的类或 nib 文件创建一个。
+
+The cell returned to you from the dequeueing process should be in a pristine state and ready to be configured with new data. For a cell or view that must be created, the dequeueing process creates and initializes it using the normal processes—that is, by loading the view from a storyboard or nib file or by creating a new instance and initializing it using the [initWithFrame:](https://developer.apple.com/documentation/uikit/uiview/1622488-initwithframe) method. In contrast, an item that wasn’t created from scratch but that was instead retrieved from a reuse queue may already contain data from a previous usage. In that case, dequeue methods call the [prepareForReuse](https://developer.apple.com/documentation/uikit/uicollectionreusableview/1620141-prepareforreuse) method of the item to give it a chance to return itself to a pristine state. When you implement a custom cell or view class, you can override this method to reset properties to default values and perform any additional cleanup.
+
+从 dequeue 过程返回给你的 cell 应该处在一个全新的状态，并准备好配置新数据。对于必须创建的 cell 或 view，dequeue 过程使用普通程序创建并初始化它——也就是说，从 storyboard 或 nib 文件加载一个 view 或创建一个新的实例，并使用 [initWithFrame:](https://developer.apple.com/documentation/uikit/uiview/1622488-initwithframe) 方法初始化它。不同之处在于，那些不是从零开始创建而是从重用队列取回的 item 可能已经包含前一次使用的数据。在这种情况下，dequeue 方法会调用 item 的 [prepareForReuse](https://developer.apple.com/documentation/uikit/uicollectionreusableview/1620141-prepareforreuse) 方法给它一次机会让它自己返回到全新的状态。当你实现一个自定义 cell 或 view 类，你可以重写这个方法把属性都重置到默认值并执行任何额外的清理。
 
 After your data source dequeues the view, it configures the view with its new data. You can use the index path passed to your data source methods to locate the appropriate data object and then apply that object’s data to the view. After you configure the view, return it from your method and you are done. Listing 2-2 shows a simple example of how to configure a cell. After dequeueing the cell, the method sets the cell’s custom label using the information about the cell’s location and then returns the cell.
 
+在你的数据源取出 view 之后，它会使用它的新数据配置这个 view。你可以使用传给数据源方法的 index path 定位合适的数据对象，然后把这个对象的数据应用到视图上。在你配置好 view 之后，从你的方法返回它，你就完全了全部工作。表 2-2 展示了如何配置 cell 的简单例子。在取回 cell 之后，这个方法使用关于 cell 的位置的信息设置了 cell 的自定义标签，然后返回这个 cell。 
+
+```
 Listing 2-2  Configuring a custom cell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -150,8 +201,13 @@ Listing 2-2  Configuring a custom cell
    newCell.cellLabel.text = [NSString stringWithFormat:@"Section:%d, Item:%d", indexPath.section, indexPath.item];
    return newCell;
 }
-Note: When returning views from your datasource, always return a valid view. Returning nil, even if for some reason the view that is being asked for should not be displayed, causes an assertion and your app terminates because the layout object expects valid views to be returned by these methods.
-Inserting, Deleting, and Moving Sections and Items
+```
+
+> **Note:** When returning views from your data source, always return a valid view. Returning nil, even if for some reason the view that is being asked for should not be displayed, causes an assertion and your app terminates because the layout object expects valid views to be returned by these methods.
+> 
+> **注意：**当从你的数据源返回视图时，总要返回一个可用的视图。返回 `nil` 的话，即使由于某些原因被请求的视图不应该显示，也会导致断言并且你的app会终止，因为布局对象需要这些方法返回可用的视图。
+
+## 2.3 Inserting, Deleting, and Moving Sections and Items
 
 To insert, delete, or move a single section or item, follow these steps:
 
