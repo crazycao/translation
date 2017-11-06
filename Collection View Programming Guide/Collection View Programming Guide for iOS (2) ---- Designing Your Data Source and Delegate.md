@@ -207,19 +207,35 @@ Listing 2-2  Configuring a custom cell
 > 
 > **注意：**当从你的数据源返回视图时，总要返回一个可用的视图。返回 `nil` 的话，即使由于某些原因被请求的视图不应该显示，也会导致断言并且你的app会终止，因为布局对象需要这些方法返回可用的视图。
 
-## 2.3 Inserting, Deleting, and Moving Sections and Items
+## 2.3 Inserting, Deleting, and Moving Sections and Items - 插入、删除、移动 section 和 item
 
 To insert, delete, or move a single section or item, follow these steps:
 
-Update the data in your data source object.
-Call the appropriate method of the collection view to insert or delete the section or item.
+要插入、删除或者移动一个 section 或 item，按照这些步骤做：
+
+1. Update the data in your data source object.
+2. Call the appropriate method of the collection view to insert or delete the section or item.
+
+>
+
+1. 在你的数据源中更新数据。
+2. 调用 collection view 的适当的方法插入或删除 section 或 item。
+
 It is critical that you update your data source before notifying the collection view of any changes. The collection view methods assume that your data source contains the currently correct data. If it does not, the collection view might receive the wrong set of items from your data source or ask for items that are not there and crash your app.
 
-When you add, delete, or move a single item programmatically, the collection view’s methods automatically create animations to reflect the changes. If you want to animate multiple changes together, though, you must perform all insert, delete, or move calls inside a block and pass that block to the performBatchUpdates:completion: method. The batch update process then animates all of your changes at the same time and you can freely mix calls to insert, delete, or move items within the same block.
+在通知 collection view 进行任何修改之前更新你的数据源，这非常关键。Collection view 方法假定你的数据源包含了当前的正确数据。如果并不是这样，collection view 可能从你的数据源收到错误的，或者请求并不在那里的 item 而让App崩溃。
 
-Listing 2-3 shows a simple example of how to perform a batch update to delete the currently selected items. The block passed to the performBatchUpdates:completion: method first calls a custom method to update the data source. It then tells the collection view to delete the items. Both the update block and the completion block you provide are executed synchronously.
+When you add, delete, or move a single item programmatically, the collection view’s methods automatically create animations to reflect the changes. If you want to animate multiple changes together, though, you must perform all insert, delete, or move calls inside a block and pass that block to the [performBatchUpdates:completion:](https://developer.apple.com/documentation/uikit/uicollectionview/1618045-performbatchupdates) method. The batch update process then animates all of your changes at the same time and you can freely mix calls to insert, delete, or move items within the same block.
 
-Listing 2-3  Deleting the selected items
+当你采用编程方式添加、删除或移除一个 item 时，collection view 的方法会自动创建动画来反映变化。如果你想要让多个变化一起做动画，那么，你必须在一个 block 中执行所有的插入、删除或移动调用，并将这个 block 传给 [performBatchUpdates:completion:](https://developer.apple.com/documentation/uikit/uicollectionview/1618045-performbatchupdates) 方法。批量更新过程然后就会在同一时间给你的所有改变做动画，你可以在同一个 block 中自由的混合插入、删除或移动 item 的调用。
+
+Listing 2-3 shows a simple example of how to perform a batch update to delete the currently selected items. The block passed to the `performBatchUpdates:completion:` method first calls a custom method to update the data source. It then tells the collection view to delete the items. Both the update block and the completion block you provide are executed synchronously.
+
+表 2-3 展示了如何执行一个批量更新一删除当前选中的 item 的例子。传给 `performBatchUpdates:completion:` 方法的 block 首先调用了一个自定义方法更新数据源。然后它告诉 collection view 删除 item。你提供的更新 block 和完成 block 都是同步执行的。
+
+Listing 2-3  Deleting the selected items - 删除选中的 item
+
+```
 [self.collectionView performBatchUpdates:^{
    NSArray* itemPaths = [self.collectionView indexPathsForSelectedItems];
  
@@ -229,13 +245,21 @@ Listing 2-3  Deleting the selected items
    // Now delete the items from the collection view.
    [self.collectionView deleteItemsAtIndexPaths:itemPaths];
 } completion:nil];
-Managing the Visual State for Selections and Highlights
+```
 
-Collection views support single-item selection by default and can be configured to support multiple-item selection or have selections disabled altogether. The collection view detects taps inside its bounds and highlights or selects the corresponding cell accordingly. For the most part, the collection view modifies only the properties of a cell to indicate that it is selected or highlighted; it does not change the visual appearance of your cells, with one exception. If a cell’s selectedBackgroundView property contains a valid view, the collection view shows that view when the cell is highlighted or selected.
+## 2.4 Managing the Visual State for Selections and Highlights - 管理选中和高亮的视觉状态
 
-Listing 2-4 shows code that could be incorporated into your implementation of a custom collection view cell to facilitate a changing appearance for highlighted and selected states. The cell’s backgroundView property will always be the default view when the cell loads for the first time and when the cell is either not highlighted or not selected. The selectedBackgroundView property replaces the default background view whenever a cell is highlighted or selected. In this case, the cell’s background color would be changed from red to white when selected or highlighted.
+Collection views support single-item selection by default and can be configured to support multiple-item selection or have selections disabled altogether. The collection view detects taps inside its bounds and highlights or selects the corresponding cell accordingly. For the most part, the collection view modifies only the properties of a cell to indicate that it is selected or highlighted; it does not change the visual appearance of your cells, with one exception. If a cell’s [selectedBackgroundView](https://developer.apple.com/documentation/uikit/uicollectionviewcell/1620138-selectedbackgroundview) property contains a valid view, the collection view shows that view when the cell is highlighted or selected.
 
-Listing 2-4  Setting the background views to indicate changed states
+Collection view 默认支持单 item 选中，并可以配置成支持多 item 选中或者完全禁止选中。Collection view 发现点击在其边界内并相应的高亮或选中相关的 cell。就绝大部分而言，collection view 只修改 cell 的属性以指示它被选中或高亮；它不会改变 cell 的视觉外观，只有一个例外。如果 cell 的 [selectedBackgroundView](https://developer.apple.com/documentation/uikit/uicollectionviewcell/1620138-selectedbackgroundview) 属性包含一个可用的视图，collection view 会在 cell 被高亮或选中时展示这个视图。
+
+Listing 2-4 shows code that could be incorporated into your implementation of a custom collection view cell to facilitate a changing appearance for highlighted and selected states. The cell’s [backgroundView](https://developer.apple.com/documentation/uikit/uicollectionviewcell/1620131-backgroundview) property will always be the default view when the cell loads for the first time and when the cell is either not highlighted or not selected. The [selectedBackgroundView](https://developer.apple.com/documentation/uikit/uicollectionviewcell/1620138-selectedbackgroundview) property replaces the default background view whenever a cell is highlighted or selected. In this case, the cell’s background color would be changed from red to white when selected or highlighted.
+
+表 2-4 展示了可以合并到你的自定义 collection view cell 实现的代码，以便为了突出高亮和选中状态而改变外观。Cell 的 [backgroundView](https://developer.apple.com/documentation/uikit/uicollectionviewcell/1620131-backgroundview) 属性在 cell 第一次加载时和 cell 没有被高亮或选中时总是默认视图。每当 cell 被高亮或选中时，[selectedBackgroundView](https://developer.apple.com/documentation/uikit/uicollectionviewcell/1620138-selectedbackgroundview) 属性就会替换默认的背景视图。在这个情况下，cell 在选中或高亮时的背景色也会从红色变成白色。
+
+Listing 2-4  Setting the background views to indicate changed states - 设置背景视图以指示改变的状态
+
+```
 UIView* backgroundView = [[UIView alloc] initWithFrame:self.bounds];
 backgroundView.backgroundColor = [UIColor redColor];
 self.backgroundView = backgroundView;
@@ -243,22 +267,35 @@ self.backgroundView = backgroundView;
 UIView* selectedBGView = [[UIView alloc] initWithFrame:self.bounds];
 selectedBGView.backgroundColor = [UIColor whiteColor];
 self.selectedBackgroundView = selectedBGView;
+```
+
 The collection view’s delegate provides the collection view with the following methods to facilitate highlighting and selecting:
 
-collectionView:shouldSelectItemAtIndexPath:
-collectionView:shouldDeselectItemAtIndexPath:
-collectionView:didSelectItemAtIndexPath:
-collectionView:didDeselectItemAtIndexPath:
-collectionView:shouldHighlightItemAtIndexPath:
-collectionView:didHighlightItemAtIndexPath:
-collectionView:didUnhighlightItemAtIndexPath:
+Collection view 的代理向 collection view 提供了下列方法以便高亮和选中：
+
+- [collectionView:shouldSelectItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618095-collectionview)
+- [collectionView:shouldDeselectItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618067-collectionview)
+- [collectionView:didSelectItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618032-collectionview)
+- [collectionView:didDeselectItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618035-collectionview)
+- [collectionView:shouldHighlightItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618070-collectionview)
+- [collectionView:didHighlightItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618049-collectionview)
+- [collectionView:didUnhighlightItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618027-collectionview)
+
 These methods provide you with many opportunities to tweak the highlighting/selecting bahavior of your collection view to the exact desired specifications.
 
-For example, if you prefer to draw the selection state of a cell yourself, you can leave the selectedBackgroundView property set to nil and apply any visual changes to the cell using your delegate object. You would apply the visual changes in the collectionView:didSelectItemAtIndexPath:: method and remove them in the collectionView:didDeselectItemAtIndexPath: method.
+这些方法向你提供了许多机会对你的 collection view 的高亮/选中行为进行微调，以准确达到所需的要求。
 
-If you prefer to draw the highlight state yourself, you can override the collectionView:didHighlightItemAtIndexPath: and collectionView:didUnhighlightItemAtIndexPath: delegate methods and use them to apply your highlights. If you also specified a view in the selectedBackgroundView property, you should make your changes to the content view of the cell to ensure your changes are visible. Listing 2-5 shows a simple way of changing the highlight using the content view’s background color.
+For example, if you prefer to draw the selection state of a cell yourself, you can leave the `selectedBackgroundView` property set to `nil` and apply any visual changes to the cell using your delegate object. You would apply the visual changes in the `collectionView:didSelectItemAtIndexPath:` method and remove them in the `collectionView:didDeselectItemAtIndexPath:` method.
 
-Listing 2-5  Applying a temporary highlight to a cell
+例如，如果你倾向于自己绘制 cell 的选中状态，你可以把 `selectedBackgroundView` 属性设置成 `nil`，并使用你的代理对象将一些视觉变化应用到 cell 上。你可以在 `collectionView:didSelectItemAtIndexPath:` 方法中应用视觉变化，并在 `collectionView:didDeselectItemAtIndexPath:` 方法中移除它们。
+
+If you prefer to draw the highlight state yourself, you can override the `collectionView:didHighlightItemAtIndexPath:` and `collectionView:didUnhighlightItemAtIndexPath:` delegate methods and use them to apply your highlights. If you also specified a view in the `selectedBackgroundView` property, you should make your changes to the content view of the cell to ensure your changes are visible. Listing 2-5 shows a simple way of changing the highlight using the content view’s background color.
+
+如果你倾向于自己绘制高亮状态，你可以复写 `collectionView:didHighlightItemAtIndexPath:` 和 `collectionView:didUnhighlightItemAtIndexPath:` 代理方法，并用它们应用你的高亮状态。如果你也在 `selectedBackgroundView` 属性中指定了一个视图，你应该要把你的变化应用到 cell 的 content view 上，才能确保你的变化时可见的。表 2-5 展示了一个简单的改变高亮的方法，使用了 content view 的背景色。
+
+Listing 2-5  Applying a temporary highlight to a cell - 应用一个临时的高亮到 cell 上
+
+```
 - (void)collectionView:(UICollectionView *)colView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell* cell = [colView cellForItemAtIndexPath:indexPath];
     cell.contentView.backgroundColor = [UIColor blueColor];
@@ -268,15 +305,25 @@ Listing 2-5  Applying a temporary highlight to a cell
     UICollectionViewCell* cell = [colView cellForItemAtIndexPath:indexPath];
     cell.contentView.backgroundColor = nil;
 }
-There is a subtle but important distinction between a cell’s highlighted state and its selected state. The highlighted state is a transitional state that you can use to apply visible highlights to the cell while the user’s finger is still touching the device. This state is set to YES only while the collection view is tracking touch events over the cell. When touch events stop, the highlighted state returns to the value NO. By contrast, the selected state changes only after a series of touch events has ended—specifically, when those touch events indicated that the user tried to select the cell.
+```
 
-Figure 2-3 illustrates the series of steps that occurs when a user touches an unselected cell. The initial touch-down event causes the collection view to change the highlighted state of the cell to YES, although doing so does not automatically change the appearance of the cell. If the final touch up event occurs in the cell, the highlighted state returns to NO and the collection view changes the selected state to YES. When the user changes the selected state, the collection view displays the view in the cell’s selectedBackgroundView property, but this is the only visual change that the collection view makes to the cell. Any other visual changes must be made by your delegate object.
+There is a subtle but important distinction between a cell’s highlighted state and its selected state. The highlighted state is a transitional state that you can use to apply visible highlights to the cell while the user’s finger is still touching the device. This state is set to `YES` only while the collection view is tracking touch events over the cell. When touch events stop, the highlighted state returns to the value `NO`. By contrast, the selected state changes only after a series of touch events has ended—specifically, when those touch events indicated that the user tried to select the cell.
 
-Figure 2-3  Tracking touches in a cell
+在 cell 的高亮状态和选中状态之间有一个微小但是重要的差别。高亮状态是一个过渡状态，你可以在用户的手指仍接触设备时应用可见的高亮到 cell 上。只有当 collection view 正跟踪到覆盖在 cell 上的触碰事件时，这个状态才会被设置成 `YES`。当触碰事件停止，高亮状态的值也返回到 `NO`。与之不同的是，选中状态只在一系列触碰事件结束之后才发生改变 —— 特别是当那些触碰事件暗示用户视图选中 cell 的时候。
+
+Figure 2-3 illustrates the series of steps that occurs when a user touches an unselected cell. The initial touch-down event causes the collection view to change the highlighted state of the cell to `YES`, although doing so does not automatically change the appearance of the cell. If the final touch up event occurs in the cell, the highlighted state returns to `NO` and the collection view changes the selected state to `YES`. When the user changes the selected state, the collection view displays the view in the cell’s `selectedBackgroundView` property, but this is the only visual change that the collection view makes to the cell. Any other visual changes must be made by your delegate object.
+
+图 2-3 说明了当用户触碰一个未选中的 cell 时发生的一系列步骤。初始的 touch-down 事件导致 collection view 把 cell 的高亮状态改为 `YES`，而这么做不会自动改变 cell 的外观。如果最后 touch up 事件发生在 cell 之内，高亮状态就会返回到 `NO`，并且 collection view 会把选中状态改成 `YES`。当用户改变选中状态时，collection view 会显示 cell 的 `seletedBackgroundView` 属性中的视图，但这是 collection view 对 cell 做的唯一视觉改变。任何其他的视觉改变必须由你的代理对象来完成。
+
+Figure 2-3  Tracking touches in a cell - 跟踪 cell 中的触碰
+
+![cell_selection_semantics_2x.png](images/cell_selection_semantics_2x.png)
 
 Whether the user is selecting or deselecting a cell, the cell’s selected state is always the last thing to change. Taps in a cell always result in changes to the cell’s highlighted state first. Only after the tap sequence ends and any highlights applied during that sequence are removed, does the selected state of the cell change. When designing your cells, you should make sure that the visual appearance of your highlights and selected state do not conflict in unintended ways.
 
-Showing the Edit Menu for a Cell
+无论用户选中或取消选中一个 cell，cell 的选中状态总是最后才变的。点到 cell 里面总是会首先导致 cell 的高亮状态变化。只有在点击系列结束以后，在系列过程中应用的所有高亮状态被移除，cell 的高亮状态才会改变。当设计你的 cell 时，你应该确保你的高亮和选中状态的视觉外观不会意外的冲突。
+
+## 2.5 Showing the Edit Menu for a Cell
 
 When the user performs a long-tap gesture on a cell, the collection view attempts to display an Edit menu for that cell. The Edit menu can be used to cut, copy, and paste cells in the collection view. Several conditions must be met before the Edit menu can be displayed:
 
