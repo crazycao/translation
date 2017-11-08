@@ -323,30 +323,36 @@ Whether the user is selecting or deselecting a cell, the cell’s selected state
 
 无论用户选中或取消选中一个 cell，cell 的选中状态总是最后才变的。点到 cell 里面总是会首先导致 cell 的高亮状态变化。只有在点击系列结束以后，在系列过程中应用的所有高亮状态被移除，cell 的高亮状态才会改变。当设计你的 cell 时，你应该确保你的高亮和选中状态的视觉外观不会意外的冲突。
 
-## 2.5 Showing the Edit Menu for a Cell
+## 2.5 Showing the Edit Menu for a Cell - 在 cell 中展示 Edit 菜单
 
 When the user performs a long-tap gesture on a cell, the collection view attempts to display an Edit menu for that cell. The Edit menu can be used to cut, copy, and paste cells in the collection view. Several conditions must be met before the Edit menu can be displayed:
 
-The delegate must implement all three methods related to handling actions:
-collectionView:shouldShowMenuForItemAtIndexPath:
+当用户在一个 cell 上做长按手势时，collection view 会尝试为这个 cell 显示一个 Edit 菜单。Edit 菜单可以用来剪切、复制和粘贴 collection view 中的 cell。在 Edit 菜单显示之前必须满足若干个条件：
 
-collectionView:canPerformAction:forItemAtIndexPath:withSender:
+- The delegate must implement all three methods related to handling actions:
+	[collectionView:shouldShowMenuForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618010-collectionview)
+	[collectionView:canPerformAction:forItemAtIndexPath:withSender:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618051-collectionview)
+	[collectionView:performAction:forItemAtIndexPath:withSender:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618073-collectionview)
+- The `collectionView:shouldShowMenuForItemAtIndexPath:` method must return `YES` for the indicated cell.
+- The `collectionView:canPerformAction:forItemAtIndexPath:withSender:` method must return `YES` for at least one of the desired actions. The collection view supports the following actions: `cut:`, `copy:` and `paste:`.
+- 代理必须实现了关于处理动作的全部三个方法：
+	[collectionView:shouldShowMenuForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618010-collectionview)
+	[collectionView:canPerformAction:forItemAtIndexPath:withSender:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618051-collectionview)
+	[collectionView:performAction:forItemAtIndexPath:withSender:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618073-collectionview)
+- `collectionView:canPerformAction:forItemAtIndexPath:withSender:` 方法必须对指示的 cell 返回 `YES`。
+- `collectionView:canPerformAction:forItemAtIndexPath:withSender:` 方法必须对至少一个期望的动作返回 `YES`。Collection view 支持下列动作：`cut:`，`copy:` 和 `paste:`。
 
-collectionView:performAction:forItemAtIndexPath:withSender:
+If these conditions are met and the user chooses an action from the menu, the collection view calls the delegate’s `collectionView:performAction:forItemAtIndexPath:withSender:` method to perform the action on the indicated item.
 
-The collectionView:shouldShowMenuForItemAtIndexPath: method must return YES for the indicated cell.
-The collectionView:canPerformAction:forItemAtIndexPath:withSender: method must return YES for at least one of the desired actions. The collection view supports the following actions:
-cut:
+如果满足了这些条件，并且用户从菜单中选择了一个动作，collection view 就会调用代理的 `collectionView:performAction:forItemAtIndexPath:withSender:` 方法在指示的 item 上执行动作。
 
-copy:
+Listing 2-6 shows how to prevent one of the menu items from appearing. In this example, the [collectionView:canPerformAction:forItemAtIndexPath:withSender:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618051-collectionview) method prevents the Cut menu item from appearing in the Edit menu. It enables the Copy and Paste items so that the user can insert content.
 
-paste:
+表 2-6 展示了如何让一个菜单项目不可见。在这个例子中，[collectionView:canPerformAction:forItemAtIndexPath:withSender:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618051-collectionview) 方法让 Cut 菜单项从 Edit 菜单中消失了。它启用了 Copy 和 Paste 项目，因此用户可以插入内容。
 
-If these conditions are met and the user chooses an action from the menu, the collection view calls the delegate’s collectionView:performAction:forItemAtIndexPath:withSender: method to perform the action on the indicated item.
+Listing 2-6  Selectively disabling actions in the Edit menu - 选择性的禁用 Edit 菜单中的操作
 
-Listing 2-6 shows how to prevent one of the menu items from appearing. In this example, the collectionView:canPerformAction:forItemAtIndexPath:withSender: method prevents the Cut menu item from appearing in the Edit menu. It enables the Copy and Paste items so that the user can insert content.
-
-Listing 2-6  Selectively disabling actions in the Edit menu
+```
 - (BOOL)collectionView:(UICollectionView *)collectionView
         canPerformAction:(SEL)action
         forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -359,19 +365,36 @@ Listing 2-6  Selectively disabling actions in the Edit menu
    // Prevent all other actions.
    return NO;
 }
-For more information on working with the pasteboard commands, see Text Programming Guide for iOS.
+```
 
-Transitioning Between Layouts
+For more information on working with the pasteboard commands, see [Text Programming Guide for iOS](https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009542).
 
-The easiest way to transition between layouts is by using the setCollectionViewLayout:animated: method. However, if you require control of the transition or want it to be interactive, use a UICollectionViewTransitionLayout object.
+关于剪贴板命令工作的更多信息，参见 [Text Programming Guide for iOS](https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009542)。
 
-The UICollectionViewTransitionLayout class is a special type of layout that gets installed as the collection view’s layout object when transitioning to a new layout. With a transition layout object, you can have objects follow a non linear path, use a different timing algorithm, or move according to incoming touch events. The standard class provides a linear transition to a new layout, but like the UICollectionViewLayout class, the UICollectionViewTransitionLayout class can be subclassed to create any desired effect. In doing so, you need to implement the same methods you would when creating a custom layout and allow your implementation to adapt to input from the user, most often from a gesture recognizer. For more information about creating custom layout objects, see Creating Custom Layouts.
+## 2.6 Transitioning Between Layouts - 布局之间的过渡
 
-The UICollectionViewLayout class provides several methods for tracking the transition between layouts. UICollectionViewTransitionLayout objects track the completion of a transition through the transitionProgress property. As the transition occurs, your code updates this property periodically to indicate the completion percentage of the transition. For example, using the UICollectionViewTransitionLayout class in conjunction with objects like gesture recognizers, which you can use to transition between layouts, allows you to create interactive transitions. As well, if you implement a custom transition layout object, the UICollectionViewTransitionLayout class provides two methods for tracking values relevant to your layout: the updateValue:forAnimatedKey: and valueForAnimatedKey: methods. These methods track special floating point values that you can set and change during a transition to communicate to the layout important information. For example, if you transitioned between layouts using a pinch gesture, you could use these methods to tell the transition layout object at what offset the view’s need to be from one another.
+The easiest way to transition between layouts is by using the [setCollectionViewLayout:animated:](https://developer.apple.com/documentation/uikit/uicollectionview/1618086-setcollectionviewlayout) method. However, if you require control of the transition or want it to be interactive, use a [UICollectionViewTransitionLayout](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout) object.
 
-The steps for including a UICollectionViewTransitionLayout object in your app are as follows:
+在布局之间过渡的最简单的方法是使用 [setCollectionViewLayout:animated:](https://developer.apple.com/documentation/uikit/uicollectionview/1618086-setcollectionviewlayout) 方法。但是，如果你需要控制这个过渡或者想要它变成可交互的，就要使用 [UICollectionViewTransitionLayout](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout) 对象。
 
-Create an instance of the standard class or your own custom class using the initWithCurrentLayout:nextLayout: method.
-Communicate the progress of the transition by periodically modifying the transitionProgress property. Do not forget to invalidate the layout using the collection view’s invalidateLayout method after changing the transition’s progress.
-Implement the collectionView:transitionLayoutForOldLayout:newLayout: method in your collection view’s delegate and return your transition layout object.
-Optionally modify values for your layout using the updateValue:forAnimatedKey: method to indicate changed values relevant to your layout object. The stable value in this case is 0.
+The `UICollectionViewTransitionLayout` class is a special type of layout that gets installed as the collection view’s layout object when transitioning to a new layout. With a transition layout object, you can have objects follow a non linear path, use a different timing algorithm, or move according to incoming touch events. The standard class provides a linear transition to a new layout, but like the `UICollectionViewLayout` class, the `UICollectionViewTransitionLayout` class can be subclassed to create any desired effect. In doing so, you need to implement the same methods you would when creating a custom layout and allow your implementation to adapt to input from the user, most often from a gesture recognizer. For more information about creating custom layout objects, see [Creating Custom Layouts](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1).
+
+`UICollectionViewTransitionLayout` 类是布局的一种特殊类型，当转换到新的布局时，它就会被安装作为 collection view 的布局对象。借助过渡布局对象，你可以有沿着非线性路径排布的对象，使用不同的定时算法，或者根据即将到达的触碰事件而移动。标准类提供了到新布局的线性过渡，而像 `UICollectionViewLayout` 类一样，`UICollectionViewTransitionLayout` 类可以被子类化以创造任何想要的效果。在这么做的时候，你需要实现与创建自定义布局时相同的方法，并让你的实现能适应来自用户的输入，最常见的是来自手势识别器的输入。关于创建自定义布局的更多信息，参见 [创建自定义布局](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1)。
+
+The `UICollectionViewLayout` class provides several methods for tracking the transition between layouts. `UICollectionViewTransitionLayout` objects track the completion of a transition through the [transitionProgress](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622191-transitionprogress) property. As the transition occurs, your code updates this property periodically to indicate the completion percentage of the transition. For example, using the `UICollectionViewTransitionLayout` class in conjunction with objects like gesture recognizers, which you can use to transition between layouts, allows you to create interactive transitions. As well, if you implement a custom transition layout object, the `UICollectionViewTransitionLayout` class provides two methods for tracking values relevant to your layout: the [updateValue:forAnimatedKey:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622194-updatevalue) and [valueForAnimatedKey:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622193-value) methods. These methods track special floating point values that you can set and change during a transition to communicate to the layout important information. For example, if you transitioned between layouts using a pinch gesture, you could use these methods to tell the transition layout object at what offset the view’s need to be from one another.
+
+`UICollectionViewLayout` 类提供了若干方法来跟踪布局之间的过渡。`UICollectionViewTransitionLayout` 对象通过 [transitionProgress](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622191-transitionprogress) 属性跟踪一个过渡的完成。随着过渡发生，你的代码会周期性的更新这个属性，指示过渡的完成百分比。例如，使用 `UICollectionViewTransitionLayout` 类与像 gesture recognizer 这样的对象结合，用来在布局之间过渡，让你创建可交互的过渡。另外，如果你实现了一个自定义的过渡布局对象，`UICollectionViewTransitionLayout` 类提供了两个方法跟踪与你的布局有关的值：[updateValue:forAnimatedKey:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622194-updatevalue) 和 [valueForAnimatedKey:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622193-value) 方法。这些方法会跟踪一个特殊的浮点值，你可以在过渡过程中设置和改变这个值，传递布局的重要信息。例如，如果你在使用了 pinch 手势的布局之间过渡，你可以使用这些方法让过渡布局对象处于视图之间需求的偏移处。
+
+The steps for including a `UICollectionViewTransitionLayout` object in your app are as follows:
+
+1. Create an instance of the standard class or your own custom class using the [initWithCurrentLayout:nextLayout:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622189-initwithcurrentlayout) method.
+2. Communicate the progress of the transition by periodically modifying the [transitionProgress](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622191-transitionprogress) property. Do not forget to invalidate the layout using the collection view’s [invalidateLayout](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617728-invalidatelayout) method after changing the transition’s progress.
+3. Implement the [collectionView:transitionLayoutForOldLayout:newLayout:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618100-collectionview) method in your collection view’s delegate and return your transition layout object.
+4. Optionally modify values for your layout using the [updateValue:forAnimatedKey:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622194-updatevalue) method to indicate changed values relevant to your layout object. The stable value in this case is 0.
+
+在 App 中包含 `UICollectionViewTransitionLayout` 对象的方法如下：
+
+1. 使用 [initWithCurrentLayout:nextLayout:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622189-initwithcurrentlayout) 方法创建一个标准类或你自己的自定义类的实例。
+2. 通过周期性的修改 [transitionProgress](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622191-transitionprogress) 属性与过渡过程交互。别忘了在修改过渡的进度之后使用 collection view 的 [invalidateLayout](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617728-invalidatelayout) 方法让布局失效。
+3. 在你的 collection view 的代理中实现 [collectionView:transitionLayoutForOldLayout:newLayout:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/1618100-collectionview) 方法并返回你的过渡布局对象。
+4. 选择性的对你的布局使用 [updateValue:forAnimatedKey:](https://developer.apple.com/documentation/uikit/uicollectionviewtransitionlayout/1622194-updatevalue)  方法修改值，以指示与你的布局对象相关的改变的值。在这个例子中固定的值是 0。
