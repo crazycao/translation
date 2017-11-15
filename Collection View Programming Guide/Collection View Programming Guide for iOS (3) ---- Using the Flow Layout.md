@@ -128,35 +128,81 @@ _(表格的内容太长，无法表示，改用分点表示)_
 > ### 表 3-1（1）You want to add new supplementary or decoration views to your layout
 > ### 你想要添加新的 supplementary 或 decoration 视图到你的布局
 > The standard flow layout class supports only section header and section footer views and no decoration views. To support additional supplementary and decoration views, you need to override the following methods at a minimum:
->
-> - layoutAttributesForElementsInRect: (required)
-> - layoutAttributesForItemAtIndexPath: (required)
-> - layoutAttributesForSupplementaryViewOfKind:atIndexPath: (to support new supplementary views)
-> - layoutAttributesForDecorationViewOfKind:atIndexPath: (to support new decoration views)
 > 
-> In your layoutAttributesForElementsInRect: method, you can call super to get the layout attributes for the cells and then add the attributes for any new supplementary or decoration views that are in the specified rectangle. Use the other methods to provide attributes on demand.
-> For information about providing attributes for views during layout, see Creating Layout Attributes and Providing Layout Attributes for Items in a Given Rectangle.
-> ### 表 3-1（2）You want to tweak the layout attributes being returned by the flow layout
-> Override the layoutAttributesForElementsInRect: method and any of the methods that return layout attributes. The implementation of your methods should call super, modify the attributes provided by the parent class, and then return them.
-> For in-depth dicussions of what these methods entail, see Creating Layout Attributes and Providing Layout Attributes for Items in a Given Rectangle.
+> 标准流式布局类只支持 section header 和 section footer 视图，而不支持 decoration 视图。要支持额外的 supplementary 和 decoration 视图，你至少需要重载下面方法：
+>
+> - [layoutAttributesForElementsInRect:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617769-layoutattributesforelements) (required)
+> - [layoutAttributesForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617797-layoutattributesforitem) (required)
+> - [layoutAttributesForSupplementaryViewOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617792-layoutattributesforsupplementary) (to support new supplementary views)
+> - [layoutAttributesForDecorationViewOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617809-layoutattributesfordecorationvie) (to support new decoration views)
+> 
+> In your `layoutAttributesForElementsInRect:` method, you can call `super` to get the layout attributes for the cells and then add the attributes for any new supplementary or decoration views that are in the specified rectangle. Use the other methods to provide attributes on demand.
+> 
+> 在你的 `layoutAttributesForElementsInRect:` 方法中，你可以调用 `super` 为 cell 获取布局属性，然后为指定矩形区域内的任何新 supplementary 或 decoration 视图添加属性。按需使用其他方法提供属性。
+> 
+> For information about providing attributes for views during layout, see [Creating Layout Attributes](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW21) and [Providing Layout Attributes for Items in a Given Rectangle](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW6).
+> 
+> 关于在布局中为视图提供属性的信息，参见 [创建布局属性](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW21) 和 [向给定矩形区域内的 item 提供布局属性](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW6)。
+> 
+> ### 表 3-1（2）You want to tweak the layout attributes being returned by the flow layout 
+> 
+> ### 你想要调整由流式布局返回的布局属性
+> 
+> Override the `layoutAttributesForElementsInRect:` method and any of the methods that return layout attributes. The implementation of your methods should call `super`, modify the attributes provided by the parent class, and then return them.
+> 
+> 重载 `layoutAttributesForElementsInRect:` 方法和任何返回布局属性的方法。你的方法实现应该调用 `super`，修改由父类提供的属性，然后再返回它们。
+> 
+> For in-depth dicussions of what these methods entail, see [Creating Layout Attributes](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW21) and [Providing Layout Attributes for Items in a Given Rectangle](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW6).
+> 
+> 关于这些方法会导致什么的深度讨论，参见 [创建布局属性](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW21) 和 [向给定矩形区域内的 item 提供布局属性](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW6)。
+> 
 > ### 表 3-1（3）You want to add new layout attributes for your cells and views
-> Create a custom subclass of UICollectionViewLayoutAttributes and add whatever properties you need to represent your custom layout information.
-> Subclass UICollectionViewFlowLayout and override the layoutAttributesClass method. In your implementation of that method, return your custom subclass.
-> You should also override the layoutAttributesForElementsInRect: method, the layoutAttributesForItemAtIndexPath: method, and any other methods that return layout attributes. In your custom implementations, you should set the values for any custom attributes you defined.
+> 
+> ### 你想要为你的 cell 和视图添加新的布局属性
+> 
+> Create a custom subclass of [UICollectionViewLayoutAttributes](https://developer.apple.com/documentation/uikit/uicollectionviewlayoutattributes) and add whatever properties you need to represent your custom layout information.
+> 
+> 创建 [UICollectionViewLayoutAttributes](https://developer.apple.com/documentation/uikit/uicollectionviewlayoutattributes) 的自定义子类，并添加任何你需要表达你的自定义布局信息的属性。
+> 
+> Subclass [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewflowlayout) and override the [layoutAttributesClass](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617774-layoutattributesclass) method. In your implementation of that method, return your custom subclass.
+> 
+> 子类化 [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewflowlayout)，并重载 [layoutAttributesClass](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617774-layoutattributesclass) 方法。在这个方法的实现中，返回你的自定义子类。
+> 
+> You should also override the `layoutAttributesForElementsInRect:` method, the `layoutAttributesForItemAtIndexPath:` method, and any other methods that return layout attributes. In your custom implementations, you should set the values for any custom attributes you defined.
+> 
+> 你也应该重载 `layoutAttributesForElementsInRect:` 方法，`layoutAttributesForItemAtIndexPath:` 方法，以及任何其他返回布局属性的方法。在你的自定义实现中，你应该设置为任何你定义的自定义属性设置值。
+> 
 > ### 表 3-1（4）You want to specify initial or final locations for items being inserted or deleted
+> 
+> 你想要为插入或删除的 item 指定开始或结束为止
+> 
 > By default, a simple fade animation is created for items being inserted or deleted. To create custom animations, you must override some or all of the following methods:
 > 
-> - initialLayoutAttributesForAppearingItemAtIndexPath:
-> - initialLayoutAttributesForAppearingSupplementaryElementOfKind:atIndexPath:
-> - initialLayoutAttributesForAppearingDecorationElementOfKind:atIndexPath:
-> - finalLayoutAttributesForDisappearingItemAtIndexPath:
-> - finalLayoutAttributesForDisappearingSupplementaryElementOfKind:atIndexPath:
-> - finalLayoutAttributesForDisappearingDecorationElementOfKind:atIndexPath:
+> 默认情况下，item 被插入或删除都会创建一个简单的淡入淡出动画。要创建自定义动画，你必须重载下列部分或全部方法：
+> 
+> - [initialLayoutAttributesForAppearingItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617789-initiallayoutattributesforappear)
+> - [initialLayoutAttributesForAppearingSupplementaryElementOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617737-initiallayoutattributesforappear)
+> - [initialLayoutAttributesForAppearingDecorationElementOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617726-initiallayoutattributesforappear)
+> - [finalLayoutAttributesForDisappearingItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617740-finallayoutattributesfordisappea)
+> - [finalLayoutAttributesForDisappearingSupplementaryElementOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617742-finallayoutattributesfordisappea)
+> - [finalLayoutAttributesForDisappearingDecorationElementOfKind:atIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617762-finallayoutattributesfordisappea)
 > 
 > In your implementations of these methods, specify the attributes you want each view to have prior to being inserted or after they are removed. The flow layout object uses the attributes you provide to animate the insertions and deletions.
-> If you override these methods, it is also recommended that you override the prepareForCollectionViewUpdates: and finalizeCollectionViewUpdates methods. You can use these methods to track which items are being inserted or deleted during the current cycle.
-> For more information about how insertions and deletions work, see Making Insertion and Deletion Animations More Interesting.
+> 
+> 在这些方法的实现中，指定你希望每个视图拥有的属性，应该在它们被插入之前或被移除之后。流式布局对象使用你提供的属性给插入和删除添加动画。
+> 
+> If you override these methods, it is also recommended that you override the [prepareForCollectionViewUpdates:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617784-prepare) and [finalizeCollectionViewUpdates](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617787-finalizecollectionviewupdates) methods. You can use these methods to track which items are being inserted or deleted during the current cycle.
+> 
+> 如果你重载这些方法，也建议你重载 [prepareForCollectionViewUpdates:](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617784-prepare) 和 [finalizeCollectionViewUpdates](https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617787-finalizecollectionviewupdates) 方法。你可以使用这些方法在整个周期中跟踪被插入或删除的 item。
+> 
+> For more information about how insertions and deletions work, see [Making Insertion and Deletion Animations More Interesting](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW13).
+> 
+> 关于插入和删除如何工作的更多信息，参见 [让插入和删除动画更有趣](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW13)。
 
 There are also instances in which the right thing to do is to create a custom layout from scratch. Before you decide to do this, take the time to consider whether or not it is really necessary. The flow layout provides a lot of customizable behavior that is appropriate for many different kinds of layouts, and because it is provided to you, it is easy to use and contains numerous optimizations to make it efficient. However, all this is not to say that you should never create a custom layout, because there are circumstances in which doing so make absolute sense. The flow layout limits the scroll direction to one direction, so if your layout contains content that stretches farther than the bounds of the screen in both directions, a custom layout makes more sense to implement. Creating a custom layout is the right decision if your layout is not a grid or a line-based breaking layout, as described above, or if the items within your layout move so frequently that subclassing the flow layout is more compicated than creating your own.
 
-For more on creating a custom layout, see Creating Custom Layouts.
+也有一些情况下，正确的做法是从头创建一个自定义布局。在你决定这么做之前，花点时间考虑着是否真的有必要。流式布局提供了大量可自定义的行为，可以适应许多不同类型的布局，并且因为是向你提供的，它非常易于使用并包含了许多使其高效的优化。然而，所有这些并不是说永远不需要创建一个自定义布局，因为在有些情况下这样做绝对有意义。流式布局限制了只能一个滚动方向，因此如果你的布局在两个方向上都包含了超出屏幕边界的内容，实现自定义布局就更有意义了。如果你的布局不是一个网格或基于行分割的布局，就如上面描述的那样，或者如果你的布局中的 item 会非常频繁的移动以致于子类化流式布局比创建自己的更复杂，那么创建一个自定义布局都是正确的选择。
+
+For more on creating a custom layout, see [Creating Custom Layouts](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1).
+
+关于创建自定义布局的更多信息，参见 [创建自定义布局](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/CreatingCustomLayouts/CreatingCustomLayouts.html#//apple_ref/doc/uid/TP40012334-CH5-SW1)。
