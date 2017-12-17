@@ -1,4 +1,4 @@
-# Internationalization and Localization Guide (1) ---- Internationalizing the User Interface
+# Internationalization and Localization Guide (2) ---- Internationalizing the User Interface
 
 原文地址：
 [https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourUserInterface/InternationalizingYourUserInterface.html#//apple_ref/doc/uid/10000171i-CH3-SW3](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourUserInterface/InternationalizingYourUserInterface.html#//apple_ref/doc/uid/10000171i-CH3-SW3)
