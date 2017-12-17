@@ -51,45 +51,73 @@ Follow these tips when using Auto Layout for internationalized apps:
 
 **Don’t set the minimum size or maximum size of a window.** Let the window and its content view adjust to the size of the containing views, which may change when the language changes.
 
-**不要设置 window 的最小尺寸或最大尺寸。让 window 和它的内容视图调节包含的视图的尺寸，这也随着语言改变而改变。
+**不要设置 window 的最小尺寸或最大尺寸。**让 window 和它的内容视图调节包含的视图的尺寸，这也随着语言改变而改变。
 
-Auto Layout is enabled by default when you create a new project. To enable Auto Layout for an older project, read Adopting Auto Layout in [Auto Layout Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853). To learn how to add constraints and resolve constraint issues, read Auto Layout Guide.
+Auto Layout is enabled by default when you create a new project. To enable Auto Layout for an older project, read Adopting Auto Layout in [Auto Layout Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853). To learn how to add constraints and resolve constraint issues, read [Auto Layout Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853).
 
-当你创建一个新工程师，Auto Layout 是默认启用。要为一个更老的工程启用 Auto Layout，可阅读 [Auto Layout Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853) d 
+当你创建一个新工程师，Auto Layout 是默认启用。要为一个更老的工程启用 Auto Layout，可阅读《[Auto Layout Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853)》中的《Adopting Auto Layout》。要学习如何添加约束和解决约束问题，也阅读《[Auto Layout Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853)》。
 
-Detecting Problems Using Pseudolocalizations
+## 2.3 Detecting Problems Using Pseudolocalizations - 使用伪本地化探测问题
 
 In Interface Builder, you can preview the user interface using pseudolocalizations to detect Auto Layout problems. Before you localize your app and add languages, only pseudolocalizations are available in Interface Builder.
 
-To preview the user interface in a pseudolocalization
+在 Interface Builder 中，你可以使用伪本地化预览用户界面，以探测 Auto Layout 问题。在你本地化你的 App 并添加语言之前，也只有伪本地化在 Interface Builder 中是可用的。
 
-In project navigator, select the .storyboard or .xib file you want to preview.
-Choose View > Assistant Editor > Show Assistant Editor.
-In the assistant editor jump bar, open the Assistant pop-up menu, scroll to the Preview item, and choose the .storyboard or .xib file.
+**To preview the user interface in a pseudolocalization**
+
+**在伪本地化中预览用户界面**
+
+1. In project navigator, select the `.storyboard` or `.xib` file you want to preview.
+2. Choose View > Assistant Editor > Show Assistant Editor.
+3. In the assistant editor jump bar, open the Assistant pop-up menu, scroll to the Preview item, and choose the `.storyboard` or `.xib` file.</br>
 If a preview of the app’s user interface doesn’t appear in the assistant editor, select the window or view you want to preview in the icon or outline view.
+4. In the assistant editor, choose the pseudolocalization you want to use from the language pop-up menu in the lower-right corner.
 
-In the assistant editor, choose the pseudolocalization you want to use from the language pop-up menu in the lower-right corner.
-../Art/ib_preview_double_length1_2x.png
+>
+
+1. 在工程导航中，选择你想要预览的 `.storyboard` 或 `.xib` 文件。
+2. 选择 View > Assistant Editor > Show Assistant Editor。
+3. 在辅助编辑器跳转栏中，打开 Assistant 弹出菜单，滚动到 Preview 项目，并选择 `.storyboard` 或 `.xib` 文件。</br>
+如果 App 的用户界面预览没有出资按在辅助编辑器中，在图标或轮廓视图中选择你想要预览的 window 或 view。
+4. 在辅助编辑器中，从右下角的语言弹出菜单中选择你想要使用的伪本地化。
+
+![ib_preview_double_length1_2x.png](images/ib_preview_double_length1_2x.png)
+
 For example, choose “Double-Length Pseudo-Language” from the menu to replace all user-facing strings with duplicate strings. A preview of the localization appears in the assistant editor.
-../Art/ib_preview_double_length_2x.png
-Enabling Base Internationalization
+
+例如，从菜单中选择 “Double-Length Pseudo-Language”，用复制的字符串替换掉所有的面向用户的字符串。本地化的预览也可以在辅助编辑器中看到。
+
+![Art](images/ib_preview_double_length_2x.png)
+
+### 2.4 Enabling Base Internationalization 启用基本国际化。
 
 Verify that your project is using base internationalization and if necessary, enable it before continuing.
 
-To enable base internationalization
+验证你的工程正在使用基础国际化，如果有必要，在继续之前启用它。
 
-In the project navigator, select the project (not a target) and click Info.
-If necessary, click the disclosure triangle next to Localizations to reveal the settings.
-../Art/bi_disabled_2x.png
-If necessary, select the Use Base Internationalization checkbox.
-In the dialog that appears, specify the development language for your .storyboard and .xib files.
-Select the .storyboard and .xib files in the Resource File column and the development language in the Reference Language column.
+**To enable base internationalization**
 
-../Art/bi_enabled_dialog_2x.png
-Xcode modifies your project folder according to the selections you make in this dialog. Xcode creates a Base.lproj folder in your project folder and adds to it the resource files you select. Xcode creates a language folder for the development language but only adds resources that need translation to the folder. For example, if you select English as the development language, Xcode inserts the resource file in the Base.lproj project folder but not the en.lproj folder because the resource is already in English.
-If no resources appear in the dialog, add your .storyboard and .xib files to a language, as described in Adding Languages, and repeat these steps.
+**启用基础国际化**
 
-Click the Finish button.
-In the Language table, the number of localized resource files for the Development Language changes from 0 to the number of files you selected.
+1. In the project navigator, select the project (not a target) and click Info. </br> 
+	在工程导航器中，选择工程（不是 target）并点击 Info。
+2. If necessary, click the disclosure triangle next to Localizations to reveal the settings.</br>
+	如果有必要，点击 Localizations 旁边的折叠三角形展示设置。</br>
+![bi_disabled_2x.png](images/bi_disabled_2x.png)
+3. If necessary, select the Use Base Internationalization checkbox. </br>
+	如果有必要，选中 Use Base Internationalization 选择框。
+4. In the dialog that appears, specify the development language for your `.storyboard` and `.xib` files.</br>
+	在出现的对话框中，为你的 `.storyboard` 和 `.xib` 文件指定开发语言。 </br>
+	Select the `.storyboard` and `.xib` files in the Resource File column and the development language in the Reference Language column.</br>
+	在 Resource File 列中选择 `.storyboard` 和 `.xib` 文件，并在 Reference Language 列中选择开发语言。 </br>
+![bi_enabled_dialog_2x.png](images/bi_enabled_dialog_2x.png)</br>
+	Xcode modifies your project folder according to the selections you make in this dialog. Xcode creates a `Base.lproj` folder in your project folder and adds to it the resource files you select. Xcode creates a language folder for the development language but only adds resources that need translation to the folder. For example, if you select English as the development language, Xcode inserts the resource file in the `Base.lproj` project folder but not the `en.lproj` folder because the resource is already in English.</br>
+	Xcode 会根据你在该对话框中做出的选择修改你的工程文件夹。Xcode 会在你的工程文件夹中创建一个 `Base.lproj` 文件夹并将你选中的资源文件添加到里面。Xcode 会为开发语言创建一个语言文件夹，但是只会添加需要翻译的资源到这个文件夹。列入，如果你选择英语作为开发语言，Xcode 会插入资源文件到 `Base.lproj` 工程文件夹，但不会添加到 `en.lproj` 文件夹，因为资源已经是英语的了。 </br>
+	If no resources appear in the dialog, add your `.storyboard` and `.xib` files to a language, as described in [Adding Languages](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW2), and repeat these steps. </br>
+	如果在对话框中没有看到资源，就把你的 `.storyboard` 和 `.xib` 文件添加到一个语言，如 [Adding Languages](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW2) 所述，并重复这些步骤。
 
-../Art/bi_enabled_2x.png
+5. Click the Finish button.</br>
+	点击 Finish 按钮。</br>
+	In the Language table, the number of localized resource files for the Development Language changes from 0 to the number of files you selected. </br>
+	在 Language 表中，Development Language 对应的本地化的资源文件数目会从 0 编程你选中的文件的数量。</br>
+![bi_enabled_2x.png](images/bi_enabled_2x.png)
