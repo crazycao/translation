@@ -5,40 +5,69 @@
 
 # 3 Internationalizing Your Code - 国际化你的代码
 
-In addition to internationalizing your user interface, write code that handles text in multiple languages. First store international text in strings files similar to the strings files used by base internationalization in Internationalizing the User Interface. Also use language and locale-sensitive APIs for enumerating, searching, and sorting text in your code. Use standard text views for displaying and parsing text input as well. Let these APIs handle the complexity of different writing and input systems for you.
+In addition to internationalizing your user interface, write code that handles text in multiple languages. First store international text in strings files similar to the strings files used by base internationalization in [Internationalizing the User Interface](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourUserInterface/InternationalizingYourUserInterface.html#//apple_ref/doc/uid/10000171i-CH3-SW3). Also use language and locale-sensitive APIs for enumerating, searching, and sorting text in your code. Use standard text views for displaying and parsing text input as well. Let these APIs handle the complexity of different writing and input systems for you.
 
-Separating User-Facing Text from Your Code
+除了将你的用户界面国际化，还要写出处理多语言文本的代码。首先以字符串文件的方式保存国际化文本，类似于在《[Internationalizing the User Interface](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourUserInterface/InternationalizingYourUserInterface.html#//apple_ref/doc/uid/10000171i-CH3-SW3)》中用于基础国际化的字符串文件。在你的代码中也会使用语言和位置敏感的 API 进行枚举、查找和排序。也会使用标准文本视图显示和粘贴文本输入。让这些 API 为你处理不同拼写和输入系统的复杂性。
 
-All user-facing text supplied by your app programmatically needs to be localized—that is, user-facing text that is not contained in .storyboard or .xib files, such as error messages, needs to be translated into the current language before it’s presented to the user. iOS and OS X provide a mechanism to retrieve localized text from strings files at runtime. In your code, replace strings containing user-facing text with the return value of an NSLocalizedString macro. When you export localizations, Xcode searches your code for the macros and includes the strings files in the exported localization file for translation. When you import localizations, Xcode adds the strings files, used by your code, to your Xcode project.
+## 3.1 Separating User-Facing Text from Your Code - 将面向用户的文本与你的代码分离
 
-For example, instead of using the @"26.22 miles" string in your code, use:
+All user-facing text supplied by your app programmatically needs to be localized—that is, user-facing text that is not contained in `.storyboard` or `.xib` files, such as error messages, needs to be translated into the current language before it’s presented to the user. iOS and OS X provide a mechanism to retrieve localized text from strings files at runtime. In your code, replace strings containing user-facing text with the return value of an `NSLocalizedString` macro. When you export localizations, Xcode searches your code for the macros and includes the strings files in the exported localization file for translation. When you import localizations, Xcode adds the strings files, used by your code, to your Xcode project.
 
-NSLocalizedString(@"RunningDistance", @"distance for a marathon")
-where @"RunningDistance" is the key for text that is retrieved from a localized strings file. The @"distance for a marathon" parameter is a comment about the key-value pair stored in the strings file as a hint to localizers. If you want different behavior, use one of the other NSLocalizedString macros that take more parameters, described in Foundation Functions Reference.
+由你的 App 编程提供的所有面向用户的文本需要被本地化 —— 也就是，没有包含在 `.storyboard` 或 `.xib` 文件中的文本，比如错误消息，需要在展示给用户之前被翻译成当前语言。iOS 和 OS X 提供了一个机制在运行时从字符串文件中取回本地化的文本。在你的代码中，将包含面向用户的文本的字符串替换成一个 `NSLocalizedString` 宏的返回值。当你导出本地化时，Xcode 在你的代码中查找这个宏，并在导出的本地化文件中包含字符串文件以便翻译。当你导入本地化时，Xcode 添加被你的代码使用到的字符串文件到你的 Xcode 工程。
 
-tip icon
-Tip: Don’t overload keys or compose phrases from multiple keys. Some languages have gender articles, adjective endings, and completely different word order. Instead, add a separate key-value pair to the strings file for all unique phrases.
-For example, replace these key-value pairs:
-/* Go to next page/chapter */
-"GoToNext" = "Go to next %@";
-"chapter" = "chapter";
-"page" = "page";
-with separate key-value pairs for each phrase:
-/* Go to next chapter */
-"GoToNextChapter" = "Go to next chapter";
- 
-/* Go to next page */
-"GoToNextPage" = "Go to next page";
-Don’t put numbers in localizable strings because different regions can use different numbers.
-You don’t need to store all your key-value pairs in the same strings files. You can use other NSLocalizedString macros to create separate strings files and optionally, store them in different bundles. For more information on NSLocalizedString macros, read String Resources in Resource Programming Guide.
+For example, instead of using the `@"26.22 miles"` string in your code, use:
 
-To retrieve a localized string from a strings file, rather than adding it to a strings file, use the localizedStringForKey:value:table: method in the NSBundle class. When the strings file corresponding to the specified table is not in your project, the NSLocalizedString macros and the localizedStringForKey:value:table: method return the value parameter as the localized string.
+例如，在你的代码中替换掉对 `@26.22 miles` 字符串的使用，使用：
 
-Later, when you import localizations, as described in Importing Localizations, the localized strings files are added to your project. (Alternatively, you can generate the development language strings files from NSLocalizedString macros directly, as described in Creating Strings Files for User-Facing Text in Your Code.)
+	NSLocalizedString(@"RunningDistance", @"distance for a marathon")
 
-If your strings contain plurals of nouns or units of measurement, read Handling Noun Plurals and Units of Measurement for how to extend this mechanism for languages that have different plural rules.
+where `@"RunningDistance"` is the key for text that is retrieved from a localized strings file. The `@"distance for a marathon"` parameter is a comment about the key-value pair stored in the strings file as a hint to localizers. If you want different behavior, use one of the other `NSLocalizedString` macros that take more parameters, described in _Foundation Functions Reference_.
 
-Using Unicode Strings
+在这里 `@"RunningDistance"` 是从已本地化的字符串文件中取回文本的 key。`@"distance for a marathon"` 参数是一个对储存在字符串文件中的键值对的评论，作为对本地化这的提示。如果你想要不同的行为，使用具有更多参数的其他 `NSLocalizedString` 宏，如《_Foundation Functions Reference_》中所述。
+
+> **Tip:** Don’t overload keys or compose phrases from multiple keys. Some languages have gender articles, adjective endings, and completely different word order.   Instead, add a separate key-value pair to the strings file for all unique phrases.
+>
+>	**提示：**不要重载 key 或合成语法。某些语言有性别特色，形容词词尾，以及完全不同的拼写顺序。想反，可以为所有独立的语法添加与字符串文件分离键值对。
+>
+> For example, replace these key-value pairs:
+> 
+> 例如，替换这些键值对：
+>
+	/* Go to next page/chapter */
+	"GoToNext" = "Go to next %@";
+	"chapter" = "chapter";
+	"page" = "page";
+>
+> with separate key-value pairs for each phrase:
+> 
+> 为每个语句使用单独的键值对：
+>
+	/* Go to next chapter */
+	"GoToNextChapter" = "Go to next chapter";
+	/* Go to next page */
+	"GoToNextPage" = "Go to next page";
+
+> Don’t put numbers in localizable strings because different regions can use different numbers.
+> 
+> 不要把数字放入可本地化的字符串中，因为不同的地区可以使用不同的数字。
+
+You don’t need to store all your key-value pairs in the same strings files. You can use other `NSLocalizedString` macros to create separate strings files and optionally, store them in different bundles. For more information on `NSLocalizedString` macros, read [String Resources](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/LoadingResources/Strings/Strings.html#//apple_ref/doc/uid/10000051i-CH6) in [Resource Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/LoadingResources/Introduction/Introduction.html#//apple_ref/doc/uid/10000051i).
+
+你不需要存储所有键值对到相同的字符串文件。你也可以使用其他 `NSLocalizedString` 宏创建单独的字符串文件，并且可以选择性的把它们保存到不同的包里。关于 `NSLocalizedString` 宏的更多信息，请阅读《[Resource Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/LoadingResources/Introduction/Introduction.html#//apple_ref/doc/uid/10000051i)》中的《[String Resources](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/LoadingResources/Strings/Strings.html#//apple_ref/doc/uid/10000051i-CH6)》。
+
+To retrieve a localized string from a strings file, rather than adding it to a strings file, use the [localizedStringForKey:value:table:](https://developer.apple.com/documentation/foundation/bundle/1417694-localizedstring) method in the [NSBundle](https://developer.apple.com/documentation/foundation/nsbundle) class. When the strings file corresponding to the specified table is not in your project, the `NSLocalizedString` macros and the [localizedStringForKey:value:table:](https://developer.apple.com/documentation/foundation/bundle/1417694-localizedstring) method return the value parameter as the localized string.
+
+要从字符串文件中取回一个已本地化的字符串，而不是把它添加到字符串文件，使用 [NSBundle](https://developer.apple.com/documentation/foundation/nsbundle) 类的 [localizedStringForKey:value:table:](https://developer.apple.com/documentation/foundation/bundle/1417694-localizedstring) 方法。当指定 table 所对应的字符串文件不在你的工程中，`NSLocalizedString` 宏和 [localizedStringForKey:value:table:](https://developer.apple.com/documentation/foundation/bundle/1417694-localizedstring) 方法会返回 value 参数作为本地化的字符串。
+
+Later, when you import localizations, as described in [Importing Localizations](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW4), the localized strings files are added to your project. (Alternatively, you can generate the development language strings files from NSLocalizedString macros directly, as described in [Creating Strings Files for User-Facing Text in Your Code](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/MaintaingYourOwnStringsFiles/MaintaingYourOwnStringsFiles.html#//apple_ref/doc/uid/10000171i-CH19-SW1).)
+
+然后，当你导入本地化，如《[Importing Localizations](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW4)》中所述，已本地化的字符串文件会被添加到你的工程。（或者，你可以直接从 `NSLoalizedString` 宏生成开发语言字符串文件，如《[Creating Strings Files for User-Facing Text in Your Code](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/MaintaingYourOwnStringsFiles/MaintaingYourOwnStringsFiles.html#//apple_ref/doc/uid/10000171i-CH19-SW1)》中所述。）
+
+If your strings contain plurals of nouns or units of measurement, read [Handling Noun Plurals and Units of Measurement](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW10) for how to extend this mechanism for languages that have different plural rules.
+
+如果你的字符串包含复数名词或者度量单位，阅读《[Handling Noun Plurals and Units of Measurement](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW10)》了解如何为有不同复数规则的语言扩展这个机制。
+
+## 3.2 Using Unicode Strings - 使用 Unicode 字符串
 
 For all user-facing text, use string objects—instances of NSString, NSAttributedString, and their subclasses—that support Unicode. Unicode is a standard for encoding characters from all the world’s writing systems. String objects encapsulate a Unicode string encoded in UTF-16 format. What the user sees as a character may be represented and encoded as multiple characters in a Unicode string. Therefore, use string methods that manipulate composed character sequences, not individual characters in a string. Use the appropriate string APIs for iteration, searching, and sorting too. Use standard views and controls that display Unicode string objects correctly.
 
