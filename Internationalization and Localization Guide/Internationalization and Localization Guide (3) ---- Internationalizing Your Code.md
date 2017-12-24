@@ -69,105 +69,203 @@ If your strings contain plurals of nouns or units of measurement, read [Handling
 
 ## 3.2 Using Unicode Strings - 使用 Unicode 字符串
 
-For all user-facing text, use string objects—instances of NSString, NSAttributedString, and their subclasses—that support Unicode. Unicode is a standard for encoding characters from all the world’s writing systems. String objects encapsulate a Unicode string encoded in UTF-16 format. What the user sees as a character may be represented and encoded as multiple characters in a Unicode string. Therefore, use string methods that manipulate composed character sequences, not individual characters in a string. Use the appropriate string APIs for iteration, searching, and sorting too. Use standard views and controls that display Unicode string objects correctly.
+For all user-facing text, use string objects—instances of [NSString](https://developer.apple.com/documentation/foundation/nsstring), [NSAttributedString](https://developer.apple.com/documentation/foundation/nsattributedstring), and their subclasses—that support Unicode. Unicode is a standard for encoding characters from all the world’s writing systems. String objects encapsulate a Unicode string encoded in UTF-16 format. What the user sees as a character may be represented and encoded as multiple characters in a Unicode string. Therefore, use string methods that manipulate composed character sequences, not individual characters in a string. Use the appropriate string APIs for iteration, searching, and sorting too. Use standard views and controls that display Unicode string objects correctly.
 
-For comprehensive documentation on string objects, read String Programming Guide.
+对于所有面向用户的文本，使用字符串对象 —— [NSString](https://developer.apple.com/documentation/foundation/nsstring)、[NSAttributedString](https://developer.apple.com/documentation/foundation/nsattributedstring) 及它们的子类的实例 —— 它们支持 Unicode。Unicode 是一个为全世界的书写系统的文字编码的标准。字符串对象包含了一个以 UTF-16 格式编码的 Unicode 字符串。用户看到的一个字符在 Unicode 字符串中可能被表示或编码成多个字符。因此，使用操作成组的字符序列而不是字符串中的单个字符的字符串方法。也要使用合适的字符串 API 迭代、查找和排序。使用标准视图和空间将会正确的显示 Unicode 字符串对象。
 
-Accessing Characters in Strings
-The NSString class handles the complexity of character encoding for you by allowing you to access character clusters or ranges. Use the rangeOfComposedCharacterSequenceAtIndex: and rangeOfComposedCharacterSequencesForRange: methods to ensure that you don’t split user characters in a string and break the text. These methods return a range within a string that represents the user character.
+For comprehensive documentation on string objects, read [String Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Strings/introStrings.html#//apple_ref/doc/uid/10000035i).
+
+关于字符串对象的全面文档，请阅读《[String Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Strings/introStrings.html#//apple_ref/doc/uid/10000035i)》。
+
+### 3.2.1 Accessing Characters in Strings - 在字符串中访问字符
+
+The [NSString](https://developer.apple.com/documentation/foundation/nsstring) class handles the complexity of character encoding for you by allowing you to access character clusters or ranges. Use the [rangeOfComposedCharacterSequenceAtIndex:](https://developer.apple.com/documentation/foundation/nsstring/1416036-rangeofcomposedcharactersequence) and [rangeOfComposedCharacterSequencesForRange:](https://developer.apple.com/documentation/foundation/nsstring/1410993-rangeofcomposedcharactersequence) methods to ensure that you don’t split user characters in a string and break the text. These methods return a range within a string that represents the user character.
+
+[NSString](https://developer.apple.com/documentation/foundation/nsstring) 类通过允许你访问字符数组或范围，为你处理了字符编码的复杂方面。使用 [rangeOfComposedCharacterSequenceAtIndex:](https://developer.apple.com/documentation/foundation/nsstring/1416036-rangeofcomposedcharactersequence) 和 [rangeOfComposedCharacterSequencesForRange:](https://developer.apple.com/documentation/foundation/nsstring/1410993-rangeofcomposedcharactersequence) 方法确保你不会分离字符串中的用户字符而破坏文本。这些方法会返回一个表示用户特征的的范围。
 
 For example, Table 3-1 shows the numeric representation of user characters in UTF-16 and UTF-32 encoding. Note that the user characters have different lengths no matter what encoding format you use.
 
-Table 3-1  Unicode Encoding of User Characters
-User Character
-UTF-16
-UTF-32
-../Art/chinese_string_table.svg
-D85E DFFD
-27BFD
-../Art/korean_string_table.svg
-1100 1161 11A8
-01100 01161 011A8
-Video: WWDC 2013 Making Your App World-Ready: International Text > Composed Character Sequences
-Enumerating Strings
-Enumerate strings by composed character sequence, word, sentence, or paragraph, not individual characters in a string. To enumerate a string by composed character sequence, use the enumerateSubstringsInRange:options:usingBlock: method and pass NSStringEnumerationByComposedCharacterSequences as the options parameter. To enumerate a string by word (skipping over punctuation), pass NSStringEnumerationByWords as the options parameter.
+例如，表 3-1 展示了以 UTF-16 和 UTF-32 编码的用户字符的数字表示。注意用户字符有不同的长度，不管你使用的什么编码格式。
 
-For example, if you pass NSStringEnumerationByComposedCharacterSequences to the enumerateSubstringsInRange:options:usingBlock: method, it returns the user characters, as in the composed character sequences:
+Table 3-1  Unicode Encoding of User Characters - 用户字符的 Unicode 编码
 
-../Art/chinese_string_table.svg
-../Art/korean_string_table.svg
+|User Character|UTF-16|UTF-32
+|:-:|:-:|:-:|
+|![chinese_string_table.svg](images/chinese_string_table.svg)|D85E DFFD|27BFD|
+|![korean_string_table.svg](images/korean_string_table.svg)|1100 1161 11A8|01100 01161 011A8|
+
+> **Video:** [WWDC 2013 Making Your App World-Ready: International Text > Composed Character Sequences](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=47:30,48:20)
+> 
+> **视频:** [WWDC 2013 让你的 App 准备好面向世界：国际文本 > 组合的字符序列](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=47:30,48:20)
+
+#### 3.2.1.1 Enumerating Strings - 枚举字符串
+
+Enumerate strings by composed character sequence, word, sentence, or paragraph, not individual characters in a string. To enumerate a string by composed character sequence, use the [enumerateSubstringsInRange:options:usingBlock:](https://developer.apple.com/documentation/foundation/nsstring/1416774-enumeratesubstringsinrange) method and pass [NSStringEnumerationByComposedCharacterSequences](https://developer.apple.com/documentation/foundation/nsstring.enumerationoptions/1407290-bycomposedcharactersequences) as the options parameter. To enumerate a string by word (skipping over punctuation), pass [NSStringEnumerationByWords](https://developer.apple.com/documentation/foundation/nsstringenumerationoptions/nsstringenumerationbywords) as the options parameter.
+
+用组合的字符序列、单词、句子或段落枚举字符串，而不是字符串中的单个字符。要用组合的字符序列枚举一个字符串，使用 [enumerateSubstringsInRange:options:usingBlock:](https://developer.apple.com/documentation/foundation/nsstring/1416774-enumeratesubstringsinrange) 方法，并传入 [NSStringEnumerationByComposedCharacterSequences](https://developer.apple.com/documentation/foundation/nsstring.enumerationoptions/1407290-bycomposedcharactersequences) 作为选项参数。要用单词枚举一个字符串（跳过标点），传入 [NSStringEnumerationByWords](https://developer.apple.com/documentation/foundation/nsstringenumerationoptions/nsstringenumerationbywords)
+作为选项参数。
+
+For example, if you pass [NSStringEnumerationByComposedCharacterSequences](https://developer.apple.com/documentation/foundation/nsstring.enumerationoptions/1407290-bycomposedcharactersequences) to the [enumerateSubstringsInRange:options:usingBlock:](https://developer.apple.com/documentation/foundation/nsstring/1416774-enumeratesubstringsinrange) method, it returns the user characters, as in the composed character sequences:
+
+例如，如果你把 [NSStringEnumerationByComposedCharacterSequences](https://developer.apple.com/documentation/foundation/nsstring.enumerationoptions/1407290-bycomposedcharactersequences) 传给 [enumerateSubstringsInRange:options:usingBlock:](https://developer.apple.com/documentation/foundation/nsstring/1416774-enumeratesubstringsinrange) 方法，它会按照组合的字符序列返回用户字符：
+
+![chinese_string_table.svg](images/chinese_string_table.svg) </br>
+![korean_string_table.svg](images/korean_string_table.svg)
+
 If the string is
 
-../Art/enumerating_strings.svg
-and you pass NSStringEnumerationByWords as the options parameter, the following words are returned:
+如果字符串是
 
-../Art/enumerating_word_1.svg
-../Art/enumerating_word_2.svg
-../Art/enumerating_word_3.svg
-../Art/enumerating_word_4.svg
+![enumerating_strings.svg](images/enumerating_strings.svg)
+
+and you pass [NSStringEnumerationByWords](https://developer.apple.com/documentation/foundation/nsstringenumerationoptions/nsstringenumerationbywords) as the options parameter, the following words are returned:
+
+并且如果你传入 [NSStringEnumerationByWords](https://developer.apple.com/documentation/foundation/nsstringenumerationoptions/nsstringenumerationbywords) 
+作为 options 参数，将会返回下列文字：
+
+![enumerating_word_1.svg](images/enumerating_word_1.svg) </br>
+![enumerating_word_2.svg](images/enumerating_word_2.svg) </br>
+![enumerating_word_3.svg](images/enumerating_word_3.svg) </br>
+![enumerating_word_4.svg](images/enumerating_word_4.svg)
+
 Notice that spaces and punctuation are not included in the words.
 
-Video: WWDC 2013 Making Your App World-Ready: International Text > String APIs: Iteration
-Searching Strings
-To search the contents of a string or verify the presence of a string within a string using locale-sensitive comparison algorithms, use the rangeOfString:options:range:locale: method, passing the current locale as the locale parameter. The constants you can combine and pass as the options parameter are:
+注意空格和标点没有包含在句子中。
 
-NSCaseInsensitiveSearch
-Case-insensitive search. For example, ‘B’ is the same as ‘b’.
-NSDiacriticInsensitiveSearch
-Ignores diacritic marks. For example, ‘ö’ is equal to ‘o’.
-NSBackwardsSearch
+> **Video:** [WWDC 2013 Making Your App World-Ready: International Text > String APIs: Iteration](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=48:21,49:28)
+>
+> **视频：** [WWDC 2013 让你的 App 准备好面向世界 > 字符串 API：迭代](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=48:21,49:28)
+
+#### 3.2.1.2 Searching Strings - 查找字符串
+
+To search the contents of a string or verify the presence of a string within a string using locale-sensitive comparison algorithms, use the [rangeOfString:options:range:locale:](https://developer.apple.com/documentation/foundation/nsstring/1417348-rangeofstring) method, passing the current locale as the locale parameter. The constants you can combine and pass as the options parameter are:
+
+要使用地区敏感的比较算法查找字符串的内容或者验证字符串中的字符串是否存在，使用 [rangeOfString:options:range:locale:](https://developer.apple.com/documentation/foundation/nsstring/1417348-rangeofstring) 方法，传入当前地区作为 locale 参数。你可以使用并传入作为 options 参数的常量有：
+
+[NSCaseInsensitiveSearch](https://developer.apple.com/documentation/foundation/nsstringcompareoptions/nscaseinsensitivesearch)
+
+Case-insensitive search. For example, `‘B’` is the same as `‘b’`.
+
+大小写不敏感的搜索。例如，认为`‘B’`与`‘b’`是相同的。
+
+[NSDiacriticInsensitiveSearch](https://developer.apple.com/documentation/foundation/nsstring.compareoptions/1412313-diacriticinsensitive)
+
+Ignores diacritic marks. For example, `‘ö’` is equal to `‘o’`.
+
+忽略变音符标记。例如，认为`‘ö’`与`‘o’`是相等的。
+
+[NSBackwardsSearch](https://developer.apple.com/documentation/foundation/nsstring.compareoptions/1415204-backwards)
+
 Search backwards. (The default is forwards.)
-NSAnchoredSearch
-Search at the starting point.
-For example, if you are searching for user text in a string, pass the NSCaseInsensitiveSearch and NSDiacriticInsensitiveSearch constants as the options parameter to the rangeOfString:options:range:locale: method. Typically, searching text is a case and diacritic insensitive operation, but sorting text is case and diacritic sensitive.
 
-Sorting Strings
+从后往前搜索。（默认是从前往后。）
+
+[NSAnchoredSearch](https://developer.apple.com/documentation/foundation/nsstringcompareoptions/nsanchoredsearch)
+
+Search at the starting point.
+
+从一个开始点搜索。
+
+For example, if you are searching for user text in a string, pass the [NSCaseInsensitiveSearch](https://developer.apple.com/documentation/foundation/nsstringcompareoptions/nscaseinsensitivesearch) and [NSDiacriticInsensitiveSearch](https://developer.apple.com/documentation/foundation/nsstring.compareoptions/1412313-diacriticinsensitive) constants as the options parameter to the [rangeOfString:options:range:locale:](https://developer.apple.com/documentation/foundation/nsstring/1417348-rangeofstring) method. Typically, searching text is a case and diacritic insensitive operation, but sorting text is case and diacritic sensitive.
+
+例如，如果你在一个字符串中搜索用户文本，给 [rangeOfString:options:range:locale:](https://developer.apple.com/documentation/foundation/nsstring/1417348-rangeofstring) 方法传入 [NSCaseInsensitiveSearch](https://developer.apple.com/documentation/foundation/nsstringcompareoptions/nscaseinsensitivesearch) 和 [NSDiacriticInsensitiveSearch](https://developer.apple.com/documentation/foundation/nsstring.compareoptions/1412313-diacriticinsensitive) 常量作为 options 参数。一般，搜索文本是一个大小写和变音符不敏感操作，但排序文本就是一个大小写和变音符敏感操作。
+
+#### 3.2.1.3 Sorting Strings - 排序字符串
+
 For text you display to users, use locale-sensitive APIs for sorting and comparing strings. Different languages and regions have different sort order standards. For example, in French the diacritics are significant, and in English they are not. In some languages multiple letters are combined and affect the sort order.
 
-To use the locale-sensitive comparison algorithms, use the localizedStandardCompare: method which produces the same results as the Finder.
+对于你显示给用户的文本，使用地区敏感的 API 搜索和比较字符串。不同的语言和区域有不同的排序标准。例如，在法语中变音符是重要的，而在英语中不是。在某些语言中，多个字母是联合的并影响排序。
 
-If you don’t want the same results as the Finder, use the compare:options:range:locale: method, passing the current locale as the locale parameter, or the localizedCompare: method.
+To use the locale-sensitive comparison algorithms, use the [localizedStandardCompare:](https://developer.apple.com/documentation/foundation/nsstring/1409742-localizedstandardcompare) method which produces the same results as the Finder.
 
-Don’t use the localizedCaseInsensitiveCompare: method for sorting.
+要使用地区敏感的比较算法，使用 [localizedStandardCompare:](https://developer.apple.com/documentation/foundation/nsstring/1409742-localizedstandardcompare) 方法，它会产生与 Finder 相同的结果。
 
-Video: WWDC 2013 Making Your App World-Ready: International Text > String APIs: Sorting
-Displaying Text
-Use standard views and controls that handle the complexity of Unicode text layout and display for you. Characters in a string do not directly correspond to text rendered on the screen. What appears on the screen is a sequence of glyphs. A glyph is the smallest displayable unit in a font. A glyph may represent one character, more than one character, or part of a character. The mapping of characters to glyphs is not simple—it can be many-to-many. In addition, the order and position of glyphs in a line is complex. The standard views and controls even lay out bidirectional text properly for you—for example, the order of characters in a string containing an English word followed by a Hebrew word is not the same order used to lay out the text in a view, as described in Handling Bidirectional Text.
+If you don’t want the same results as the Finder, use the [compare:options:range:locale:](https://developer.apple.com/documentation/foundation/nsstring/1414561-compare) method, passing the current locale as the locale parameter, or the [localizedCompare:](https://developer.apple.com/documentation/foundation/nsstring/1416999-localizedcompare) method.
 
-If you need to write custom display code, use the appropriate low-level text APIs. To learn about the text classes for iOS, read Text Programming Guide for iOS and for Mac, read Text Layout Programming Guide.
+如果你不想要与 Finder 相同的结果，使用 [compare:options:range:locale:](https://developer.apple.com/documentation/foundation/nsstring/1414561-compare) 方法并传入当前地区作为 locale 参数，或使用 [localizedCompare:](https://developer.apple.com/documentation/foundation/nsstring/1416999-localizedcompare) 方法。
 
-Parsing Text Input
+Don’t use the [localizedCaseInsensitiveCompare:](https://developer.apple.com/documentation/foundation/nsstring/1417333-localizedcaseinsensitivecompare) method for sorting.
+
+不要使用 [localizedCaseInsensitiveCompare:](https://developer.apple.com/documentation/foundation/nsstring/1417333-localizedcaseinsensitivecompare) 方法进行排序。
+
+> **Video:** [WWDC 2013 Making Your App World-Ready: International Text > String APIs: Sorting](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=51:15,51:50)
+> 
+> **视频：** [WWDC 2013 让你的 App 准备好面向世界 > 字符串API：排序](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=51:15,51:50)
+ 
+#### 3.2.1.4 Displaying Text - 显示字符串
+
+Use standard views and controls that handle the complexity of Unicode text layout and display for you. Characters in a string do not directly correspond to text rendered on the screen. What appears on the screen is a sequence of glyphs. A glyph is the smallest displayable unit in a font. A glyph may represent one character, more than one character, or part of a character. The mapping of characters to glyphs is not simple—it can be many-to-many. In addition, the order and position of glyphs in a line is complex. The standard views and controls even lay out bidirectional text properly for you—for example, the order of characters in a string containing an English word followed by a Hebrew word is not the same order used to lay out the text in a view, as described in [Handling Bidirectional Text](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/SupportingRight-To-LeftLanguages/SupportingRight-To-LeftLanguages.html#//apple_ref/doc/uid/10000171i-CH17-SW4).
+
+使用标准视图和控件可以处理复杂的 Unicode 文本，为你进行布局和显示。字符串中的字符不会直接对应到在屏幕中渲染的文本。在屏幕中出现的是一串象形符号。字符到象形符号之间并不是简单的映射 —— 它可能是多对多的。另外，象形符号在一行中的顺序和位置也是复杂的。标准视图和控件甚至可以为你正确的布局两个方向的文本 —— 例如，一个包含希伯来语单词和英语单词的字符串中的字符顺序就以不同的顺序在视图中布局文本，如 [Handling Bidirectional Text](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/SupportingRight-To-LeftLanguages/SupportingRight-To-LeftLanguages.html#//apple_ref/doc/uid/10000171i-CH17-SW4) 中所述。
+
+If you need to write custom display code, use the appropriate low-level text APIs. To learn about the text classes for iOS, read [Text Programming Guide for iOS](https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009542) and for Mac, read [Text Layout Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/TextLayout.html#//apple_ref/doc/uid/10000158i).
+
+如果你需要编写自定义显示代码，使用合适的低级文本 API。要学习 iOS 上的文本类，阅读《[Text Programming Guide for iOS](https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009542)》，而 Mac 上的文本类，阅读《[Text Layout Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/TextLayout.html#//apple_ref/doc/uid/10000158i)》。
+
+#### 3.2.1.5 Parsing Text Input - 粘贴文本输入
+
 The user might enter text in any language and format. iOS and OS X can recognize the language the user is typing and provide the appropriate keyboard options. If you are parsing text as the user enters it, keep in mind that there’s a many-to-many mapping from keyboard characters to language characters.
 
-Parsing Language Characters
+用户可能以任何语言和格式输入文本。iOS 和 OS X 可以识别用户正在输入的语言，并提供合适的键盘选项。如果你在用户输入时粘贴文本，始终记住从键盘字符到语言字符有一个多对多的映射。
+
+##### 3.2.1.5.1 Parsing Language Characters - 粘贴语言字符
 
 For some languages, the user doesn’t enter text one character at a time. That is, keys the user presses on a keyboard don’t necessarily correspond to characters in the language. In French, the user adds an accent at the insertion point by choosing it from a pop-up menu. In Japanese and Chinese languages, the user enters phonetic representations and selects a candidate from the candidate list to confirm the marked text. In both cases, preliminary text is inserted first and then converted to final text when the user confirms it.
 
-Video: WWDC 2013 Making Your App World-Ready: International Text > Text Input
-Determining When the User Confirms Marked Text (iOS Only)
+对于某些语言，用户不会一次输入一个文本字符。也就是说，用户在键盘上按下的键不一定对应该语言中的字符。在法语中，用户可以通过从弹出菜单选择将口音添加到插入点。在日语和汉语中，用户输入拼音并从候选列表中选择一个候选词确认想要的文本。在这两个例子中，都是首先插入一个初步的文本，然后当用户确认时在转换成最终的文本。
 
-To determine if the user confirmed marked text, send markedTextRange to a text view. If this method returns an empty string, the user confirmed some entered text.
+> **Video:** [WWDC 2013 Making Your App World-Ready: International Text > Text Input](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=54:33,56:02)
+> 
+> **视频：** [WWDC 2013 让你的 App 准备好面向世界：国际化文本 > 文本输入](http://devstreaming.apple.com/videos/wwdc/2013/219xax4xjor8i6b9h77lafay32/219/ref.mov#t=54:33,56:02)
 
-Determining the Typed Language (iOS Only)
+##### 3.2.1.5.2 Determining When the User Confirms Marked Text (iOS Only) - 当用户确认想要的文本时再决定（仅 iOS）
 
-To get the language that the user is currently typing, use the textInputMode property in the UIResponder class, as in:
+To determine if the user confirmed marked text, send [markedTextRange](https://developer.apple.com/documentation/uikit/uitextinput/1614489-markedtextrange) to a text view. If this method returns an empty string, the user confirmed some entered text.
 
+要决定用户是否确认想要的文本，把 [markedTextRange](https://developer.apple.com/documentation/uikit/uitextinput/1614489-markedtextrange) 发送到文本视图。如果该方法返回一个空字符串，用户就已经确认了一些输入的文本。
+
+##### 3.2.1.5.3 Determining the Typed Language (iOS Only) - 决定输入的语言（仅 iOS）
+
+To get the language that the user is currently typing, use the [textInputMode](https://developer.apple.com/documentation/uikit/uiresponder/1621133-textinputmode) property in the [UIResponder](https://developer.apple.com/documentation/uikit/uiresponder) class, as in:
+
+要获得用户当前输入的语言，使用 [UIResponder](https://developer.apple.com/documentation/uikit/uiresponder) 类的 [textInputMode](https://developer.apple.com/documentation/uikit/uiresponder/1621133-textinputmode) 属性，如：
+
+```
 NSString *languageID = [[[UIApplication sharedApplication] textInputMode] primaryLanguage];
-The returned string is a language ID, as described in Language and Locale IDs, that identifies a written language or dialect.
+```
+
+The returned string is a language ID, as described in [Language and Locale IDs](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html#//apple_ref/doc/uid/10000171i-CH15-SW1), that identifies a written language or dialect.
+
+返回的字符串是一个语言 ID，描述见《[Language and Locale IDs](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html#//apple_ref/doc/uid/10000171i-CH15-SW1)》，这标识了书写的语言或方言。
 
 To get the set of languages that the user enables:
 
-NSArray *languages = [[[UIApplication sharedApplication] textInputMode] activeInputModes];
-where the returned array contains instances of the UITextInputMode class.
+要获得用户启用的语言集合使用如下方法：
 
-Detecting Personal Names, Mailing Addresses, and Phone Numbers
+```
+NSArray *languages = [[[UIApplication sharedApplication] textInputMode] activeInputModes];
+```
+
+where the returned array contains instances of the [UITextInputMode](https://developer.apple.com/documentation/uikit/uitextinputmode) class.
+
+这里返回的数组包含了 [UITextInputMode](https://developer.apple.com/documentation/uikit/uitextinputmode) 类的实例。
+
+## 3.3 Detecting Personal Names, Mailing Addresses, and Phone Numbers - 检测用户名、邮箱地址和电话号码
 
 Worldwide, the format of personal names, mailing addresses, and phone numbers varies considerably. Personal names have many different formats including different ordering of the components. For example, in Asian countries, the family name is followed by the given name with no spaces between. The format of mailing addresses depends on the country. Phone numbers have different amounts of digits and punctuation between them. To handle varying input formats in your text views, use Interface Builder to add data detectors to your text views. A data detector identifies addresses and phone numbers in many different international formats and optionally turns them into links.
 
-To detect this type of data in strings programmatically, read NSDataDetector Class Reference.
+世界范围内的，人名、邮箱和电话号码的格式都相当不同。人名有不同的格式，包括组成部分的不同顺序。例如，在亚洲国家，姓后面跟着名，中间没有空格。邮件地址的格式取决于国家。电话号码有大量不同的数字和标点。要在你的文本视图中处理不同的输入格式，使用 Interface Builder 添加数据探测器到你的文本视图。数据探测是会识别多种不同语言的地址和电话号码，并可选的将其换成链接。
 
-Getting the Current Language
+To detect this type of data in strings programmatically, read [NSDataDetector Class Reference](https://developer.apple.com/documentation/foundation/nsdatadetector).
 
-To get the language that the app is using from the main application bundle, use the preferredLocalizations method in the NSBundle class:
+如果要编程探测字符串中的数据的格式，阅读 [NSDataDetector Class Reference](https://developer.apple.com/documentation/foundation/nsdatadetector)。
 
+## 3.4 Getting the Current Language - 获取当前语言
+
+To get the language that the app is using from the main application bundle, use the [preferredLocalizations](https://developer.apple.com/documentation/foundation/bundle/1413220-preferredlocalizations) method in the [NSBundle](https://developer.apple.com/documentation/foundation/bundle) class:
+
+要从主应用包中获取 App 正在使用的语言。使用 [NSBundle](https://developer.apple.com/documentation/foundation/bundle) 类中的 [preferredLocalizations](https://developer.apple.com/documentation/foundation/bundle/1413220-preferredlocalizations) 方法。
+
+```
 NSString *languageID = [[NSBundle mainBundle] preferredLocalizations].firstObject;
+```
