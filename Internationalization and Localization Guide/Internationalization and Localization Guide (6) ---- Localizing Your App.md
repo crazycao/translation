@@ -11,85 +11,147 @@ When you are done internationalizing the app’s user interface and code, begin 
 
 ![export_import_process_2x.png](images/export_import_process_2x.png)
 
-## 5.1 Choosing Languages - 选择语言
+## 6.1 Choosing Languages - 选择语言
 
 You can choose from more than 100 different languages and dialects designated by regions to localize your app. However, the more general you make your localized resources, the more regions you can support with a single set of resources. This can save a lot of space in your app bundle and help reduce localization costs. For example, if you don’t need to distinguish between different regions that use the English language, you can add English to support users in the United States, United Kingdom, and Australia. Even if you provide region-specific resources always provide a complete set of language-specific resources for all the languages you support.
 
 你可以从由地区指定的超过100种不同的语言和方言中选择以本地化你的 APP。不过，你让你的本地化资源越通用，单个资源就能支持越多的地区。这可以节省你的 APP bundle 中的量空间，并有助于减少本地化开销。例如，如果你不需要在不同的使用英语的地区之间做区分，你可以只添加英语就能支持美国、英国和澳大利亚的用户。即使你只提供特定地区的资源，也总会为你所支持的所有语言提供特定语言资源的完整集合。
 
-When searching for resources, the bundle APIs try to find the best match between the languages the app supports and the user’s language and region settings. The region-specific resource folders are searched before the language-specific resource folders. For example, if you add English (United States), English (United Kingdom), and English (Australia) to your project, the bundle APIs search the appropriate region-specific folders first, followed by the English language folder. For more information about how the bundle APIs find localized resources, read The Bundle Search Pattern in Bundle Programming Guide.
+When searching for resources, the bundle APIs try to find the best match between the languages the app supports and the user’s language and region settings. The region-specific resource folders are searched before the language-specific resource folders. For example, if you add English (United States), English (United Kingdom), and English (Australia) to your project, the bundle APIs search the appropriate region-specific folders first, followed by the English language folder. For more information about how the bundle APIs find localized resources, read [The Bundle Search Pattern](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/AccessingaBundlesContents/AccessingaBundlesContents.html#//apple_ref/doc/uid/10000123i-CH104-SW7) in [Bundle Programming Guide](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/Introduction/Introduction.html#//apple_ref/doc/uid/10000123i).
 
-If you are unsure about what languages to add, consider the primary languages used in the App Store territories you choose in iTunes Connect to market your app. The App Store territories are listed in App Store Territories in iTunes Connect Developer Guide.
+当查找资源时，bundle API 尝试在 APP 支持的语言和用户的语言和地区设置之间找到最佳匹配。一般会先查找指定地区的资源文件夹，再查找指定语言的资源文件夹。例如，如果你添加英语（美国）、英语（英国）和英语（澳大利亚）到你的工程，bundle API 会首先查找合适的指定地区的文件夹，然后再查找英语语言文件夹。关于 bundle API 如何找到本地化资源的更多信息，请阅读《[Bundle Programming Guide](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/Introduction/Introduction.html#//apple_ref/doc/uid/10000123i)》中的《[The Bundle Search Pattern](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/AccessingaBundlesContents/AccessingaBundlesContents.html#//apple_ref/doc/uid/10000123i-CH104-SW7)》章节。
 
-Locking Views
+If you are unsure about what languages to add, consider the primary languages used in the App Store territories you choose in iTunes Connect to market your app. The App Store territories are listed in [App Store Territories](https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/AppStoreTerritories.html#//apple_ref/doc/uid/TP40011225-CH18) in [iTunes Connect Developer Guide](https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/About.html#//apple_ref/doc/uid/TP40011225).
+
+如果你不确定要添加什么语言，考虑在 App Store 中你选择的领域的主要语言，也就是你在 iTunes Connect 中投放你的 App 的领域。App Store 的所有领域都被列在《[iTunes Connect Developer Guide](https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/About.html#//apple_ref/doc/uid/TP40011225)》中的《[App Store Territories](https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/AppStoreTerritories.html#//apple_ref/doc/uid/TP40011225-CH18)》章节。
+
+## 6.2 Locking Views - 锁定视图
+
 In Interface Builder, lock views you don’t want to accidentally change while waiting for translations. When a view is locked, you can’t change some or all of its properties in the inspector or the project editor. You specify the set of properties to lock by choosing a locking level (see Table 6-1).
 
-Table 6-1  Locking levels
-Locking level
+在 Interface Builder 中，锁定你不想在等待翻译时意外发生变化的视图。当一个视图被锁定，你就不能在检视板或工程编辑器中改变它的部分或全部属性。你通过选择锁定级别（见表 6-1）指定要锁住的属性集合。
 
-Description
+Table 6-1  Locking levels - 锁定级别
 
-Nothing
+|Locking level|Description|
+|:-:|:-:|
+|Nothing|You can edit all properties of the view.|
+|All properties|You can’t edit any properties of the view.|
+|Localizable properties|You can’t change any user-visible strings and can’t change a limited set of other attributes, such as the view’s size. You can make other changes; for example, you can change the enabled state of a control or cell.|
+|Non-localizable properties|You can change user-visible strings and attributes—such as the size of the view—but can’t change any other attributes of the view.|
 
-You can edit all properties of the view.
+|锁定级别|描述|
+|:-:|:-:|
+|不锁定|你可以编辑视图的所有属性。|
+|所有属性|你不能编辑视图的任何属性。|
+|可本地化属性|你不能修改任何用户可见的字符串，不能修改其他有限个数的属性，比如视图的尺寸。你可以做其他修改；例如，你可以改变一个 control 或 cell 的启用状态。|
+|不可本地化的属性|你可以修改用户可见的字符串和属性 —— 比如视图的尺寸 —— 但是不能修改视图的任何其他属性。|
 
-All properties
+You can set the lock attribute for a single view or the entire nib file. By default, views inherit their lock attribute from their parent view and top-level views inherit their lock attribute from the `.storyboard` or `.xib` file. If you set a view’s lock attribute, it sets the lock attribute for all its descendant views.
 
-You can’t edit any properties of the view.
+你可以设置单个视图或整个 nib 文件的锁定属性。默认情况下，视图会从它们的父视图继承锁定属性，而最高级的视图从 `.storyboard` 或 `.xib` 文件中继承锁定属性。如果你设置了一个视图的锁定属性，它就会把这个锁定属性设置给它的所有子视图。
 
-Localizable properties
+**To change the locking level of a view**
 
-You can’t change any user-visible strings and can’t change a limited set of other attributes, such as the view’s size. You can make other changes; for example, you can change the enabled state of a control or cell.
+**修改视图的锁定级别**
 
-Non-localizable properties
+1. In Interface Builder, select the view you want to lock.
 
-You can change user-visible strings and attributes—such as the size of the view—but can’t change any other attributes of the view.
+2. In the Identity inspector (under the Document section), choose a locking level from the Lock pop-up menu.
 
-You can set the lock attribute for a single view or the entire nib file. By default, views inherit their lock attribute from their parent view and top-level views inherit their lock attribute from the .storyboard or .xib file. If you set a view’s lock attribute, it sets the lock attribute for all its descendant views.
+	Refer to Table 6-1 for a description of the locking choices in this menu.
+	
+	To obtain the lock value from its parent view, choose Inherited.
 
-To change the locking level of a view
+>
 
-In Interface Builder, select the view you want to lock.
-In the Identity inspector (under the Document section), choose a locking level from the Lock pop-up menu.
-Refer to Table 6-1 for a description of the locking choices in this menu.
+1. 在 Interface Builder 中，选中你想要锁定的视图。
 
-To obtain the lock value from its parent view, choose Inherited.
+2. 在 Identity 检视板（在 Document 部分的下面）中，从 Lock 弹出菜单选择一个锁定级别。
+
+	在这个菜单中锁定选项的描述参考表 6-1。
+	
+	要从它的父视图获取锁定值，选择 Inherited。
 
 For example, choose Localizable Properties to continue developing your app while waiting for a nib or strings file to be localized. Choose Non-localizable Properties if you are incorporating translations into a nib file and don’t want to make other changes inadvertently.
 
-To change the locking level of the nib file
+例如，当你等待对 nib 或字符串文件本地化时，你可以选择 Localizable Properties 以继续开发你的 App。如果你正把翻译奶如到 nib 文件中，以及不想无意中做了其他修改，选择 Non-localizable Properties 。
 
-In project navigator, select a .storyboard or .xib file.
-Choose a locking level from the Editor > Localization Locking menu.
-Refer to Table 6-1 for a description of the locking choices in this menu.
+**To change the locking level of the nib file**
 
-To unlock all the views in the file, choose Reset Locking Controls.
+**改变 nib 文件的锁定级别** 
+
+1. In project navigator, select a `.storyboard` or `.xib` file.
+
+2. Choose a locking level from the Editor > Localization Locking menu.
+
+	Refer to Table 6-1 for a description of the locking choices in this menu.
+	
+	To unlock all the views in the file, choose Reset Locking Controls.
+
+1. 在工程导航中，选中一个 `.storyboard` 或 `.xib` 文件。
+
+2. 从 Editor > Localization Locking 菜单中选择一个锁定级别。
+
+	参考 表 6-1 对这个菜单中的锁定选项的描述。
+	
+	要在文件中解锁所有视图，选择 Reset Locking Controls。
 
 For example, to prevent any edits to the nib file that would impact localized strings files, choose Reset Locking Controls followed by Localizable Properties.
 
-Exporting Localizations
+例如，为了避免对 nib 文件的任何编辑影响本地化的字符串文件，在选择 Localizable Properties 之后再选择 Reset Locking Controls。
+
+## 6.3 Exporting Localizations - 导出本地化
+
 Export the development language resources to an XLIFF file and submit it to a localization team for translation into multiple languages.
 
-The first time you export localizations, only the base internationalization—the .storyboard and .xib resource files—exist in the project folder. Xcode generates the strings files from your project files and includes them in the exported .xliff file. Xcode doesn’t add the strings files to the project until you import localizations later. The exported [Language ID].xliff file encodes the strings files in the standard XML Localization Interchange File Format (XLIFF). (Most third-party localization tools support this XLIFF file format.) For example, if the development language is English, the en.xliff file contains base internationalization strings files (one for each .storyboard and .xib file), a Localizable.strings file, and an InfoPlist.strings file. The source text in the strings files is in English.
+把开发语言资源导出到一个 XLIFF 文件，并把它们提交到一个本地化团队，以翻译成多种语言。
 
-Translators should return a separate .xliff file for each language. The files should use the language ID as the prefix. For example, if you request en.xliff for English be translated into German and Russian, the returned files should be named de.xliff for German and ru.xliff for Russian. The individual .xliff files contain the actual translations.
+The first time you export localizations, only the base internationalization—the `.storyboard` and `.xib` resource files—exist in the project folder. Xcode generates the strings files from your project files and includes them in the exported `.xliff` file. Xcode doesn’t add the strings files to the project until you import localizations later. The exported `[Language ID].xliff` file encodes the strings files in the standard XML Localization Interchange File Format (XLIFF). (Most third-party localization tools support this XLIFF file format.) For example, if the development language is English, the `en.xliff` file contains base internationalization strings files (one for `each .storyboard` and `.xib` file), a `Localizable.strings` file, and an `InfoPlist.strings` file. The source text in the strings files is in English.
 
-../Art/export_details_2x.png
-The first step to localize your app is to export the development language or base localization for translation. Before doing this, verify that the development language copyright notice in the Info.plist file is correct. Xcode includes the human-readable copyright notice in the XLIFF file. For a complete list of the localizable Info.plist keys, read Locking Views.
+当基础国际化 —— `.storyboard` 和 `.xib` 资源文件 —— 只存在于工程文件夹中，你第一次导出本地化。Xcode 从你的工程文件生成字符串文件，并把它们包含到导出的 `.xliff` 文件中。Xcode 不会添加字符串文件到工程，除非你之后导入了本地化。导出的 `[Language ID].xliff` 文件以标准的 XML 本地化内部交换文件格式（XML Localization Interchange File Format，即 XLIFF）编码了字符串文件。（大部分第三方本地化工具都支持这种 XLIFF 文件格式。）例如，如果开发语言是英语，`en.xliff` 文件就包括了基础国际化字符串文件（每个 `.storyboard` 和 `.xib` 文件有一个），一个 `Localizable.strings` 文件和一个 `InfoPlist.string` 文件。字符串中的资源文本是英语。
 
-To export the development language translation
+Translators should return a separate `.xliff` file for each language. The files should use the language ID as the prefix. For example, if you request `en.xliff` for English be translated into German and Russian, the returned files should be named `de.xliff` for German and `ru.xliff` for Russian. The individual `.xliff` files contain the actual translations.
 
-In the Xcode project editor, select the project or target.
-Choose Editor > Export For Localization.
-In the sheet that appears, enter a location in the Save As field and click Save.
-Xcode saves the file to the location you specified with a .xliff extension. Xcode creates the folder (if it doesn’t exist) and places a file named [Language ID].xliff in the folder where Language ID is the identifier for the development language. For example, if the development language is English, the filename is en.xliff.
+翻译者应该为每个语言返回一个单独的 `.xliff` 文件。这些文件应该使用语言 ID 作为前缀。例如，如果你请求把英语的 `en.xliff` 翻译成德语和俄语，返回的文件应该被命名成德语的 `de.xliff` 和俄语的 `ru.xliff`。独立的 `.xliff` 文件包含实际的翻译。
 
-If you never added a language to your project, the export dialog appears similar to this screenshot:
+![export_details_2x.png](images/export_details_2x.png)
 
-../Art/export_base_localization_2x.png
+The first step to localize your app is to export the development language or base localization for translation. Before doing this, verify that the development language copyright notice in the `Info.plist` file is correct. Xcode includes the human-readable copyright notice in the XLIFF file. For a complete list of the localizable Info.plist keys, read [Locking Views](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW6).
+
+本地化你的 App 的第一步就是导出开发语言或基础本地化用于翻译。在做这个之前，要验证 `Info.plist` 文件中的开发语言版权声明是正确的。Xcode 在 XLIFF 文件中包含了人类可读的版权声明。关于可本地化的 `Info.plist` key 的完整列表，阅读《[Locking Views](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW6)》。
+
+**To export the development language translation**
+
+**导出开发语言翻译**
+
+1. In the Xcode project editor, select the project or target.
+
+2. Choose Editor > Export For Localization.
+
+3. In the sheet that appears, enter a location in the Save As field and click Save.
+	
+	Xcode saves the file to the location you specified with a `.xliff` extension. Xcode creates the folder (if it doesn’t exist) and places a file named `[Language ID].xliff` in the folder where Language ID is the identifier for the development language. For example, if the development language is English, the filename is `en.xliff`.
+
+	If you never added a language to your project, the export dialog appears similar to this screenshot:
+	
+1. 在 Xcode 工程编辑器中，选中工程或目标。
+
+2. 选择 Editor > Export For Localization。
+
+3. 在出现的表单中，在 Save As 字段中输入一个地址，并点击 Save。
+
+	Xcode 以 `.xliff` 为扩展名把文件保存到你指定的地址。Xcode 会创建文件夹（如果它不存在）并在这个文件夹中放一个名为 `[Language ID].xliff` 的文件，Language ID 就是开发语言的标识符。例如，如果开发语言是英语，文件名就是 `en.xliff`。
+	
+	如果你从未添加语言到你的工程，导出对话框就像下面截屏这样：
+
+![export_base_localization_2x.png](images/export_base_localization_2x.png)
+
 The next time you export localizations, optionally export the development language resources, specific language resources, or all language resources.
 
-To export multiple localizations for translation
+下一次你导出本地化，就可以选择导出开发语言资源、指定语言资源或者所有语言资源。
+
+**To export multiple localizations for translation**
 
 In the Xcode project editor, select the project or target.
 Choose Editor > Export For Localization.
