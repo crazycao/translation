@@ -135,6 +135,8 @@ The first step to localize your app is to export the development language or bas
 
 	If you never added a language to your project, the export dialog appears similar to this screenshot:
 	
+>
+
 1. 在 Xcode 工程编辑器中，选中工程或目标。
 
 2. 选择 Editor > Export For Localization。
@@ -153,19 +155,46 @@ The next time you export localizations, optionally export the development langua
 
 **To export multiple localizations for translation**
 
-In the Xcode project editor, select the project or target.
-Choose Editor > Export For Localization.
-In the sheet that appears, enter a location in the Save As field.
-If you added a language to your project, the export dialog appears similar to this screenshot:
+1. In the Xcode project editor, select the project or target.
 
-../Art/export_multiple_localizations_2x.png
-From the Include pop-up menu, choose Existing Translations or Development Language Only.
-To export all or specific language resources, choose Existing Translations and then deselect the languages that you don’t want to include in the export in the Languages section below. To export the development language resources, choose Development Language Only.
+2. Choose Editor > Export For Localization.
 
-Click Save.
-For each language you select, Xcode saves an XLIFF file (a file with a language ID prefix and .xliff extension) to the location you specified in the Save As field. For example, if you select German and French from the language list, Xcode adds a de.xliff and fr.xliff file to the folder.
+3. In the sheet that appears, enter a location in the Save As field.
 
-Importing Localizations
+	If you added a language to your project, the export dialog appears similar to this screenshot:
+
+	![export_multiple_localizations_2x.png](images/export_multiple_localizations_2x.png)
+
+4. From the Include pop-up menu, choose Existing Translations or Development Language Only.
+
+	To export all or specific language resources, choose Existing Translations and then deselect the languages that you don’t want to include in the export in the Languages section below. To export the development language resources, choose Development Language Only.
+
+5. Click Save.
+
+	For each language you select, Xcode saves an XLIFF file (a file with a language ID prefix and `.xliff` extension) to the location you specified in the Save As field. For example, if you select German and French from the language list, Xcode adds a `de.xliff` and `fr.xliff` file to the folder.
+
+>
+
+1. 在 Xcode 工程编辑器中，选中工程或目标。
+
+2. 选择 Editor > Export For Localization。
+
+3. 在出现的表单中，在 Save As 字段输入一个地址。
+
+	如果你曾添加一个语言到你的工程，导出对话框像下面截屏这样：
+	
+	![export_multiple_localizations_2x.png](images/export_multiple_localizations_2x.png)
+
+4. 从 Include 弹出菜单，选择 Existing Translations 或 Development Language Only。
+
+	要导出所有或特定语言资源，选择 Existing Translations，然后取消选中下方 Languages 部分中你不想包含到导出中的语言。要导出开发语言资源，选择 Development Language Only。
+	
+5. 点击 Save。
+
+	对于每个你选择的语言，Xcode 都会保存一个 XLIFF 文件（以语言 ID 开头，以 `.xliff` 为扩展名的文件）到你在 Save As 字段指定的地址。例如，如果你从语言列表中选中了德语和法语，Xcode 会添加一个 `de.xliff` 和 `fr.xliff` 文件到该文件夹。
+
+## 6.4 Importing Localizations - 导入本地化
+
 When you import localizations, Xcode adds the language and a set of localized strings files for the language to the project. For example, if you import ru.xliff in the standard XML Localization Interchange File Format (XLIFF) that includes the target language attribute, the Russian language is added to the project. The first time you import localizations, the base internationalization files change to a group containing the strings files in the project navigator. Xcode stores the language-specific strings files in language folders. For example, Xcode creates a ru.lproj folder in the project folder and adds a localized copy of the Localizable.strings and InfoPlist.strings files to the ru.lproj folder. The localized strings files are extracted from the corresponding [Language ID].xliff file. The next time you import localizations, the strings files are merged with your existing project files.
 
 ../Art/import_details_2x.png
