@@ -195,30 +195,66 @@ The next time you export localizations, optionally export the development langua
 
 ## 6.4 Importing Localizations - 导入本地化
 
-When you import localizations, Xcode adds the language and a set of localized strings files for the language to the project. For example, if you import ru.xliff in the standard XML Localization Interchange File Format (XLIFF) that includes the target language attribute, the Russian language is added to the project. The first time you import localizations, the base internationalization files change to a group containing the strings files in the project navigator. Xcode stores the language-specific strings files in language folders. For example, Xcode creates a ru.lproj folder in the project folder and adds a localized copy of the Localizable.strings and InfoPlist.strings files to the ru.lproj folder. The localized strings files are extracted from the corresponding [Language ID].xliff file. The next time you import localizations, the strings files are merged with your existing project files.
+When you import localizations, Xcode adds the language and a set of localized strings files for the language to the project. For example, if you import `ru.xliff` in the standard XML Localization Interchange File Format (XLIFF) that includes the target language attribute, the Russian language is added to the project. The first time you import localizations, the base internationalization files change to a group containing the strings files in the project navigator. Xcode stores the language-specific strings files in language folders. For example, Xcode creates a `ru.lproj` folder in the project folder and adds a localized copy of the `Localizable.strings` and `InfoPlist.strings` files to the `ru.lproj` folder. The localized strings files are extracted from the corresponding `[Language ID].xliff` file. The next time you import localizations, the strings files are merged with your existing project files.
 
-../Art/import_details_2x.png
-To import localizations from translators
+当你导入本地化时，Xcode 添加语言和为该语言准备的本地化的字符串文件集合到工程中。例如，如果你导入标准 XML 本地化内部交换文件格式（XLIFF）的 `ru.xliff` 文件，该文件包含了目标语言属性，就可以把俄语添加到工程。当你第一次导入本地化，基本国际化文件会在工程导航中变成一个包含字符串文件的组。Xcode 以语言文件夹储存了特定语言的字符串文件。例如，Xcode 在工程文件夹中创建了一个 `ru.lproj` 文件夹，并添加 `Localizable.strings` 和 `InfoPlist.strings` 文件的本地化备份到 `ru.lproj` 文件夹。本地化的字符串文件取自相应的 `[Language ID].xliff` 文件。下次你导入本地化时，字符串文件就会被合并到你已有的工程文件中。
 
-In the Xcode project editor, select the project or target.
-Choose Editor > Import Localizations.
-In the sheet that appears, select a file with a .xliff extension and click Open.
-A sheet appears showing the differences between the imported XLIFF file and the existing resources in the project folder.
+![import_details_2x.png](images/import_details_2x.png)
 
-../Art/import_localizations_2x.png
-Click Import.
-Xcode decodes the localized strings files from the XLIFF file and adds them to the project folder. Xcode replaces existing strings files.
+**To import localizations from translators**
 
-Verifying Your Steps
-After you import localizations, Xcode updates the project navigator to show the new language-specific resources. Localized .storyboard and .xib files now appear as groups in the project navigator. Click the disclosure triangle next to a .storyboard or .xib file to reveal the base resource and language-specific strings files.
+**从翻译者导入本地化
 
-../Art/localized_nib_2x.png
-Select a strings file to view and optionally, edit the contents. The strings file contains key-value pairs that Xcode automatically generates from the text it finds in the corresponding .storyboard or .xib file. If you use NSLocalizedString macros in your code, as described in Separating User-Facing Text from Your Code, a Localizable.strings group also appears in the project navigator.
+1. In the Xcode project editor, select the project or target.
 
-../Art/localized_strings_2x.png
-Another kind of strings file is InfoPlist.strings, which you use for localizing app properties that are visible to users (such as the app’s name). For the keys you can localize in an InfoPlist.strings file, read Locking Views.
+2. Choose Editor > Import Localizations.
 
-Exporting and Importing Localizations Using Command-Line Utilities
+3. In the sheet that appears, select a file with a .xliff extension and click Open.
+
+	A sheet appears showing the differences between the imported XLIFF file and the existing resources in the project folder.
+
+	![import_localizations_2x.png](images/import_localizations_2x.png)
+	
+4. Click Import.
+
+	Xcode decodes the localized strings files from the XLIFF file and adds them to the project folder. Xcode replaces existing strings files.
+	
+>
+
+1. 在 Xcode 工程编辑器中，选中工程或目标。
+
+2. 选择 Editor > Import Localizations。
+
+3. 在出现的表单中，选择一个以 `.xliff` 为扩展名的文件，并点击 Open。
+
+	这个表单展示了导入的 XLIFF 文件和工程文件夹中已存在的资源之间的区别。
+	
+	![import_localizations_2x.png](images/import_localizations_2x.png)
+
+4. 点击 Import。
+
+	Xcode 从 XLIFF 文件解码出本地化的字符串文件，并把它们添加到工程文件夹。Xcode 会替换已存在的字符串文件。
+
+### 6.3.1 Verifying Your Steps - 验证你的步骤
+
+After you import localizations, Xcode updates the project navigator to show the new language-specific resources. Localized `.storyboard` and `.xib` files now appear as groups in the project navigator. Click the disclosure triangle next to a `.storyboard` or `.xib` file to reveal the base resource and language-specific strings files.
+
+在你导入本地化之后，Xcode 会更新工程导航栏，并展示新的特定语言的资源。本地化的 `.storyboard` 和 `.xib` 文件现在已组的形式出现在工程导航栏中。点击 `.storyboard` 或 `.xib` 文件旁边的展开三角形会显示基础资源和特定语言的字符串文件。
+
+![localized_nib_2x.png](images/localized_nib_2x.png)
+
+Select a strings file to view and optionally, edit the contents. The strings file contains key-value pairs that Xcode automatically generates from the text it finds in the corresponding `.storyboard` or `.xib` file. If you use `NSLocalizedString` macros in your code, as described in [Separating User-Facing Text from Your Code](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourCode/InternationalizingYourCode.html#//apple_ref/doc/uid/10000171i-CH4-SW3), a `Localizable.strings` group also appears in the project navigator.
+
+选中一个到视图的字符串文件，并可选的编辑其内容。字符串文件包含了 Xcode 从相应的 `.storyboard` 和 `.xib` 文件中找到的文本自动生成的键值对。如果你在代码中使用 `NSLocalizedString` 宏，如《[Separating User-Facing Text from Your Code](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourCode/InternationalizingYourCode.html#//apple_ref/doc/uid/10000171i-CH4-SW3)》中所述，一个 `Localizable.strings` 组也会出现在工程导航栏里。
+
+![localized_strings_2x.png](images/localized_strings_2x.png)
+
+Another kind of strings file is `InfoPlist.strings`, which you use for localizing app properties that are visible to users (such as the app’s name). For the keys you can localize in an `InfoPlist.strings` file, read [Locking Views](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW6).
+
+另一种字符串文件就是 `InfoPlist.strings`，也就是你本地化用户可见的 APP 属性（如 APP 的名字）。关于你可以在 `InfoPlist.strings` 进行本地化的 `InfoPlist.strings` 对象，阅读 《[Locking Views](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW6)》
+
+## 6.4 Exporting and Importing Localizations Using Command-Line Utilities - 使用命令行实体导入和导出本地化。
+
 Alternatively, you can use the xcodebuild command-line utility to export and import localizations.
 
 To export localizations, enter this command in Terminal, replacing the <dirpath> and <projectname> arguments:
