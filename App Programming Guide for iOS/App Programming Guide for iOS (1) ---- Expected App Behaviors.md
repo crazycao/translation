@@ -144,61 +144,91 @@ For information about designing your app’s launch images, including the sizes 
 关于设计 APP 的启动图的信息，包括那些图片的尺寸，参见 [iOS Human Interface Guidelines](https://developer.apple.com/ios/human-interface-guidelines/)。
 
 <span id="1.2">
-##1.2 Supporting User Privacy - 支持用户隐私政策
+##1.2 Supporting User Privacy - 支持用户隐私
 
 Designing for user privacy is important. Most iOS devices contain personal data that the user might not want to expose to apps or to external entities. If your app accesses or uses data inappropriately, the user might respond by deleting your app.
 
+为用户隐私做设计非常重要。大部分 iOS 设备都包含用户可能不想暴露给 APP 或外部实体的个人数据。如果你的 APP 不恰当的访问或使用数据，用户可能会删除你的 APP。
+
 Access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:
 
+仅在符合使用法律的情况下获得用户的知情同意时访问用户或设备数据。另外，采取适当的步骤保护用户和设备数据，并将你如何使用它们透明化。这里是我们能做的一些最佳实践：
+
 - Review guidelines from government or industry sources, including the following documents:
+- 阅读来自政府或行业来源的指南，包括下列文档：
 
   - The Federal Trade Commission’s report on mobile privacy: [Mobile Privacy Disclosures: Building Trust Through Transparency](http://www.ftc.gov/os/2013/02/130201mobileprivacyreport.pdf).
+  - 美国联邦贸易委员会关于移动隐私的报告：[Mobile Privacy Disclosures: Building Trust Through Transparency](http://www.ftc.gov/os/2013/02/130201mobileprivacyreport.pdf)。
 
-  - The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: [http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf](http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf)
+  - The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: [http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf](http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf).
+  - 欧盟数据保护专员对手机应用数据保护的意见：[http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf](http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf)。
 
   - The Japanese Ministry of Internal Affairs and Communications’ Smartphone Privacy Initiatives:
+  - 日本内政和通信部的智能手机隐私倡议：
 
     - Smartphone Privacy Initiative (2012):
+    - 智能手机隐私倡议（2012）：
   		
       - English: [http://www.soumu.go.jp/main_sosiki/joho_tsusin/eng/presentation/pdf/Initiative.pdf](http://www.soumu.go.jp/main_sosiki/joho_tsusin/eng/presentation/pdf/Initiative.pdf)
       - Japanese: [http://www.soumu.go.jp/main_content/000171225.pdf](http://www.soumu.go.jp/main_content/000171225.pdf)
+      
     - Smartphone Privacy Initiative II (2013): 
+    - 智能手机隐私倡议 II （2013）：
+    
       - English: [http://www.soumu.go.jp/main_sosiki/joho_tsusin/eng/presentation/pdf/Summary_II.pdf](http://www.soumu.go.jp/main_sosiki/joho_tsusin/eng/presentation/pdf/Summary_II.pdf)
       - Japanese: [http://www.soumu.go.jp/main_content/000247654.pdf](http://www.soumu.go.jp/main_content/000247654.pdf)
 
-  - The California State Attorney General’s recommendations for mobile privacy: [Privacy on the Go: Recommendations for the Mobile Ecosystem](http://oag.ca.gov/sites/all/files/pdfs/privacy/privacy_on_the_go.pdf)
+  - The California State Attorney General’s recommendations for mobile privacy: [Privacy on the Go: Recommendations for the Mobile Ecosystem](http://oag.ca.gov/sites/all/files/pdfs/privacy/privacy_on_the_go.pdf).
+  - 加利福尼亚州检察长关于移动隐私的建议：[Privacy on the Go: Recommendations for the Mobile Ecosystem](http://oag.ca.gov/sites/all/files/pdfs/privacy/privacy_on_the_go.pdf)。
 
 - These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
+- 这些报告为保护用户隐私提供了有用的建议。你也应该和你公司的法律顾问一起查阅这些文件。
 
-- Request access to sensitive user or device data, which is protected by the iOS system authorization settings, at the time your app needs the data. You must supply a purpose string (sometimes called a usage description string) in your app’s Info.plist file explaining why your app needs the data or resource you are attempting to access. Data protected by iOS system authorization settings includes location, contacts, calendar events, reminders, photos, media, and many other types as well; see Table 1-2. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.
+- Request access to sensitive user or device data, which is protected by the iOS system authorization settings, at the time your app needs the data. You must supply a purpose string (sometimes called a usage description string) in your app’s *Info.plist* file explaining why your app needs the data or resource you are attempting to access. Data protected by iOS system authorization settings includes location, contacts, calendar events, reminders, photos, media, and many other types as well; see [Table 1-2](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW7). Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.
+- 当你的 APP 需要访问由 iOS 系统授权设置保护的敏感用户或设备数据时，需要请求访问这些数据。你必须在 APP 的 *Info.plist* 文件中提供一个目的字符串（有时称作使用说明字符串），解释你的 APP 为什么要试图访问这些数据或资源。由 iOS 系统授权设置保护的数据包括位置、联系人、日历事件、提醒、照片、媒体和许多其他类型；参见 [Table 1-2](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW7)。在用户不允许访问所请求的数据的情况下，提供合理的回退行为。
 
-- Be transparent with users about how their data is going to be used. For example, when you submit your app to the App Store, specify a URL for your privacy policy or statement as part of your iTunes Connect metadata. You might also want to summarize that policy or statement in your app description.For more information about providing your app’s privacy policy in iTunes Connect, see a target="_self" Adding an App in iTunes Connect/a. 
+- Be transparent with users about how their data is going to be used. For example, when you submit your app to the App Store, specify a URL for your privacy policy or statement as part of your App Store Connect metadata. You might also want to summarize that policy or statement in your app description.
+- 关于如何使用用户的数据，要对用户透明。例如，当你提交你的 APP 到 App Store时，为你的隐私政策或声明指定一个 URL 作为 App Store Connect 元数据的一部分。您可能还要在你的 APP 描述中概述一下该政策或声明。
 
 - Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
+- 给用户对他们的用户或设备数据的控制权。提供设置项，以便用户可以在需要时禁止访问某些敏感信息。
 
 - Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
+- 请求和使用完成给定任务所需的最小数量的用户或设备数据。不要因为不明显的原因、不必要的原因或因为你认为以后可能有用，就寻找或收集数据。
 
 - Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in [Protecting Data Using On-Disk Encryption](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforImplementingYourApp/StrategiesforImplementingYourApp.html#//apple_ref/doc/uid/TP40007072-CH5-SW21)) to store it in an encrypted format. Use App Transport Security (as described in [NSAppTransportSecurity](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33)) when sending user or device data over the network.
+- 采取合理的步骤来保护你在应用程序中收集的用户和设备数据。当本地存储这些信息时，尝试使用IOS数据保护特性（描述见 [Protecting Data Using On-Disk Encryption](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforImplementingYourApp/StrategiesforImplementingYourApp.html#//apple_ref/doc/uid/TP40007072-CH5-SW21)）以加密格式存储它。当你通过网络发送用户或设备数据时，使用 App Transport Security（描述见 [NSAppTransportSecurity](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33)）。
 
-- If your app uses the [ASIdentifierManager](https://developer.apple.com/reference/adsupport/asidentifiermanager) class, you must respect the value of its [advertisingTrackingEnabled](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614148-advertisingtrackingenabled) property. And if that property is set to a NO/a by the user, then use the ASIdentifierManager class only for Limited Advertising Purposes. “Limited Advertising Purposes” means frequency capping, attribution, conversion events, estimating the number of unique users, advertising fraud detection, debugging for advertising purposes only, and other uses for advertising that may be permitted by Apple in Documentation for the Ad Support APIs.
+- If your app uses the [ASIdentifierManager](https://developer.apple.com/reference/adsupport/asidentifiermanager) class, you must respect the value of its [advertisingTrackingEnabled](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614148-advertisingtrackingenabled) property. And if that property is set to a `NO` by the user, then use the `ASIdentifierManager` class only for Limited Advertising Purposes. “Limited Advertising Purposes” means frequency capping, attribution, conversion events, estimating the number of unique users, advertising fraud detection, debugging for advertising purposes only, and other uses for advertising that may be permitted by Apple in Documentation for the Ad Support APIs.
+- 如果你的 APP 使用了 [ASIdentifierManager](https://developer.apple.com/reference/adsupport/asidentifiermanager) 类，你必须遵守其 [advertisingTrackingEnabled](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614148-advertisingtrackingenabled) 属性的值。如果这个属性被用户设置成 `NO`，那么只能为**有限的广告目的**使用 `ASIdentifierManager` 类。“有限的广告目的”意味着频率上限、归属、转换事件、估计唯一用户的数量、广告欺诈检测、仅用于广告目的的调试，以及苹果在 Ad Support APIs 中允许的广告的其他用途。
 
-- If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the [UIDevice](https://developer.apple.com/reference/uikit/uidevice) class. That property was deprecated in iOS 5.0, and the App Store does not accept new apps or app updates that use that identifier. Instead, apps should use the [identifierForVendor](https://developer.apple.com/reference/uikit/uidevice/1620059-identifierforvendor) property of the UIDevice class or the [advertisingIdentifier](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614151-advertisingidentifier) property of the ASIdentifierManager class, as appropriate.
+- If you have not already done so, stop using the unique device identifier (UDID) provided by the `uniqueIdentifier` property of the [UIDevice](https://developer.apple.com/documentation/uikit/uidevice) class. That property was deprecated in iOS 5.0, and the App Store does not accept new apps or app updates that use that identifier. Instead, apps should use the [identifierForVendor](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) property of the `UIDevice` class or the [advertisingIdentifier](https://developer.apple.com/documentation/adsupport/asidentifiermanager/1614151-advertisingidentifier) property of the ASIdentifierManager class, as appropriate.
+- 如果你还没有这么做，请停止使用由 [UIDevice](https://developer.apple.com/documentation/uikit/uidevice) 类的 `uniqueIdentifier` 属性提供的唯一设备标识符（UDID）。这个属性在 iOS 5.0 就被废弃了，并且 App Store 不再接受新 APP 或 APP 更新使用这个标识符。取而代之的是，APP 应该视情况使用 `UIDevice` 类的 [identifierForVendor](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) 属性或 `ASIdentifierManager` 类的 [advertisingIdentifier](https://developer.apple.com/documentation/adsupport/asidentifiermanager/1614151-advertisingidentifier) 属性。
 
 - If your app supports audio input, configure your audio session for recording only at the point where you actually plan to begin recording. Do not configure your audio session for recording at launch time if you do not plan to record right away. The system alerts users when apps configure their audio session for recording and gives the user the option to disable recording for your app.
+- 如果你的 APP 支持音频输入，为录音配置音频会话只能在你实际准备开始录音时进行。如果你不打算马上录音，不要在启动时为录音配置音频会话。当 APP 为录音配置音频会话时，系统会提示用户，并给用户提供禁止 APP 录音的选项。
 
 Table 1-2 lists the types of resource and data authorizations supported by iOS. For each item, the table shows the purpose-string key and the API to use to check authorization status.
 
-> **Important:** When your app attempts to use a protected item, the system prompts the user with an alert asking for permission for access. Starting in iOS 10, your Info.plist file must include a purpose string, for display in the permission alert, for each such item. If your app attempts to access a protected item without you having provided a corresponding purpose string, your app exits. (This behavior applies equally to an iMessage app, which must include the relevant keys listed in Table 1-2 before accessing the device’s camera or microphone.)
+表 1-2 列出了 iOS 系统支持的资源和数据授权的类型。对于每一项，表中都展示了目的字符串 key 和用于检查授权状态的 API。
+
+> **Important:** When your app attempts to use a protected item, the system prompts the user with an alert asking for permission for access. Starting in iOS 10, your *Info.plist* file must include a purpose string, for display in the permission alert, for each such item. If your app attempts to access a protected item without you having provided a corresponding purpose string, your app exits. (This behavior applies equally to an iMessage app, which must include the relevant keys listed in Table 1-2 before accessing the device’s camera or microphone.)
+> 
+> **重要：** 当你的 APP 试图使用受保护的项目时，系统会用一个警告框提示用户请求访问许可。从 iOS 10 开始，你的 *Info.plist* 文件必须为每个项目包含用于显示在许可警告框中的目的字符串。如果你的 APP 试图访问你没有提供相应目的字符串的受保护项目时，你的 APP 会退出。（这个行为同样适用于 iMessage APP，在它访问设备的照相机或麦克风之前，它必须包含表 1-2 中列出的相关 key。）
 
 For some protected data and resources, iOS frameworks provide dedicated API for checking and requesting authorization, as described in Table 1-2.
 
+对于某些受保护的数据和资源，iOS 框架提供专门的 API 确认和请求授权，如表 1-2 所述。
+
 Because a user can change authorization at any time by using Settings, check authorization status before accessing any of these items. (Some features, notably motion and HomeKit, do not provide dedicated API for checking system authorization status. See Table 1-2 for details.)
 
-**Table 1-2**  Data and resources protected by system authorization settings
+因为用户可以在任何时候通过使用 Settings 改变授权，在访问这些项目中的任何一个之前，都要检查授权状态。（某些功能，尤其是运动和 HomeKit，没有提供检查系统授权状态的专门 API。详见表 1-2）。
+
+**Table 1-2**  Data and resources protected by system authorization settings - 由系统授权设置保护的数据和资源
 
 | **Data or resources**       | **Purpose-string Info.plist keys**       | **System authorization APIs**            |
 | --------------------------- | ---------------------------------------- | ---------------------------------------- |
-| Bluetooth peripherals       | [NSBluetoothPeripheralUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW20) | Use the [state](https://developer.apple.com/reference/corebluetooth/cbcentralmanager/1518740-state) property of the [CBCentralManager](https://developer.apple.com/reference/corebluetooth/cbcentralmanager) class to check system-authorization status for using Bluetooth peripherals. |
+| Bluetooth peripherals </br> 蓝牙外设     | [NSBluetoothPeripheralUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW20) | Use the [state](https://developer.apple.com/reference/corebluetooth/cbcentralmanager/1518740-state) property of the [CBCentralManager](https://developer.apple.com/reference/corebluetooth/cbcentralmanager) class to check system-authorization status for using Bluetooth peripherals. </br> 使用 [CBCentralManager](https://developer.apple.com/reference/corebluetooth/cbcentralmanager) 类的 [state](https://developer.apple.com/reference/corebluetooth/cbcentralmanager/1518740-state) 属性检查系统授权状态以使用蓝牙外设。 |
 | Calendar data               | [NSCalendarsUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW15) | Use the [authorizationStatusForEntityType:](https://developer.apple.com/reference/eventkit/ekeventstore/1507239-authorizationstatusforentitytype) method of the [EKEventStore](https://developer.apple.com/reference/eventkit/ekeventstore) class to check system-authorization status for accessing calendar data. |
 | Camera                      | [NSCameraUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW24) | Use the [deviceInputWithDevice:error:](https://developer.apple.com/reference/avfoundation/avcapturedeviceinput/1450880-deviceinputwithdevice) method of the [AVCaptureDeviceInput](https://developer.apple.com/reference/avfoundation/avcapturedeviceinput) class to check system-authorization status for using device cameras. |
 | Contacts                    | [NSContactsUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW14) | Use the [authorizationStatusForEntityType:](https://developer.apple.com/reference/contacts/cncontactstore/1403143-authorizationstatus) method of the [CNContactStore](https://developer.apple.com/reference/contacts/cncontactstore) class to check system-authorization status for accessing contact data. |
