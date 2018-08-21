@@ -182,7 +182,7 @@ The image view should shrink so that it is the same height as the stack containi
 
 图像视图应该压缩，以致于它的高度跟包含 name 行的堆栈相同。但是，堆栈视图只是弱弱的压缩它们的内容。这意味着，图像视图的竖直压缩阻力必须非常低，这样图像视图才会压缩，而不是让堆栈视图扩张。另外，图像视图的高宽比约束使布局复杂化，因为它允许竖直和水平约束交互。这意味着 text field 的水平内容紧靠也必须非常低，否则它们将组织图像视图压缩。在这两种情况中，要将这个优先级的值设置成48或更低。
 
-Dynamic Stack View
+### 1.1.3 Dynamic Stack View - 动态堆栈视图
 
 This recipe demonstrates dynamically adding and removing items from a stack at runtime. All changes to the stack are animated. Additionally, the stack view is placed inside a scroll view, letting you scroll through the list if it is too long to fit on the screen.
 

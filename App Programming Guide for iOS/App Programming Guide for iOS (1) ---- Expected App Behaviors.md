@@ -63,54 +63,88 @@ For more information about the structure of an iOS app bundle, see [Bundle Progr
 
 Xcode uses information from the General, Capabilities, and Info tabs of your project to generate an information property list (*Info.plist*) file for your app at compile time. The *Info.plist* file is a structured file that contains critical information about your app’s configuration. It is used by the App Store and by iOS to determine your app’s capabilities and to locate key resources. Every app must include this file.
 
-Xcode 使用来自于你的工程的 General、Capabilities 和 Info 标签在编译时为你的 APP 生成一个信息属性列表文件（*Info.plist*）。
+Xcode 使用来自于你的工程的 General、Capabilities 和 Info 标签在编译时为你的 APP 生成一个信息属性列表文件（*Info.plist*）。*Info.plist* 文件是一个结构化问阿金，包含了关于你的 APP 的配置的关键信息。它被 App Store 和 iOS 用来决定你的 APP 的能力和定位关键资源。每个 APP 都必须包含这个文件。
 
 Although the *Info.plist* file provided by Xcode includes default values for all of the required entries, most apps require some changes or additions. Whenever possible, use the General and Capabilities tabs to specify the configuration information for your app. Those tabs contain the most common configuration options available for apps. If you do not see a specific option on either of those tabs, use the Info tab.
 
+尽管由 Xcode 提供的 *Info.plist* 文件包含了所有必须的条目的默认值，大部分 APP 都需要一些增加和更改。只要可能，都使用 General 和 Capabilities 选项卡来指定 APP 的配置信息。那些选项卡包含了 APP 可用的大部分通用配置选项。如果你在那些选项卡中都没有看到某个特定的选项，就使用 Info 选项卡。
+
 For options where Xcode does not provide a custom configuration interface, you must provide appropriate keys and values directly using the Xcode property list editor. The Custom iOS Target Properties section of the Info tab contains a summary of the entries to be included in the *Info.plist* file. By default, Xcode displays human-readable descriptions of the intended feature but each feature actually corresponds to a unique key in the *Info.plist* file. Most keys are optional and used infrequently, but there are a handful of keys that you should consider when defining any new project:
 
+对于 Xcode 不提供自定义配置界面的选项，你必须直接使用 Xcode 属性列表编辑器提供正确的 key 和 value。Info 选项卡的 Custom iOS Target Properties 部分包括了将被包含到 *Info.plist* 文件中的条目的集合。默认情况下，Xcode 提供期望功能的人类可读的描述，而每个功能实际上都对应了 *Info.plist* 文件中的一个独立的 key。大部分 key 是可选的并且不常使用，但是当你定义任何新工程时，有一些 key 你应该考虑：
+
 - **Declare your app’s required capabilities in the Info tab.** The Required device capabilities section contains information about the device-level features that your app requires to run. The App Store uses the information in this entry to determine the capabilities of your app and to prevent it from being installed on devices that do not support features your app requires. For more information, see Declaring the Required Device Capabilities.
+- **在 Info 选项卡中声明你的 APP 的必须的能力。** Required device capabilities 部分包含了你的 APP 需要用来运行的设备级功能的信息。App Store 使用该条目的信息决定你的 APP 的能力，以免其被安装在不支持你 APP 需要的功能的设备上。更多信息，参见 Declaring the Required Device Capabilities。
 - **Apps that require a persistent Wi-Fi connection must declare that fact.** If your app talks to a server across the network, you can add the Application uses Wi-Fi entry to the Info tab of your project. This entry corresponds to the *UIRequiresPersistentWiFi* key in the *Info.plist* file. Setting this key to a *YES* prevents iOS from closing the active Wi-Fi connection when it has been inactive for an extended period of time. This key is recommended for all apps that use the network to communicate with a server.
+- **需要持续的 Wi-Fi 连接的 APP 必须声明这一事实。** 如果你的 APP 通过网络与服务端对话，你可以添加 Application uses Wi-Fi 条目到你工程的 Info 选项卡。这个提哦啊木对应 *Info.plist* 文件的  *UIRequiresPersistentWiFi* key。把这个 key 设成 *YES* 可以避免 iOS 在 APP 一段时间不活跃时关闭活跃的 Wi-Fi 连接。所有使用网络与服务器交互的 APP 都建议设置这个 key。
 - **Newsstand apps must declare themselves as such.** Include the *UINewsstandApp* key to indicate that your app presents content from the Newsstand app.
+- **新闻 APP 必须声明自己是新闻 APP。** 包含 *UINewsstandApp* key 表示你的 APP 从 Newsstand APP 获取内容。
 - **Apps that define custom document types must declare those types.** Use the Document Types section of the Info tab to specify icons and UTI information for the document formats that you support. The system uses this information to identify apps capable of handling specific file types. For more information about adding document support to your app, see [Document-Based App Programming Guide for iOS](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/DocumentBasedAppPGiOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011149).
+- **定义自定义文档类型的 APP 必须声明这些类型。** 使用 Info 选项卡中的  Document Types 部分为你支持的文档格式指定图标和 UTI 信息。系统使用这些信息来识别 APP 能够处理的特定文件类型。关于添加文件支持到你的 APP 的更多信息，参见 [Document-Based App Programming Guide for iOS](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/DocumentBasedAppPGiOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011149)。
 - **Apps can declare any custom URL schemes they support.** Use the URL Types section of the Info tab to specify the custom URL schemes that your app handles. Apps can use custom URL schemes to communicate with each other. For more information about how to implement support for this feature, see [Using URL Schemes to Communicate with Apps](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Inter-AppCommunication/Inter-AppCommunication.html#//apple_ref/doc/uid/TP40007072-CH6-SW1).
-- **Apps must provide purpose strings (sometimes called “usage descriptions”) for accessing user data and certain app features.** When there is a privacy concern about an app accessing user data or device capabilities, iOS prompts the user and requests permission on behalf of your app. An app must explain to the user, by way of a purpose string defined in its Info.plist file, why it requires access. If your app attempts to gain access without having provided a corresponding purpose string, your app exits.
+- **APP 可以声明它们支持的任意自定义 URL scheme。** 使用 Info 选项卡的 URL Types 部分指定你的 APP 处理的自定义 URL scheme。APP 可以使用自定义 URL scheme 彼此交互。关于如何实现对这个特性的支持的更多信息，参见 [Using URL Schemes to Communicate with Apps](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Inter-AppCommunication/Inter-AppCommunication.html#//apple_ref/doc/uid/TP40007072-CH6-SW1)。
+- **Apps must provide purpose strings (sometimes called “usage descriptions”) for accessing user data and certain app features.** When there is a privacy concern about an app accessing user data or device capabilities, iOS prompts the user and requests permission on behalf of your app. An app must explain to the user, by way of a purpose string defined in its *Info.plist* file, why it requires access. If your app attempts to gain access without having provided a corresponding purpose string, your app exits.
+- **APP 必须为访问用户数据和某些 APP 特性提供目的字符串（有时称为“使用说明”）。** 当对应用程序访问用户数据或设备能力有隐私保护时，iOS 提示用户并代表 APP 请求许可。APP 必须向用户解释它为什么需要访问，通过定义在 *Info.plist* 中的目的字符串。如果你的 APP 试图在没有提供相应目的字符串的情况下获得访问，你的 APP 就会退出。
 	 
-	The data and features that require user permission are described in Table 1-2. Purpose strings are described in the [Cocoa Keys](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251) chapter of [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
+	The data and features that require user permission are described in [Table 1-2](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW7). Purpose strings are described in the [Cocoa Keys](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251) chapter of [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
+	
+	需要用户许可的数据和功能在 [Table 1-2](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW7) 中有述。目的字符串在 [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247) 的 [Cocoa Keys](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251) 章节有述。
 
 For detailed information about the keys and values you can include in the *Info.plist* file, see [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
 
+关于你可以包含到 *Info.plist* 文件中的 key 和 value 的详细信息，参见 [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247)。
+
 <span id="1.1.3">
-###1.1.3 Declaring the Required Device Capabilities 声明需要的设备功能
+###1.1.3 Declaring the Required Device Capabilities - 声明需要的设备功能
 
 All apps must declare the device-specific capabilities they need to run. Xcode includes a Required device capabilities entry in your project’s Info tab and populates it with some minimum requirements. You can add values to this entry to specify additional requirements for your app. The Required device capabilities entry corresponds to the *UIRequiredDeviceCapabilities* key in your app’s *Info.plist* file.
 
+所有 APP 都必须声明它们运行所需要的设备特定能力。Xcode 在工程的 Info 选项卡中包含了一个 Required device capabilities 条目，并且以最低要求填充它。你可以在这个条目中加入值，为你的 APP 指定附加需求。Required device capabilities 条目对应 APP 的 *Info.plist* 文件的 *UIRequiredDeviceCapabilities* key。
+
 The value of the *UIRequiredDeviceCapabilities* key is either an array or dictionary that contains additional keys identifying features your app requires (or specifically prohibits). If you specify the value of the key using an array, the presence of a key indicates that the feature is required; the absence of a key indicates that the feature is not required and that the app can run without it. If you specify a dictionary instead, each key in the dictionary must have a Boolean value that indicates whether the feature is required or prohibited. A value of *true* indicates the feature is required and a value of *false* indicates that the feature must not be present on the device. If a given capability is optional for your app, do not include the corresponding key in the dictionary.
+
+*UIRequiredDeviceCapabilities* key 的值是一个数组或字典，包含辨识你的 APP 需要（或明确禁止）的功能的附加 key。如果你使用一个数组指定 key 的值，key 的存在表示这个功能是需要的；缺少一个 key 表示该功能不需要，并且应用程序可以在没有它的情况下运行。如果你指定一个字典，则字典中的每个 key 都必须具有布尔值，该值指示是否需要或禁用该功能。值 *true* 表示需要这个特性，值 *false* 表示该功能必须不能存在于设备上。如果给定的功能对你的 APP 是可选的，则不要在字典中包含相应的 key。
 
 For detailed information on the values you can include for the *UIRequiredDeviceCapabilities* key, see [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
 
+关于你可以包含在 *UIRequiredDeviceCapabilities* 中的值的详细信息，参见 [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247)。
+
 <span id="1.1.4">
-###1.1.4 App Icons
+###1.1.4 App Icons - App 图标
 
 Every app must provide an icon to be displayed on a device’s Home screen and in the App Store. An app may actually specify several different icons for use in different situations. For example, an app can provide a small icon to use when displaying search results and can provide a high-resolution icon for devices with Retina displays.
 
+每个 APP 都必须提供一个图标，显示在设备的 Home 屏幕和 App Store 中。APP 实际上可以指定几个不同图标在不同情况下使用。例如，APP 可以提供一个小图标在显示搜索结果时使用，并且可以提供一个高分辨率的图标给带有 Retina 显示器的设备。
+
 New Xcode projects include image asset entries for your app’s icon images. To add icons, assign the corresponding image files to the image assets of your project. At build time, Xcode adds the appropriate keys to your app’s *Info.plist* file and places the images in your app bundle.
+
+新的 Xcode 工程为你 APP 的图标图像包含了一个 image asset 条目。要添加图标，把相应的图像文件指派给工程的 image asset。在构建时，Xcode 添加适当的 key 到你 APP 的 *Info.plist* 文件中，并把图像放入你 APP 的 bundle 中。
 
 For information about designing your app icons, including the sizes of those icons, see [iOS Human Interface Guidelines](https://developer.apple.com/ios/human-interface-guidelines/).
 
+关于设计你的 APP 图标的信息，包括这些图标的尺寸，参见 [iOS Human Interface Guidelines](https://developer.apple.com/ios/human-interface-guidelines/)。 
+
 <span id="1.1.5">
-###1.1.5 App Launch (Default) Images App启动（默认）图
+###1.1.5 App Launch (Default) Images - App 启动（默认）图
 
 When the system launches an app for the first time on a device, it temporarily displays a static launch image on the screen. This image is your app’s launch image and it is a resource that you specify in your Xcode project. Launch images provide the user with immediate feedback that your app has launched while giving your app time to prepare its initial user interface. When your app’s window is configured and ready to be displayed, the system swaps out the launch image for that window.
 
+当系统在某个设备上第一次启动一个 APP，它会在屏幕上临时显示一张静态图片。这张图片就是你 APP 的启动图，是你的 Xcode 工程中指定的一个资源。启动图提供给用户一个即时的反馈，你的 APP 已经启动，同时给你的 APP 时间准备其初始用户界面。当你的 APP 的窗口配置好了并准备好显示时，系统会把启动图换成这个窗口。
+
 When a recent snapshot of your app’s user interface is available, the system prefers the use of that image over the use of your app’s launch images. The system takes a snapshot of your app’s user interface when your app transitions from the foreground to the background. When your app returns to the foreground, it uses that image instead of a launch image whenever possible. In cases where the user has killed your app or your app has not run for a long time, the system discards the snapshot and relies once again on your launch images.
+
+当你的 APP 的用户界面的最近快照可用时，系统偏好于使用这张图片胜过你 APP 的启动图。当你的 APP 从前台转入后台时系统会对 APP 的用户界面进行快照。当你的 APP 回到前台时，只要可能，系统就会使用这张图片取代启动图。对于用户杀死你的 APP 或者 APP 很久没有运行的情况，系统会丢弃快照并在此依赖你的启动图。
 
 New Xcode projects include image asset entries for your app’s launch images. To add launch images, add the corresponding image files to the image assets of your project. At build time, Xcode adds the appropriate keys to your app’s *Info.plist* file and places the images in your app bundle.
 
+新的 Xcode 工程为你 APP 的启动图包含了 image asset 条目。若要添加启动图，将相应的图像文件添加到工程的 image asset 中。在构建时，Xcode 会添加适当的 key 到 APP 的 *Info.plist* 文件中并把图片放入你的 APP bundle。
+
 For information about designing your app’s launch images, including the sizes of those images, see [iOS Human Interface Guidelines](https://developer.apple.com/ios/human-interface-guidelines/).
 
+关于设计 APP 的启动图的信息，包括那些图片的尺寸，参见 [iOS Human Interface Guidelines](https://developer.apple.com/ios/human-interface-guidelines/)。
+
 <span id="1.2">
-##1.2 Supporting User Privacy 支持用户隐私政策
+##1.2 Supporting User Privacy - 支持用户隐私政策
 
 Designing for user privacy is important. Most iOS devices contain personal data that the user might not want to expose to apps or to external entities. If your app accesses or uses data inappropriately, the user might respond by deleting your app.
 
