@@ -11,24 +11,44 @@ When the user is not actively using your app, the system moves it to the backgro
 
 Most apps can move to the suspended state easily enough but there are also legitimate reasons for apps to continue running in the background. A hiking app might want to track the user’s position over time so that it can display that course overlaid on top of a hiking map. An audio app might need to continue playing music over the lock screen. Other apps might want to download content in the background so that it can minimize the delay in presenting that content to the user. When you find it necessary to keep your app running in the background, iOS helps you do so efficiently and without draining system resources or the user’s battery. The techniques offered by iOS fall into three categories:
 
+大部分 APP 可以非常容易的转入挂起状态，但是 APP 也有合理的理由继续在后台运行。一个徒步 APP 可能想要随时跟踪用户的位置，以便可以在徒步地图上线显示该路线。一个音频 APP 可能需要在锁屏时继续播放音乐。其他 APP 可能想要在后台下载内容，以便它们可以最小化将内容展示给用户的延迟时间。当你发现有必要在后台保持你的 APP 运行时，iOS 会帮助你有效的实现，并且不会耗尽系统资源或用户的电量。iOS 提供的技术分为三类：
+
 - Apps that start a short task in the foreground can ask for time to finish that task when the app moves to the background.
+
+- 在前台开启了一个短任务的 APP 可以在 APP 转入后台时请求时间以完成该任务。 
+
 - Apps that initiate downloads in the foreground can hand off management of those downloads to the system, thereby allowing the app to be suspended or terminated while the download continues.
+
+- 在前台发起了下载的 APP 可以把那些下载交给系统管理，从而允许 APP 被挂起或终止时下载仍在继续。
+
 - Apps that need to run in the background to support specific types of tasks can declare their support for one or more background execution modes.
+
+- 需要在后台运行以支持特定类型的任务的 APP 可以声明它们支持一种或多种后台运行模式。
 
 Always try to avoid doing any background work unless doing so improves the overall user experience. An app might move to the background because the user launched a different app or because the user locked the device and is not using it right now. In both situations, the user is signaling that your app does not need to be doing any meaningful work right now. Continuing to run in such conditions will only drain the device’s battery and might lead the user to force quit your app altogether. So be mindful about the work you do in the background and avoid it when you can.
 
+尽量避免做任何后台工作，除非这样做提升了整个用户体验。一个 APP 可能由于用户启动了另一个 APP 或者由于用户锁住了屏幕现在不使用它了，而转入后台。在这两种情况，用户都在暗示你的 APP 现在不需要做任何有意义的工作。在这种条件下继续运行将指挥耗尽设备的电量，并导致用户一并强制退出你的 APP。所以要注意你在后台做的工作，并尽量避免。
+
 <span id="3.1">
-##3.1 Executing Finite-Length Tasks 执行有限长度的任务
+##3.1 Executing Finite-Length Tasks - 执行有限长度的任务
 
-Apps moving to the background are expected to put themselves into a quiescent state as quickly as possible so that they can be suspended by the system. If your app is in the middle of a task and needs a little extra time to complete that task, it can call the [beginBackgroundTaskWithName:expirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623051-beginbackgroundtask) or [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) method of the UIApplication object to request some additional execution time. Calling either of these methods delays the suspension of your app temporarily, giving it a little extra time to finish its work. Upon completion of that work, your app must call the [endBackgroundTask:](https://developer.apple.com/reference/uikit/uiapplication/1622970-endbackgroundtask) method to let the system know that it is finished and can be suspended.
+Apps moving to the background are expected to put themselves into a quiescent state as quickly as possible so that they can be suspended by the system. If your app is in the middle of a task and needs a little extra time to complete that task, it can call the [beginBackgroundTaskWithName:expirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623051-beginbackgroundtask) or [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) method of the `UIApplication` object to request some additional execution time. Calling either of these methods delays the suspension of your app temporarily, giving it a little extra time to finish its work. Upon completion of that work, your app must call the [endBackgroundTask:](https://developer.apple.com/reference/uikit/uiapplication/1622970-endbackgroundtask) method to let the system know that it is finished and can be suspended.
 
-Each call to the *beginBackgroundTaskWithName:expirationHandler:* or *beginBackgroundTaskWithExpirationHandler:* method generates a unique token to associate with the corresponding task. When your app completes a task, it must call the endBackgroundTask: method with the corresponding token to let the system know that the task is complete. Failure to call the *endBackgroundTask:* method for a background task will result in the termination of your app. If you provided an expiration handler when starting the task, the system calls that handler and gives you one last chance to end the task and avoid termination.
+移入后台的 APP 将会尽快进入静止状态，以便它们可以被系统挂起。如果你的 APP 正在任务当中，并需要一点额外的时间完成该任务，可以调用 `UIApplication` 对象的 [beginBackgroundTaskWithName:expirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623051-beginbackgroundtask) 或 [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) 方法请求一些附加的执行时间。调用其中任何一个方法都会暂时延迟你的 APP 的挂起，给它一点额外的时间完成它的工作。等到完成该工作，你的 APP 必须调用 [endBackgroundTask:](https://developer.apple.com/reference/uikit/uiapplication/1622970-endbackgroundtask) 方法让系统知道工作完成了，可以被挂起了。
 
-You do not need to wait until your app moves to the background to designate background tasks. A more useful design is to call the *beginBackgroundTaskWithName:expirationHandler:* or *beginBackgroundTaskWithExpirationHandler:* method before starting a task and call the endBackgroundTask: method as soon as you finish. You can even follow this pattern while your app is executing in the foreground.
+Each call to the `beginBackgroundTaskWithName:expirationHandler:` or `beginBackgroundTaskWithExpirationHandler:` method generates a unique token to associate with the corresponding task. When your app completes a task, it must call the `endBackgroundTask:` method with the corresponding token to let the system know that the task is complete. Failure to call the `endBackgroundTask:` method for a background task will result in the termination of your app. If you provided an expiration handler when starting the task, the system calls that handler and gives you one last chance to end the task and avoid termination.
 
-Listing 3-1 shows how to start a long-running task when your app transitions to the background. In this example, the request to start a background task includes an expiration handler just in case the task takes too long. The task itself is then submitted to a dispatch queue for asynchronous execution so that the applicationDidEnterBackground: method can return normally. The use of blocks simplifies the code needed to maintain references to any important variables, such as the background task identifier. The bgTask variable is a member variable of the class that stores a pointer to the current background task identifier and is initialized prior to its use in this method.
+每次调用 `beginBackgroundTaskWithName:expirationHandler:` 或 `beginBackgroundTaskWithExpirationHandler:` 方法都会生成一个独立的 token 关联到相应的任务。当你的 APP 完成任务时，必须调用 `endBackgroundTask:` 方法传入相应的 token 让系统知道该任务完成了。为后台任务调用 `endBackgroundTask:` 方法失败将会导致你的 APP 终止。如果你在开始任务时提供了超时处理方法，系统会调用该方法，给你最后一次机会结束该任务并避免终止。
 
-**Listing 3-1**  Starting a background task at quit time
+You do not need to wait until your app moves to the background to designate background tasks. A more useful design is to call the `beginBackgroundTaskWithName:expirationHandler:` or `beginBackgroundTaskWithExpirationHandler:` method before starting a task and call the `endBackgroundTask:` method as soon as you finish. You can even follow this pattern while your app is executing in the foreground.
+
+你不需要等到 APP 移入后台才指定后台任务。更有用的设计是在开始任务之前就调用 `beginBackgroundTaskWithName:expirationHandler:` 或 `beginBackgroundTaskWithExpirationHandler:` 方法，并在你完成时调用 `endBackgroundTask:` 方法。你甚至可以在你的 APP 在前台执行时遵循这个模式。
+
+Listing 3-1 shows how to start a long-running task when your app transitions to the background. In this example, the request to start a background task includes an expiration handler just in case the task takes too long. The task itself is then submitted to a dispatch queue for asynchronous execution so that the `applicationDidEnterBackground:` method can return normally. The use of blocks simplifies the code needed to maintain references to any important variables, such as the background task identifier. The `bgTask` variable is a member variable of the class that stores a pointer to the current background task identifier and is initialized prior to its use in this method.
+
+表 3-1 展示了当你的 APP 转入后台时如何开启一个长时间运行的任务。在这个例子中，开始后台任务的请求包含了一个超时处理方法，仅在该任务花费了过长时间时被调用。这个任务自身被提交到一个 dispatch 队列异步执行，以便 `applicationDidEnterBackground:` 方法可以正常返回。Block 的使用简化了需要持有对任何重要变量的引用的代码，例如后台任务标识符。`bgTask` 变量是类的成员变量，存储了当前后台任务标识符的指针，并在它在这个方法中使用之前就已初始化。
+
+**Listing 3-1**  Starting a background task at quit time - 在退出时开始一个后台任务
 
 	- (void)applicationDidEnterBackground:(UIApplication *)application
 	{
@@ -49,31 +69,53 @@ Listing 3-1 shows how to start a long-running task when your app transitions to 
 	    });
 	}
 
->**Note:** Always provide an expiration handler when starting a task, but if you want to know how much time your app has left to run, get the value of the [backgroundTimeRemaining](https://developer.apple.com/reference/uikit/uiapplication/1623029-backgroundtimeremaining) property of UIApplication.
+>**Note:** Always provide an expiration handler when starting a task, but if you want to know how much time your app has left to run, get the value of the [backgroundTimeRemaining](https://developer.apple.com/reference/uikit/uiapplication/1623029-backgroundtimeremaining) property of `UIApplication`.
+>
+>**注意：** 当开始任务时总提供超时处理方法，但是如果你想要知道你的 APP 还有多少时间可以运行，只要获取 `UIApplication` 的 [backgroundTimeRemaining](https://developer.apple.com/reference/uikit/uiapplication/1623029-backgroundtimeremaining) 属性值即可。
 
 In your own expiration handlers, you can include additional code needed to close out your task. However, any code you include must not take too long to execute because, by the time your expiration handler is called, your app is already very close to its time limit. For this reason, perform only minimal cleanup of your state information and end the task.
 
+在你自己的超时处理方法中，你可以包含需要关闭你的任务的附加代码。但是，你包含的任何代码都不能花费太长的执行时间，因为，当你的超时处理方法被调用时，你的 APP 已经非常接近其时间限制了。出于这个原因，只执行状态信息的最小清理并结束任务即可。
+
 <span id="3.2">
-##3.2 Downloading Content in the Background 在后台下载内容
+##3.2 Downloading Content in the Background - 在后台下载内容
 
-When downloading files, apps should use an NSURLSession object to start the downloads so that the system can take control of the download process in case the app is suspended or terminated. When you configure an NSURLSession object for background transfers, the system manages those transfers in a separate process and reports status back to your app in the usual way. If your app is terminated while transfers are ongoing, the system continues the transfers in the background and launches your app (as appropriate) when the transfers finish or when one or more tasks need your app’s attention.
+When downloading files, apps should use an `NSURLSession` object to start the downloads so that the system can take control of the download process in case the app is suspended or terminated. When you configure an `NSURLSession` object for background transfers, the system manages those transfers in a separate process and reports status back to your app in the usual way. If your app is terminated while transfers are ongoing, the system continues the transfers in the background and launches your app (as appropriate) when the transfers finish or when one or more tasks need your app’s attention.
 
-To support background transfers, you must configure your NSURLSession object appropriately. To configure the session, you must first create a NSURLSessionConfiguration object and set several properties to appropriate values. You then pass that configuration object to the appropriate initialization method of NSURLSession when creating your session.
+当下载文件时，APP 应该使用 `NSURLSession` 对象开启下载，以便系统可以在 APP 被挂起或终止时控制下载的过程。当你为后台传输配置 `NSURLSession` 对象时，系统会在独立的进程中管理那些传输，并以平常的方式把状态报告给你的 APP。如果你的 APP 在传输正在进行时被终止，系统会在后台继续传输，当传输完成或者当一个或多个任务需要你的 APP 注意时系统会（视情况）启动你的 APP。
+
+To support background transfers, you must configure your `NSURLSession` object appropriately. To configure the session, you must first create a `NSURLSessionConfiguration` object and set several properties to appropriate values. You then pass that configuration object to the appropriate initialization method of `NSURLSession` when creating your session.
+
+要支持后台传输，你必须正确的配置你的 `NSURLSession` 对象。你必须首先创建一个 `NSURLSessionConfiguration` 对象，并将若干属性设置成正确的值。然后你在创建会话时，把这个配置对象传给适当的 `NSURLSession` 初始化方法。
 
 The process for creating a configuration object that supports background downloads is as follows:
 
-1. Create the configuration object using the [backgroundSessionConfigurationWithIdentifier:](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1407496-background) method of NSURLSessionConfiguration.
-2. Set the value of the configuration object’s [sessionSendsLaunchEvents](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1617174-sessionsendslaunchevents) property to a YES/a.
-3. if your app starts transfers while it is in the foreground, it is recommend that you also set the [discretionary](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1411552-isdiscretionary) property of the configuration object to a YES/a.
+创建支持后台下载的配置对象的过程如下：
+
+1. Create the configuration object using the [backgroundSessionConfigurationWithIdentifier:](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1407496-background) method of `NSURLSessionConfiguration`.
+2. Set the value of the configuration object’s [sessionSendsLaunchEvents](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1617174-sessionsendslaunchevents) property to a `YES`.
+3. if your app starts transfers while it is in the foreground, it is recommend that you also set the [discretionary](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1411552-isdiscretionary) property of the configuration object to a `YES`.
 4. Configure any other properties of the configuration object as appropriate.
-5. Use the configuration object to create your NSURLSession object.
+5. Use the configuration object to create your `NSURLSession` object.
 
-Once configured, your NSURLSession object seamlessly hands off upload and download tasks to the system at appropriate times. If tasks finish while your app is still running (either in the foreground or the background), the session object notifies its delegate in the usual way. If tasks have not yet finished and the system terminates your app, the system automatically continues managing the tasks in the background. If the user terminates your app, the system cancels any pending tasks.
+>
 
-When all of the tasks associated with a background session are complete, the system relaunches a terminated app (assuming that the sessionSendsLaunchEvents property was set to a YES/a and that the user did not force quit the app) and calls the app delegate’s [application:handleEventsForBackgroundURLSession:completionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622941-application) method. (The system may also relaunch the app to handle authentication challenges or other task-related events that require your app’s attention.) In your implementation of that delegate method, use the provided identifier to create a new NSURLSessionConfiguration and NSURLSession object with the same configuration as before. The system reconnects your new session object to the previous tasks and reports their status to the session object’s delegate.
+1. 使用 `NSURLSessionConfiguration` 的 [backgroundSessionConfigurationWithIdentifier:](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1407496-background) 方法创建配置对象。
+2. 将配置对象的 [sessionSendsLaunchEvents](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1617174-sessionsendslaunchevents) 属性值设成 `YES`。
+3. 如果 APP 开始传输时正在前台，推荐也将配置对象的 [discretionary](https://developer.apple.com/reference/foundation/urlsessionconfiguration/1411552-isdiscretionary) 属性也设成 `YES`。
+4. 看情况配置配置对象的其他属性。
+5. 使用配置对象创建你的 `NSURLSession` 对象。
+
+Once configured, your `NSURLSession` object seamlessly hands off upload and download tasks to the system at appropriate times. If tasks finish while your app is still running (either in the foreground or the background), the session object notifies its delegate in the usual way. If tasks have not yet finished and the system terminates your app, the system automatically continues managing the tasks in the background. If the user terminates your app, the system cancels any pending tasks.
+
+一旦配置好，你的 `NSURLSession` 对象就会在适当的时候无缝的对系统执行上传和下载任务。如果任务完成而你的 APP 仍在运行（在前台或在后台），会话对象会以往常的方式通知其代理。如果任务还没有完成而系统终止了你的 APP，系统会自动的在后台继续管理该任务。如果用户终止你的 APP，系统会取消任何未处理的任务。
+
+When all of the tasks associated with a background session are complete, the system relaunches a terminated app (assuming that the `sessionSendsLaunchEvents` property was set to `YES` and that the user did not force quit the app) and calls the app delegate’s [application:handleEventsForBackgroundURLSession:completionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622941-application) method. (The system may also relaunch the app to handle authentication challenges or other task-related events that require your app’s attention.) In your implementation of that delegate method, use the provided identifier to create a new `NSURLSessionConfiguration` and `NSURLSession` object with the same configuration as before. The system reconnects your new session object to the previous tasks and reports their status to the session object’s delegate.
+
+当所有的与后台会话相关联的任务都完成时，系统会重新启动终止的 APP（嘉定 `sessionSendsLaunchEvents` 属性被设置成 `YES`，并且用户没有强制退出 APP），并调用 [application:handleEventsForBackgroundURLSession:completionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622941-application) 方法。（系统也可能重新启动 APP 以处理授权挑战或其他需要你的 APP 注意的其他任务相关的事件。）在该代理方法的实现中，使用提供的标识符创建一个新的 `NSURLSessionConfiguration` 和 `NSURLSession` 对象，并按照先前做相同的配置。系统会把你的新会话对象重新连接到以前的任务，并将它们的状态报告给会话系统的代理。
 
 <span id="3.3">
-## 3.3 Implementing Long-Running Tasks 实现长期运行的任务
+## 3.3 Implementing Long-Running Tasks  - 实现长期运行的任务
 
 For tasks that require more execution time to implement, you must request specific permissions to run them in the background without their being suspended. In iOS, only specific app types are allowed to run in the background:
 
