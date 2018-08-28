@@ -119,6 +119,8 @@ When all of the tasks associated with a background session are complete, the sys
 
 For tasks that require more execution time to implement, you must request specific permissions to run them in the background without their being suspended. In iOS, only specific app types are allowed to run in the background:
 
+对于需要更多执行时间以实现的任务，你必须请求特定的许可才能在后台运行它们而不被挂起。在 iOS 中，只有特定的 APP 类型允许在后台运行：
+
 - Apps that play audible content to the user while in the background, such as a music player app
 - Apps that record audio content while in the background
 - Apps that keep users informed of their location at all times, such as a navigation app
@@ -135,16 +137,20 @@ For tasks that require more execution time to implement, you must request specif
 
 Apps that implement these services must declare the services they support and use system frameworks to implement the relevant aspects of those services. Declaring the services lets the system know which services you use, but in some cases it is the system frameworks that actually prevent your application from being suspended.
 
+实现这些服务的 APP 必须声明它们支持的服务，并使用系统框架实现这些服务的相关方面。声明服务让系统知道你使用哪些服务，但在某些情况下，系统框架实际上就避免了你的应用程序被挂起。
+
 <span id="3.3.1">
 ###3.3.1 Declaring Your App’s Supported Background Tasks 声明你的app支持后台任务
 
-Support for some types of background execution must be declared in advance by the app that uses them. In Xcode 5 and later, you declare the background modes your app supports from the Capabilities tab of your project settings. Enabling the Background Modes option adds the UIBackgroundModes key to your app’s Info.plist file. Selecting one or more checkboxes adds the corresponding background mode values to that key. Table 3-1 lists the background modes you can specify and the values that Xcode assigns to the UIBackgroundModes key in your app’s Info.plist file.
+Support for some types of background execution must be declared in advance by the app that uses them. In Xcode 5 and later, you declare the background modes your app supports from the Capabilities tab of your project settings. Enabling the Background Modes option adds the `UIBackgroundModes` key to your app’s *Info.plist* file. Selecting one or more checkboxes adds the corresponding background mode values to that key. Table 3-1 lists the background modes you can specify and the values that Xcode assigns to the `UIBackgroundModes` key in your app’s *Info.plist* file.
 
-**Table 3-1**  Background modes for apps
+要对某些类型的后台执行进行支持，必须由使用它们的 APP 事先声明。在 Xcode 5 及以后版本，你可以通过你的工程设置的 Capabilities 选项卡声明 APP 支持的后台模式。启用 Background Modes 选项会将 `UIBackgroundModes` key 添加到你 APP 的 *Info.plist* 文件。选择一个或多个复选框将相应的后台模式值添加到该 key。表 3-1 列举了你可以指定的后台模式，以及 Xcode 会分配给你 APP 的 *Info.plist* 文件中的 `UIBackgroundModes` key 的值。
+
+**Table 3-1**  Background modes for apps - APP 的后台模式
 
 | **Xcode background mode**        | **UIBackgroundModes value** | **Description**                          |
 | -------------------------------- | --------------------------- | ---------------------------------------- |
-| Audio and AirPlay                | audio                       | The app plays audible content to the user or records audio while in the background. (This content includes streaming audio or video content using AirPlay.)The user must grant permission for apps to use the microphone prior to the first use; for more information, see [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6). |
+| Audio and AirPlay </br> 音频和 AirPlay               | audio                       | The app plays audible content to the user or records audio while in the background. (This content includes streaming audio or video content using AirPlay.)The user must grant permission for apps to use the microphone prior to the first use; for more information, see [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6). |
 | Location updates                 | location                    | The app keeps users informed of their location, even while it is running in the background. |
 | Voice over IP                    | voip                        | The app provides the ability for the user to make phone calls using an Internet connection. |
 | Newsstand downloads              | newsstand-content           | The app is a Newsstand app that downloads and processes magazine or newspaper content in the background. |
