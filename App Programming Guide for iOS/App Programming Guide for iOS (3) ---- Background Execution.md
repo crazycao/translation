@@ -355,11 +355,17 @@ Any app that supports the background processing of Bluetooth data must be sessio
 
 Notifications are a way for an app that is suspended, is in the background, or is not running to get the user’s attention. Apps can use local notifications to display alerts, play sounds, badge the app’s icon, or a combination of the three. For example, an alarm clock app might use local notifications to play an alarm sound and display an alert to disable the alarm. When a notification is delivered to the user, the user must decide if the information warrants bringing the app back to the foreground. (If the app is already running in the foreground, local notifications are delivered quietly to the app and not to the user.)
 
-To schedule the delivery of a local notification, create an instance of the [UILocalNotification](https://developer.apple.com/reference/uikit/uilocalnotification) class, configure the notification parameters, and schedule it using the methods of the UIApplication class. The local notification object contains information about the type of notification to deliver (sound, alert, or badge) and the time (when applicable) at which to deliver it. The methods of the UIApplication class provide options for delivering notifications immediately or at the scheduled time.
+对于被挂起的、在后台的或者没有运行的 APP，通知都是一种获得用户关注的方法。APP 可以使用本地通知显示弹窗，播放声音，给 APP icon 放角标，或者三者的组合。例如，闹钟 APP 可能使用本地通知播放闹钟声音并给出一个弹窗来关闭闹钟。当通知被发送给用户时，用户必须决定该信息是否有足够的理由把 APP 从后台带到前台。（如果 APP 已经在前台运行，本地通知会静静的发送给 APP 并不会通知用户。）
+
+To schedule the delivery of a local notification, create an instance of the [UILocalNotification](https://developer.apple.com/reference/uikit/uilocalnotification) class, configure the notification parameters, and schedule it using the methods of the `UIApplication` class. The local notification object contains information about the type of notification to deliver (sound, alert, or badge) and the time (when applicable) at which to deliver it. The methods of the `UIApplication` class provide options for delivering notifications immediately or at the scheduled time.
+
+要调度本地通知的发送，需要先创建 [UILocalNotification](https://developer.apple.com/reference/uikit/uilocalnotification) 类的实例，配置通知参数，并且使用 `UIApplication` 类的方法调度它。本地通知对象包含要发送的通知类型（声音、弹窗或角标）和发送时间（如果可以发送）的信息。 `UIApplication` 类的方法提供了选项，立即发送通知或者在调度的时间发送。
 
 Listing 3-2 shows an example that schedules a single alarm using a date and time that is set by the user. This example configures only one alarm at a time and cancels the previous alarm before scheduling a new one. (Your own apps can have no more than 128 local notifications active at any given time, any of which can be configured to repeat at a specified interval.) The alarm itself consists of an alert box and a sound file that is played if the app is not running or is in the background when the alarm fires. If the app is active and therefore running in the foreground, the app delegate’s [application:didReceiveLocalNotification:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622930-application) method is called instead.
 
-**Listing 3-2**  Scheduling an alarm notification
+表 3-2 展示了一个使用用户设置的日期和时间调度单次闹钟的例子。这个例子一次只配置了一个闹钟，在调度新的之前取消了前一个闹钟。（你自己的 APP 在任何给定的时间里都可以有不超过 128 个本地通知，每一个都可以配置成按特定的时间间隔重复。）闹钟自己有一个警告弹框和一个声音文件组成，当闹钟时间到时， APP 不在运行或者在后台，会播放该声音文件。如果 APP 是活跃的并且正在前台与进行，则会调用 APP 代理的 [application:didReceiveLocalNotification:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622930-application) 方法。
+
+**Listing 3-2**  Scheduling an alarm notification - 调度一个闹钟通知
 
 	- (void)scheduleAlarmForDate:(NSDate*)theDate
 	{
@@ -386,59 +392,63 @@ Listing 3-2 shows an example that schedules a single alarm using a date and time
 
 Sound files used with local notifications have the same requirements as those used for push notifications. Custom sound files must be located inside your app’s main bundle and support one of the following formats: Linear PCM, MA4, µ-Law, or a-Law. You can also specify the [UILocalNotificationDefaultSoundName](https://developer.apple.com/reference/uikit/uilocalnotificationdefaultsoundname) constant to play the default alert sound for the device. When the notification is sent and the sound is played, the system also triggers a vibration on devices that support it.
 
-You can cancel scheduled notifications or get a list of notifications using the methods of the UIApplication class. For more information about these methods, see [UIApplication Class Reference](https://developer.apple.com/reference/uikit/uiapplication). For additional information about configuring local notifications, see [Local and Remote Notification Programming Guide](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/index.html#//apple_ref/doc/uid/TP40008194).
+被本地通知使用的声音文件与被推送通知使用的声音文件有相同的要求。自定义声音文件必须被放在你 APP 的 main bundle 里，并且支持下列其中一种格式：Linear PCM, MA4, µ-Law, 或 a-Law。你也可以指定 [UILocalNotificationDefaultSoundName](https://developer.apple.com/reference/uikit/uilocalnotificationdefaultsoundname) 常量播放设备的默认提示音。当通知被发送且声音被播放，系统也会触发设备震动，如果设备支持的话。
+
+You can cancel scheduled notifications or get a list of notifications using the methods of the `UIApplication` class. For more information about these methods, see [UIApplication Class Reference](https://developer.apple.com/reference/uikit/uiapplication). For additional information about configuring local notifications, see [Local and Remote Notification Programming Guide](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/index.html#//apple_ref/doc/uid/TP40008194).
+
+你可以使用 `UIApplication` 类的方法取消已调度的通知或者获取通知列表。关于这些方法的更多信息，参见 [UIApplication Class Reference](https://developer.apple.com/reference/uikit/uiapplication)。关于配置本地通知的附加信息，参见 [Local and Remote Notification Programming Guide](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/index.html#//apple_ref/doc/uid/TP40008194)。
 
 <span id="3.5">
-##3.5 Understanding When Your App Gets Launched into the Background 理解什么时候App会启动就进入后台
+##3.5 Understanding When Your App Gets Launched into the Background - 理解什么时候App会启动就进入后台
 
 Apps that support background execution may be relaunched by the system to handle incoming events. If an app is terminated for any reason other than the user force quitting it, the system launches the app when one of the following events happens:
 
-支持后台执行的app可能被系统重新启动以处理刚收到的事件。如果app由于其他原因终止而不是用户强制退出的，系统会在以下事件之一发生时启动app：
+支持后台执行的 APP 可能被系统重新启动以处理刚收到的事件。如果 APP 由于其他原因终止而不是用户强制退出的，系统会在以下事件之一发生时启动 APP：
 
 - For location apps:
 
   - The system receives a location update that meets the app’s configured criteria for delivery.
   - The device entered or exited a registered region. (Regions can be geographic regions or iBeacon regions.)
 
-- 对于定位app：
+- 对于定位 APP：
 
-  - 系统收到满足app配置的发送条件的位置更新.
+  - 系统收到满足 APP 配置的发送条件的位置更新.
   - 设备进入或离开一个已注册的地区。(地区可以是地理学的地区，也可以是iBeacon地区。)
   
 - For audio apps, the audio framework needs the app to process some data. (Audio apps include those that play audio or use the microphone.)
 
-- 对于音频app，音频框架需要app处理某些数据。（音频app包括播放音频的app和使用麦克风的app。）
+- 对于音频 APP，音频框架需要 APP 处理某些数据。（音频 APP 包括播放音频的 APP 和使用麦克风的 APP 。）
 
 - For Bluetooth apps:
 
   - An app acting in the central role receives data from a connected peripheral.
   - An app acting in the peripheral role receives commands from a connected central.
 
-- 对于蓝牙app：
+- 对于蓝牙 APP：
 
-  - 作为中心角色的app收到来自于已连接的外设的数据。
-  - 作为外设角色的app收到来自于已连接的中心的命令。
+  - 作为中心角色的 APP 收到来自于已连接的外设的数据。
+  - 作为外设角色的 APP 收到来自于已连接的中心的命令。
   
 - For background download apps:
 
-  - A push notification arrives for an app and the payload of the notification contains the *content-available* key with a value of 1.
+  - A push notification arrives for an app and the payload of the notification contains the *content-available* key with a value of `1`.
   - The system wakes the app at opportunistic moments to begin downloading new content.
   - For apps downloading content in the background using the [NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession) class, all tasks associated with that session object either completed successfully or received an error.
   - A download initiated by a Newsstand app finishes.
  
-- 对于后台下载app：
+- 对于后台下载 APP：
 
-  - 该app的推送通知到达，而通知的负载包含*content-available*关键字且其值为1。
-  - 系统有一定机会唤醒app开始下载新内容。
-  - 对于使用[NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession)类在后台下载内容的app，与该会话对象关联的所有任务成功完成或发生错误。
-  - 由新闻app发起的系在结束了。
+  - 该 APP 的推送通知到达，而通知的负载包含 *content-available* 关键字且其值为 `1`。
+  - 系统有一定机会唤醒 APP 开始下载新内容。
+  - 对于使用 [NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession) 类在后台下载内容的 APP，与该会话对象关联的所有任务成功完成或发生错误。
+  - 由新闻 APP 发起的下载结束了。
 
 In most cases, the system does not relaunch apps after they are force quit by the user. One exception is location apps, which in iOS 8 and later are relaunched after being force quit by the user. In other cases, though, the user must launch the app explicitly or reboot the device before the app can be launched automatically into the background by the system. When password protection is enabled on the device, the system does not launch an app in the background before the user first unlocks the device.
 
-在大多数情况下，当app被用户强制退出之后，系统不会重新启动app。一个例外是定位app，在iOS 8及之后版本，即使被用户强制退出之后也会重启。而在其他情况下，用户必须明确的启动这个app，或者重启设备，系统才会自动启动app进入后台。当设备启用了密码保护，系统在用户第一次解锁设备之前也不会在后台启动app。
+在大多数情况下，当 APP 被用户强制退出之后，系统不会重新启动 APP。一个例外是定位 APP，在 iOS 8 及之后版本，即使被用户强制退出之后也会重启。而在其他情况下，用户必须明确的启动这个 APP，或者重启设备，系统才会自动启动 APP 并进入后台。当设备启用了密码保护，系统在用户第一次解锁设备之前也不会在后台启动 APP。
 
 <span id="3.6">
-##3.6 Being a Responsible Background App 做一个负责任的后台app
+##3.6 Being a Responsible Background App - 做一个负责任的后台 APP 
 
 The foreground app always has precedence over background apps when it comes to the use of system resources and hardware. Apps running in the background need to be prepared for this discrepancy and adjust their behavior when running in the background. Specifically, apps moving to the background should follow these guidelines:
 
