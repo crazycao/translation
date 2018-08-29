@@ -140,7 +140,7 @@ Apps that implement these services must declare the services they support and us
 实现这些服务的 APP 必须声明它们支持的服务，并使用系统框架实现这些服务的相关方面。声明服务让系统知道你使用哪些服务，但在某些情况下，系统框架实际上就避免了你的应用程序被挂起。
 
 <span id="3.3.1">
-###3.3.1 Declaring Your App’s Supported Background Tasks 声明你的app支持后台任务
+###3.3.1 Declaring Your App’s Supported Background Tasks - 声明你的app支持后台任务
 
 Support for some types of background execution must be declared in advance by the app that uses them. In Xcode 5 and later, you declare the background modes your app supports from the Capabilities tab of your project settings. Enabling the Background Modes option adds the `UIBackgroundModes` key to your app’s *Info.plist* file. Selecting one or more checkboxes adds the corresponding background mode values to that key. Table 3-1 lists the background modes you can specify and the values that Xcode assigns to the `UIBackgroundModes` key in your app’s *Info.plist* file.
 
@@ -150,39 +150,56 @@ Support for some types of background execution must be declared in advance by th
 
 | **Xcode background mode**        | **UIBackgroundModes value** | **Description**                          |
 | -------------------------------- | --------------------------- | ---------------------------------------- |
-| Audio and AirPlay </br> 音频和 AirPlay               | audio                       | The app plays audible content to the user or records audio while in the background. (This content includes streaming audio or video content using AirPlay.)The user must grant permission for apps to use the microphone prior to the first use; for more information, see [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6). |
-| Location updates                 | location                    | The app keeps users informed of their location, even while it is running in the background. |
-| Voice over IP                    | voip                        | The app provides the ability for the user to make phone calls using an Internet connection. |
-| Newsstand downloads              | newsstand-content           | The app is a Newsstand app that downloads and processes magazine or newspaper content in the background. |
-| External accessory communication | external-accessory          | The app works with a hardware accessory that needs to deliver updates on a regular schedule through the External Accessory framework. |
-| Uses Bluetooth LE accessories    | bluetooth-central           | The app works with a Bluetooth accessory that needs to deliver updates on a regular schedule through the Core Bluetooth framework. |
-| Acts as a Bluetooth LE accessory | bluetooth-peripheral        | The app supports Bluetooth communication in peripheral mode through the Core Bluetooth framework.Using this mode requires user authorization; for more information, see [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6). |
-| Background fetch                 | fetch                       | The app regularly downloads and processes small amounts of content from the network. |
-| Remote notifications             | remote-notification         | The app wants to start downloading content when a push notification arrives. Use this notification to minimize the delay in showing content related to the push notification. |
+| Audio and AirPlay </br> 音频和 AirPlay               | audio                       | The app plays audible content to the user or records audio while in the background. (This content includes streaming audio or video content using AirPlay.)</br>The user must grant permission for apps to use the microphone prior to the first use; for more information, see [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6).</br> App 在后台向用户播放可听内容或者录制音频。（该内容包括流式音频或者使用 AirPlay 的视频内容。）</br> 用户必须在首次使用麦克风之前为 APP 获得允许；更多信息，参见 [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6)。|
+| Location updates </br> 位置更新                | location                    | The app keeps users informed of their location, even while it is running in the background.</br> 即使在后台运行时，APP 也会让用户知道他们的位置。 |
+| Voice over IP </br> 网络电话                   | voip                        | The app provides the ability for the user to make phone calls using an Internet connection. </br> APP 使用网络连接为用户提供打电话的能力。 |
+| Newsstand downloads  </br> 新闻下载           | newsstand-content           | The app is a Newsstand app that downloads and processes magazine or newspaper content in the background. </br> 该 APP 是一个在后台下载和处理杂志或报纸内容的新闻 APP。 |
+| External accessory communication </br> 外部辅助通信 | external-accessory          | The app works with a hardware accessory that needs to deliver updates on a regular schedule through the External Accessory framework. </br> 该 APP 与需要定期通过 External Accessory 框架发送更新的硬件配件一起工作。|
+| Uses Bluetooth LE accessories </br> 使用蓝牙配件   | bluetooth-central           | The app works with a Bluetooth accessory that needs to deliver updates on a regular schedule through the Core Bluetooth framework.  </br> 该 APP 与需要定期通过 Core Bluetooth 框架发送更新的蓝牙配件一起工作。|
+| Acts as a Bluetooth LE accessory </br> 作为蓝牙配件 | bluetooth-peripheral        | The app supports Bluetooth communication in peripheral mode through the Core Bluetooth framework. </br> Using this mode requires user authorization; for more information, see [Supporting User Privacy](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/ExpectedAppBehaviors/ExpectedAppBehaviors.html#//apple_ref/doc/uid/TP40007072-CH3-SW6). </br> 该 APP 支持通过 Core Bluetooth 框架以外设模式进行蓝牙通信。 |
+| Background fetch </br> 后台获取                | fetch                       | The app regularly downloads and processes small amounts of content from the network. </br> APP 定期下载和处理来自网络的少量内容。 |
+| Remote notifications </br> 远程通知            | remote-notification         | The app wants to start downloading content when a push notification arrives. Use this notification to minimize the delay in showing content related to the push notification. </br> APP 想要在推送通知到达时开始下载内容。使用该通知可以最小化显示与该推送通知相关内容的延迟。 |
 
 Each of the preceding modes lets the system know that your app should be woken up or launched at appropriate times to respond to relevant events. For example, an app that begins playing music and then moves to the background still needs execution time to fill the audio output buffers. Enabling the Audio mode tells the system frameworks that they should continue to make the necessary callbacks to the app at appropriate intervals. If the app does not select this mode, any audio being played or recorded by the app stops when the app moves to the background.
 
+前面的每个模式都让系统知道你的 APP 应该在适当的时间被唤醒或启动已响应相关的事件。例如，一个开始播放音乐然后进入后台的 APP 仍然需要执行时间来填充音频输出缓冲区。启用 Audio 模式告诉系统框架它们应该以适当的时间间隔继续给 APP 必要的回调。如果 APP 没有选择该模式，任何由该 APP 播放或录制的音频都会在 APP 移入后台时停止。
+
 <span id="3.3.2">
-###3.3.2 Tracking the User’s Location 跟踪用户的定位
+###3.3.2 Tracking the User’s Location - 跟踪用户的定位
 
 There are several ways to track the user’s location in the background, most of which do not actually require your app to run continuously in the background:
+
+有几种方法可以在后台跟踪用户的定位，其中大部分实际上并不需要 APP 在后台持续运行：
 
 - The significant-change location service (Recommended)
 - Foreground-only location services
 - Background location services
+- 显著变化定位服务（推荐）
+- 只在前台的定位服务
+- 后台定位服务
 
 The significant-change location service is highly recommended for apps that do not need high-precision location data. With this service, location updates are generated only when the user’s location changes significantly; thus, it is ideal for social apps or apps that provide the user with noncritical, location-relevant information. If the app is suspended when an update occurs, the system wakes it up in the background to handle the update. If the app starts this service and is then terminated, the system relaunches the app automatically when a new location becomes available. This service is available in iOS 4 and later, and it is available only on devices that contain a cellular radio.
 
+对于不需要高精度位置数据的 APP，强烈建议使用显著变化的定位服务。使用该服务，只当用户的位置显著改变时才会发生位置更新；因此，这对于社交 APP 或向用户提供非关键的位置相关信息的 APP 都是完美的。如果更新发生时 APP 已被挂起，系统会在后台唤醒它以处理该更新。如果 APP 开启了该服务然后被终止，当新的位置可用时系统会自动重新启动该 APP。该服务在 iOS 4及以后版本可用，并且只在包含蜂窝无线的设备上可用。
+
 The foreground-only and background location services both use the standard location Core Location service to retrieve location data. The only difference is that the foreground-only location services stop delivering updates if the app is ever suspended, which is likely to happen if the app does not support other background services or tasks. Foreground-only location services are intended for apps that only need location data while they are in the foreground.
 
-You enable location support from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the location value in your app’s Info.plist file.) Enabling this mode does not prevent the system from suspending the app, but it does tell the system that it should wake up the app whenever there is new location data to deliver. Thus, this key effectively lets the app run in the background to process location updates whenever they occur.
+只在前台的定位服务和后台定位服务都使用标准定位 Core Location 服务来检索定位数据。唯一的不同是如果 APP 被挂起，只在前台的定位服务会停止发送更新，如果 APP 不支持其他后台服务或任务，这就很可能发生。只在前台的定位服务适用于只当它们在前台时才需要定位数据的 APP。
+
+You enable location support from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `location` value in your app’s *Info.plist* file.) Enabling this mode does not prevent the system from suspending the app, but it does tell the system that it should wake up the app whenever there is new location data to deliver. Thus, this key effectively lets the app run in the background to process location updates whenever they occur.
+
+从你的 Xcode 工程中的 Capabilities 选项卡的 Background 模式部分开启定位支持。（你也可以通过在你 APP 的 *Info.plist* 文件中添加 `UIBackgroundModes` key 和 `location` 值开启该支持。）启用该模式不会避免系统挂起 APP，但是它会告诉系统每当有新的定位数据发送时应该唤醒该 APP。因此，该 key 让 APP 在后台有效的运行以处理定位更新，每当它们发生时。
 
 >**Important:** You are encouraged to use the standard services sparingly or use the significant location change service instead. Location services require the active use of an iOS device’s onboard radio hardware. Running this hardware continuously can consume a significant amount of power. If your app does not need to provide precise and continuous location information to the user, it is best to minimize the use of location services.
+>
+>**重要：** 鼓励您保守的使用标准服务，或者使用显著定位变化服务取而代之。定位服务需要积极使用 iOS 设备的机载无线硬件。持续运行该硬件会显著的消耗电量。如果你的 APP 不需要向用户提供精确的连续的定位信息，最好最小化定位服务的使用。
 
 For information about how to use each of the different location services in your app, see [Location and Maps Programming Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/LocationAwarenessPG/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009497).
 
+关于如何在你的 APP 中使用每一种不同的定位服务的信息，参见 Location and Maps Programming Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/LocationAwarenessPG/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009497)。
+
 <span id="3.3.3">
-###3.3.3 Playing and Recording Background Audio 播放和录制后台音频
+###3.3.3 Playing and Recording Background Audio - 播放和录制后台音频
 
 An app that plays or records audio continuously (even while the app is running in the background) can register to perform those tasks in the background. You enable audio support from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the audio value in your app’s Info.plist file.) Apps that play audio content in the background must play audible content and not silence.
 
