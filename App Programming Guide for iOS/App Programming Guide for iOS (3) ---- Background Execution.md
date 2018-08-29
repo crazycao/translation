@@ -196,97 +196,162 @@ You enable location support from the Background modes section of the Capabilitie
 
 For information about how to use each of the different location services in your app, see [Location and Maps Programming Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/LocationAwarenessPG/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009497).
 
-关于如何在你的 APP 中使用每一种不同的定位服务的信息，参见 Location and Maps Programming Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/LocationAwarenessPG/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009497)。
+关于如何在你的 APP 中使用每一种不同的定位服务的信息，参见 [Location and Maps Programming Guide](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/LocationAwarenessPG/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009497)。
 
 <span id="3.3.3">
 ###3.3.3 Playing and Recording Background Audio - 播放和录制后台音频
 
-An app that plays or records audio continuously (even while the app is running in the background) can register to perform those tasks in the background. You enable audio support from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the audio value in your app’s Info.plist file.) Apps that play audio content in the background must play audible content and not silence.
+An app that plays or records audio continuously (even while the app is running in the background) can register to perform those tasks in the background. You enable audio support from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `audio` value in your app’s *Info.plist* file.) Apps that play audio content in the background must play audible content and not silence.
+
+持续播放或录制音频（即使 APP 在后台运行）的 APP 可以注册以在后台执行那些任务。你可以从 Xcode 工程的 Capabilities 选项卡的 Background modes 部分启用音频支持。（你也可以通过在你 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `audio` 值来启动该支持。）在后台播放音频内容的 APP 必须播放可听内容，并且不能静音。
 
 Typical examples of background audio apps include:
+
+后台音频 APP 的典型例子包括：
 
 - Music player apps
 - Audio recording apps
 - Apps that support audio or video playback over AirPlay
 - VoIP apps
+- 音乐播放器 APP
+- 音频录制 APP
+- 支持通过 AirPlay 支持音频或视频播放的 APP
+- VoIP APP
 
-When the UIBackgroundModes key contains the audio value, the system’s media frameworks automatically prevent the corresponding app from being suspended when it moves to the background. As long as it is playing audio or video content or recording audio content, the app continues to run in the background. However, if recording or playback stops, the system suspends the app.
+When the `UIBackgroundModes` key contains the `audio` value, the system’s media frameworks automatically prevent the corresponding app from being suspended when it moves to the background. As long as it is playing audio or video content or recording audio content, the app continues to run in the background. However, if recording or playback stops, the system suspends the app.
+
+当 `UIBackgroundModes` key 包含 `audio` 值时，当 APP 移入后台时，系统多媒体框架会自动阻止相应的 APP 被挂起。只要正在播放音频或视频内容或者正在录制音频内容，APP 都会在后台持续运行。然而，如果录制或播放停止，系统就会挂起该 APP。
 
 You can use any of the system audio frameworks to work with background audio content, and the process for using those frameworks is unchanged. (For video playback over AirPlay, you can use the Media Player or AV Foundation framework to present your video.) Because your app is not suspended while playing media files, callbacks operate normally while your app is in the background. In your callbacks, though, you should do only the work necessary to provide data for playback. For example, a streaming audio app would need to download the music stream data from its server and push the current audio samples out for playback. Apps should not perform any extraneous tasks that are unrelated to playback.
 
+你可以使用任何系统音频框架与后台音频内容一起工作，使用那些框架的过程不变。（对于通过 AirPlay 的视频播放，你可以使用 Media Player 或 AV Foundation 框架展示你的视频。）因为你的 APP 在播放多媒体文件时不会被挂起，当你的 APP 在后台时回调会正常执行。而在你的回调中，你应该只做对提供播放数据必要的工作。例如，流式音频 APP 应该需要从它的服务器下载音乐流数据，并推送当前音频采样到播放。APP 不应该执行任何与播放无关的额外任务。
+
 Because more than one app may support audio, the system determines which app is allowed to play or record audio at any given time. The foreground app always has priority for audio operations. It is possible for more than one background app to be allowed to play audio and such determinations are based on the configuration of each app’s audio session objects. You should always configure your app’s audio session object appropriately and work carefully with the system frameworks to handle interruptions and other types of audio-related notifications. For information on how to configure audio session objects for background execution, see [Audio Session Programming Guide](https://developer.apple.com/library/content/documentation/Audio/Conceptual/AudioSessionProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40007875).
 
+因为可能不止一个 APP 支持音频，系统要随时决定允许哪个 APP 播放或录制音频。前台 APP 总是对音频操作有优先权。有可能不止一个后台 APP 允许播放音频，而这些决定都基于每个 APP 的音频会话对象的配置。你应该总是适当的配置你的 APP 的音频会话对象，小心的与系统框架协作以处理中断和其他类型的音频相关的通知。关于如何配置音频会话对象在后台执行的信息，参见 [Audio Session Programming Guide](https://developer.apple.com/library/content/documentation/Audio/Conceptual/AudioSessionProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40007875)。
+
 <span id="3.3.4">
-###3.3.4 Implementing a VoIP App 实现一个网络电话app
+###3.3.4 Implementing a VoIP App - 实现一个网络电话 APP
 
 A Voice over Internet Protocol (VoIP) app allows the user to make phone calls using an Internet connection instead of the device’s cellular service. Such an app needs to maintain a persistent network connection to its associated service so that it can receive incoming calls and other relevant data. Rather than keep VoIP apps awake all the time, the system allows them to be suspended and provides facilities for monitoring their sockets for them. When incoming traffic is detected, the system wakes up the VoIP app and returns control of its sockets to it.
 
+网络电话（VoIP）APP 允许用户使用网络连接而不是设备的蜂窝服务拨打电话。这样的 APP 需要保持其相关服务的持久网络连接，以便它能收到呼入电话和其他相关的数据。系统并没有保持 VoIP APP 一直醒着，而是允许它们被挂起同时为它们提供监听套接字的工具。当检测到传入通信时，系统会唤起 VoIP APP 并将套接字的控制权还给它。
+
 To configure a VoIP app, you must do the following:
 
-1. Enable support for Voice over IP from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the voip value in your app’s Info.plist file.)
+要配置一个 VoIP APP，你必须做以下事情：
+
+1. Enable support for Voice over IP from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `voip` value in your app’s *Info.plist* file.)
 2. Configure one of the app’s sockets for VoIP usage.
 3. Before moving to the background, call the [setKeepAliveTimeout:handler:](https://developer.apple.com/reference/uikit/uiapplication/1622989-setkeepalivetimeout) method to install a handler to be executed periodically. Your app can use this handler to maintain its service connection.
 4. Configure your audio session to handle transitions to and from active use.
 
-Including the voip value in the UIBackgroundModes key lets the system know that it should allow the app to run in the background as needed to manage its network sockets. An app with this key is also relaunched in the background immediately after system boot to ensure that the VoIP services are always available.
+>
 
-Most VoIP apps also need to be configured as background audio apps to deliver audio while in the background. Therefore, you should include both the audio and voip values to the UIBackgroundModes key. If you do not do this, your app cannot play or record audio while it is in the background. For more information about the UIBackgroundModes key, see [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
+1. 在你的 Xcode 工程的 Capabilities 选项卡的 Background modes 部分启用对网络电话的支持。（你也可以通过在你的 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `voip` 值来启用该支持。）
+2. 为使用 VoIP 配置一个 socket。
+3. 在移入后台之前，调用 [setKeepAliveTimeout:handler:](https://developer.apple.com/reference/uikit/uiapplication/1622989-setkeepalivetimeout) 方法安置一个定期执行的处理程序。你的 APP 可以使用这个处理程序来维护它的的服务连接。
+4. 配置你的音频会话以处理来和去主动使用的转变。
+
+Including the `voip` value in the `UIBackgroundModes` key lets the system know that it should allow the app to run in the background as needed to manage its network sockets. An app with this key is also relaunched in the background immediately after system boot to ensure that the VoIP services are always available.
+
+在 `UIBackgroundModes` key 中包含 `voip` 值让系统知道它将允许 APP 按需在后台运行以管理其网络套接字。带有这个 key 的 APP 也可以在系统重启后立即在后台重新启动以确保 VoIP 服务总是可用的。
+
+Most VoIP apps also need to be configured as background audio apps to deliver audio while in the background. Therefore, you should include both the `audio` and `voip` values to the `UIBackgroundModes` key. If you do not do this, your app cannot play or record audio while it is in the background. For more information about the `UIBackgroundModes` key, see [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
+
+大部分 VoIP APP 也需要被配置为后台音频 APP 以便在后台时发送音频。因此，你需要在 `UIBackgroundModes` key 中同时包含 `audio` 和 `voip` 值。如果你不这么做，你的 APP 在后台时就不能播放或记录音频。关于 `UIBackgroundModes` key 的更多信息，参见 [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247)。
 
 For specific information about the steps you must take to implement a VoIP app, see [Tips for Developing a VoIP App](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforImplementingYourApp/StrategiesforImplementingYourApp.html#//apple_ref/doc/uid/TP40007072-CH5-SW13).
 
-<span id="3.3.5">
-###3.3.5 Fetching Small Amounts of Content Opportunistically 趁机获取少量内容
+有关实现 VoIP APP 必须采取的步骤的具体信息，参见 [Tips for Developing a VoIP App](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforImplementingYourApp/StrategiesforImplementingYourApp.html#//apple_ref/doc/uid/TP40007072-CH5-SW13)。
 
-Apps that need to check for new content periodically can ask the system to wake them up so that they can initiate a fetch operation for that content. To support this mode, enable the Background fetch option from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the fetch value in your app’s Info.plist file.) Enabling this mode is not a guarantee that the system will give your app any time to perform background fetches. The system must balance your app’s need to fetch content with the needs of other apps and the system itself. After assessing that information, the system gives time to apps when there are good opportunities to do so.
+<span id="3.3.5">
+###3.3.5 Fetching Small Amounts of Content Opportunistically - 适时地获取少量内容
+
+Apps that need to check for new content periodically can ask the system to wake them up so that they can initiate a fetch operation for that content. To support this mode, enable the Background fetch option from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `fetch` value in your app’s *Info.plist* file.) Enabling this mode is not a guarantee that the system will give your app any time to perform background fetches. The system must balance your app’s need to fetch content with the needs of other apps and the system itself. After assessing that information, the system gives time to apps when there are good opportunities to do so.
+
+需要定期检查新内容的 APP 可以让系统唤醒它们以便对那些内容开启一个获取操作。要支持该模式，可以在你的 Xcode 工程中的 Capabilities 选项卡的 Background modes 部分启用 Background fetch 选项。（你也可以通过在你的 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `fetch` 值来启用该支持。）启用此模式并不能保证系统将随时为你的 APP 执行后台获取。系统必须平衡你 APP 获取内容的需求和其他 APP 以及系统自己的需求。在评估信息之后，当有合适的时机时系统会给到 APP 时间来做这些事。
 
 When a good opportunity arises, the system wakes or launches your app into the background and calls the app delegate’s [application:performFetchWithCompletionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623125-application) method. Use that method to check for new content and initiate a download operation if content is available. As soon as you finish downloading the new content, you must execute the provided completion handler block, passing a result that indicates whether content was available. Executing this block tells the system that it can move your app back to the suspended state and evaluate its power usage. Apps that download small amounts of content quickly, and accurately reflect when they had content available to download, are more likely to receive execution time in the future than apps that take a long time to download their content or that claim content was available but then do not download anything.
 
+当一个好时机出现时，系统在后台唤醒或启动你的 APP 并调用 APP 代理的 [application:performFetchWithCompletionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623125-application) 方法。使用该方法检查是否有新的内容，并且如果内容可用就开始一个下载操作。当你完成对新内容的下载，你必须执行提供的完成处理 block，传入一个结果指示内容是否可用。执行这个 block 会告诉系统它可以把你的 APP 放回到挂起状态，并评估其电量使用。快速下载少量内容并在有可用下载内容时准确反映的 APP，比花费很长时间下载内容或者声称内容可用却并没有下载任何东西的 APP，在将来更可以获得执行时间。
+
 When downloading any content, it is recommended that you use the [NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession) class to initiate and manage your downloads. For information about how to use this class to manage upload and download tasks, see [URL Session Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i).
 
+当下载任何内容时，推荐使用 [NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession) 类开始和管理你的下载。关于如何使用这个类管理上传和下载任务的信息，参见 [URL Session Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i)。
+
 <span id="3.3.6">
-###3.3.6 Using Push Notifications to Initiate a Download 使用推送通知发起一次下载
+###3.3.6 Using Push Notifications to Initiate a Download - 使用推送通知发起一次下载
 
 If your server sends push notifications to a user’s device when new content is available for your app, you can ask the system to run your app in the background so that it can begin downloading the new content right away. The intent of this background mode is to minimize the amount of time that elapses between when a user sees a push notification and when your app is able to able to display the associated content. Apps are typically woken up at roughly the same time that the user sees the notification but that still gives you more time than you might have otherwise.
 
-To support this background mode, enable the Remote notifications option from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the remote-notification value in your app’s Info.plist file.)
+如果你的服务器在新的内容可用时发送一个推送通知到用户设备，你可以让系统在后台运行你的 APP 以便可以马上下载新的内容。这种后台模式的目的是最小化用户收到推送通知与 APP 能够显示相关内容之间间隔的时间。APP 通常在用户看到通知的同时被唤醒，但这仍然比别的方式给了你更多的时间。
 
-For a push notification to trigger a download operation, the notification’s payload must include the content-available key with its value set to 1. When that key is present, the system wakes the app in the background (or launches it into the background) and calls the app delegate’s [application:didReceiveRemoteNotification:fetchCompletionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623013-application) method. Your implementation of that method should download the relevant content and integrate it into your app.
+To support this background mode, enable the Remote notifications option from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `remote-notification` value in your app’s *Info.plist* file.)
+
+要支持这种后台模式，可以在你的 Xcode 工程的 Capabilities 选项卡的 Background modes 部分启用 Remote notification 选项。（你也可以通过在你的 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `remote-notification` 值来开启该支持。）
+
+For a push notification to trigger a download operation, the notification’s payload must include the `content-available` key with its value set to `1`. When that key is present, the system wakes the app in the background (or launches it into the background) and calls the app delegate’s [application:didReceiveRemoteNotification:fetchCompletionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623013-application) method. Your implementation of that method should download the relevant content and integrate it into your app.
+
+对于触发下载操作的推送通知，通知的负载必须包含 `content-available` key 并且值设置为 `1`。当有这个 key 时，系统会在后台唤醒 APP（或者启动它并进入后台）并调用 APP 代理的 [application:didReceiveRemoteNotification:fetchCompletionHandler:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623013-application) 方法。该方法的实现应该下载相关的内容并且集成到你的 APP 中。
 
 When downloading any content, it is recommended that you use the [NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession) class to initiate and manage your downloads. For information about how to use this class to manage upload and download tasks, see [URL Session Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i).
 
-<span id="3.3.7">
-###3.3.7 Downloading Newsstand Content in the Background 在后台下载新闻内容
+无论下载任何内容，都推荐使用 [NSURLSession](https://developer.apple.com/reference/foundation/nsurlsession) 类开启和管理你的下载。关于如何使用这个类管理上传和下载任务的信息，参见 [URL Session Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i)。
 
-A Newsstand app that downloads new magazine or newspaper issues can register to perform those downloads in the background. You enable support for newsstand downloads from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the newsstand-content value in your app’s Info.plist file.) When this key is present, the system launches your app, if it is not already running, so that it can initiate the downloading of the new issue.
+<span id="3.3.7">
+###3.3.7 Downloading Newsstand Content in the Background - 在后台下载新闻内容
+
+A Newsstand app that downloads new magazine or newspaper issues can register to perform those downloads in the background. You enable support for newsstand downloads from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `newsstand-content` value in your app’s *Info.plist* file.) When this key is present, the system launches your app, if it is not already running, so that it can initiate the downloading of the new issue.
+
+下载新杂志或报纸出版物的新闻 APP 可以注册以在后台执行那些下载。你可以在你的 Xcode 工程的 Capabilities 选项卡的 Background modes 部分开启对新闻下载的支持。（你也可以在你的 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `newsstand-content` value 以开启该支持。）当这个 key 出现时，系统启动你的 APP，如果它还没有运行，以便它可以开启新问题的下载。
 
 When you use the Newsstand Kit framework to initiate a download, the system handles the download process for your app. The system continues to download the file even if your app is suspended or terminated. When the download operation is complete, the system transfers the file to your app sandbox and notifies your app. If the app is not running, this notification wakes it up and gives it a chance to process the newly downloaded file. If there are errors during the download process, your app is similarly woken up to handle them.
 
+当你使用 Newsstand Kit 框架开始下载，系统会为你的 APP 处理下载过程。即使你的 APP 被挂起或终止，系统也会继续下载文件。当下载操作完成，系统把文件传给你 APP 的沙盒并通知你的 APP。如果 APP 没有运行，这个通知会唤醒它，并给它机会处理新下载的文件。如果在下载过程中有错误，你的 APP 同样会被唤醒来处理它们。
+
 For information about how to download content using the Newsstand Kit framework, see [Newsstand Kit Framework Reference](https://developer.apple.com/reference/newsstandkit).
 
-<span id="3.3.8">
-###3.3.8 Communicating with an External Accessory 与外部配件通信
+关于如何使用 Newsstand Kit 框架下载内容的信息，参见 [Newsstand Kit Framework Reference](https://developer.apple.com/reference/newsstandkit)。
 
-Apps that work with external accessories can ask to be woken up if the accessory delivers an update when the app is suspended. This support is important for some types of accessories that deliver data at regular intervals, such as heart-rate monitors. You enable support for external accessory communication from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the external-accessory value in your app’s Info.plist file.) When you enable this mode, the external accessory framework does not close active sessions with accessories. (In iOS 4 and earlier, these sessions are closed automatically when the app is suspended.) When new data arrives from the accessory, the framework wakes your app so that it can process that data. The system also wakes the app to process accessory connection and disconnection notifications.
+<span id="3.3.8">
+###3.3.8 Communicating with an External Accessory - 与外部配件通信
+
+Apps that work with external accessories can ask to be woken up if the accessory delivers an update when the app is suspended. This support is important for some types of accessories that deliver data at regular intervals, such as heart-rate monitors. You enable support for external accessory communication from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `external-accessory` value in your app’s *Info.plist* file.) When you enable this mode, the external accessory framework does not close active sessions with accessories. (In iOS 4 and earlier, these sessions are closed automatically when the app is suspended.) When new data arrives from the accessory, the framework wakes your app so that it can process that data. The system also wakes the app to process accessory connection and disconnection notifications.
+
+与外部配件一起工作的 APP ，如果被挂起时配件发送一个更新，该 APP 可以请求被唤醒。这个支持对于某些定时发送数据的配件非常重要，比如心率监视器。你可以在 Xcode 工程的 Capabilities 选项卡的 Background modes 部分启用对外部配件通信的支持。（你也可以在你的 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `external-accessory` value 以启用该支持。）当你启用了该模式，外部配件框架就不会关闭与配件的活跃会话。（在 iOS 4 及更早的版本，这些会话在 APP 被挂起时会自动关闭。）当来自配件的新数据到达时，框架会唤醒你的 APP 以便它可以处理那些数据。系统也会唤醒 APP 处理配件的连接和断开连接通知。
 
 Any app that supports the background processing of accessory updates must follow a few basic guidelines:
 
+任何支持配件更新的后台处理的 APP 必须遵循一些基本原则：
+
 - Apps must provide an interface that allows the user to start and stop the delivery of accessory update events. That interface should then open or close the accessory session as appropriate.
+- APP 必须提供一个接口允许用户开始和停止配件更新事件的发送。然后该接口应该视情况打开或关闭配件会话。
 - Upon being woken up, the app has around 10 seconds to process the data. Ideally, it should process the data as fast as possible and allow itself to be suspended again. However, if more time is needed, the app can use the [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) method to request additional time; it should do so only when absolutely necessary, though.
+- 当被唤醒时，APP 有 10 秒左右的时间处理数据。理想情况下，它应该尽可能快的处理数据，并允许自己再次被挂起。然而，如果需要更多的时间，APP 可以使用 [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) 方法请求额外的时间；不过，应该只在绝对必要时才这么做。
 
 <span id="3.3.9">
-###3.3.9 Communicating with a Bluetooth Accessory 与蓝牙配件通信
+###3.3.9 Communicating with a Bluetooth Accessory - 与蓝牙配件通信
 
-Apps that work with Bluetooth peripherals can ask to be woken up if the peripheral delivers an update when the app is suspended. This support is important for Bluetooth-LE accessories that deliver data at regular intervals, such as a Bluetooth heart rate belt. You enable support for using bluetooth accessories from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the bluetooth-central value in your app’s Info.plist file.) When you enable this mode, the Core Bluetooth framework keeps open any active sessions for the corresponding peripheral. In addition, new data arriving from the peripheral causes the system to wake up the app so that it can process the data. The system also wakes up the app to process accessory connection and disconnection notifications.
+Apps that work with Bluetooth peripherals can ask to be woken up if the peripheral delivers an update when the app is suspended. This support is important for Bluetooth-LE accessories that deliver data at regular intervals, such as a Bluetooth heart rate belt. You enable support for using bluetooth accessories from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the `UIBackgroundModes` key with the `bluetooth-central` value in your app’s *Info.plist* file.) When you enable this mode, the Core Bluetooth framework keeps open any active sessions for the corresponding peripheral. In addition, new data arriving from the peripheral causes the system to wake up the app so that it can process the data. The system also wakes up the app to process accessory connection and disconnection notifications.
+
+与蓝牙外设一起工作的 APP 可以请求被唤醒，如果外设在 APP 被挂起时发送了更新。该支持对定时发送数据的 Bluetooth-LE 配件非常重要，比如蓝牙心率带。你可以在 Xcode 工程中的 Capabilities 选项卡的 Background modes 部分启用使用蓝牙设备的支持。（你也可以在你的 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `bluetooth-central` value 来启用该支持。）当你启用该模式，Core Bluetooth 框架保持打开与相应外设的任何活跃会话。另外，来自外设的新数据会导致系统唤醒 APP 以便它可以处理该数据。系统也会唤醒 APP 处理配件连接和断开连接通知。
 
 In iOS 6, an app can also operate in peripheral mode with Bluetooth accessories. To act as a Bluetooth accessory, you must enable support for that mode from the Background modes section of the Capabilities tab in your Xcode project. (You can also enable this support by including the UIBackgroundModes key with the bluetooth-peripheral value in your app’s Info.plist file.) Enabling this mode lets the Core Bluetooth framework wake the app up briefly in the background so that it can handle accessory-related requests. Apps woken up for these events should process them and return as quickly as possible so that the app can be suspended again.
 
+在 iOS 6，APP 也可以在外设模式下操作蓝牙配件。要充当蓝牙外设，你必须在 Xcode 工程的 Capabilities 选项卡的 Background modes 部分启用对该模式的支持。（你也可以在你 APP 的 *Info.plist* 文件中包含 `UIBackgroundModes` key 和 `bluetooth-peripheral` value 来启用该支持。）启用该支持让 Core Bluetooth 框架简单的在后台唤醒 APP 以便它可以处理配件相关的请求。由于这些事件被唤醒的 APP 应该处理它们并且尽可能快的返回，以便 APP 可以再次被挂起。 
+
 Any app that supports the background processing of Bluetooth data must be session-based and follow a few basic guidelines:
 
+任何支持蓝牙数据的后台处理的 APP 必须基于会话，并且遵守一些基本原则：
+
 - Apps must provide an interface that allows the user to start and stop the delivery of Bluetooth events. That interface should then open or close the session as appropriate.
+- APP 必须提供一个接口允许用户开始和停止蓝牙事件的发送。然后该接口应该视情况打开或关闭配件会话。
 - Upon being woken up, the app has around 10 seconds to process the data. Ideally, it should process the data as fast as possible and allow itself to be suspended again. However, if more time is needed, the app can use the [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) method to request additional time; it should do so only when absolutely necessary, though.
+- 当被唤醒时，APP 有 10 秒左右的时间处理数据。理想情况下，它应该尽可能快的处理数据，并允许自己再次被挂起。然而，如果需要更多的时间，APP 可以使用 [beginBackgroundTaskWithExpirationHandler:](https://developer.apple.com/reference/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio) 方法请求额外的时间；不过，应该只在绝对必要时才这么做。
 
 <span id="3.4">
-##3.4 Getting the User’s Attention While in the Background 在后台时引起用户的注意
+##3.4 Getting the User’s Attention While in the Background - 在后台时引起用户的注意
 
 Notifications are a way for an app that is suspended, is in the background, or is not running to get the user’s attention. Apps can use local notifications to display alerts, play sounds, badge the app’s icon, or a combination of the three. For example, an alarm clock app might use local notifications to play an alarm sound and display an alert to disable the alarm. When a notification is delivered to the user, the user must decide if the information warrants bringing the app back to the foreground. (If the app is already running in the foreground, local notifications are delivered quietly to the app and not to the user.)
 
