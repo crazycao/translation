@@ -487,16 +487,31 @@ The foreground app always has precedence over background apps when it comes to t
 - **响应外部配件的连接和断开通知。** 对于与外部配件通信的 APP，系统会在 APP 移入后台时自动的发送一个断开通知。APP 必须注册这个通知，并用它来关闭当前配件会话。当 APP 回到前台，也会发送一个匹配的连接通知，给 APP 一个机会重新连接。关于处理配件连接和断开通知的更多信息，参见 [External Accessory Programming Topics](https://developer.apple.com/library/content/featuredarticles/ExternalAccessoryPT/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009502)。
 
 - **Clean up resources for active alerts when moving to the background.** In order to preserve context when switching between apps, the system does not automatically dismiss action sheets ([UIActionSheet](https://developer.apple.com/reference/uikit/uiactionsheet)) or alert views ([UIAlertView](https://developer.apple.com/reference/uikit/uialertview)) when your app moves to the background. It is up to you to provide the appropriate cleanup behavior prior to moving to the background. For example, you might want to cancel the action sheet or alert view programmatically or save enough contextual information to restore the view later (in cases where your app is terminated).
+
+- **当移入后台时为活跃的警告弹框清理资源。** 为了在 APP 之间切换时保持上下文，当 APP 进入后台时系统不会自动关闭操作表（[UIActionSheet](https://developer.apple.com/reference/uikit/uiactionsheet)）或警告弹窗（[UIAlertView](https://developer.apple.com/reference/uikit/uialertview)）。在移入后台之前，你可以决定提供适当的清理行为。例如，你可能想要通过编程取消操作表或警告弹窗，或者保存足够的上下文信息以便未来恢复视图（在你的 APP 被终止的情况下）。
+
 - **Remove sensitive information from views before moving to the background.** When an app transitions to the background, the system takes a snapshot of the app’s main window, which it then presents briefly when transitioning your app back to the foreground. Before returning from your [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) method, you should hide or obscure passwords and other sensitive personal information that might be captured as part of the snapshot.
+
+- **在移入后台之前从视图中移除敏感信息。** 当 APP 过渡到后台时，系统会对 APP 的主窗口拍摄一张快照，然后在你的 APP 回到前台时显示它。在从你的 [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) 方法返回之前，你应该隐藏或遮挡密码和其他敏感个人信息，它们可能作为快照的一部分被捕获。
+
 - **Do minimal work while running in the background.** The execution time given to background apps is more constrained than the amount of time given to the foreground app. Apps that spend too much time executing in the background can be throttled back by the system or terminated.
+-  **在后台运行时做最少的工作。** 给后台 APP 的执行时间比给前台 APP 的时间更受到约束。在后台花费了太多时间执行的 APP 可能被系统减速或终止。
 
 If you are implementing a background audio app, or any other type of app that is allowed to run in the background, your app responds to incoming messages in the usual way. In other words, the system may notify your app of low-memory warnings when they occur. And in situations where the system needs to terminate apps to free even more memory, the app calls its delegate’s [applicationWillTerminate:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623111-applicationwillterminate) method to perform any final tasks before exiting.
 
-<span id="3.7">
-##3.7 Opting Out of Background Execution 选择不使用后台执行
+如果你正实现一个后台音频 APP，或任何其他类型的允许在后台运行的 APP，你的 APP 会以正常的方式响应传入的消息。换句话说，当发生低内存警告时系统可以通知你的 APP。而在系统需要终止你的 APP 以释放更多内存时，APP 调用其代理的 [applicationWillTerminate:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623111-applicationwillterminate) 方法在退出前执行所有最终任务。
 
-If you do not want your app to run in the background at all, you can explicitly opt out of background by adding the UIApplicationExitsOnSuspend key (with the value a *YES*) to your app’s Info.plist file. When an app opts out, it cycles between the not-running, inactive, and active states and never enters the background or suspended states. When the user presses the Home button to quit the app, the [applicationWillTerminate:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623111-applicationwillterminate) method of the app delegate is called and the app has approximately 5 seconds to clean up and exit before it is terminated and moved back to the not-running state.
+<span id="3.7">
+##3.7 Opting Out of Background Execution - 选择不使用后台执行
+
+If you do not want your app to run in the background at all, you can explicitly opt out of background by adding the `UIApplicationExitsOnSuspend` key (with the value a `YES`) to your app’s *Info.plist* file. When an app opts out, it cycles between the not-running, inactive, and active states and never enters the background or suspended states. When the user presses the Home button to quit the app, the [applicationWillTerminate:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623111-applicationwillterminate) method of the app delegate is called and the app has approximately 5 seconds to clean up and exit before it is terminated and moved back to the not-running state.
+
+如果你并不希望你的 APP 在后台运行，你可以通过在你 APP 的 *Info.plist* 文件中添加 `UIApplicationExitsOnSuspend` key（值为 `YES`）明确选择不用后台。当一个 APP 选择退出，它就只在未运行、非活跃和活跃状态下循环，而永远不会进入后台或挂起状态。当用户按下 Home 键退出 APP，APP 代理的 [applicationWillTerminate:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623111-applicationwillterminate) 方法会被调用，在它被终止并移入未运行状态之前，APP 有大约 5 秒钟时间进行清理和退出。
 
 Opting out of background execution is strongly discouraged but may be the preferred option under certain conditions. Specifically, if coding for background execution adds significant complexity to your app, terminating the app might be a simpler solution. Also, if your app consumes a large amount of memory and cannot easily release any of it, the system might kill your app quickly anyway to make room for other apps. Thus, opting to terminate, instead of switching to the background, might yield the same results and save you development time and effort.
 
-For more information about the keys you can include in your app’s Info.plist file, see [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
+选择不用后台执行是非常不被鼓励的，但在某些条件下却可能是首选的选项。特别是，如果为后台执行写代码给你的 APP 带来了极大的复杂度，终止这个 APP 可能就是一个更简单的办法。另外，如果你的 APP 消耗大量的内存并且不能简单的释放，系统可能很快就杀死你的 APP 来给其他 APP 腾空间。因此，选择终止，而不是切换到后台，可能产生同样的结果，但却节约了你的开发时间和精力。
+
+For more information about the keys you can include in your app’s *Info.plist* file, see [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247).
+
+关于可以包含到 APP 的 *Info.plist* 文件中的 key 的更多信息，参见 [Information Property List Key Reference](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247)。
