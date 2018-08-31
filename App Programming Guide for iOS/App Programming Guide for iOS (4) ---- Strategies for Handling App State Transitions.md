@@ -108,7 +108,7 @@ For more information about where to put app-related data files, see [File System
 关于放置 APP 相关的数据文件的更多信息，参见 [File System Programming Guide](https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40010672)。
 
 <span id="4.2">
-## 4.2 What to Do When Your App Is Interrupted Temporarily 当App被暂时中断时做什么
+## 4.2 What to Do When Your App Is Interrupted Temporarily - 当App被暂时中断时做什么
 
 Alert-based interruptions result in a temporary loss of control by your app. Your app continues to run in the foreground, but it does not receive touch events from the system. (It does continue to receive notifications and other types of events, such as accelerometer events, though.) In response to this change, your app should do the following in its [applicationWillResignActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622950-applicationwillresignactive) method:
 
@@ -141,49 +141,65 @@ Notifications that display a banner do not deactivate your app in the way that a
 Pressing the Sleep/Wake button is another type of interruption that causes your app to be deactivated temporarily. When the user presses this button, the system disables touch events, moves the app to the background, sets the value of the app’s [applicationState](https://developer.apple.com/reference/uikit/uiapplication/1623003-applicationstate) property to [UIApplicationStateBackground](https://developer.apple.com/reference/uikit/uiapplicationstate/uiapplicationstatebackground), and locks the screen. A locked screen has additional consequences for apps that use data protection to encrypt files. Those consequences are described in What to Do When Your App Is Interrupted Temporarily.
 
 <span id="4.3">
-## 4.3 What to Do When Your App Enters the Foreground 当App进入前台时做什么
+## 4.3 What to Do When Your App Enters the Foreground - 当App进入前台时做什么
 
-Returning to the foreground is your app’s chance to restart the tasks that it stopped when it moved to the background. The steps that occur when moving to the foreground are shown in Figure 4-4. The [applicationWillEnterForeground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623076-applicationwillenterforeground) method should undo anything that was done in your applicationDidEnterBackground: method, and the [applicationDidBecomeActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622956-applicationdidbecomeactive) method should continue to perform the same activation tasks that it would at launch time.
+Returning to the foreground is your app’s chance to restart the tasks that it stopped when it moved to the background. The steps that occur when moving to the foreground are shown in Figure 4-4. The [applicationWillEnterForeground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623076-applicationwillenterforeground) method should undo anything that was done in your `applicationDidEnterBackground:` method, and the [applicationDidBecomeActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622956-applicationdidbecomeactive) method should continue to perform the same activation tasks that it would at launch time.
 
-**Figure 4-4**  Transitioning from the background to the foreground
+回到前台，你的 APP 就有机会重新启动它移入后台时关闭的任务。移入前台时发生的步骤如图 4-4 所示。[applicationWillEnterForeground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623076-applicationwillenterforeground) 方法应该撤销你在 `applicationDidEnterBackground:` 方法中做的所有事情，而 [applicationDidBecomeActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622956-applicationdidbecomeactive) 方法应该继续执行与 APP 启动时相同的激活任务。
 
-![Figure 4-4](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/app_enter_foreground_2x.png)
+**Figure 4-4**  Transitioning from the background to the foreground - 从后台到前台的过渡
+
+![Figure 4-4](images/app_enter_foreground_2x.png)
 
 > **Note:** The [UIApplicationWillEnterForegroundNotification](https://developer.apple.com/reference/uikit/uiapplicationwillenterforegroundnotification) notification is also available for tracking when your app reenters the foreground. Objects in your app can use the default notification center to register for this notification.
+> 
+> **注意：** [UIApplicationWillEnterForegroundNotification](https://developer.apple.com/reference/uikit/uiapplicationwillenterforegroundnotification) 通知也是可用的，以跟踪你的 APP 何时重新进入前台。你的 APP 中的对象可以使用默认的通知中心注册这个通知。
 
 <span id="4.3.1">
-### 4.3.1 Be Prepared to Process Queued Notifications 准备处理排好队的通知
+### 4.3.1 Be Prepared to Process Queued Notifications - 准备处理排好队的通知
 
 An app in the suspended state must be ready to handle any queued notifications when it returns to a foreground or background execution state. A suspended app does not execute any code and therefore cannot process notifications related to orientation changes, time changes, preferences changes, and many others that would affect the app’s appearance or state. To make sure these changes are not lost, the system queues many relevant notifications and delivers them to the app as soon as it starts executing code again (either in the foreground or background). To prevent your app from becoming overloaded with notifications when it resumes, the system coalesces events and delivers a single notification (of each relevant type) that reflects the net change since your app was suspended.
 
+在挂起状态的 APP 必须准备好在它回到前台或后台执行状态时处理所有排好队的通知。一个被挂起的 APP 不会执行任何代码，因此不能处理关于方向改变、时间改变、偏好设置改变以及许多其他可能影响 APP 的显示或状态的通知。要确保这些改变没有丢失，系统把许多相关的通知纳入队列，并当 APP 再次开始（在前台或后台）执行代码时把它们发给 APP。为了防止 APP 在回复时通知过载，系统合并事件，并发送一个（每个相关类型的）通知，反应从你的 APP 被挂起之后的净变化。
+
 Table 4-1 lists the notifications that can be coalesced and delivered to your app. Most of these notifications are delivered directly to the registered observers. Some, like those related to device orientation changes, are typically intercepted by a system framework and delivered to your app in another way.
 
-**Table 4-1**  Notifications delivered to waking apps
+表 4-1 列出了可能被合并发送到你的 APP 的通知。其中大部分直接发送给了注册的观察者。某些，比如那些与设备方向变化相关，通常被系统框架拦截并以另一种方式发送给你的 APP。
+
+**Table 4-1**  Notifications delivered to waking apps - 发送到唤醒的 APP 的通知
 
 | **Event**                                | **Notifications**                        |
 | ---------------------------------------- | ---------------------------------------- |
-| An accessory is connected or disconnected. | [EAAccessoryDidConnectNotification](https://developer.apple.com/reference/externalaccessory/eaaccessorydidconnectnotification)[EAAccessoryDidDisconnectNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1613901-eaaccessorydiddisconnect) |
-| The device orientation changes.          | [UIDeviceOrientationDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1620025-uideviceorientationdidchange)In addition to this notification, view controllers update their interface orientations automatically. |
-| There is a significant time change.      | [UIApplicationSignificantTimeChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1623059-uiapplicationsignificanttimechan) |
-| The battery level or battery state changes. | [UIDeviceBatteryLevelDidChangeNotification](https://developer.apple.com/reference/uikit/uidevicebatteryleveldidchangenotification)[UIDeviceBatteryStateDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1620052-uidevicebatterystatedidchange) |
-| The proximity state changes.             | [UIDeviceProximityStateDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1620046-uideviceproximitystatedidchange) |
-| The status of protected files changes.   | [UIApplicationProtectedDataWillBecomeUnavailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623058-uiapplicationprotecteddatawillbe)[UIApplicationProtectedDataDidBecomeAvailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623039-uiapplicationprotecteddatadidbec) |
-| An external display is connected or disconnected. | [UIScreenDidConnectNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1617826-uiscreendidconnect)[UIScreenDidDisconnectNotification](https://developer.apple.com/reference/uikit/uiscreendiddisconnectnotification) |
-| The screen mode of a display changes.    | [UIScreenModeDidChangeNotification](https://developer.apple.com/reference/uikit/uiscreenmodedidchangenotification) |
-| Preferences that your app exposes through the Settings app changed. | [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification) |
-| The current language or locale settings changed. | [NSCurrentLocaleDidChangeNotification](https://developer.apple.com/reference/foundation/nslocale/1418141-currentlocaledidchangenotificati) |
-| The status of the user’s iCloud account changed. | [NSUbiquityIdentityDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1407629-nsubiquityidentitydidchange) |
+| An accessory is connected or disconnected. </br> 配件连接或断开连接。 | [EAAccessoryDidConnectNotification](https://developer.apple.com/reference/externalaccessory/eaaccessorydidconnectnotification) </br> [EAAccessoryDidDisconnectNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1613901-eaaccessorydiddisconnect) |
+| The device orientation changes. </br> 设备方向改变。         | [UIDeviceOrientationDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1620025-uideviceorientationdidchange) </br> In addition to this notification, view controllers update their interface orientations automatically. </br> 除此通知之外，视图控制器会自动更新它们的界面方向。|
+| There is a significant time change.  </br> 有重要的时间改变。    | [UIApplicationSignificantTimeChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1623059-uiapplicationsignificanttimechan) |
+| The battery level or battery state changes. </br> 电池电量或电池状态改变。 | [UIDeviceBatteryLevelDidChangeNotification](https://developer.apple.com/reference/uikit/uidevicebatteryleveldidchangenotification) </br> [UIDeviceBatteryStateDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1620052-uidevicebatterystatedidchange) |
+| The proximity state changes. </br> 接近状态改变。            | [UIDeviceProximityStateDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1620046-uideviceproximitystatedidchange) |
+| The status of protected files changes. </br> 受保护文件的状态改变。  | [UIApplicationProtectedDataWillBecomeUnavailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623058-uiapplicationprotecteddatawillbe) </br> [UIApplicationProtectedDataDidBecomeAvailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623039-uiapplicationprotecteddatadidbec) |
+| An external display is connected or disconnected. </br> 扩展显示器连接或断开连接。 | [UIScreenDidConnectNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1617826-uiscreendidconnect) </br> [UIScreenDidDisconnectNotification](https://developer.apple.com/reference/uikit/uiscreendiddisconnectnotification) |
+| The screen mode of a display changes. </br> 显示器的屏幕模式改变。    | [UIScreenModeDidChangeNotification](https://developer.apple.com/reference/uikit/uiscreenmodedidchangenotification) |
+| Preferences that your app exposes through the Settings app changed. </br> APP 的偏好设置通过 Settings 改变。 | [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification) |
+| The current language or locale settings changed. </br> 当前语言或定位设置改变  | [NSCurrentLocaleDidChangeNotification](https://developer.apple.com/reference/foundation/nslocale/1418141-currentlocaledidchangenotificati) |
+| The status of the user’s iCloud account changed. </br>  用户的 iCloud 账户状态改变。 | [NSUbiquityIdentityDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1407629-nsubiquityidentitydidchange) |
 
 Queued notifications are delivered on your app’s main run loop and are typically delivered before any touch events or other user input. Most apps should be able to handle these events quickly enough that they would not cause any noticeable lag when resumed. However, if your app appears sluggish when it returns from the background state, use Instruments to determine whether your notification handler code is causing the delay.
 
+排好队的通知会被发送到你的 APP 的 main run loop 上，并且通常在所有触碰事件或其他用户输入之前就被发送。大部分 APP 应该能足够快的处理这些事件，而不会导致恢复时有任何明显的滞后。但是，如果你的 APP 从后台状态返回时显得迟缓，请使用 Instruments 确定是否你的通知处理代码导致了延迟。
+
 An app returning to the foreground also receives view-update notifications for any views that were marked dirty since the last update. An app running in the background can still call the [setNeedsDisplay](https://developer.apple.com/reference/uikit/uiview/1622437-setneedsdisplay) or [setNeedsDisplayInRect:](https://developer.apple.com/reference/uikit/uiview/1622587-setneedsdisplayinrect) methods to request an update for its views. However, because the views are not visible, the system coalesces the requests and updates the views only after the app returns to the foreground.
 
+返回到前台的 APP 也会受到从上次更新之后被标记为脏视图的所有视图更新通知。运行在后台的 APP 仍然可以调用 [setNeedsDisplay](https://developer.apple.com/reference/uikit/uiview/1622437-setneedsdisplay) 或 [setNeedsDisplayInRect:](https://developer.apple.com/reference/uikit/uiview/1622587-setneedsdisplayinrect) 方法为这些视图请求更新。然而，由于这些视图不可见，系统会合并这些请求，并只在 APP 返回到前台之后才更新这些视图。
+
 <span id="4.3.2">
-### 4.3.2 Handle iCloud Changes 处理iCloud变更
+### 4.3.2 Handle iCloud Changes - 处理iCloud变更
 
 If the status of iCloud changes for any reason, the system delivers a [NSUbiquityIdentityDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1407629-nsubiquityidentitydidchange) notification to your app. The state of iCloud changes when the user logs into or out of an iCloud account or enables or disables the syncing of documents and data. This notification is your app’s cue to update caches and any iCloud-related user interface elements to accommodate the change. For example, when the user logs out of iCloud, you should remove references to all iCloud–based files or data.
 
+如果 iCloud 状态由于任何原因改变，系统都会发送一个 [NSUbiquityIdentityDidChangeNotification](https://developer.apple.com/reference/foundation/nsnotification.name/1407629-nsubiquityidentitydidchange) 通知到你的 APP。iCloud 的状态会在用户登入或登出 iCloud 账户或者启用或禁用文档和数据同步时发生变化。这个通知给你的 APP 暗示去更新缓存和所有与 iCloud 相关的用户界面元素以适应变化。例如，当用户从 iCloud 登出，你应该移除对所有基于 iCloud 的文件或数据的引用。
+
 If your app has already prompted the user about whether to store files in iCloud, do not prompt again when the status of iCloud changes. After prompting the user the first time, store the user’s choice in your app’s local preferences. You might then want to expose that preference using a Settings bundle or as an option in your app. But do not repeat the prompt again unless that preference is not currently in the user defaults database.
+
+如果你的 APP 已经提示用户是否把在 iCloud 中存储文件，当 iCloud 状态变化时就不要再次提示。在第一次提示用户之后，在你 APP 的本地偏好中保存用户的选择。然后，你可能想要使用 Settings bundle 或者在你的 APP 中以选项的方式展示这个偏好。但是都不用再次重复提醒，除非该偏好当前不在用户默认数据库中了。
 
 <span id="4.3.3">
 ### 4.3.3 Handle Locale Changes 处理定位变更
