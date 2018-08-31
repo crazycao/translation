@@ -255,47 +255,85 @@ Upon receiving the `NSUserDefaultsDidChangeNotification` notification, your app 
 
 When moving from foreground to background execution, use the [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) method of your app delegate to do the following:
 
-- **Prepare to have your app’s picture taken.** When your applicationDidEnterBackground: method returns, the system takes a picture of your app’s user interface and uses the resulting image for transition animations. If any views in your interface contain sensitive information, you should hide or modify those views before the applicationDidEnterBackground: method returns. If you add new views to your view hierarchy as part of this process, you must force those views to draw themselves, as described in Prepare for the App Snapshot.
+当从前台进入后台执行时，使用你 APP 代理的 [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) 方法做以下操作：
+
+- **Prepare to have your app’s picture taken.** When your `applicationDidEnterBackground:` method returns, the system takes a picture of your app’s user interface and uses the resulting image for transition animations. If any views in your interface contain sensitive information, you should hide or modify those views before the `applicationDidEnterBackground:` method returns. If you add new views to your view hierarchy as part of this process, you must force those views to draw themselves, as described in [Prepare for the App Snapshot](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html#//apple_ref/doc/uid/TP40007072-CH8-SW27).
+- **准备让你的 APP 拍照。** 当你的 `applicationDidEnterBackground:` 方法返回时，系统会拍一张你的 APP 的用户界面的照片，并用拍出的图片作为过渡动画。如果你的界面上的任何视图包含敏感信息，你应该在 `applicationDidEnterBackground:` 方法返回之前隐藏或修改那些视图。如果你添加新的视图到你的视图层级中作为这个过程的一部分，你必须强制那些视图自我绘制，如 [Prepare for the App Snapshot](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html#//apple_ref/doc/uid/TP40007072-CH8-SW27) 中所述。
 - **Save any relevant app state information.** Prior to entering the background, your app should already have saved all critical user data. Use the transition to the background to save any last minute changes to your app’s state.
-- **Free up memory as needed.** Release any cached data that you do not need and do any simple cleanup that might reduce your app’s memory footprint. Apps with large memory footprints are the first to be terminated by the system, so release image resources, data caches, and any other objects that you no longer need. For more information, see Reduce Your Memory Footprint.
+- **保存所有相关的 APP 状态信息。** 在进入后台之前，你的 APP 应该已经保存了所有重要的用户数据。使用到后台的过渡来保存任何最后一分钟的变化到你的 APP 的状态中。
+- **Free up memory as needed.** Release any cached data that you do not need and do any simple cleanup that might reduce your app’s memory footprint. Apps with large memory footprints are the first to be terminated by the system, so release image resources, data caches, and any other objects that you no longer need. For more information, see [Reduce Your Memory Footprint](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html#//apple_ref/doc/uid/TP40007072-CH8-SW28).
+- **按需释放内存。** 释放你不需要的任何缓存数据并做所有简单的清理，这会减少你的 APP 的内存占用。占用大量内存空间的 APP 会首先被系统终止，所以释放图片资源、数据缓存以及其他任何你不再需要的对象。更多信息，参见 [Reduce Your Memory Footprint](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html#//apple_ref/doc/uid/TP40007072-CH8-SW28)。
 
-Your app delegate’s applicationDidEnterBackground: method has approximately 5 seconds to finish any tasks and return. In practice, this method should return as quickly as possible. If the method does not return before time runs out, your app is killed and purged from memory. If you still need more time to perform tasks, call the beginBackgroundTaskWithExpirationHandler: method to request background execution time and then start any long-running tasks in a secondary thread. Regardless of whether you start any background tasks, the applicationDidEnterBackground: method must still exit within 5 seconds.
+Your app delegate’s `applicationDidEnterBackground:` method has approximately 5 seconds to finish any tasks and return. In practice, this method should return as quickly as possible. If the method does not return before time runs out, your app is killed and purged from memory. If you still need more time to perform tasks, call the `beginBackgroundTaskWithExpirationHandler:` method to request background execution time and then start any long-running tasks in a secondary thread. Regardless of whether you start any background tasks, the `applicationDidEnterBackground:` method must still exit within 5 seconds.
 
-> **Note:** The system sends the [UIApplicationDidEnterBackgroundNotification](https://developer.apple.com/reference/uikit/uiapplicationdidenterbackgroundnotification) notification in addition to calling the applicationDidEnterBackground: method. You can use that notification to distribute cleanup tasks to other objects of your app.
+你的 APP 代理的 `applicationDidEnterBackground:` 方法有 5 秒左右的时间完成所有任务并返回。实际上，这个方法应该尽可能快的返回。如果方法没有在时间耗尽之前返回，你的 APP 会被杀死并从内存中清除。如果你仍需要更多的时间执行任务，调用 `beginBackgroundTaskWithExpirationHandler:` 方法请求后台执行时间，然后在附加线程开始任何长时间运行的任务。不管你是否开启了任何后台任务，`applicationDidEnterBackground:` 方法必须仍在 5 秒内退出。
+
+> **Note:** The system sends the [UIApplicationDidEnterBackgroundNotification](https://developer.apple.com/reference/uikit/uiapplicationdidenterbackgroundnotification) notification in addition to calling the `applicationDidEnterBackground:` method. You can use that notification to distribute cleanup tasks to other objects of your app.
+> 
+> **注意：** 系统除了调用 `applicationDidEnterBackground:` 方法之外还会发送 [UIApplicationDidEnterBackgroundNotification](https://developer.apple.com/reference/uikit/uiapplicationdidenterbackgroundnotification) 通知。你可以使用该通知把清理任务分配给你的 APP 的其他对象。
 
 Depending on the features of your app, there are other things your app should do when moving to the background. For example, any active Bonjour services should be suspended and the app should stop calling OpenGL ES functions. For a list of things your app should do when moving to the background, see [Being a Responsible Background App](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html#//apple_ref/doc/uid/TP40007072-CH4-SW8).
 
+取决于你的 APP 的功能，当移入后台时也有一些其他应该做的事情。例如，任何活跃的 Bonjour 服务应该被挂起，以及 APP 应该停止调用 OpenGL ES 函数。关于 APP 在移入后台时应该做的事情的列表，参见 [Being a Responsible Background App](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html#//apple_ref/doc/uid/TP40007072-CH4-SW8)。
+
 <span id="4.4.1">
-### 4.4.1 The Background Transition Cycle 后台转换循环
+### 4.4.1 The Background Transition Cycle - 后台过渡周期
 
 When the user presses the Home button, presses the Sleep/Wake button, or the system launches another app, the foreground app transitions to the inactive state and then to the background state. These transitions result in calls to the app delegate’s [applicationWillResignActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622950-applicationwillresignactive) and [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) methods, as shown in Figure 4-5. After returning from the applicationDidEnterBackground: method, most apps move to the suspended state shortly afterward. Apps that request specific background tasks (such as playing music) or that request a little extra execution time from the system may continue to run for a while longer.
 
-**Figure 4-5**  Moving from the foreground to the background
+当用户按下 Home 按钮，按下 Sleep/Wake 按钮 或者系统启动其他 APP 时，前台 APP 就会过渡到非活跃状态，然后到后台状态。这些过渡导致调用 APP 代理的 [applicationWillResignActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622950-applicationwillresignactive) 和 [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) 方法，如图 4-5 所示。在从 `applicationDidEnterBackground:` 方法返回之后，大部分 APP 不久后就会进入挂起状态。请求特定后台任务（如播放音乐）或从系统请求一点额外执行时间的 APP 会继续运行更长的一段时间。
 
-![Figure 4-5](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/app_bg_life_cycle_2x.png)
+**Figure 4-5**  Moving from the foreground to the background - 从前台移入后台
+
+![Figure 4-5](images/app_bg_life_cycle_2x.png)
 
 <span id="4.4.2">
-### 4.4.2 Prepare for the App Snapshot 准备App快照
+### 4.4.2 Prepare for the App Snapshot - 准备 APP 快照
 
 Shortly after an app delegate’s [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) method returns, the system takes a snapshot of the app’s windows. Similarly, when an app is woken up to perform background tasks, the system may take a new snapshot to reflect any relevant changes. For example, when an app is woken to process downloaded items, the system takes a new snapshot so that can reflect any changes caused by the incorporation of the items. The system uses these snapshot images in the multitasking UI to show the state of your app.
 
-If you make changes to your views upon entering the background, you can call the [snapshotViewAfterScreenUpdates:](https://developer.apple.com/reference/uikit/uiview/1622531-snapshotviewafterscreenupdates) method of your main view to force those changes to be rendered. Calling the setNeedsDisplay method on a view is ineffective for snapshots because the snapshot is taken before the next drawing cycle, thus preventing any changes from being rendered. Calling the snapshotViewAfterScreenUpdates: method with a value of a YES/a forces an immediate update to the underlying buffers that the snapshot machinery uses.
+在你的 APP 代理的 [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) 方法返回后，系统立即就会拍一张 APP 的窗口的快照。类似的，当 APP 被唤醒执行后台任务时，系统可能拍新的快照以反映任何相关的变化。例如，当 APP 被唤醒处理下载项目，系统拍新的快照反映由这些项目的合集导致的任何变化。系统使用这些快照图片在多任务 UI 中展示你的 APP 的状态。
+
+If you make changes to your views upon entering the background, you can call the [snapshotViewAfterScreenUpdates:](https://developer.apple.com/reference/uikit/uiview/1622531-snapshotviewafterscreenupdates) method of your main view to force those changes to be rendered. Calling the `setNeedsDisplay` method on a view is ineffective for snapshots because the snapshot is taken before the next drawing cycle, thus preventing any changes from being rendered. Calling the `snapshotViewAfterScreenUpdates:` method with a value of a `YES` forces an immediate update to the underlying buffers that the snapshot machinery uses.
+
+如果在进入后台时你对你的视图做了任何改变，你都可以调用你的主视图的 [snapshotViewAfterScreenUpdate:](https://developer.apple.com/reference/uikit/uiview/1622531-snapshotviewafterscreenupdates) 方法强制渲染那些改变。对一个视图调用 `setNeedsDisplay` 方法对快照是无效果的，因为快照在下一个绘制周期之前就拍摄了，从而避免了任何改变被渲染。调用 `snapshotViewAfterScreenUpdates:` 方法并传入 `YES` 值，会强制立即更新快照装置使用的底层缓冲区。
 
 <span id="4.4.3">
-### 4.4.3 Reduce Your Memory Footprint 减少内存占用
+### 4.4.3 Reduce Your Memory Footprint - 减少内存占用
 
 Every app should free up as much memory as is practical upon entering the background. The system tries to keep as many apps in memory at the same time as it can, but when memory runs low it terminates suspended apps to reclaim that memory. Apps that consume large amounts of memory while in the background are the first apps to be terminated.
 
+每个 APP 在进入后台时都应该释放尽可能多的内存。系统会在内存中同时保持尽可能多的 APP，但是当内存降低时它会终止挂起的 APP 以回收内存。而在后台中时消耗大量内存的 APP 是首先被终止的。
+
 Practically speaking, your app should remove strong references to objects as soon as they are no longer needed. Removing strong references gives the compiler the ability to release the objects right away so that the corresponding memory can be reclaimed. However, if you want to cache some objects to improve performance, you can wait until the app transitions to the background before removing references to them.
+
+实际上，你的 APP 应该立即移除对不再需要的对象的强引用。移除强引用让编译器可以立刻释放对象，以便相应的内存被回收。但是，如果你希望缓存某些对象以提升体验，你可以等到 APP 过渡到后台时才移除对它们的引用。
 
 Some examples of objects that you should remove strong references to as soon as possible include:
 
-- Image objects you created. (Some methods of UIImage return images whose underlying image data is purged automatically by the system. For more information, see the discussion in the overview of [UIImage Class Reference](https://developer.apple.com/reference/uikit/uiimage). )
+一些你应该尽可能移除强引用的对象的例子包括：
+
+- Image objects you created. (Some methods of `UIImage` return images whose underlying image data is purged automatically by the system. For more information, see the discussion in the overview of [UIImage Class Reference](https://developer.apple.com/reference/uikit/uiimage). )
 - Large media or data files that you can load again from disk
 - Any other objects that your app does not need and can recreate easily later
 
+- 你创建的图片对象。（`UIImage` 的某些方法返回的图片的底层图像数据是由系统自动清除的，参见 [UIImage Class Reference](https://developer.apple.com/reference/uikit/uiimage) 的概述中的讨论。）
+- 你可以从硬盘再次加载的大的多媒体或数据文件
+- 你的 APP 不需要并且之后很容易重新创建的任何其他对象
+
 To help reduce your app’s memory footprint, the system automatically purges some data allocated on behalf of your app when your app moves to the background.
+
+为了帮助减少你的 APP 的内存占用，系统在你的 APP 移入后台时自动清除了一些为你的 APP 分配的数据。
 
 - The system purges the backing store for all Core Animation layers. This effort does not remove your app’s layer objects from memory, nor does it change the current layer properties. It simply prevents the contents of those layers from appearing onscreen, which given that the app is in the background should not happen anyway.
 - It removes any system references to cached images.
 - It removes strong references to some other system-managed data caches.
+
+- 系统为所有 Core Animation 层清除备份存储。该操作既不会从内存中移除你的 APP 的 layer，也没有改变当前 layer 属性。它只是简单的阻止那些 layer 的内容出现在屏幕上，这也是在后台的 APP 不应该发生的事情。
+- 移除了缓存图像的所有系统引用。
+- 移除了对某些其他系统管理的数据缓存的强引用。
+
+
+
+
+
