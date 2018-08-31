@@ -112,6 +112,8 @@ For more information about where to put app-related data files, see [File System
 
 Alert-based interruptions result in a temporary loss of control by your app. Your app continues to run in the foreground, but it does not receive touch events from the system. (It does continue to receive notifications and other types of events, such as accelerometer events, though.) In response to this change, your app should do the following in its [applicationWillResignActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622950-applicationwillresignactive) method:
 
+基于弹窗的中断结果是你的 APP 暂时失去控制权。你的 APP 继续在前台运行，但是它不会收到来自系统的触碰事件。（但是它仍然可以接收通知和其他类型的事件，比如加速计事件。）为了响应该变化，你的 APP 应该在它的 [applicationWillResignActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622950-applicationwillresignactive) 方法中做下面这些事情：
+
 - Save data and any relevant state information.
 - Stop timers and other periodic tasks.
 - Stop any running metadata queries.
@@ -120,25 +122,45 @@ Alert-based interruptions result in a temporary loss of control by your app. You
 - Enter into a pause state if your app is a game.
 - Throttle back OpenGL ES frame rates.
 - Suspend any dispatch queues or operation queues executing non-critical code. (You can continue processing network requests and other time-sensitive background tasks while inactive.)
+- 保存数据和任何相关的状态信息。
+- 停止定时器和其他周期性的任务。
+- 停止任何正在运行的元数据查询。
+- 不要开始任何新任务。
+- 暂停电影播放（除了通过 AirPlay 的播放）。
+- 如果你的 APP 是一个游戏，进入暂停状态。
+- 调低 OpenGL ES 帧率。
+- 挂起任何正在执行非关键代码的调度队列或操作队列。（在不活跃时，你仍可以继续处理网络请求和其他事件敏感的后台任务。）
 
-When your app is moved back to the active state, its [applicationDidBecomeActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622956-applicationdidbecomeactive) method should reverse any of the steps taken in the applicationWillResignActive: method. Thus, upon reactivation, your app should restart timers, resume dispatch queues, and throttle up OpenGL ES frame rates again. However, games should not resume automatically; they should remain paused until the user chooses to resume them.
+When your app is moved back to the active state, its [applicationDidBecomeActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622956-applicationdidbecomeactive) method should reverse any of the steps taken in the `applicationWillResignActive:` method. Thus, upon reactivation, your app should restart timers, resume dispatch queues, and throttle up OpenGL ES frame rates again. However, games should not resume automatically; they should remain paused until the user chooses to resume them.
 
-When the user presses the Sleep/Wake button, apps with files protected by the [NSFileProtectionComplete](https://developer.apple.com/reference/foundation/fileprotectiontype/1616200-complete) protection option must close any references to those files. For devices configured with an appropriate password, pressing the Sleep/Wake button locks the screen and forces the system to throw away the decryption keys for files with complete protection enabled. While the screen is locked, any attempts to access the corresponding files will fail. So if you have such files, you should close any references to them in your applicationWillResignActive: method and open new references in your applicationDidBecomeActive: method.
+当你的 APP 被移入活跃状态，它的 [applicationDidBecomeActive:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622956-applicationdidbecomeactive) 方法应该反转在 `applicationWillResignActive:` 方法中执行的所有步骤。因此，重新激活后，你的 APP 应该重新启动定时器，恢复调度队列，并再次调高 OpenGL ES 帧率。然而，游戏不应该自动恢复；它们应该保持暂停，直到用户选择恢复它们。
+
+When the user presses the Sleep/Wake button, apps with files protected by the [NSFileProtectionComplete](https://developer.apple.com/reference/foundation/fileprotectiontype/1616200-complete) protection option must close any references to those files. For devices configured with an appropriate password, pressing the Sleep/Wake button locks the screen and forces the system to throw away the decryption keys for files with complete protection enabled. While the screen is locked, any attempts to access the corresponding files will fail. So if you have such files, you should close any references to them in your `applicationWillResignActive:` method and open new references in your `applicationDidBecomeActive:` method.
+
+当用户按下 Sleep/Wake 按钮，带有受 [NSFileProtectionComplete](https://developer.apple.com/reference/foundation/fileprotectiontype/1616200-complete) 保护选项保护的文件的 APP 必须关闭对那些文件的所有引用。对于配有适当密码的设备，按下 Sleep/Wake 按钮会锁住屏幕并且强制系统丢弃开启了完全保护的文件的解密密钥。当屏幕被锁住，任何访问相应文件的尝试都会失败。因此如果你有这样的文件，你应该在你的 `applicationWillResignActive:` 方法中关闭所有对它们的引用，并在你的 `applicationDidBecomeActive:` 方法中打开新的引用。
 
 > **Important:** Always save user data at appropriate checkpoints in your app. Although you can use app state transitions to force objects to write unsaved changes to disk, never wait for an app state transition to save data. For example, a view controller that manages user data should save its data when it is dismissed.
+> 
+> **重要：** 在你的 APP 中总在适当的检查点保存用户数据。尽管你可以使用 APP 状态过渡强制对象把未保存的改变写入硬盘，但永远不要等到 APP 状态变化才保存数据。例如，管理用户数据的视图控制器应该在它消失时就保存它的数据。
 
 <span id="4.2.1">
-### 4.2.1 Responding to Temporary Interruptions 响应暂时中断
+### 4.2.1 Responding to Temporary Interruptions - 响应暂时的中断
 
 When an alert-based interruption occurs, such as an incoming phone call, the app moves temporarily to the inactive state so that the system can prompt the user about how to proceed. The app remains in this state until the user dismisses the alert. At this point, the app either returns to the active state or moves to the background state. Figure 4-3 shows the flow of events through your app when an alert-based interruption occurs.
 
-**Figure 4-3**  Handling alert-based interruptions
+当基于弹窗的中断发生时，比如一个呼入的电话，APP 会暂时移入不活跃状态，以便系统可以提醒用户要怎么做。APP 保持在这个状态，直到用户关闭弹窗。在这个时候，APP 会返回到活跃状态或者进入后台状态。图 4-3 展示了当基于弹窗的中断发生时通过你的 APP 的事件流。
 
-![Figure 4-3](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/app_interruptions_2x.png)
+**Figure 4-3**  Handling alert-based interruptions - 处理基于弹窗的中断
+
+![Figure 4-3](images/app_interruptions_2x.png)
 
 Notifications that display a banner do not deactivate your app in the way that alert-based notifications do. Instead, the banner is laid along the top edge of your app window and your app continues receive touch events as before. However, if the user pulls down the banner to reveal the notification center, your app moves to the inactive state just as if an alert-based interruption had occurred. Your app remains in the inactive state until the user dismisses the notification center or launches another app. At this point, your app moves to the appropriate active or background state. The user can use the Settings app to configure which notifications display a banner and which display an alert.
 
-Pressing the Sleep/Wake button is another type of interruption that causes your app to be deactivated temporarily. When the user presses this button, the system disables touch events, moves the app to the background, sets the value of the app’s [applicationState](https://developer.apple.com/reference/uikit/uiapplication/1623003-applicationstate) property to [UIApplicationStateBackground](https://developer.apple.com/reference/uikit/uiapplicationstate/uiapplicationstatebackground), and locks the screen. A locked screen has additional consequences for apps that use data protection to encrypt files. Those consequences are described in What to Do When Your App Is Interrupted Temporarily.
+显示 banner 的通知不会像基于弹窗的通知那样使你的 APP 失活。相反，banner 被放在 APP 窗口的顶部边沿，而你的 APP 可以像之前一样继续接收触碰事件。但是，如果用户拉下 banner 显示出通知中心，你的 APP 就会进入不活跃的状态，就好像基于弹窗的中断发生了一样。你的 APP 仍然处在不活跃的状态，直到用户关闭通知中心或者启动另一个 APP。在这个时候，你的 APP 适当的移入活跃或后台庄爱。用户可以使用 Settings APP 配置哪个通知显示 banner 而哪个通知显示弹窗。
+
+Pressing the Sleep/Wake button is another type of interruption that causes your app to be deactivated temporarily. When the user presses this button, the system disables touch events, moves the app to the background, sets the value of the app’s [applicationState](https://developer.apple.com/reference/uikit/uiapplication/1623003-applicationstate) property to [UIApplicationStateBackground](https://developer.apple.com/reference/uikit/uiapplicationstate/uiapplicationstatebackground), and locks the screen. A locked screen has additional consequences for apps that use data protection to encrypt files. Those consequences are described in [What to Do When Your App Is Interrupted Temporarily](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html#//apple_ref/doc/uid/TP40007072-CH8-SW10).
+
+按下 Sleep/Wake 按钮时导致你的 APP 暂时失活的另一种中断。当用户按下这个按钮时，系统禁用触碰事件，把 APP 移入后台，把 APP 的 [applicationState](https://developer.apple.com/reference/uikit/uiapplication/1623003-applicationstate) 属性设置成 [UIApplicationStateBackground](https://developer.apple.com/reference/uikit/uiapplicationstate/uiapplicationstatebackground)，并锁住屏幕。被锁住的屏幕对使用数据保护加密文件的 APP 有副作用。那些结果的描述在 [What to Do When Your App Is Interrupted Temporarily](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html#//apple_ref/doc/uid/TP40007072-CH8-SW10) 中。
 
 <span id="4.3">
 ## 4.3 What to Do When Your App Enters the Foreground - 当App进入前台时做什么
