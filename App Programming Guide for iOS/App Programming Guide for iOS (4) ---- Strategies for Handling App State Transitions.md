@@ -224,24 +224,34 @@ If your app has already prompted the user about whether to store files in iCloud
 如果你的 APP 已经提示用户是否把在 iCloud 中存储文件，当 iCloud 状态变化时就不要再次提示。在第一次提示用户之后，在你 APP 的本地偏好中保存用户的选择。然后，你可能想要使用 Settings bundle 或者在你的 APP 中以选项的方式展示这个偏好。但是都不用再次重复提醒，除非该偏好当前不在用户默认数据库中了。
 
 <span id="4.3.3">
-### 4.3.3 Handle Locale Changes 处理定位变更
+### 4.3.3 Handle Locale Changes - 处理定位变更
 
 If a user changes the current locale while your app is suspended, you can use the [NSCurrentLocaleDidChangeNotification](https://developer.apple.com/reference/foundation/nslocale/1418141-currentlocaledidchangenotificati) notification to force updates to any views containing locale-sensitive information, such as dates, times, and numbers when your app returns to the foreground. Of course, the best way to avoid locale-related issues is to write your code in ways that make it easy to update views. For example:
 
-- Use the [autoupdatingCurrentLocale](https://developer.apple.com/reference/foundation/nslocale/1414388-autoupdatingcurrent) class method when retrieving NSLocale objects. This method returns a locale object that updates itself automatically in response to changes, so you never need to recreate it. However, when the locale changes, you still need to refresh views that contain content derived from the current locale.
+如果一个用户在你的 APP 被挂起时改变了当前位置，你可以使用 [NSCurrentLocaleDidChangeNotification](https://developer.apple.com/reference/foundation/nslocale/1418141-currentlocaledidchangenotificati) 通知在你的 APP 返回前台时强制更新所有包含定位敏感信息的视图，比如日期、时间和数字。当然，避免定位相关问题的最好方式是以易于更新视图的方式写代码。例如：
+
+- Use the [autoupdatingCurrentLocale](https://developer.apple.com/reference/foundation/nslocale/1414388-autoupdatingcurrent) class method when retrieving `NSLocale` objects. This method returns a locale object that updates itself automatically in response to changes, so you never need to recreate it. However, when the locale changes, you still need to refresh views that contain content derived from the current locale.
+- 在检索 `NSLocale` 对象时使用 [autoupdatingCurrentLocale](https://developer.apple.com/reference/foundation/nslocale/1414388-autoupdatingcurrent) 类方法。该方法返回一个可以自动自我更新以响应变化的定位对象，所以你就永远不用重新创建它了。但是，当定位变化时，你仍然需要刷新包含从当前定位得到的内容的视图。
 - Re-create any cached date and number formatter objects whenever the current locale information changes.
+- 只要当前定位信息变化，就重新创建所有缓存的日期和数字格式的对象。
 
 For more information about internationalizing your code to handle locale changes, see [Internationalization and Localization Guide](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/Introduction/Introduction.html#//apple_ref/doc/uid/10000171i).
 
+关于国际化你的代码以处理定位变化的更多信息，参见 [Internationalization and Localization Guide](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/Introduction/Introduction.html#//apple_ref/doc/uid/10000171i)。
+
 <span id="4.3.4">
-### 4.3.4 Handle Changes to Your App’s Settings 处理App设置的变更
+### 4.3.4 Handle Changes to Your App’s Settings - 处理 APP 设置的变更
 
 If your app has settings that are managed by the Settings app, it should observe the [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification) notification. Because the user can modify settings while your app is suspended or in the background, you can use this notification to respond to any important changes in those settings. In some cases, responding to this notification can help close a potential security hole. For example, an email program should respond to changes in the user’s account information. Failure to monitor these changes could cause privacy or security issues. Specifically, the current user might be able to send email using the old account information, even if the account no longer belongs to that person.
 
-Upon receiving the NSUserDefaultsDidChangeNotification notification, your app should reload any relevant settings and, if necessary, reset its user interface appropriately. In cases where passwords or other security-related information has changed, you should also hide any previously displayed information and force the user to enter the new password.
+如果你的 APP 有被 Settings 应用管理的设置，它应该观察  [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification) 通知。因为用户可以在你的 APP 被挂起或在后台时修改设置，你可以使用这个通知响应那些设置中的所有重要变化。在某些情况下，响应这个通知可以帮助关闭潜在的安全漏洞。例如，邮件程序应该响应用户账户信息的变化。未能监视这些变化可能导致隐私或安全问题。特别的，当前用户可能使用旧的账户信息发送邮件，甚至这个账户已经不再属于那个人。
+
+Upon receiving the `NSUserDefaultsDidChangeNotification` notification, your app should reload any relevant settings and, if necessary, reset its user interface appropriately. In cases where passwords or other security-related information has changed, you should also hide any previously displayed information and force the user to enter the new password.
+
+当收到 `NSUserDefaultsDidChangeNotification` 通知，你的 APP 应该重新加载所有相关的设置，并且，如果必要，适当的重置用户界面。在密码或其他安全相关的信息改变时，你也应该隐藏所有先前显示的信息，并强制用户输入新的密码。
 
 <span id="4.4">
-## 4.4 What to Do When Your App Enters the Background 当App进入后台时做什么
+## 4.4 What to Do When Your App Enters the Background - 当App进入后台时做什么
 
 When moving from foreground to background execution, use the [applicationDidEnterBackground:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground) method of your app delegate to do the following:
 
