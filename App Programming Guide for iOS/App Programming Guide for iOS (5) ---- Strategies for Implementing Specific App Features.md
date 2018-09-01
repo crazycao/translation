@@ -3,57 +3,94 @@ App Programming Guide for iOS (5) ---- Strategies for Implementing Specific App 
 原文链接：[https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforImplementingYourApp/StrategiesforImplementingYourApp.html#//apple_ref/doc/uid/TP40007072-CH5-SW1](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforImplementingYourApp/StrategiesforImplementingYourApp.html#//apple_ref/doc/uid/TP40007072-CH5-SW1)
 
 <span id=5>
-#5 Strategies for Implementing Specific App Features 实现特定App功能的策略
+#5 Strategies for Implementing Specific App Features - 实现特定 APP 功能的策略
 
 Different apps have different needs but some behaviors are common to many types of app. The following sections provide guidance about how to implement specific types of features in your app.
 
+不同的 APP 有不同的需求，但是某些行为对许多类型的 APP 都是通用的。下面的章节为如何在你的 APP 中实现特定类型的功能提供了指南。
+
 <span id=5.1>
-##5.1 Privacy Strategies 隐私策略
+##5.1 Privacy Strategies - 隐私策略
 
 Protecting a user’s privacy is an important consideration in the design of an app. Privacy protection includes protecting the user’s data, including the user’s identity and personal information. The system frameworks already provide privacy controls for managing data such as contacts but your app should take steps to protect the data that you use locally.
 
+在 APP 的设计中保护用户的隐私是非常重要的考虑点。隐私保护包括保护用户的数据，包括用户的身份和个人信息。系统框架已经为管理如通讯录这样的数据提供了隐私控制，但是你应该采取措施保护你在本地使用的数据。
+
 <span id=5.1.1>
-### 5.1.1 Protecting Data Using On-Disk Encryption 使用磁盘加密保护数据
+### 5.1.1 Protecting Data Using On-Disk Encryption - 使用磁盘加密保护数据
 
 Data protection uses built-in hardware to store files in an encrypted format on disk and to decrypt them on demand. While the user’s device is locked, protected files are inaccessible, even to the app that created them. The user must unlock the device (by entering the appropriate passcode) before an app can access one of its protected files.
 
+数据保护使用嵌入硬件在硬盘上以加密格式存储文件，并按需要解密它们。当用户设备锁住时，受保护的文件是不可访问的，即使是创建它们的 APP 也不行。在 APP 可以访问它的一个受保护文件之前，用户必须解锁设备（通过输入正确的密码）。
+
 Data protection is available on most iOS devices and is subject to the following requirements:
+
+在大多数 iOS 设备上数据保护都是可用的，并且符合下列要求：
 
 - The file system on the user’s device must support data protection. Most devices support this behavior.
 - The user must have an active passcode lock set for the device.
+- 在用户设备上的文件系统必须支持数据保护。大部分设备支持该行为。
+- 用户必须为设备设置一个有效的密码锁。
 
-To protect a file, you add an attribute to the file indicating the desired level of protection. Add this attribute using either the NSData class or the NSFileManager class. When writing new files, you can use the [writeToFile:options:error:](https://developer.apple.com/reference/foundation/nsdata/1414800-write) method of NSData with the appropriate protection value as one of the write options. For existing files, you can use the [setAttributes:ofItemAtPath:error:](https://developer.apple.com/reference/foundation/filemanager/1413667-setattributes) method of NSFileManager to set or change the value of the [NSFileProtectionKey](https://developer.apple.com/reference/foundation/nsfileprotectionkey). When using these methods, specify one of the following protection levels for the file:
+To protect a file, you add an attribute to the file indicating the desired level of protection. Add this attribute using either the `NSData` class or the `NSFileManager` class. When writing new files, you can use the [writeToFile:options:error:](https://developer.apple.com/reference/foundation/nsdata/1414800-write) method of `NSData `with the appropriate protection value as one of the write options. For existing files, you can use the [setAttributes:ofItemAtPath:error:](https://developer.apple.com/reference/foundation/filemanager/1413667-setattributes) method of `NSFileManager` to set or change the value of the [NSFileProtectionKey](https://developer.apple.com/reference/foundation/nsfileprotectionkey). When using these methods, specify one of the following protection levels for the file:
 
-- No protection—The file is encrypted but is not protected by the passcode and is available when the device is locked. Specify the [NSDataWritingFileProtectionNone](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1616757-nofileprotection) option (NSData) or the [NSFileProtectionNone](https://developer.apple.com/reference/foundation/nsfileprotectionnone) attribute (NSFileManager).
-- Complete—The file is encrypted and inaccessible while the device is locked. Specify the [NSDataWritingFileProtectionComplete](https://developer.apple.com/reference/foundation/nsdatawritingoptions/nsdatawritingfileprotectioncomplete) option (NSData) or the [NSFileProtectionComplete](https://developer.apple.com/reference/foundation/fileprotectiontype/1616200-complete) attribute (NSFileManager).
-- Complete unless already open—The file is encrypted. A closed file is inaccessible while the device is locked. After the user unlocks the device, your app can open the file and use it. If the user locks the device while the file is open, though, your app can continue to access it. Specify the [NSDataWritingFileProtectionCompleteUnlessOpen](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1616278-completefileprotectionunlessopen) option (NSData) or the [NSFileProtectionCompleteUnlessOpen](https://developer.apple.com/reference/foundation/fileprotectiontype/1617188-completeunlessopen) attribute (NSFileManager).
-- Complete until first login—The file is encrypted and inaccessible until after the device has booted and the user has unlocked it once. Specify the [NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1617028-completefileprotectionuntilfirst) option (NSData) or the [NSFileProtectionCompleteUntilFirstUserAuthentication](https://developer.apple.com/reference/foundation/fileprotectiontype/1616633-completeuntilfirstuserauthentica) attribute (NSFileManager).
+要保护一个文件，你需要添加一个属性到文件中，表明期望的保护等级。使用 `NSData` 类或 `NSFileManager` 类添加这个属性。当写新文件时，你可以使用 `NSData` 的 [writeToFile:options:error:](https://developer.apple.com/reference/foundation/nsdata/1414800-write) 方法，传入适当的保护值作为一个写选项。对于已存在的文件，你可以使用 `NSFileManager` 的 [setAttributes:ofItemAtPath:error:](https://developer.apple.com/reference/foundation/filemanager/1413667-setattributes) 方法来设置或者修改 [NSFileProtectionKey](https://developer.apple.com/reference/foundation/nsfileprotectionkey) 的值。当使用这些方法时，为该文件指定下列保护等级之一。
+
+- No protection — The file is encrypted but is not protected by the passcode and is available when the device is locked. Specify the [NSDataWritingFileProtectionNone](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1616757-nofileprotection) option (`NSData`) or the [NSFileProtectionNone](https://developer.apple.com/reference/foundation/nsfileprotectionnone) attribute (`NSFileManager`).
+- Complete — The file is encrypted and inaccessible while the device is locked. Specify the [NSDataWritingFileProtectionComplete](https://developer.apple.com/reference/foundation/nsdatawritingoptions/nsdatawritingfileprotectioncomplete) option (`NSData`) or the [NSFileProtectionComplete](https://developer.apple.com/reference/foundation/fileprotectiontype/1616200-complete) attribute (`NSFileManager`).
+- Complete unless already open — The file is encrypted. A closed file is inaccessible while the device is locked. After the user unlocks the device, your app can open the file and use it. If the user locks the device while the file is open, though, your app can continue to access it. Specify the [NSDataWritingFileProtectionCompleteUnlessOpen](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1616278-completefileprotectionunlessopen) option (`NSData`) or the [NSFileProtectionCompleteUnlessOpen](https://developer.apple.com/reference/foundation/fileprotectiontype/1617188-completeunlessopen) attribute (`NSFileManager`).
+- Complete until first login — The file is encrypted and inaccessible until after the device has booted and the user has unlocked it once. Specify the [NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1617028-completefileprotectionuntilfirst) option (`NSData`) or the [NSFileProtectionCompleteUntilFirstUserAuthentication](https://developer.apple.com/reference/foundation/fileprotectiontype/1616633-completeuntilfirstuserauthentica) attribute (`NSFileManager`).
+
+- 不保护 —— 文件是加密的，但是没有受到密码保护，并且当设备锁住时仍可用。指定 [NSDataWritingFileProtectionNone](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1616757-nofileprotection) 选项（`NSData`）或者 [NSFileProtectionNone](https://developer.apple.com/reference/foundation/nsfileprotectionnone) 属性（`NSFileManager`）。
+- 完整 —— 文件是加密的，并且当设备锁住时不可访问。指定 [NSDataWritingFileProtectionComplete](https://developer.apple.com/reference/foundation/nsdatawritingoptions/nsdatawritingfileprotectioncomplete) 选项（`NSData`）或者 [NSFileProtectionComplete](https://developer.apple.com/reference/foundation/fileprotectiontype/1616200-complete) 属性（`NSFileManager`）。
+- 完整除非已经打开 —— 文件是加密的。当设备锁住时关闭的文件不可访问。在用户解锁设备之后，你的 APP 可以打开该文件并使用它。如果用户在文件已打开时锁住设备，那么，你的 APP 可以继续访问它。指定 [NSDataWritingFileProtectionCompleteUnlessOpen](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1616278-completefileprotectionunlessopen) 选项（`NSData`）或 [NSFileProtectionCompleteUnlessOpen](https://developer.apple.com/reference/foundation/fileprotectiontype/1617188-completeunlessopen) 属性（`NSFileManager`）。
+- 完整直到第一次登录 —— 文件是加密的并且不可访问的，直到设备已经启动并且用户已经解锁它一次。指定 [NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication](https://developer.apple.com/reference/foundation/nsdata.writingoptions/1617028-completefileprotectionuntilfirst) 选项（`NSData`）或者 [NSFileProtectionCompleteUntilFirstUserAuthentication](https://developer.apple.com/reference/foundation/fileprotectiontype/1616633-completeuntilfirstuserauthentica) 属性（`NSFileManager`）。
 
 If you protect a file, your app must be prepared to lose access to that file. When complete file protection is enabled, your app loses the ability to read and write the file’s contents when the user locks the device. You can track changes to the state of protected files using one of the following techniques:
 
+如果你保护一个文件，你的 APP 必须准备好失去该文件的访问权。当完整文件保护被启用，你的 APP 在用户锁上设备时会失去读写文件内容的能力。你可以使用以下技术之一来跟踪受保护文件的这个状态：
+
 - The app delegate can implement the [applicationProtectedDataWillBecomeUnavailable:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623019-applicationprotecteddatawillbeco) and [applicationProtectedDataDidBecomeAvailable:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623044-applicationprotecteddatadidbecom) methods.
 - Any object can register for the [UIApplicationProtectedDataWillBecomeUnavailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623058-uiapplicationprotecteddatawillbe) and [UIApplicationProtectedDataDidBecomeAvailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623039-uiapplicationprotecteddatadidbec) notifications.
-- Any object can check the value of the [protectedDataAvailable](https://developer.apple.com/reference/uikit/uiapplication/1622925-isprotecteddataavailable) property of the shared UIApplication object to determine whether files are currently accessible.
+- Any object can check the value of the [protectedDataAvailable](https://developer.apple.com/reference/uikit/uiapplication/1622925-isprotecteddataavailable) property of the shared `UIApplication` object to determine whether files are currently accessible.
 
-For new files, it is recommended that you enable data protection before writing any data to them. If you are using the writeToFile:options:error: method to write the contents of an [NSData](https://developer.apple.com/reference/foundation/nsdata) object to disk, this happens automatically. For existing files, adding data protection replaces an unprotected file with a new protected version.
+- APP 代理可以实现 [applicationProtectedDataWillBecomeUnavailable:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623019-applicationprotecteddatawillbeco) 和 [applicationProtectedDataDidBecomeAvailable:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623044-applicationprotecteddatadidbecom) 方法。
+- 任何对象都可以注册 [UIApplicationProtectedDataWillBecomeUnavailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623058-uiapplicationprotecteddatawillbe) 和 [UIApplicationProtectedDataDidBecomeAvailable](https://developer.apple.com/reference/foundation/nsnotification.name/1623039-uiapplicationprotecteddatadidbec) 通知。
+- 任何对象可以检查共享的 `UIApplication` 对象的 [protectedDataAvailable](https://developer.apple.com/reference/uikit/uiapplication/1622925-isprotecteddataavailable) 属性值以确定文件当前是否可访问的。
+
+For new files, it is recommended that you enable data protection before writing any data to them. If you are using the `writeToFile:options:error:` method to write the contents of an [NSData](https://developer.apple.com/reference/foundation/nsdata) object to disk, this happens automatically. For existing files, adding data protection replaces an unprotected file with a new protected version.
+
+对于新文件，推荐在写入任何数据之前开启数据保护。如果你使用 `writeToFile:options:error:` 方法将 [NSData](https://developer.apple.com/reference/foundation/nsdata) 对象的内容写入硬盘，这会自动发生。对于已存在的文件，添加数据保护会把未保护文件替换成一个新的受保护的版本。
 
 <span id=5.1.2>
-### 5.1.2 Identifying Unique Users of Your App 识别App的唯一用户
+### 5.1.2 Identifying Unique Users of Your App - 识别 APP 的唯一用户
 
 You should identify a user of your app only when doing so offers a clear benefit to that user. In cases where you only need to differentiate one user of your app from another, iOS provides identifiers that can help you do that. However, if you need a higher level of security, you might need to do more work on your own. For example, an app that provides financial services would likely want to prompt the user for login credentials to ensure that the user is authorized to access a specific account.
 
+你应该识别你的 APP 的用户，只有在这么做时，才可以给该用户提供明确的好处。在你只需要把你的 APP 的一个用户与另一个区分开时，iOS 提供了标识符可以帮你实现。但是，如果你需要更高级的保证，你可能需要自己做更多的工作。例如，提供金融服务的 APP 可能希望提示用户输入登录凭证，以确保用户被授权访问某个特定账户。
+
 > **Important:** When identifying a user, always be transparent about what you intend to do with any information you obtain. It is not acceptable to identify a user so that you can track them surreptitiously.
+> 
+> **重要：** 当标识一个用户时，对你想要用获取到的任何信息做的事情总是保持公开透明。不接受通过标识一个用户来偷偷跟踪他们。
 
 Here are some common scenarios that might require you to identify a user, along with solutions for how to implement them.
 
+下面是一些可能需要你识别用户的常见场景，以及如何实现它们的解决方案。
+
 - **You want to link a user to a specific account on your server.** Include a login screen that requires the user to enter their account information securely. Always protect the account information you gather from the user by storing it in an encrypted form.
-- **You want to differentiate instances of your app running on different devices.** Use the [identifierForVendor](https://developer.apple.com/reference/uikit/uidevice/1620059-identifierforvendor) property of the UIDevice class to obtain an ID that differentiates a user on one device from users on other devices. This technique does now allow you to identify specific users. A single user can have multiple devices, each with a different ID value.
-- **You want to identify a user for the purposes of advertising.** Use the [advertisingIdentifier](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614151-advertisingidentifier) property of the ASIdentifierManager class to obtain an ID for the user.
+- **You want to differentiate instances of your app running on different devices.** Use the [identifierForVendor](https://developer.apple.com/reference/uikit/uidevice/1620059-identifierforvendor) property of the `UIDevice` class to obtain an ID that differentiates a user on one device from users on other devices. This technique does now allow you to identify specific users. A single user can have multiple devices, each with a different ID value.
+- **You want to identify a user for the purposes of advertising.** Use the [advertisingIdentifier](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614151-advertisingidentifier) property of the `ASIdentifierManager` class to obtain an ID for the user.
+
+- **你想要把用户链接到你服务器上的某个特定账户。** 包含一个登录屏幕，要求用户安全的输入他们的账户信息。总是保护你从用户那里获取的账户信息，通过已加密的形式储存它。
+- **你想要区分你的 APP 运行在不同设备上的的实例。** 使用 `UIDevice` 类的 [identifierForVendor](https://developer.apple.com/reference/uikit/uidevice/1620059-identifierforvendor) 属性获取一个 ID，这个 ID 可以将一个设备上的用户与其他设备上的用户区分开。这个技术限制允许你标识特定用户。一个用户可以有多个设备，每个都有不同的 ID 值。 
+- **你想要因为广告意图标识用户。** 使用 `ASIdentifierManager` 类的 [advertisingIdentifier](https://developer.apple.com/reference/adsupport/asidentifiermanager/1614151-advertisingidentifier) 属性为用户获取一个 ID。
 
 Because users are allowed to run apps on all of their iOS devices, Apple does not provide a way to identify the same user on multiple devices. If you need to identify a specific user, you must provide your own solution using universally unique IDs (UUIDs), a login account, or some other type of identification system.
 
+因为用户可以在他们所有的 iOS 设备上运行 APP，苹果也没有提供标识多个设备上同一个用户的方法。如果你需要标识特定的用户，你必须提供你自己的解决方案，使用通用唯一ID（UUID）、登录账户或其他类型的识别系统。
+
 <span id=5.2>
-## 5.2 Respecting Restrictions 尊重限制
+## 5.2 Respecting Restrictions - 尊重限制
 
 Users can set restrictions that specify the ratings of media they want to consume in apps. If your app plays media or modifies its behavior based on restrictions, you need to determine the current settings and respond when the settings change.
 
