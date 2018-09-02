@@ -94,22 +94,33 @@ Because users are allowed to run apps on all of their iOS devices, Apple does no
 
 Users can set restrictions that specify the ratings of media they want to consume in apps. If your app plays media or modifies its behavior based on restrictions, you need to determine the current settings and respond when the settings change.
 
+用户可以设置限制，以指定他们希望在 APP 中消费的多媒体的评级。如果用户播放多媒体或修改他基于限制的行为，你需要确定当前设置并响应当设置变化时做出响应。
+
 To get the current settings, get the shared [standardUserDefaults](https://developer.apple.com/reference/foundation/userdefaults/1416603-standard) object and use the [objectForKey:](https://developer.apple.com/reference/foundation/nsuserdefaults/1410095-objectforkey) method to view the values for the following keys:
 
-| **Media rating key**                     | **Value**                                | com.apple.content-rating.ExplicitBooksAllowed | Boolean. If the value of this key is a NO/a, explicit books are not allowed |
-| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| com.apple.content-rating.ExplicitMusicPodcastsAllowed | Boolean. If the value of this key is a NO/a, explicit music, movies, and podcasts are not allowed. |                                          |                                          |
-| com.apple.content-rating.AppRating       | NSNumber. The value of this key ranges from 0 to 1000. An app whose rating is higher than the current key value is not allowed. |                                          |                                          |
-| com.apple.content-rating.MovieRating     | NSNumber. The value of this key ranges from 0 to 1000. A movie whose rating is higher than the current key value is not allowed. |                                          |                                          |
-| com.apple.content-rating.TVShowRating    | NSNumber. The value of this key ranges from 0 to 1000. A TV show whose rating is higher than the current key value is not allowed. |                                          |                                          |
+要获取当前限制，获取共享的 [standardUserDefaults](https://developer.apple.com/reference/foundation/userdefaults/1416603-standard) 对象并使用 [objectForKey:](https://developer.apple.com/reference/foundation/nsuserdefaults/1410095-objectforkey) 方法查看下列 key 的值：
 
-> **Note:** If objectForKey: returns nil for a specific key, it means that information about this particular restriction is not available. In this case, your app can use its own policies to determine appropriate ratings.
+| **Media rating key**                     | **Value**                                | 
+| ---------------------------------------- | ---------------------------------------- |
+| ` com.apple.content-rating.ExplicitBooksAllowed` | `Boolean`. If the value of this key is a `NO`, explicit books are not allowed. </br> 如果这个 key 的值是 `NO`，明确的图书是不允许的。 |
+| `com.apple.content-rating.ExplicitMusicPodcastsAllowed` | `Boolean`. If the value of this key is a `NO`, explicit music, movies, and podcasts are not allowed. </br> 如果这个 key 的值是 `NO`，明确的音乐、电影和播客是不允许的。 | 
+| `com.apple.content-rating.AppRating`       | `NSNumber`. The value of this key ranges from 0 to 1000. An app whose rating is higher than the current key value is not allowed. </br> 这个 key 的值从 0 到 1000。评级高于当前 key 值的 APP 是不允许的。 |                                      
+| `com.apple.content-rating.MovieRating`     | `NSNumber`. The value of this key ranges from 0 to 1000. A movie whose rating is higher than the current key value is not allowed. </br> 这个 key 的值从 0 到 1000。评级高于当前 key 值的电影是不被允许的。 |                                          
+| `com.apple.content-rating.TVShowRating`    | `NSNumber`. The value of this key ranges from 0 to 1000. A TV show whose rating is higher than the current key value is not allowed. </br> 这个 key 的值从 0 到 1000。评级高于当前 key 值的电视节目是不被允许的。 |                                          
 
-To detect when the user makes a change to a restriction, register for the notification [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification). The shared standardUserDefaults object sends this notification to your app when it detects a change to a preference located in one of the persistent domains.
+> **Note:** If `objectForKey:` returns `nil` for a specific key, it means that information about this particular restriction is not available. In this case, your app can use its own policies to determine appropriate ratings.
+> 
+> **注意：**  如果 `objectForKey:` 对指定的 key 返回 `nil`，意味着关于这个特定限制的信息不可用。在这种情况下，你的 APP  可以使用它自己的策略决定适当的评级。
+
+To detect when the user makes a change to a restriction, register for the notification [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification). The shared `standardUserDefaults` object sends this notification to your app when it detects a change to a preference located in one of the persistent domains.
+
+要检测用户什么时候修改了限制，请注册 [NSUserDefaultsDidChangeNotification](https://developer.apple.com/reference/foundation/userdefaults/1408206-didchangenotification) 通知。共享的 `standardUserDefaults` 对象会在它检测到位于某个持久域的偏好改变时，发送这个通知到你的 APP。
 
 App ratings are defined for the us country code and are universally applied. Table 5-1 shows the value associated with each US app rating.
 
-**Table 5-1**  App ratings
+APP 评级是为美国国家代码定义的，并且被普遍接受。表 5-1 展示了关于每个美国 APP 评级的值。
+
+**Table 5-1**  App ratings - APP 评级
 
 | **Rating name** | **Numerical value** |
 | --------------- | ------------------- |
@@ -120,18 +131,29 @@ App ratings are defined for the us country code and are universally applied. Tab
 
 Movie and TV ratings vary by country. If a country or region doesn’t specify a rating system for movies or TV shows, your app should use its own policies to determine appropriate ratings. Although most regions define movie ratings, only a few define TV show ratings.
 
+电影和电视的评级在每个国家都不同。如果一个国家或地区没有为电影和电视指定评级系统，你的 APP 应该使用自己的策略决定适当的评级。尽管大部分区域都定义了电影评级，只有少数定义了电视评级。
+
 A region can define several rating levels, each of which is associated with a name that describes the rating and a number in the range of 0 to 1000. For example, the US uses the string “G” and the number 100 to specify the lowest movie rating level.
+
+一个区域可以定义若干评级等级，每一个都有一个描述该评级的名字和一个 0 到 1000 之间的数字。例如，美国使用字符串 “G” 和数字 100 指定最低的电影评级等级。
 
 Even if your app doesn’t play media, you might want to map your own rating system to a movie or TV show rating system. For example, a game might enable certain features only when the US movie rating “R” is allowed. To view the current list of ratings, download this document’s companion file (the link is near the top of the page).
 
+即使你的 APP 不播放多媒体，你可能也想要把你自己的评级系统与电影或电视评级系统对应起来。例如，一个游戏可能只有在美国电影评级为 “R” 被允许时才开启某些功能。要查看当前的评级列表，下载本文的附件（链接在本页的顶部附近：[下载链接](https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/iOS%20App%20Programming%20Guide%20Companion%20Files.zip)）
+
 <span id=5.3>
-## 5.3 Supporting Multiple Versions of iOS 支持iOS的多个版本
+## 5.3 Supporting Multiple Versions of iOS - 支持iOS的多个版本
 
 An app that supports the latest version of iOS plus one or more earlier versions must use runtime checks to prevent the use of newer APIs on older versions of iOS. Runtime checks prevent your app from crashing when it tries to use a feature that is not available on the current operating system.
 
+支持 iOS 最新版本的前一个或更早版本的 APP 必须使用运行时检查以避免在 iOS 的旧版本上使用了新的 API。如果 APP 尝试使用当前操作系统上不可用的功能，运行时检查可以避免你的 APP 崩溃。
+
 There are several types of checks that you can make:
 
-- To determine whether a class exists, see if its Class object is nil. The linker returns nil for any unknown class objects, making it possible to use a conditional check similar to the following:
+你可以做下面几种检查：
+
+- To determine whether a class exists, see if its `Class` object is `nil`. The linker returns nil for any unknown class objects, making it possible to use a conditional check similar to the following:
+- 要确定一个类是否存在，看它的 `Class` 对象是不是 `nil`。对于任何未知类对象，连接器都会返回 `nil`，这就有可能使用一个像下面这样的条件检查：
 
 >
 	if ([UIPrintInteractionController class]) {
@@ -142,8 +164,10 @@ There are several types of checks that you can make:
 	}	
 	
 - To determine whether a method is available on an existing class, use the [instancesRespondToSelector:](https://developer.apple.com/reference/objectivec/nsobject/1418555-instancesrespondtoselector) class method or the [respondsToSelector:](https://developer.apple.com/reference/objectivec/nsobjectprotocol/1418583-responds) instance method.
+- 要确定一个方法在一个已存在的类上是否可用，使用 [instancesRespondToSelector:]((https://developer.apple.com/reference/objectivec/nsobject/1418555-instancesrespondtoselector)) 类方法或者 [responsToSelector:](https://developer.apple.com/reference/objectivec/nsobjectprotocol/1418583-responds) 实例方法。
 
 - To determine whether a C-based function is available, perform a Boolean comparison of the function name to NULL. If the symbol is not NULL, you can call the function. For example:
+- 要确定一个基于 C 的函数是否可用，只要把函数名与 `NULL` 做一个布尔比较就行。如果这个符号不是 `NULL`，你就可以调用这个函数。例如：
 
 >
 	if (UIGraphicsBeginPDFPage != NULL) {
@@ -151,6 +175,8 @@ There are several types of checks that you can make:
 	}
 
 For more information and examples of how to write code that supports multiple deployment targets, see [SDK Compatibility Guide](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/cross_development/Introduction/Introduction.html#//apple_ref/doc/uid/10000163i).
+
+关于如何写支持多部署目标的代码的更多信息和例子，参见 [SDK Compatibility Guide](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/cross_development/Introduction/Introduction.html#//apple_ref/doc/uid/10000163i)。
 
 <span id=5.4>
 ##5.4 Preserving Your App’s Visual Appearance Across Launches 保持贯穿启动过程App视觉可见
