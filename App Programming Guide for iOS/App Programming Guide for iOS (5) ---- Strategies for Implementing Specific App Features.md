@@ -297,19 +297,25 @@ The next time the app is launched, UIKit loads the app’s main storyboard or ni
 下一次 APP 启动时，UIKit 照常加载 APP 的 main storyboard 或 nib 文件，调用 APP 代理的 [application:willFinishLaunchingWithOptions:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623032-application) 方法，然后尝试恢复 APP 的先前的状态。它做的第一件事是让你的 APP 提供与保存的视图控制器对象相匹配的对象集合。如果给定的视图控制器有一个指定的恢复类，就会让这个类提供该对象；否则，让 APP 代理提供它。
 
 <span id=5.4.3>
-###5.4.3 Flow of the Preservation Process 保持过程流
+###5.4.3 Flow of the Preservation Process - 保存过程的流
 
-Figure 5-3 shows the high-level events that happen during state preservation and shows how the objects of your app are affected. Before preservation even occurs, UIKit asks your app delegate if it should occur by calling the [application:shouldSaveApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623089-application) method. If that method returns a YES/a, UIKit begins gathering and encoding your app’s views and view controllers. When it is finished, it writes the encoded data to disk.
+Figure 5-3 shows the high-level events that happen during state preservation and shows how the objects of your app are affected. Before preservation even occurs, UIKit asks your app delegate if it should occur by calling the [application:shouldSaveApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623089-application) method. If that method returns a `YES`, UIKit begins gathering and encoding your app’s views and view controllers. When it is finished, it writes the encoded data to disk.
 
-**Figure 5-3**  High-level flow interface preservation
-![Figure 5-3](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/save_process_simple_2x.png)
+图 5-3 展示了在状态保存中发生的高级事件，并这是了你 APP 的对象是如何受影响的。在保存事件发生之前，UIKit 通过调用 [application:shouldSaveApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623089-application) 方法会问你的 APP 代理该事件是否要发生。如果该方法返回 `YES`，UIKit 就开始采集和编码你的 APP 的视图和视图控制器。当完成时，它就把已编码的数据写入磁盘。
+
+**Figure 5-3**  High-level flow interface preservation - 高级流接口保存
+![Figure 5-3](images/save_process_simple_2x.png)
 
 The next time your app launches, the system automatically looks for a preserved state file, and if present, uses it to restore your interface. Because this state information is only relevant between the previous and current launch cycles of your app, the file is typically discarded after your app finishes launching. The file is also discarded any time there is an error restoring your app. For example, if your app crashes during the restoration process, the system automatically throws away the state information during the next launch cycle to avoid another crash.
 
+你的 APP 下次启动时，系统会自动查找保存的状态文件，如果存在，就用它恢复你的界面。因为该状态信息只与你的 APP 的前一次和当前启动周期有关，该文件通常会在你的 APP 完成启动之后被丢弃。例如，如果你的 APP 在恢复过程中崩溃，系统会在下次启动周期中自动丢弃状态信息以避免另一次崩溃。
+
 <span id=5.4.4>
-###5.4.4 Flow of the Restoration Process 恢复过程流
+###5.4.4 Flow of the Restoration Process - 恢复过程的流
 
 Figure 5-4 shows the high-level events that happen during state restoration and shows how the objects of your app are affected. After the standard initialization and UI loading is complete, UIKit asks your app delegate if state restoration should occur at all by calling the [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application) method. This is your app delegate’s opportunity to examine the preserved data and determine if state restoration is possible. If it is, UIKit uses the app delegate and restoration classes to obtain references to your app’s view controllers. Each object is then provided with the data it needs to restore itself to its previous state.
+
+图 5-4 展示了
 
 **Figure 5-4**  High-level flow for restoring your user interface
 ![Figure 5-4](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/restoration_process_simple_2x.png)
