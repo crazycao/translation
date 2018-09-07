@@ -179,75 +179,122 @@ For more information and examples of how to write code that supports multiple de
 关于如何写支持多部署目标的代码的更多信息和例子，参见 [SDK Compatibility Guide](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/cross_development/Introduction/Introduction.html#//apple_ref/doc/uid/10000163i)。
 
 <span id=5.4>
-##5.4 Preserving Your App’s Visual Appearance Across Launches 保持贯穿启动过程App视觉可见
+##5.4 Preserving Your App’s Visual Appearance Across Launches - 贯穿启动过程保持 APP 视觉可见
 
 Even if your app supports background execution, it cannot run forever. At some point, the system might need to terminate your app to free up memory for the current foreground app. However, the user should never have to care if an app is already running or was terminated. From the user’s perspective, quitting an app should just seem like a temporary interruption. When the user returns to an app, that app should always return the user to the last point of use, so that the user can continue with whatever task was in progress. This behavior provides a better experience for the user and with the state restoration support built in to UIKit is relatively easy to achieve.
 
+即使你的 APP 支持后台运行，它也不可能永远运行。在某些时候，系统可能终止你的 APP 为当前的前台 APP 释放内存。但是，用户永远没必要关心一个 APP 是正在运行还是已经被终止了。从用户的角度，退出一个 APP 应该就好像一个暂时的中断。当用户回到 APP 时，APP 应该总是返回用户上次使用的点，以便用户继续任何进行中的任务。该行为向用户提供了更好的体验，并且内嵌对 UIKit 支持的状态恢复也相对容易实现。
+
 The state preservation system in UIKit provides a simple but flexible infrastructure for preserving and restoring the state of your app’s view controllers and views. The job of the infrastructure is to drive the preservation and restoration processes at the appropriate times. To do that, UIKit needs help from your app. Only you understand the content of your app, and so only you can write the code needed to save and restore that content. And when you update your app’s UI, only you know how to map older preserved content to the newer objects in your interface.
 
+在 UIKit 中的状态保持系统为保存和恢复你 APP 的视图控制器和视图提供了一个简单但灵活的基础架构。该基础架构的工作是在适当的时候启动保存和恢复过程。要做到这个，UIKit 需要来自你的 APP 的帮助。只有你理解你的 APP 的内容，并且因此只有你能写出保存和恢复那些内容所需的代码。并且，当你更新了你的 APP 的 UI，只有你知道如何将保存的旧内容与你界面上的新对象对应起来。
+
 There are three places where you have to think about state preservation in your app:
+
+关于你的 APP 中的状态保存，你有三个地方必须考虑：
 
 - Your app delegate object, which manages the app’s top-level state
 - Your app’s view controller objects, which manage the overall state for your app’s user interface
 - Your app’s custom views, which might have some custom data that needs to be preserved
+- 你的 APP 的代理对象，它管理 APP 的顶级状态
+- 你的 APP 的视图控制器对象，它管理你的 APP 的用户界面的总体状态
+- 你的 APP 的自定义视图，它可能有一些需要保存的自定义数据
 
 UIKit allows you to choose which parts of your user interface you want to preserve. And if you already have custom code for handling state preservation, you can continue to use that code and migrate portions to the UIKit state preservation system as needed.
 
+UIKit 允许你选择你想要保存 用户界面的哪些部分。而且，如果你已经有了处理状态保存的自定义代码，你可以继续使用那些代码，并根据需要将一部分迁移到 UIKit 状态保存系统。
+
 <span id=5.4.1>
-###5.4.1 Enabling State Preservation and Restoration in Your App 在App中开启状态保持和恢复
+###5.4.1 Enabling State Preservation and Restoration in Your App - 在 APP 中开启状态保存和恢复
 
 State preservation and restoration is not an automatic feature and apps must opt-in to use it. Apps indicate their support for the feature by implementing the following methods in their app delegate:
+
+状态保存和恢复并不是自动的特性，APP 必须选择进入才能使用它。APP 通过实现它们的 APP 代理的下列方法标明它们支持该功能：
 
 - [application:shouldSaveApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623089-application)
 - [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application)
 
-Normally, your implementations of these methods just return a YES/a to indicate that state preservation and restoration can occur. However, apps that want to preserve and restore their state conditionally can return a NO/a in situations where the operations should not occur. For example, after releasing an update to your app, you might want to return a NO/a from your [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application) method if your app is unable to usefully restore the state from a previous version.
+Normally, your implementations of these methods just return a `YES` to indicate that state preservation and restoration can occur. However, apps that want to preserve and restore their state conditionally can return a `NO` in situations where the operations should not occur. For example, after releasing an update to your app, you might want to return a `NO` from your [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application) method if your app is unable to usefully restore the state from a previous version.
+
+通常，你的这些方法的实现只要返回 `YES` 就表示状态保存和恢复可以发生。但是，希望有条件的保存和恢复它们的状态的 APP 可以在操作不应该发生时返回 `NO`。例如，在向应用程序发布更新之后，如果你的 APP 不能有效的从先前的版本中恢复状态，你可能要从你的 [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application) 方法中返回 `NO`。
 
 <span id=5.4.2>
-###5.4.2 The Preservation and Restoration Process 保持和恢复过程
+###5.4.2 The Preservation and Restoration Process - 保存和恢复过程
 
 State preservation and restoration is an opt-in feature and works with the help of your app. Your app identifies objects that should be preserved and UIKit does the work of preserving and restoring those objects at appropriate times. Because UIKit handles so much of the process, it helps to understand what it does behind the scenes so that you know how your custom code fits into the overall scheme.
 
+状态保存和恢复是一个选择进入的功能，并且要你的 APP 的帮助才能工作。你的 APP 要确认应该保存的对象，而 UIKit 会在适当的时候执行保存和恢复那些对象的工作。因为 UIKit 处理如此多的工序，理解它在幕后做了什么会有助于让你知道你的自定义代码如何适应整个方案。
+
 When thinking about state preservation and restoration, it helps to separate the two processes first. UIKit preserves your app’s state at appropriate times, such as when your app moves from the foreground to the background. When UIKit determines new state information is needed, it looks at your app’s views and view controllers to see which ones should be preserved. For each of those objects, UIKit writes preservation-related data to an encrypted on-disk file. The next time your app launches from scratch, UIKit looks for that file and, if it is present, uses it to try and restore your app’s state. Because the file is encrypted, state preservation and restoration only happens when the device is unlocked.
+
+当考虑状态保存和恢复时，首先要区分开这两个过程。UIKit 在适当的时候保存你的 APP 的状态，例如当你的 APP 从前台进入后台时。当 UIKit 决定需要新的状态信息时，它会查看你的 APP 的视图和视图控制器，看看哪些需要被保存。对于每一个对象，UIKit 会把一个与保存相关的数据写入一个硬盘上的加密文件。你的 APP 下次从头启动时，UIKit 会查找该文件，并且，如果存在，会用它来尝试恢复你的 APP 的状态。由于该文件是加密的，状态保存和恢复只在设备未被锁住时发生。
 
 During the restoration process, UIKit uses the preserved data to reconstitute your interface but the creation of actual objects is handled by your code. Because your app might load objects from a storyboard file automatically, only your code knows which objects need to be created and which might already exist and can simply be returned. After creating each object, UIKit initializes them with the preserved state information.
 
+在恢复过程中，UIKit 使用保存的数据重建你的界面，但实际对象的创建由你的代码处理。由于你的 APP 可能自动从 storyboard 文件加载对象，只有你的代码知道哪些对象需要被创建，哪些可能已经存在可以简单返回。在创建每个对象之后，UIKit 用保存的状态信息初始化它们。
+
 During the preservation and restoration process, your app has a handful of responsibilities.
 
-- During preservation, your app is responsible for:
+在保存和恢复过程中，你的 APP 有一些责任。
 
+- During preservation, your app is responsible for:
   - Telling UIKit that it supports state preservation.
   - Telling UIKit which view controllers and views should be preserved.
   - Encoding relevant data for any preserved objects.
 
-- During restoration, your app is responsible for:
+- 在保存过程中，你的 APP 的责任是：
+	- 告诉 UIKit 它支持状态保存。
+	- 告诉 UIKit 哪个视图控制器和视图应该被保存。
+	- 为所有保存的对象编码相关的数据。 
 
+- During restoration, your app is responsible for:
   - Telling UIKit that it supports state restoration.
   - Providing (or creating) the objects that are requested by UIKit.
   - Decoding the state of your preserved objects and using it to return the object to its previous state.
 
+- 在恢复过程中，你的 APP 的责任是：
+	- 告诉 UIKit 它支持状态恢复。
+	- 提供（或创建）被 UIKit 请求的对象。
+	- 解码你保存的对象的状态，并使用它让对象返回到先前的状态。 
+
 Of your app’s responsibilities, the most significant are telling UIKit which objects to preserve and providing those objects during subsequent launches. Those two behaviors are where you should spend most of your time when designing your app’s preservation and restoration code. They are also where you have the most control over the actual process. To understand why that is the case, it helps to look at an example.
+
+你的 APP 的责任中，最重要的是告诉 UIKit 哪些对象要保存并在随后的启动中提供那些对象。这两个行为是你在设计你的 APP 的保存和恢复代码时应该花费大部分时间的地方。它们也是你对整个实际过程有最大控制权的地方。要理解为什么会这样，看一个例子会很有帮助。
 
 Figure 5-1 shows the view controller hierarchy of a tab bar interface after the user has interacted with several of the tabs. As you can see, some of the view controllers are loaded automatically as part of the app’s main storyboard file but some of the view controllers were presented or pushed onto the view controllers in different tabs. Without state restoration, only the view controllers from the main storyboard file would be restored during subsequent launches. By adding support for state restoration to your app, you can preserve all of the view controllers.
 
-**Figure 5-1**  A sample view controller hierarchy
-![Figure 5-1](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/state_vc_hierarchy_initial_2x.png)
+图 5-1 展示了一个 tab bar 界面在用户与若干 tab 交互之后的视图控制器层级。正如你所见，有的视图控制器是作为 APP 的 main storyboard 文件的一部分被自动加载的，而有的视图控制器被 present 或 push 到不同 tab 中的视图控制器上。如果没有状态恢复，只有来自 main storyboard 文件的视图控制器会在随后的启动中被恢复。通过添加对状态恢复的支持到你的 APP，你可以恢复所有的视图控制器。
+
+**Figure 5-1**  A sample view controller hierarchy - 一个示例视图控制器层级
+![Figure 5-1](images/state_vc_hierarchy_initial_2x.png)
 
 UIKit preserves only those objects that have an assigned restoration identifier. A restoration identifier is a string that identifies the view or view controller to UIKit and your app. The value of this string is significant only to your code but the presence of this string tells UIKit that it needs to preserve the tagged object. During the preservation process, UIKit walks your app’s view controller hierarchy and preserves all objects that have a restoration identifier. If a view controller does not have a restoration identifier, that view controller and all of its views and child view controllers are not preserved. Figure 5-2 shows an updated version of the previous view hierarchy, now with restoration identifies applied to most (but not all) of the view controllers.
 
-**Figure 5-2**  Adding restoration identifies to view controllers
-![Figure 5-2](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/state_vc_hierarchy_preserve_2x.png)
+UIKit 只保存那些具有指定的恢复标识符的对象。恢复标识符是一个字符串，为 UIKit 和你的 APP 标识视图或视图控制器。这个字符串的值只对你的代码是重要的，但是这个字符串的存在告诉 UIKit 它需要保存这个加了标记的对象。在保存过程中，UIKit 走过你的 APP 的视图控制器层级并恢复所有由恢复标识符的对象。如果一个视图控制器没有恢复标识符，这个视图控制器和它的所有视图和子视图控制器就不会被保存。图 5-2 展示了先前的视图层级的更新版本，现在恢复标识符已经应用到了大部分（不是全部）视图控制器。
+
+**Figure 5-2**  Adding restoration identifies to view controllers - 添加恢复标识符到视图控制器
+![Figure 5-2](images/state_vc_hierarchy_preserve_2x.png)
 
 Depending on your app, it might or might not make sense to preserve every view controller. If a view controller presents transitory information, you might not want to return to that same point on restore, opting instead to return the user to a more stable point in your interface.
 
+保存每一个视图控制器可能有也可能没有意义，这取决于你的 APP。如果一个视图控制器只展示临时信息，你可能不想在恢复时回到相同的地方，而选择让用户回到你的界面中一个更稳定的地方。
+
 For each view controller you choose to preserve, you also need to decide how you want to restore it later. UIKit offers two ways to recreate objects. You can let your app delegate recreate it or you can assign a restoration class to the view controller and let that class recreate it. A restoration class implements the [UIViewControllerRestoration](https://developer.apple.com/reference/uikit/uiviewcontrollerrestoration) protocol and is responsible for finding or creating a designated object at restore time. Here are some tips for when to use each one:
+
+对于每个你选择保存的视图控制器，你也需要决定稍后如何恢复它。UIKit 提供两种方法重新创建对象。你可以让你的 APP 代理重建它，或者可以分配一个恢复类给视图控制器并让这个类重建它。恢复类实现 [UIViewControllerRestoration](https://developer.apple.com/reference/uikit/uiviewcontrollerrestoration) 协议，并负责在恢复时找到或创建指定的对象。下面是何时使用哪种方法的建议：
 
 - **If the view controller is always loaded from your app’s main storyboard file at launch time, do not assign a restoration class.** Instead, let your app delegate find the object or take advantage of UIKit’s support for implicitly finding restored objects.
 - **For view controllers that are not loaded from your main storyboard file at launch time, assign a restoration class.** The simplest option is to make each view controller its own restoration class.
+- **如果视图控制器总是在启动时从你的 APP 的 main storyboard 文件加载，不需要分配一个恢复类。** 相反的，让你的 APP 代理找到这个对象，或者利用 UIKit 的支持隐式的找到恢复对象。
+- **对于在启动时不会从你的 main storyboard 加载的视图控制器，指派一个恢复类。** 最简单的选择是让每一个视图控制器就是它自己的恢复类。
 
 During the preservation process, UIKit identifies the objects to save and writes each affected object’s state to disk. Each view controller object is given a chance to write out any data it wants to save. For example, a tab view controller saves the identity of the selected tab. UIKit also saves information such as the view controller’s restoration class to disk. And if any of the view controller’s views has a restoration identifier, UIKit asks them to save their state information too.
 
+在保存过程中，UIKit 标识对象以保存，并把每个影响的对象的状态写入磁盘。每个视图控制器对象都被给予了一次机会写出所有它想保存的数据。例如，一个 tab 视图控制器要保存选中的 tab 的标识。UIKit 也保存如视图控制器的恢复类等信息到磁盘。并且，如果任何视图控制器的视图有恢复标识符，UIKit 也会让它们保存它们的状态信息。
+
 The next time the app is launched, UIKit loads the app’s main storyboard or nib file as usual, calls the app delegate’s [application:willFinishLaunchingWithOptions:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623032-application) method, and then tries to restore the app’s previous state. The first thing it does is ask your app to provide the set of view controller objects that match the ones that were preserved. If a given view controller had an assigned restoration class, that class is asked to provide the object; otherwise, the app delegate is asked to provide it.
+
+下一次 APP 启动时，UIKit 照常加载 APP 的 main storyboard 或 nib 文件，调用 APP 代理的 [application:willFinishLaunchingWithOptions:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1623032-application) 方法，然后尝试恢复 APP 的先前的状态。它做的第一件事是让你的 APP 提供与保存的视图控制器对象相匹配的对象集合。如果给定的视图控制器有一个指定的恢复类，就会让这个类提供该对象；否则，让 APP 代理提供它。
 
 <span id=5.4.3>
 ###5.4.3 Flow of the Preservation Process 保持过程流
