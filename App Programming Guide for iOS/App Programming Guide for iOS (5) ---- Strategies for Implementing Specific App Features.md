@@ -315,19 +315,25 @@ The next time your app launches, the system automatically looks for a preserved 
 
 Figure 5-4 shows the high-level events that happen during state restoration and shows how the objects of your app are affected. After the standard initialization and UI loading is complete, UIKit asks your app delegate if state restoration should occur at all by calling the [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application) method. This is your app delegate’s opportunity to examine the preserved data and determine if state restoration is possible. If it is, UIKit uses the app delegate and restoration classes to obtain references to your app’s view controllers. Each object is then provided with the data it needs to restore itself to its previous state.
 
-图 5-4 展示了
+图 5-4 展示了在状态恢复中发生的高级事件，并展示了你的 APP 的对象如何受到影响。在标准初始化和 UI 加载完成后，UIKit 会通过调用 [application:shouldRestoreApplicationState:](https://developer.apple.com/reference/uikit/uiapplicationdelegate/1622987-application) 方法问你的 APP 代理状态恢复是否应该发生。这是你的 APP 代理的机会，检查保存的数据并确定状态恢复是否可能。如果是，UIKit 使用 APP 代理和恢复类获得你的 APP 的视图控制器的引用。然后给每个对象提供它所需的数据以恢复到它先前的状态。
 
-**Figure 5-4**  High-level flow for restoring your user interface
-![Figure 5-4](https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Art/restoration_process_simple_2x.png)
+**Figure 5-4**  High-level flow for restoring your user interface - 恢复你的用户界面的高级流
+![Figure 5-4](images/restoration_process_simple_2x.png)
 
 Although UIKit helps restore the individual view controllers, it does not automatically restore the relationships between those view controllers. Instead, each view controller is responsible for encoding enough state information to return itself to its previous state. For example, a navigation controller encodes information about the order of the view controllers on its navigation stack. It then uses this information later to return those view controllers to their previous positions on the stack. Other view controllers that have embedded child view controllers are similarly responsible for encoding any information they need to restore their children later.
 
+尽管 UIKit 帮着恢复每个视图控制器，但它不会自动恢复那些视图控制器之间的关系。相反，每个视图控制器有责任对足够的状态信息编码以返回到它先前的状态。例如，导航控制器要编码关于它的导航栈上的视图控制器的顺序的信息。然后它使用该信息把那些视图控制器返回到它们在栈上先前的位置。其他嵌入了子视图控制器的视图控制器有类似的责任编码它们稍后需要回复它们的孩子的所有信息。
+
 >**Note:** Not all view controllers need to encode their child view controllers. For example, tab bar controllers do not encode information about their child view controllers. Instead, it is assumed that your app follows the usual pattern of creating the appropriate child view controllers prior to creating the tab bar controller itself.
+>
+>**注意：** 并不是所有的视图控制器都需要编码它们的子视图控制器。例如，tab bar 控制器不需要编码关于它们的子视图控制器的信息。而是，假定你的 APP 会遵守先创建适当的子视图控制器再创建 tab bar 控制器自身的常见模式。
 
 Because you are responsible for recreating your app’s view controllers, you have some flexibility to change your interface during the restoration process. For example, you could reorder the tabs in a tab bar controller and still use the preserved data to return each tab to its previous state. Of course, if you make dramatic changes to your view controller hierarchy, such as during an app update, you might not be able to use the preserved data.
 
+由于你负责重新创建你的 APP 的视图控制器，你在恢复过程中可以灵活的改变你的界面。例如，你可以重新排序 tab bar 中的 tab 并仍使用保存的数据把每个 tab 返回到它先前的状态。当然，如果你对你的视图控制器层级做了显著的更改，例如在 APP 更新时，你可能不能使用保存的数据。
+
 <span id=5.4.5>
-###5.4.5 What Happens When You Exclude Groups of View Controllers? 当你移除整组的视图控制器时会发生什么？
+###5.4.5 What Happens When You Exclude Groups of View Controllers? - 当你移除整组的视图控制器时会发生什么？
 
 When the restoration identifier of a view controller is nil, that view controller and any child view controllers it manages are not preserved automatically. For example, in Figure 5-5, because a navigation controller did not have a restoration identifier, it and all of its child view controllers and views are omitted from the preserved data.
 
