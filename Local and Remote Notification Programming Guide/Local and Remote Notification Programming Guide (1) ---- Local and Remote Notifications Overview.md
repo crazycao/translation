@@ -243,11 +243,19 @@ When local and remote notifications are not handled directly by your app or the 
 
 Local notifications give you a way to alert the user at times when your app might not be running. You schedule local notifications at a time when your app is running either in the foreground or background. After scheduling a notification, the system takes on the responsibility of delivering the notification to the user at the appropriate time. Your app does not need to be running for the system to deliver the notification.
 
+本地通知给你提供了一种方式可以在某些时候提醒用户，那时你的APP可能没有运行。你可以在应用程序在前台或后台运行时安排本地通知。在安排通知后，系统负责在适当的时间向用户发送通知。系统无需运行应用程序即可发送通知。
+
 If your app is not running, or if it is in the background, the system displays local notifications directly to the user. The system can alert the user with an alert panel or banner, with a sound, or by badging your app’s icon. If your app provides a notification content app extension, the system can even use your custom interface to alert the user. If your app is in the foreground when a notification arrives, the system gives your app the opportunity to handle the notification internally.
+
+如果您的应用程序未运行，或者处于后台，系统将直接向用户显示本地通知。系统可以通过警告板或横幅来通知用户，带有声音或者在APP图标上标记。如果您的应用程序提供通知内容应用程序扩展，系统甚至可以使用您的自定义界面向用户发出提醒。当通知到达时，如果您的应用程序位于前台，则系统将为您的APP提供一个在内部处理通知的机会。
 
 >NOTE
 >
 >Local notifications are supported only in iOS, watchOS, and tvOS. In macOS, apps do not require local notifications to badge their icon, play sounds, or display alerts while running in the background. Those capabilities are already supported by the AppKit framework.
+>
+>注意
+>
+>本地通知只在 iOS、watchOS 和 tvOS 上支持。在 macOS 上，APP不需要本地通知来标记它们的图标、播放声音或者在后台运行时展示提醒。这些能力都已经在 AppKit 框架中支持了。
 
 ### 1.3.1 Configuring a Local Notification - 配置本地通知
 
