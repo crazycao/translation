@@ -107,34 +107,375 @@ Collection views provide two prefetching techniques you can use to improve respo
 ## Reordering Items Interactively
 
 Collection views allow you to move items around based on user interactions. Typically, the order of items in a collection view is defined by your data source. If you allow users to reorder items, you can configure a gesture recognizer to track the user’s interactions with a collection view item and update that item’s position.
-To begin the interactive repositioning of an item, call the beginInteractiveMovementForItem(at:) method of the collection view. While your gesture recognizer is tracking touch events, call the updateInteractiveMovementTargetPosition(_:) method to report changes in the touch location. When you are done tracking the gesture, call the endInteractiveMovement() or cancelInteractiveMovement() method to conclude the interactions and update the collection view.
+
+集合视图允许您根据用户交互移动项目。通常，集合视图中的项目的顺序由数据源定义。如果你允许用户重新排列项目，可以配置手势识别器来跟踪用户对集合视图项目的交互，并更新该项目的位置。
+
+To begin the interactive repositioning of an item, call the [beginInteractiveMovementForItem(at:)](https://developer.apple.com/documentation/uikit/uicollectionview/1618019-begininteractivemovementforitem) method of the collection view. While your gesture recognizer is tracking touch events, call the [updateInteractiveMovementTargetPosition(_:)](https://developer.apple.com/documentation/uikit/uicollectionview/1618079-updateinteractivemovementtargetp) method to report changes in the touch location. When you are done tracking the gesture, call the [endInteractiveMovement()](https://developer.apple.com/documentation/uikit/uicollectionview/1618082-endinteractivemovement) or [cancelInteractiveMovement()](https://developer.apple.com/documentation/uikit/uicollectionview/1618076-cancelinteractivemovement) method to conclude the interactions and update the collection view.
+
+要开始项目的交互式重定位，请调用集合视图的  [beginInteractiveMovementForItem(at:)](https://developer.apple.com/documentation/uikit/uicollectionview/1618019-begininteractivemovementforitem) 方法。当你的手势识别器在跟踪触摸事件时，请调用 [updateInteractiveMovementTargetPosition(_:)](https://developer.apple.com/documentation/uikit/uicollectionview/1618079-updateinteractivemovementtargetp) 方法来报告触摸位置的变化。当完成手势跟踪后，调用 [endInteractiveMovement()](https://developer.apple.com/documentation/uikit/uicollectionview/1618082-endinteractivemovement) 或 [cancelInteractiveMovement()](https://developer.apple.com/documentation/uikit/uicollectionview/1618076-cancelinteractivemovement) 方法结束交互并更新集合视图。
+
 During user interactions, the collection view invalidates its layout dynamically to reflect the current position of the item. If you do nothing, the default layout behavior repositions the items for you, but you can customize the layout animations if you want. When interactions finish, the collection view updates its data source object with the new location of the item.
-The UICollectionViewController class provides a default gesture recognizer that you can use to rearrange items in its managed collection view. To install this gesture recognizer, set the installsStandardGestureForInteractiveMovement property of the collection view controller to true.
+
+在用户交互期间，集合视图动态的使布局暂时无效，以反映项目的当前位置。如果你不执行任何操作，默认布局行为会帮你重新定位项目，而你也可以根据需要自定义布局动画。当交互完成时，集合视图将使用项目的新位置更新其数据源对象。
+
+The [UICollectionViewController](https://developer.apple.com/documentation/uikit/uicollectionviewcontroller) class provides a default gesture recognizer that you can use to rearrange items in its managed collection view. To install this gesture recognizer, set the [installsStandardGestureForInteractiveMovement](https://developer.apple.com/documentation/uikit/uicollectionviewcontroller/1623979-installsstandardgestureforintera) property of the collection view controller to `true`.
+
+[UICollectionViewController](https://developer.apple.com/documentation/uikit/uicollectionviewcontroller) 类提供了一个默认的手势识别器，可以用它来重新排列它管理的集合视图中的项目。要安装这个手势识别器，请将集合视图控制器的 [installsStandardGestureForInteractiveMovement](https://developer.apple.com/documentation/uikit/uicollectionviewcontroller/1623979-installsstandardgestureforintera) 属性设置为 `true`。
+
+## Interface Builder Attributes 界面生成器属性
+
+Table 1 lists the attributes that you configure for collection views in Interface Builder.
+
+表1列出了在界面生成器中可以为集合视图配置的属性。
+
+**Table 1** Collection view attributes **表1** 集合视图属性
+
+|Attribute|Description|
+|:-:|:--|
+|Items|The number of prototype cells. This property controls the specified number of prototype cells for you to configure in your storyboard. Collection views must always have at least one cell and may have multiple cells for displaying different types of content or for displaying the same content in different ways. </br> 原型单元格的数量。此属性控制要在 storyboard 中配置的原型单元格的数量。集合视图必须始终至少有一个单元格，并且可以有多个单元格用于显示不同类型的内容或以不同方式显示相同的内容。|
+|Layout|The layout object to use. Use this control to select between the [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewflowlayout) object and a custom layout object that you define. </br> When the flow layout is selected, you can also configure the scrolling direction for the collection view’s content and whether the flow layout has header and footer views. Enabling header and footer views adds reusable views to your storyboard that you can configure with your header and footer content. You can also create those views programmatically. </br> When a custom layout is selected, you must specify the UICollectionViewLayout subclass to use.  </br> 要使用的布局对象。使用此控件选择 [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewlayout) 对象或您定义的自定义布局对象。 </br>选择流式布局时，您还可以配置集合视图内容的滚动方向，以及流式布局是否有 header 和 footer 视图。您也可以通过编程方式创建这些视图。 </br>选择自定义布局时，您必须指定要使用的 [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewlayout) 子类。 |
+When the Flow layout is selected, the Size inspector for the collection view contains additional attributes for configuring flow layout metrics. Use those attributes to configure the size of your cells, the size of headers and footers, the minimum spacing between cells, and any margins around each section of cells. For more information about the meaning of the flow layout metrics, see [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewflowlayout).
+
+选中 `Flow` 布局时，集合视图的 `Size` 检查器中会包含用于配置流式布局度量的其他属性。使用这些属性可以配置单元格的尺寸、header 和 footer 的尺寸、单元格的最小间距以及每个 section 周围的缩进。有关流式布局度量的含义的更多信息，参见 [UICollectionViewFlowLayout](https://developer.apple.com/documentation/uikit/uicollectionviewflowlayout)。
+
+## Internationalization 国际化
+A collection view has no direct content of its own to internationalize. Instead, you internationalize the cells and reusable views of the collection view. For more information about internationalization, see [Internationalization and Localization Guide](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPInternational/Introduction/Introduction.html#//apple_ref/doc/uid/10000171i).
+
+集合视图本身没有可直接国际化的内容，而是对集合视图的单元格和可重用视图进行国际化。有关国际化的更多信息，请参阅《[Internationalization and Localization Guide](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPInternational/Introduction/Introduction.html#//apple_ref/doc/uid/10000171i)》。
+
+## Accessibility 辅助功能（旁白等无障碍功能）
+A collection view has no content of its own to make accessible. If your cells and reusable views contain standard `UIKit` controls such as `UILabel` and `UITextField`, you can make those controls accessible. When a collection view changes its onscreen layout, it posts the `UIAccessibilityLayoutChangedNotification` notification.
+
+集合视图本身没有无障碍相关的内容。如果单元格和可重用视图中包含了标准 `UIKit` 控件，如 `UILabel` 和 `UITextField`，可以给这些控件添加无障碍功能。当集合视图变更其屏幕布局时，会发出 `UIAccessibilityLayoutChangedNotification` 通知。
+
+For general information about making your interface accessible, see [Accessibility Programming Guide for iOS](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/iPhoneAccessibility/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008785).
+
+有关给你的界面添加无障碍功能的通用信息，请参阅《[Accessibility Programming Guide for iOS](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/iPhoneAccessibility/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008785)》。
+
+# Topics 主题
+
+## Initializing a Collection View
+### init(frame: CGRect, collectionViewLayout: UICollectionViewLayout)
+
+Creates a collection view object with the specified frame and layout.
+
+### init?(coder: NSCoder)
+
+Creates a collection view object from data in a given unarchiver.
+
+## Providing the Collection View Data
+
+### var dataSource: UICollectionViewDataSource?
+
+The object that provides the data for the collection view.
+
+### class UICollectionViewDiffableDataSource
+
+The object you use to manage data and provide cells for a collection view.
+
+### protocol UICollectionViewDataSource
+
+The methods adopted by the object you use to manage data and provide cells for a collection view.
+
+### Building High-Performance Lists and Collection Views
+
+Improve the performance of lists and collections in your app with prefetching and image preparation.
+
+## Prefetching Collection View Cells and Data
+
+### var isPrefetchingEnabled: Bool
+
+A Boolean value that indicates whether cell and data prefetching are enabled.
+
+### var prefetchDataSource: UICollectionViewDataSourcePrefetching?
+
+The object that acts as the prefetching data source for the collection view, receiving notifications of upcoming cell data requirements.
+
+### protocol UICollectionViewDataSourcePrefetching
+
+A protocol that provides advance warning of the data requirements for a collection view, allowing the triggering of asynchronous data load operations.
+
+## Managing Collection View Interactions
+
+### var delegate: UICollectionViewDelegate?
+
+The object that acts as the delegate of the collection view.
+
+### protocol UICollectionViewDelegate
+
+The methods adopted by the object you use to manage user interactions with items in a collection view.
+
+## Creating Cells
+
+### struct UICollectionView.CellRegistration
+A registration for the collection view’s cells.
+
+### func dequeueConfiguredReusableCell<Cell, Item>(using: UICollectionView.CellRegistration<Cell, Item>, for: IndexPath, item: Item?) -> Cell
+Dequeues a configured reusable cell object.
+
+### func register(AnyClass?, forCellWithReuseIdentifier: String)
+Registers a class for use in creating new collection view cells.
+
+### func register(UINib?, forCellWithReuseIdentifier: String)
+Registers a nib file for use in creating new collection view cells.
+
+### func dequeueReusableCell(withReuseIdentifier: String, for: IndexPath) -> UICollectionViewCell
+Dequeues a reusable cell object located by its identifier.
+
+## Creating Headers and Footers
+
+### struct UICollectionView.SupplementaryRegistration
+A registration for the collection view’s supplementary views.
+
+### func dequeueConfiguredReusableSupplementary<Supplementary>(using: UICollectionView.SupplementaryRegistration<Supplementary>, for: IndexPath) -> Supplementary
+Dequeues a configured reusable supplementary view object.
+
+### func register(AnyClass?, forSupplementaryViewOfKind: String, withReuseIdentifier: String)
+Registers a class for use in creating supplementary views for the collection view.
+
+### func register(UINib?, forSupplementaryViewOfKind: String, withReuseIdentifier: String)
+Registers a nib file for use in creating supplementary views for the collection view.
+
+### func dequeueReusableSupplementaryView(ofKind: String, withReuseIdentifier: String, for: IndexPath) -> UICollectionReusableView
+Dequeues a reusable supplementary view located by its identifier and kind.
+
+## Configuring the Background View
+
+### var backgroundView: UIView?
+The view that provides the background appearance.
+
+## Changing the Layout
+
+### var collectionViewLayout: UICollectionViewLayout
+The layout used to organize the collected view’s items.
+
+### func setCollectionViewLayout(UICollectionViewLayout, animated: Bool)
+Changes the collection view’s layout and optionally animates the change.
+
+### func setCollectionViewLayout(UICollectionViewLayout, animated: Bool, completion: ((Bool) -> Void)?)
+Changes the collection view’s layout and notifies you when the animations complete.
+
+### func startInteractiveTransition(to: UICollectionViewLayout, completion: UICollectionView.LayoutInteractiveTransitionCompletion?) -> UICollectionViewTransitionLayout
+Changes the collection view’s current layout using an interactive transition effect.
+
+### func finishInteractiveTransition()
+Tells the collection view to finish an interactive transition by installing the intended target layout.
+
+### func cancelInteractiveTransition()
+Tells the collection view to cancel an interactive transition and return to its original layout object.
+
+### typealias UICollectionView.LayoutInteractiveTransitionCompletion
+The completion block called at the end of an interactive transition for a collection view.
+
+## Getting the State of the Collection View
+
+### var numberOfSections: Int
+The number of sections displayed by the collection view.
+
+### func numberOfItems(inSection: Int) -> Int
+Fetches the count of items in the specified section.
+
+### var visibleCells: [UICollectionViewCell]
+An array of visible cells currently displayed by the collection view.
+
+## Inserting, Moving, and Deleting Items
+
+### func insertItems(at: [IndexPath])
+Inserts new items at the specified index paths.
+
+### func moveItem(at: IndexPath, to: IndexPath)
+Moves an item from one location to another in the collection view.
+
+### func deleteItems(at: [IndexPath])
+Deletes the items at the specified index paths.
+
+## Inserting, Moving, and Deleting Sections
+
+### func insertSections(IndexSet)
+Inserts new sections at the specified indexes.
+
+### func moveSection(Int, toSection: Int)
+Moves a section from one location to another in the collection view.
+
+### func deleteSections(IndexSet)
+Deletes the sections at the specified indexes.
+
+## Reordering Items Interactively
+
+### func beginInteractiveMovementForItem(at: IndexPath) -> Bool
+Initiates the interactive movement of the item at the specified index path.
+
+### func updateInteractiveMovementTargetPosition(CGPoint)
+Updates the position of the item within the collection view’s bounds.
+
+### func endInteractiveMovement()
+Ends interactive movement tracking and moves the target item to its new location.
+
+### func cancelInteractiveMovement()
+Ends interactive movement tracking and returns the target item to its original location.
+
+## Managing Drag Interactions
+
+### var dragDelegate: UICollectionViewDragDelegate?
+The delegate object that manages the dragging of items from the collection view.
+
+### protocol UICollectionViewDragDelegate
+The interface for initiating drags from a collection view.
+
+### var hasActiveDrag: Bool
+A Boolean value that indicates whether items were lifted from the collection view and have not yet been dropped.
+
+### var dragInteractionEnabled: Bool
+A Boolean value that indicates whether the collection view supports dragging content.
+
+## Managing Drop Interactions
+
+### var dropDelegate: UICollectionViewDropDelegate?
+The delegate object that manages the dropping of items into the collection view.
+
+### var hasActiveDrop: Bool
+A Boolean value that indicates whether the collection view is currently tracking a drop session.
+
+### var reorderingCadence: UICollectionView.ReorderingCadence
+The speed at which items in the collection view are reordered to show potential drop locations.
+
+### enum UICollectionView.ReorderingCadence
+Constants indicating the speed at which collection view items are reorganized during a drop.
+
+## Selecting Cells
+
+### var indexPathsForSelectedItems: [IndexPath]?
+The index paths for the selected items.
+
+### func selectItem(at: IndexPath?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition)
+Selects the item at the specified index path and optionally scrolls it into view.
+
+### func deselectItem(at: IndexPath, animated: Bool)
+Deselects the item at the specified index.
+
+### var allowsSelection: Bool
+A Boolean value that indicates whether users can select items in the collection view.
+
+### var allowsMultipleSelection: Bool
+A Boolean value that determines whether users can select more than one item in the collection view.
+
+### var allowsSelectionDuringEditing: Bool
+A Boolean value that determines whether users can select cells while the collection view is in editing mode.
+
+### var allowsMultipleSelectionDuringEditing: Bool
+A Boolean value that controls whether users can select more than one cell simultaneously in editing mode.
+
+### var selectionFollowsFocus: Bool
+A Boolean value that triggers an automatic selection when focus moves to a cell.
+
+## Putting the Collection View into Edit Mode
+
+### var isEditing: Bool
+A Boolean value that determines whether the collection view is in editing mode.
+
+## Locating Items and Views in the Collection View
+
+### func indexPathForItem(at: CGPoint) -> IndexPath?
+Gets the index path of the item at the specified point in the collection view.
+
+### var indexPathsForVisibleItems: [IndexPath]
+An array of the visible items in the collection view.
+
+### func indexPath(for: UICollectionViewCell) -> IndexPath?
+Gets the index path of the specified cell.
+
+### func cellForItem(at: IndexPath) -> UICollectionViewCell?
+Gets the cell object at the index path you specify.
+
+### func indexPathsForVisibleSupplementaryElements(ofKind: String) -> [IndexPath]
+Gets the index paths of all visible supplementary views of the specified type.
+
+### func supplementaryView(forElementKind: String, at: IndexPath) -> UICollectionReusableView?
+Gets the supplementary view at the specified index path.
+
+### func visibleSupplementaryViews(ofKind: String) -> [UICollectionReusableView]
+Gets an array of the visible supplementary views of the specified kind.
+
+## Getting Layout Information
+
+### func layoutAttributesForItem(at: IndexPath) -> UICollectionViewLayoutAttributes?
+Gets the layout information for the item at the specified index path.
+
+### func layoutAttributesForSupplementaryElement(ofKind: String, at: IndexPath) -> UICollectionViewLayoutAttributes?
+Gets the layout information for the specified supplementary view.
+
+## Scrolling an Item Into View
+
+### func scrollToItem(at: IndexPath, at: UICollectionView.ScrollPosition, animated: Bool)
+Scrolls the collection view contents until the specified item is visible.
+
+### struct UICollectionView.ScrollPosition
+Constants that indicate how to scroll an item into the visible portion of the collection view.
+
+### enum UICollectionView.ScrollDirection
+Constants that indicate the direction of scrolling for the layout.
+
+## Animating Multiple Changes to the Collection View
+
+### func performBatchUpdates((() -> Void)?, completion: ((Bool) -> Void)?)
+Animates multiple insert, delete, reload, and move operations as a group.
+Reloading Content
+
+### var hasUncommittedUpdates: Bool
+A Boolean value that indicates whether the collection view contains drop placeholders or is reordering its items as part of handling a drop.
+
+### func reconfigureItems(at: [IndexPath])
+Updates the data for the items at the index paths you specify, preserving the existing cells for the items.
+
+### func reloadData()
+Reloads all of the data for the collection view.
+
+### func reloadSections(IndexSet)
+Reloads the data in the specified sections of the collection view.
+
+### func reloadItems(at: [IndexPath])
+Reloads just the items at the specified index paths.
+
+## Identifying Collection View Elements
+
+### enum UICollectionView.ElementCategory
+Constants specifying the type of view.
+
+### class let elementKindSectionFooter: String
+A supplementary view that identifies the footer for a given section.
+
+### class let elementKindSectionHeader: String
+A supplementary view that identifies the header for a given section.
+
+## Remembering the Last Focused Cell
+
+### var remembersLastFocusedIndexPath: Bool
+A Boolean value that indicates whether the collection view automatically assigns the focus to the item at the last focused index path.
+
+## Instance Properties
+
+### var allowsFocus: Bool
+
+### var allowsFocusDuringEditing: Bool
+
+### var contextMenuInteraction: UIContextMenuInteraction?
+
+# Relationships
+## Inherits From
+### UIScrollView
+
+## Conforms To
+### UIDataSourceTranslating
+### UISpringLoadedInteractionSupporting
+See Also
+View
 
 # See Also 其它参考
 
-## Container Views 容器视图
+## View 视图
 
-### [Autosizing Views for Localization in iOS](https://developer.apple.com/documentation/xcode/autosizing_views_for_localization_in_ios)
+### class [UICollectionViewController](https://developer.apple.com/documentation/uikit/uicollectionviewcontroller)
+A view controller that specializes in managing a collection view.
 
-Add auto layout constraints to your app to achieve localizable views.
+专门管理集合视图的视图控制器。
 
-向应用程序添加自动布局约束，以实现可本地化的视图。
-
-### [Table Views](https://developer.apple.com/documentation/uikit/views_and_controls/table_views)
-
-Display data in a single column of customizable rows.
-
-在一列可自定义的行中显示数据。
-
-### class [UIStackView](https://developer.apple.com/documentation/uikit/uistackview)
-
-A streamlined interface for laying out a collection of views in either a column or a row.
-
-用于在列或行中布局视图集合的流线型界面。
-
-### class [UIScrollView](https://developer.apple.com/documentation/uikit/uiscrollview)
-
-A view that allows the scrolling and zooming of its contained views.
-
-允许滚动和缩放其包含视图的视图。
