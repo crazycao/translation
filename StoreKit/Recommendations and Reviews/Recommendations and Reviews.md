@@ -1,4 +1,4 @@
-# StoreKit ---- Recommendations and Reviews
+# Recommendations and Reviews
 
 原文地址：[https://developer.apple.com/documentation/storekit/recommendations_and_reviews?language=objc](https://developer.apple.com/documentation/storekit/recommendations_and_reviews?language=objc)
 
