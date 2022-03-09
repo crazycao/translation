@@ -1,4 +1,5 @@
 # Original API for In-App Purchase
+# 原始的应用内购买 API
 
 原文地址：[https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase?language=objc](https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase?language=objc)
 
