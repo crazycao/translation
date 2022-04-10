@@ -1,7 +1,7 @@
 # Finishing a Transaction
 # 完成交易
 
-原文地址：[https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase/finishing_a_transaction?language=objc](https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase/finishing_a_transaction?language=objc)
+原文地址：[https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase/finishing_a_transaction](https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase/finishing_a_transaction)
 
 > Technology
 >
