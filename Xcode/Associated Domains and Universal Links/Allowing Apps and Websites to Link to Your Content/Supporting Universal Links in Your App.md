@@ -29,7 +29,7 @@ To support universal links in your app:
 >
 > Universal links offer a potential attack vector into your app, so make sure to validate all URL parameters and discard any malformed URLs. In addition, limit the available actions to those that don’t risk the user’s data. For example, don’t allow universal links to directly delete content or access sensitive information about the user. When testing your URL-handling code, make sure your test cases include improperly formatted URLs.
 > 
-> 通用链接对您的应用程序提供了潜在的攻击向量，因此请确保验证所有 URL 参数并丢弃任何格式错误的 URL。此外，将可用的操作限制在不危及用户数据的操作上。例如，不要允许通用链接直接删除内容或访问有关用户的敏感信息。测试URL处理代码时，请确保测试用例中包含格式不正确的 URL。
+> 通用链接对您的应用程序提供了潜在的攻击向量，因此请确保验证所有 URL 参数并丢弃任何格式错误的 URL。此外，将可用的操作限制在不危及用户数据的操作上。例如，不要允许通用链接直接删除内容或访问有关用户的敏感信息。测试 URL 处理代码时，请确保测试用例中包含格式不正确的 URL。
 
 # Update Your App Delegate to Respond to a Universal Link - 更新 app 代理以响应通用链接
 
