@@ -158,7 +158,7 @@ Load the unique identifiers for your in-app products in order to retrieve produc
 
 Retrieve up-to-date information about the products for sale in your app to display to the user.
 
-在应用程序中检索要向用户显示的待售产品的最新信息。
+检索要向用户显示的在 App 中的销售的产品的最新信息。
 
 ### [SKProductsRequest](https://developer.apple.com/documentation/storekit/skproductsrequest?language=objc)
 
