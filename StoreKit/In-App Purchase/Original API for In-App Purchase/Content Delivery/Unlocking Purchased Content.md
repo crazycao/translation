@@ -1,4 +1,4 @@
-# Unlocking Purchased Conten
+# Unlocking Purchased Content
 # 解锁已购买的内容
 
 原文地址：[https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase/unlocking_purchased_content](https://developer.apple.com/documentation/storekit/original_api_for_in-app_purchase/unlocking_purchased_content)
