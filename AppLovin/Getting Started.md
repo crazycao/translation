@@ -200,7 +200,7 @@ You can also use this quick checklist to help you validate your MAX integration 
 	
 7. If you do not use MAX Unity Integration Manager, review “Preparing Mediated Networks” (Adobe AIR, Android, Cordova-Android, Cordova-iOS, [iOS](https://dash.applovin.com/documentation/mediation/ios/mediation-adapters), React Native-Android, React Native-iOS, Unity, Unreal) and use the Mediation Debugger (Adobe AIR, Android, Cordova, iOS, React Native, Unity, Unreal) feature to validate that you have all of the necessary configuration for each network.
 
-	如果未使用MAX Unity Integration Manager，请查看“[准备中介网络](https://dash.applovin.com/documentation/mediation/ios/mediation-adapters)”，并使用[中介调试器](https://dash.applovin.com/documentation/mediation/ios/testing-networks/mediation-debugger)功能验证您是否具有每个网络的所有必要配置。
+	如果未使用 MAX Unity Integration Manager，请查看“[准备中介网络](https://dash.applovin.com/documentation/mediation/ios/mediation-adapters)”，并使用[中介调试器](https://dash.applovin.com/documentation/mediation/ios/testing-networks/mediation-debugger)功能验证您是否具有每个网络的所有必要配置。
 	
 > **Warning:** To avoid issues, if you mediate a network SDK that you previously used for mediation (for example, if you transition from AdMob Mediation to MAX-mediated AdMob), create a new application ID or delete active Mediation Groups. If you reuse a mediator’s app ID this will cause crashes and discrepancies.
 >
@@ -210,59 +210,104 @@ You can also use this quick checklist to help you validate your MAX integration 
 
 After you successfully validate your integration, return to the MAX Dashboard and connect your networks. This allows you to pull in network data for real-time bidding for supported bidding networks and CPM updating for most supported traditional networks.
 
+成功验证集成后，返回 MAX Dashboard 并连接你的网络。这允许您拉入网络数据，用于支持的投标网络的实时投标，以及大多数支持的传统网络的 CPM 更新。
+
 ### Supported Networks - 支持的网络
 
 First, navigate to **MAX** in the left-hand nav and click [Networks](https://dash.applovin.com/o/mediation/networks/580541) under **Mediation > Manage**. Connect all the networks that you want to mediate. Then click **Connect**, enter the requested network credentials or API key, and click **Save**.
 
+首先，在左侧导航栏中导航到 **MAX**，然后单击  **Mediation > Manage** 下的 [Networks](https://dash.applovin.com/o/mediation/networks/580541)。连接所有要中介的网络。然后单击连接，输入请求的网络凭据或 API 密钥，然后单击 **Save**。
+
 The status icon is a green checkmark when you successfully connect that network. The icon is red or yellow if you must take any further action.
 
+成功连接该网络时，状态图标为绿色复选标记。如果您必须采取任何进一步行动，则图标为红色或黄色。
+
 AppLovin demand is enabled by default and you do not need to do anything to connect it.
+
+默认情况下，AppLovin 需要处于启用状态，您无需执行任何操作即可连接它。
 
 ### Custom Networks - 自定义网络
 
 If you have a custom SDK or JS tag network, scroll to the bottom of the **Networks** page and click [Click here to add a Custom Network](https://dash.applovin.com/o/mediation/networks/580541/customNetwork/create). Then add your network tag or adapter class name to complete the setup. Custom networks are not eligible for in-app bidding or Auto CPM.
 
+如果您有自定义 SDK 或 JS 标记网络，请滚动到 **Networks** 页面的底部，点击[单击此处添加自定义网络](https://dash.applovin.com/o/mediation/networks/580541/customNetwork/create)。然后添加网络标记或适配器类名以完成设置。自定义网络没有资格进行应用内竞价或自动 CPM。
+
 You still need to activate your network within your ad unit waterfall. That’s covered in the next section.
 
+你仍然需要在你的广告单元瀑布中激活你的网络。这将在下一节中介绍。
+
 You can read more about connecting networks [here](https://dash.applovin.com/documentation/mediation/ui-max/ad-units/enable-networks).
+
+你可以在[这里](https://dash.applovin.com/documentation/mediation/ui-max/ad-units/enable-networks)阅读更多关于连接网络的信息。
 
 ## Step 6: Set Up Your Waterfall - 第六步：设置你的瀑布
 
 You configure waterfalls at the ad unit level. Both bidding and traditional networks compete by highest CPM to serve an impression. This competition maximizes your overall revenue, ensuring you’re paid the most money for each ad opportunity.
 
+您可以在广告单元级别配置瀑布。竞价和传统网络一起竞争最高的 CPM，以提供印象广告。这场竞争使你的整体收入最大化，确保你为每个广告机会获得最多的报酬。
+
 > **Note:** If you want to programmatically manage your waterfall, review the [Ad Unit Management API](https://dash.applovin.com/documentation/mediation/features/ad-unit-automation-api) documentation.
+> 
+> **注意：**如果您想以编程方式管理瀑布，请查看《[广告单元管理 API](https://dash.applovin.com/documentation/mediation/features/ad-unit-automation-api)》文档。
 
 ### Default Waterfall - 默认瀑布
 
 The Default Waterfall is your primary waterfall for monetization. After you set up your ad partners, waterfall management is automated through a combination of in-app bidding and CPM updating.
 
+默认瀑布是确定广告价值的主要瀑布。在你设置了你的广告合作伙伴之后，瀑布自动通过应用内竞价和CPM更新的组合进行管理。
+
 To set up your default waterfall, navigate to the [Ad Units](https://dash.applovin.com/o/mediation/ad_units/580541) page, select an ad unit, then scroll down to the **Default Waterfall** which includes all supported networks, categorized by Bidder Networks and Other (traditionally-mediated) Networks. Only enable networks for which you’ve successfully integrated the SDK and that you have connected to MAX.
 
+要设置默认瀑布，请导航到 [Ad Units](https://dash.applovin.com/o/mediation/ad_units/580541) 页面，选择一个广告单元，然后向下滚动到 **Default Waterfall**，其中包括所有受支持的网络，按投标人网络和其他（传统中介）网络分类。只能启用已成功集成 SDK 且已连接到 MAX 的网络。
+
 1. Expand the desired network by clicking the down-arrow to the right of the network name. Add the required network IDs, then toggle **Status** to on.
-	- For non-bidding networks, set a CPM price.Manually enter the floor price or historical CPM of the network. If you have Auto CPM enabled, it will update automatically to align with the network reported CPM. Use the Network Comparison report to validate the MAX CPM Price and Network CPM price match.
+	- For non-bidding networks, set a CPM price. Manually enter the floor price or historical CPM of the network. If you have Auto CPM enabled, it will update automatically to align with the network reported CPM. Use the Network Comparison report to validate the MAX CPM Price and Network CPM price match.
 2. Add custom JS/SDK or [direct sold](https://dash.applovin.com/documentation/mediation/features/direct-sold) instances to the waterfall if applicable.
 3. Click Save.
+
+>
+
+1. 单击网络名称右侧的向下箭头，展开所需的网络。添加所需的网络 ID，然后将 **Status** 切换为“开启”。
+	- 对于非投标网络，设置 CPM 价格。手动输入网络的最低价格或历史 CPM。如果您启用了自动 CPM，它将自动更新以与网络报告的CPM对齐。使用网络比较报告验证 MAX CPM 价格和网络 CPM 价格是否匹配。
+2. 如果适用，将自定义 JS/SDK 或[直销](https://dash.applovin.com/documentation/mediation/features/direct-sold)实例添加到瀑布中。
+3. 点击“保存”。
 
 ### Custom Waterfalls - 自定义瀑布
 
 Custom waterfalls are for advanced MAX users. They allow you to use advanced targeting and waterfall segmentation to filter ads to specific audiences. For example, you can use these waterfalls to tailor monetization for users with limit ad tracking (LAT) enabled or high value users with strong ad engagement. Ineligible traffic will continue to use the Default Waterfall configuration.
 
+自定义瀑布适用于高级 MAX 用户。它们允许您使用高级目标定位和瀑布分割来过滤针对特定受众的广告。例如，您可以使用这些瀑布为启用限制广告跟踪（LAT）的用户或具有强大广告参与度的高价值用户量身定制确定广告价值。不合格的流量将继续使用默认的瀑布配置。
+
 Learn more about some of the uses of advanced targeting and waterfall segmentation [here](https://www.applovin.com/blog/using-waterfall-segmentation-to-optimize-user-targeting/).
+
+在[这里](https://www.applovin.com/blog/using-waterfall-segmentation-to-optimize-user-targeting/)了解有关高级目标定位和瀑布分割的一些用法的更多信息。
 
 To create a custom waterfall, click **Create New Waterfall** at the top of the **Default Waterfall**. Name your waterfall and select the device targeting (if applicable). If you collect user or device information and pass it to AppLovin as [keywords](https://dash.applovin.com/documentation/mediation/ios/getting-started/data-passing), you can target those keywords by using **Show Advanced Targeting Options**.
 
+要创建自定义瀑布，请单击默认瀑布顶部的 **Create New Waterfall**。命名瀑布并选择设备目标（如果适用）。如果您收集用户或设备信息并将其作为[关键字](https://dash.applovin.com/documentation/mediation/ios/getting-started/data-passing)传递给 AppLovin，则可以使用 **Show Advanced Targeting Options** 以这些关键字为目标定位。
+
 MAX copies your network configurations from the Default Waterfall as the base for your custom waterfall. You can edit them after they are copied.
 
+MAX 可以从默认瀑布复制网络配置，作为自定义瀑布的基础。您可以在复制后对其进行编辑。
+
 You can read more about Waterfall Segmentation [here](https://dash.applovin.com/documentation/mediation/features/waterfall-segmentation).
+
+你可以在[这里](https://dash.applovin.com/documentation/mediation/features/waterfall-segmentation)阅读更多关于瀑布分割的内容。
 
 ### Best Practices - 最佳实践
 
 - Use at least six to eight networks with strong global demand (such as Google or Facebook) to mediate in addition to AppLovin when you begin to establish baseline revenue and performance.
+- 当你开始建立基准收入和业绩时，除了 AppLovin 外，至少使用6到8个强大全球需求的网络（如谷歌或脸书）进行中介。
 - Prioritize bidding networks whenever possible to reduce manual waterfall maintenance and latency.
+- 尽可能优先考虑竞价网络，以减少手动瀑布维护和延迟。
 - As you scale, you’ll find that CPMs can vary greatly depending on the geographical mix of your app. Identify the biggest revenue opportunities based on these countries and add networks with strong regional demand (our account teams are happy to make a reccomentation). Build geo-based waterfalls targeting those networks to specific countries to optimize for growth.
+- 当你扩张时，你会发现 CPM 可能会因应用程序的地域组合而有很大差异。基于这些国家确定最大的收入机会，并添加具有强大区域需求的网络（我们的客户团队很乐意再次介绍）。建立基于地理位置的瀑布，针对特定国家的网络优化增长。
 - Use the [Network Comparison report](https://dash.applovin.com/o/mediation/network_comparison_report) to validate that network CPMs are aligned with CPMs reported in MAX. This is important to ensure networks compete with accurate information in the unified auction and you do not lose money.
+- 使用[网络比较报告](https://dash.applovin.com/o/mediation/network_comparison_report)来验证网络 CPM 是否与 MAX 中报告的 CPM 一致。这对于确保网络在统一拍卖中与准确的信息竞争非常重要，确保您不会赔钱。
 - Always [A/B test](https://dash.applovin.com/documentation/mediation/features/ab-test) new partners or pricing in the waterfall before you push changes to your entire audience. By A/B testing first, you validate if the change will result in net-positive results. This helps you optimize your waterfall with confidence.
-- To maximize the number of bidders from the AppLovin Exchange competing for your ad inventory, add AppLovin to your app-`ads.txt` file. To learn more about how to set up `app-ads.txt` click [here](https://support.applovin.com/hc/en-us/articles/4403932935053-Implementing-app-ads-txt).
+- 在将更改推给整个受众之前，始终在瀑布中对新的合作伙伴或定价 [A/B 测试](https://dash.applovin.com/documentation/mediation/features/ab-test)。首先通过 A/B 测试，验证更改是否会导致正向结果。这有助于您自信地优化瀑布。
+- To maximize the number of bidders from the AppLovin Exchange competing for your ad inventory, add AppLovin to your `app-ads.txt` file. To learn more about how to set up `app-ads.txt` click [here](https://support.applovin.com/hc/en-us/articles/4403932935053-Implementing-app-ads-txt).
+- 为了最大限度地增加 AppLovin Exchange 竞购您的广告库存的投标人数量，请将 AppLovin 添加到您的 `app-ads.txt` 文件中。要了解有关如何设置 `app-ads.txt` 的更多信息，请单击[此处](https://support.applovin.com/hc/en-us/articles/4403932935053-Implementing-app-ads-txt)。
 
 ## Step 7: Analyze Your Performance - 分析你的表现
 
