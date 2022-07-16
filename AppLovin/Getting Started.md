@@ -313,27 +313,49 @@ You can read more about Waterfall Segmentation [here](https://dash.applovin.com/
 
 To help you analyze your performance, there are several tools and reports available in MAX in the **Analyze** section in the left nav, which are highlighted below. You can download reports directly from the UI or schedule them to be emailed to you on a regular basis.
 
+为了帮助您分析表现，MAX 在左侧导航的 **Analyze** 部分提供了几个工具和报告，如下所示。您可以直接从界面中下载报告，或安排定期通过电子邮件发送给您。
+
 AppLovin also offers reporting APIs for MAX revenue and user level data to plug into your MMP of choice. To learn more, read the [Revenue Reporting API](https://dash.applovin.com/documentation/mediation/reporting-api/max-ad-revenue) documentation.
+
+AppLovin 还提供了报告 API，用于将 MAX 收入和用户级数据插入您选择的 MMP。要了解更多信息，请阅读《[收入报告API](https://dash.applovin.com/documentation/mediation/reporting-api/max-ad-revenue)》文档。
 
 All UI reports allow you to save reporting views for quick retrieval in the future. A best practice in saving reports is to use the preset time periods instead of custom time periods to always populate most recent data.
 
+所有 UI 报告都允许您保存报告视图，以便将来快速检索。保存报告的最佳做法是使用预设时间段而不是自定义时间段来始终填充最新数据。
+
 With UI reports’ Compare Mode you can compare current performance against historical data and can visualize trends.
+
+通过 UI 报告的比较模式，您可以将当前表现与历史数据进行比较，并可以可视化趋势。
 
 ### Performance Reporting - 表现报告
 
 Use this report to understand revenue performance at a glance. The charts help you visualize revenue trends and identify areas that are helping or hindering growth. For deeper analysis, try using **Advanced Reporting** or **User Activity Reporting**.
 
+使用此报告可以一目了然地了解收入表现。这些图表有助于您可视化收入趋势，并确定有助于或阻碍增长的领域。要进行更深入的分析，请尝试使用**高级报告**或**用户活动报告**。
+
 ### Advanced Reporting - 高级报告
+
 Advanced Reporting enables you to track deeper insights into your app inventory. Use this report to analyze the performance of your waterfall and find opportunities such as new or optimized pricing in a certain country, or see which networks are under-performing and may need to be removed.In addition to saving this report, you can also schedule it to be emailed to you and others on a regular basis.
+
+高级报告使您能够更深入地了解你的 app 库存。使用此报告可以分析瀑布的表现，并找到一些机会，例如某个国家/地区的新定价或优化定价，或者查看哪些网络表现不佳，可能需要删除。除了保存此报告外，您还可以安排定期通过电子邮件发送给您和其他人。
 
 You can add columns to the reports by clicking the checkmark next to a report filter and/or add a value in the filter field. Depending on the combination of filters you include in the report, you’ll see different metrics populate.
 
+通过单击报告筛选器旁边的复选标记和/或在筛选器字段中添加值，可以向报告中添加列。根据您在报告中包含的过滤器的组合，您将看到填充了不同的指标。
+
 Here are a few ways you can look at Advanced Reporting:
 
-- **Ad Inventory Performance** Add **Application**, **Ad Unit Name**, and **Ad Type** to get a breakdown of ad inventory performance including total impressions, revenue, and display rate, which is the percentage of time a cached ad is displayed.
-- **Network Performance** Add **Network** to the report to view network performance by ad unit. In addition to top level metrics like impressions and CPM, you’ll see two new metrics: fill rate and win rate. Fill rate shows how often a network can fill an ad and win rate is how often a bidding network wins an auction against other bidding networks.
-- **Waterfall Performance** Add **Waterfall** to your report and filter to one ad unit name to view the performance of any active waterfalls you’re running for an ad unit. Add **Country** to the report for a more granular view. Use this view to best analyze waterfall performance and identify opportunities to improve yield.
+以下是查看高级报告的几种方法：
 
-### User Activity Report
+- **Ad Inventory Performance:** Add **Application**, **Ad Unit Name**, and **Ad Type** to get a breakdown of ad inventory performance including total impressions, revenue, and display rate, which is the percentage of time a cached ad is displayed.
+- **广告库存表现：**添加**应用程序**、**广告单元名称**和**广告类型**，以获得广告库存表现的细分，包括总印象、收入和显示率，即显示缓存广告的时间百分比。
+- **Network Performance:** Add **Network** to the report to view network performance by ad unit. In addition to top level metrics like impressions and CPM, you’ll see two new metrics: fill rate and win rate. Fill rate shows how often a network can fill an ad and win rate is how often a bidding network wins an auction against other bidding networks.
+- **网络表现：**将**网络**添加到报告中，以按广告单元查看网络表现。除了印象和 CPM 等顶级指标外，您还将看到两个新指标：填充率和获胜率。填充率表示一个网络填充广告的频率，获胜率表示一个竞价网络相对于其他竞价网络赢得拍卖的频率。
+- **Waterfall Performance:** Add **Waterfall** to your report and filter to one ad unit name to view the performance of any active waterfalls you’re running for an ad unit. Add **Country** to the report for a more granular view. Use this view to best analyze waterfall performance and identify opportunities to improve yield.
+- **瀑布性能：**将**瀑布**添加到您的报告中，并过滤到一个广告单元名称，以查看您为广告单元运行的任何活动瀑布的表现。将国家/地区添加到报告中以获得更精细的视图。使用此视图可以最好地分析瀑布表现，并确定提高产量的机会。
+
+### User Activity Report - 用户活动报告
 
 Use the **User Activity** report to understand ad engagement for each ad format. You can track the number of daily active users, ARPDAU, and impressions users see. This tool is ideal for anyone who doesn’t have a MMP to connect to the MAX user revenue reporting API.
+
+使用**用户活动**报告了解每种广告格式的广告参与情况。您可以跟踪每日活动用户的数量、ARPDAU 和用户看到的印象。此工具非常适合没有连接到MAX 用户收入报告 API 的 MMP 的任何人。
