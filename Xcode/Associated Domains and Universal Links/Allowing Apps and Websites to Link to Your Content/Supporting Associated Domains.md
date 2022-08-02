@@ -51,21 +51,21 @@ The following JSON code represents the contents of a simple association file.
                {
                   "#": "no_universal_links",
                   "exclude": true,
-                  "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link"
+                  "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link - 匹配包含 no_universal_links 字符串的任何URL，并告诉系统不要将其作为通用链接打开"
                },
                {
                   "/": "/buy/*",
-                  "comment": "Matches any URL whose path starts with /buy/"
+                  "comment": "Matches any URL whose path starts with /buy/ - 匹配路径以 /buy/ 开头的任何URL"
                },
                {
                   "/": "/help/website/*",
                   "exclude": true,
-                  "comment": "Matches any URL whose path starts with /help/website/ and instructs the system not to open it as a universal link"
+                  "comment": "Matches any URL whose path starts with /help/website/ and instructs the system not to open it as a universal link - 匹配路径以 /help/website/ 开头的任何URL，并告诉系统不要将其作为通用链接打开"
                },
                {
                   "/": "/help/*",
                   "?": { "articleNumber": "????" },
-                  "comment": "Matches any URL whose path starts with /help/ and which has a query item with name 'articleNumber' and a value of exactly 4 characters"
+                  "comment": "Matches any URL whose path starts with /help/ and which has a query item with name 'articleNumber' and a value of exactly 4 characters - 匹配路径以 /help/ 开头且查询参数中包含 key 为 “articleNumber” 而 value 正好为4个字符的查询项的任何URL"
                }
              ]
            }
