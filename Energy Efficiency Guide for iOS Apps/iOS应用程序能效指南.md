@@ -2,9 +2,9 @@
 
 # iOS应用程序能效指南
 
-## [1 Energy Essentials 能源要素](./iOS应用程序能效指南/1\ 能源要素.md)
+## [1 Energy Essentials 能源要素](./iOS应用程序能效指南/1\ Energy\ Essentials\ 能源要素.md)
 
-## [2 Reduce and Prioritize Work 减少并安排工作的优先级]
+## [2 Reduce and Prioritize Work 减少并安排工作的优先级](./iOS应用程序能效指南/2\ Reduce\ and\ Prioritize\ Work\ 减少并安排工作的优先级.md)
 
 ## [3 Minimize and Defer Networking 最小化和延迟网络操作]
 
