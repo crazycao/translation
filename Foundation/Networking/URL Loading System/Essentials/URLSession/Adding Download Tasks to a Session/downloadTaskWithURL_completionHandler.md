@@ -13,7 +13,7 @@
 
 Creates a download task that retrieves the contents of the specified URL, saves the results to a file, and calls a handler upon completion.
 
-创建一个下载任务，该任务检索指定URL的内容，将结果保存到文件中，并在完成后调用处理程序。
+创建一个下载任务，该任务检索指定 URL 的内容，将结果保存到文件中，并在完成后调用处理程序。
 
 # Declaration 声明
 ```
@@ -66,7 +66,7 @@ The new session download task.
 # Discussion 讨论
 By using the completion handler, the task bypasses calls to delegate methods for response and data delivery, and instead provides any resulting [NSData](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/PropertyLists/OldStylePlists/OldStylePLists.html#//apple_ref/doc/uid/20001012-47169), [URLResponse](https://developer.apple.com/documentation/foundation/urlresponse), and [NSError](https://developer.apple.com/documentation/foundation/nserror) objects inside the completion handler. Delegate methods for handling authentication challenges, however, are still called.
 
-通过使用完成处理程序，任务将绕过对代理方法进行响应和数据传递的调用，而是在完成处理程序中提供所生成的[NSData](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/PropertyLists/OldStylePlists/OldStylePLists.html#//apple_ref/doc/uid/20001012-47169)、[URLResponse](https://developer.apple.com/documentation/foundation/urlresponse) 和 [NSError](https://developer.apple.com/documentation/foundation/nserror) 对象。但是，仍会调用用于处理身份验证挑战的代理方法。
+通过使用完成处理程序，任务将绕过对代理方法进行响应和数据传递的调用，而是在完成处理程序中提供所生成的 [NSData](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/PropertyLists/OldStylePlists/OldStylePLists.html#//apple_ref/doc/uid/20001012-47169)、[URLResponse](https://developer.apple.com/documentation/foundation/urlresponse) 和 [NSError](https://developer.apple.com/documentation/foundation/nserror) 对象。但是，仍会调用用于处理身份验证挑战的代理方法。
 
 You should pass a nil completion handler **only** when creating tasks in sessions whose delegates include a [urlSession(_:downloadTask:didFinishDownloadingTo:)](https://developer.apple.com/documentation/foundation/urlsessiondownloaddelegate/1411575-urlsession) method.
 
