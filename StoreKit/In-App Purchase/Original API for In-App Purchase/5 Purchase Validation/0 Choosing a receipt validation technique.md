@@ -13,11 +13,11 @@ Select the type of receipt validation, on the device or on your server, that wor
 
 ## Overview - 概览
 
-> Note
+> **Note** **注意**
 >
 > The receipt isn’t necessary if you use [AppTransaction](https://developer.apple.com/documentation/storekit/apptransaction) to validate the app download, or [Transaction](https://developer.apple.com/documentation/storekit/transaction) to validate in-app purchases. Only use the receipt if your app uses the [Original API for In-App Purchase](https://developer.apple.com/documentation/storekit/in-app_purchase/original_api_for_in-app_purchase), or needs the receipt to validate the app download because it can’t use `AppTransaction`.
 > 
-> 如果您使用 [AppTransaction](https://developer.apple.com/documentation/storekit/apptransaction) 验证应用下载，或使用 [Transaction](https://developer.apple.com/documentation/storekit/transaction) 验证应用内购买，则不需要收据。只有当您的 APP 使用[原始 API](https://developer.apple.com/documentation/storekit/in-app_purchase/original_api_for_in-app_purchase) 进行应用内购买时，或者因为无法使用 `AppTransaction` 而需要收据来验证应用程序下载时，才会使用收据。
+> 如果您使用 [AppTransaction](https://developer.apple.com/documentation/storekit/apptransaction) 验证应用下载，或使用 [Transaction](https://developer.apple.com/documentation/storekit/transaction) 验证应用内购买，收据并不是必须的。只有当您的 APP 使用[原始 API](https://developer.apple.com/documentation/storekit/in-app_purchase/original_api_for_in-app_purchase) 进行应用内购买时，或者因为无法使用 `AppTransaction` 而需要收据来验证应用程序下载时，才会使用收据。
 
 An App Store receipt provides a record of the sale of an app and any purchases the person makes within the app. You can authenticate purchased content by adding receipt validation code to your app or server. Receipt validation requires an understanding of secure coding techniques to employ a solution that’s secure and unique to your app.
 
@@ -58,7 +58,7 @@ App Store 在完成购买后会立即更新收据。当您从服务器调用 [ve
 
 On the device, the system updates the receipt immediately when it has an internet connection, and any of the following occur:
 
-在设备上，当系统连接到互联网时，系统会立即更新收据，并且可能出现以下任何情况：
+在设备上，当系统连接到互联网时，以及出现以下任何情况时，系统都会立即更新收据：
 
 - The customer completes an in-app purchase.
 - 客户完成应用内购买。
@@ -67,14 +67,14 @@ On the device, the system updates the receipt immediately when it has an interne
 - 应用程序启动了其交易观察者（[SKPaymentTransactionObserver](https://developer.apple.com/documentation/storekit/skpaymenttransactionobserver)），并有未完成的交易或订阅续订。
 
 - The app calls [restoreCompletedTransactions()](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions) or [restoreCompletedTransactions(withApplicationUsername:)](https://developer.apple.com/documentation/storekit/skpaymentqueue/1505992-restorecompletedtransactions) to restore transactions.
-- 应用程序调用 [restoreCompletedTransactions()](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions) 或 [restoreCompletedTransactions(withApplicationUsername:)](https://developer.apple.com/documentation/storekit/skpaymentqueue/1505992-restorecompletedtransactions) 来还原事务。
+- 应用程序调用 [restoreCompletedTransactions()](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions) 或 [restoreCompletedTransactions(withApplicationUsername:)](https://developer.apple.com/documentation/storekit/skpaymentqueue/1505992-restorecompletedtransactions) 来还原交易。
 
 - The app sends a request to [SKReceiptRefreshRequest](https://developer.apple.com/documentation/storekit/skreceiptrefreshrequest) to get a receipt if the receipt is invalid or missing.
 - 如果收据无效或丢失，应用程序将向 [SKReceiptRefreshRequest](https://developer.apple.com/documentation/storekit/skreceiptrefreshrequest) 发送请求以获取收据。
 
 Transactions can also occur at times when the app isn’t running. When necessary, call [restoreCompletedTransactions()](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions) to ensure the receipt you’re working with is up-to-date. For example, if a customer purchases an auto-renewable subscription on another device, call this method to get those transactions and update the receipt.
 
-应用程序未运行时也可能发生事务。必要时，调用 [restoreCompletedTransactions()](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions) 以确保您使用的收据是最新的。例如，如果客户在其他设备上购买了自动续订订阅，请调用此方法获取这些交易并更新收据。
+应用程序未运行时也可能发生交易。必要时，调用 [restoreCompletedTransactions()](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506123-restorecompletedtransactions) 以确保您使用的收据是最新的。例如，如果客户在其他设备上购买了自动续订订阅，请调用此方法获取这些交易并更新收据。
 
 To ensure that your app receives all transactions, add the transaction observer, [add(_:)](https://developer.apple.com/documentation/storekit/skpaymentqueue/1506042-add), at app launch time. For more information, see [Setting Up the Transaction Observer for the Payment Queue](https://developer.apple.com/documentation/storekit/in-app_purchase/original_api_for_in-app_purchase/setting_up_the_transaction_observer_for_the_payment_queue).
 

@@ -44,11 +44,150 @@ Some of the main ways apps can benefit from on-demand resources include:
 - **Remote storage of in-app purchase resources.** The app offers in-app purchases that includes additional resources. The resources for purchased modules are requested by the app after it is launched. For example, a user purchases the SuperGeeky emoticon pack in a keyboard app. The app requests the pack after it finishes launching.
 - **远程存储应用内购买资源。**应用提供应用内购买，包括额外的资源。应用在启动后请求购买的模块资源。例如，用户在一个键盘应用中购买了“超级极客表情包”。应用在启动完成后请求这个表情包。
 
-## How Tags Work
+## How Tags Work - 标签如何工作
 
-You identify on-demand resources during development by assigning them one or more tags. A tag is a string identifier you create. You can use the name of the tag to identify how the included resources are used in your app. In a game, for example, use the tag level-5 for each of the resources associated with level five. For more information on tags, see Creating and Assigning Tags.
+You identify on-demand resources during development by assigning them one or more tags. A tag is a string identifier you create. You can use the name of the tag to identify how the included resources are used in your app. In a game, for example, use the tag `level-5` for each of the resources associated with level five. For more information on tags, see [Creating and Assigning Tags](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Tagging.html#//apple_ref/doc/uid/TP40015083-CH3-SW1).
 
-At runtime, you request access to remote resources by specifying a set of tags. The operating system downloads any resources marked with those tags and then retains them in storage until the app finishes using them. When the operating system needs more storage, it purges the local storage associated with one or more tags that are no longer retained. Tagged sets of resources may remain on the device for some time before they are purged. For information on requesting access to the resources associated with tags, see Accessing and Downloading On-Demand Resources.
+在开发过程中，您可以通过分配一个或多个标签来标识按需资源。标签是您创建的字符串标识符。您可以使用标签的名称来确定所包含资源在应用程序中的使用方式。例如，在游戏中，可以使用标签 `level-5` 来标识与第五关相关的每个资源。有关标签的更多信息，请参阅《[创建和分配标签](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Tagging.html#//apple_ref/doc/uid/TP40015083-CH3-SW1)》。
+
+At runtime, you request access to remote resources by specifying a set of tags. The operating system downloads any resources marked with those tags and then retains them in storage until the app finishes using them. When the operating system needs more storage, it purges the local storage associated with one or more tags that are no longer retained. Tagged sets of resources may remain on the device for some time before they are purged. For information on requesting access to the resources associated with tags, see [Accessing and Downloading On-Demand Resources](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Managing.html#//apple_ref/doc/uid/TP40015083-CH4-SW1).
+
+在运行时，您可以通过指定一组标签来请求访问远程资源。操作系统会下载标记有这些标签的任何资源，并将其保留在存储中，直到应用程序使用完它们为止。当操作系统需要更多存储空间时，它会清除不再保留的一个或多个标签相关的本地存储。带有标签的资源集可能会在设备上保留一段时间，然后再被清除。有关请求访问与标签相关资源的信息，请参阅《[访问和下载按需资源](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Managing.html#//apple_ref/doc/uid/TP40015083-CH4-SW1)》。
 
 Continuing with the game example, in a game divided into many levels the user needs only the resources associated with the level at which the user is playing and the next likely level. Figure 1-1 shows an app bundle that includes all of the resources for all the levels.
+
+继续以游戏为例，对于分成多个关卡的游戏，用户只需要与当前正在进行的关卡以及可能的下一个关卡相关的资源。图1-1显示了一个应用程序包，其中包含了所有关卡的所有资源。
+
+**Figure 1-1** Traditional app including all resources - 包含了所有资源的传统 App
+![image: ../Art/adventure_no_odr_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/adventure_no_odr_2x.png)
+
+The size of the app bundle is reduced by creating tagged sets of on-demand resources for the different levels, and for other shared resources that do not need to be included in the app. Figure 1-2 shows a smaller app with the tagged sets of resources hosted on the App Store.
+
+通过为不同关卡创建带有标签的按需资源集合以及其他不需要包含在应用中的共享资源，可以减小应用程序包的大小。图1-2显示了一个较小的应用程序，其中带有标签的资源集合托管在 App Store 上。
+
+**Figure 1-2** Smaller app using on-demand-resources - 使用按需资源的更小的 App
+![image: ../Art/adventure_odr_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/adventure_odr_2x.png)
+
+Other functionality lets you specify tags that must be loaded when your app is installed from the App Store, set a loading priority for a resource request, track the progress of a download, and set a preservation priority for downloaded tags you are no longer using.
+
+其他功能允许您在应用程序从 App Store 安装时指定必须加载的标签，为资源请求设置加载优先级，跟踪下载的进度，并为不再使用的已下载标签设置保留优先级。
+
+## On-Demand Resource Life Cycle - 按需资源生命周期
+The first time a user launches the app, the only on-demand resources on the device are the ones set for prefetching. For information on setting up resources for prefetching, see [Prefetching Tags](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Tagging.html#//apple_ref/doc/uid/TP40015083-CH3-SW2). As the user interacts with the app, the app requests tags representing sets of resources, uses the resources associated with the tags, and then informs the operating system that it has finished using the tags. Some time after that, the operating system purges one or more tags.
+
+当用户首次启动应用程序时，设备上唯一的按需资源是为预取设置的资源。有关设置预取资源的信息，请参阅《[预取标签](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Tagging.html#//apple_ref/doc/uid/TP40015083-CH3-SW2)》。随着用户与应用程序的交互，应用程序会请求代表资源集合的标签，使用与标签相关联的资源，然后通知操作系统它已经完成使用这些标签。在此之后的一段时间，操作系统会清除一个或多个标签。
+
+> **IMPORTANT**
+>
+> Apps request tags, not individual resources.
+> 
+> 应用程序请求的是标签，而不是单个资源。
+
+As you develop apps using on-demand resources, you may notice that requesting one tag results in the resources associated with other tags being downloaded. This is because the operating system works with asset packs that are optimized for downloading shared resources. One tag may result in multiple asset packs. Asset packs are generated by Xcode when your app is built. One example is a game where the `Level1` and `Level2` tags share some resources. Xcode generates three asset packs:
+
+在使用按需资源开发应用程序时，您可能会注意到请求一个标签会导致与其他标签相关联的资源被下载。这是因为操作系统使用针对下载共享资源进行优化的资源包来处理。一个标签可能会对应多个资源包。资源包是在构建您的应用程序时由 Xcode 生成的。一个例子是游戏中的 `Level1` 和 `Level2` 标签共享一些资源。Xcode 会生成三个资源包：
+
+- `Level 1`. The resources that have only the Level1 tag.
+- `Level 2`. The resources that have only the Level2 tag.
+- `Level 1` + `Level 2`. The resources that have both the Level1 and Level2 tags.
+- `Level 1`：仅具有Level1标签的资源。
+- `Level 2`：仅具有Level2标签的资源。
+- `Level 1` + `Level 2`：同时具有Level1和Level2标签的资源。
+
+The overall life cycle for requesting tags and the associated resources is shown in Figure 1-3.
+
+请求标签及其相关资源的整体生命周期如图1-3所示。
+
+Figure 1-3On-demand resource life cycle
+![image: ../Art/ODR_flow_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/ODR_flow_2x.png)
+
+1. The app requests tags from the operating system.
+
+	The operating system translates the requested tags into a set of asset packs containing the associated resources.
+
+	In Figure 1-4, the app requests the resources associated with the `Level1` and `Forest` tags.
+	
+	应用程序向操作系统请求标签。
+	
+	操作系统将请求的标签转换为一组包含相关资源的资源包。
+
+	在图1-4中，应用程序请求与 `Level1` 和 `Forest` 标签相关联的资源。
+
+	**Figure 1-4** Request tags `Level1` and `Forest` - 请求 `Level1` 和 `Forest` 标签
+![image: ../Art/step2_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/step2_2x.png)
+
+2. The asset packs for the tags are in local storage, so the life cycle moves to phase 6.
+
+	与标签相关的资源包存储在本地存储中，因此生命周期进入第6阶段。
+
+3. One or more of the asset packs for the tags are hosted on the App Store either because it is the first launch of the app or the resources previously loaded on the device were purged (see phase 9 below.)
+
+	标签的一个或多个资源包托管在 App Store 上，这可能是因为应用程序首次启动，或之前在设备上加载的资源已被清除（请参阅下面的第9阶段）。
+
+	In Figure 1-5, all of the on-demand resources are on the App Store.
+
+	在图1-5中，所有的按需资源都托管在 App Store 上。
+
+	**Figure 1-5** All on-demand resources on the App Store - 所有按需资源都在 App Store 上
+![image: ../Art/step1_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/step1_2x.png)
+
+4. The operating system starts downloading to the device the resources associated with any asset packs that are not already in local storage.
+
+	操作系统开始将与本地存储中不存在的资源包相关联的资源下载到设备上。
+
+5. The resources for the asset packs associated with the requested tags finish downloading to the device.
+
+	与请求的标签相关联的资源包的资源下载完成并存储到设备上。
+
+	In Figure 1-6, the resources associated with the Level1 and Forest tags are downloaded to the device.
+	
+	在图1-6中，与 `Level1` 和 `Forest` 标签相关联的资源已下载到设备上。
+
+	**Figure 1-6** Downloading resources for `Level1` and `Forest` - 下载 `Level1` 和 `Forest` 资源
+![image: ../Art/step3_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/step3_2x.png)
+
+6. If the resources for the asset packs associated with the requested tags are downloaded successfully or if the asset packs are already in device storage, the operating increments the retain count for the asset packs and informs the app that the requested tags are available.
+
+	In Figure 1-7, the app is informed that the resources associated with the Level1 and Forest are tags available.
+	
+	如果与请求的标签相关联的资源包成功下载，或者资源包已经存在于设备存储中，操作系统会增加资源包的保留计数，并通知应用程序请求的标签可用。
+
+	在图1-7中，应用程序被通知 `Level1` 和 `Forest` 标签相关的资源可用。
+
+	**Figure 1-7** Making the resources for `Level1` and `Forest` available - 使Level1和Forest的资源可用
+![image: ../Art/step4_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/step4_2x.png)
+
+	After the tags are available, the app uses the resources associated with those tags. On-demand resources are accessed in the same way as resources bundled with the downloaded app. The figure shows the downloaded resources as virtual members of the app.
+	
+	在标签可用之后，应用程序可以使用与这些标签相关联的资源。按需资源的访问方式与打包在下载的应用程序中的资源相同。图中将已下载的资源显示为应用程序的虚拟成员。
+
+	**Figure 1-8** Accessing downloaded resources - 访问已下载的资源
+![image: ../Art/step5_2x.png](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Art/step5_2x.png)
+
+7. The app informs the operating system that it has finished using the requested tags.
+
+	应用程序通知操作系统它已经完成对请求的标签的使用。
+
+8. The operating system releases the tags in local storage. This is done by decrementing the retain count for the asset packs associated with the tags.
+
+	Making another request for tags that are already on the device moves to phase 1.
+
+	操作系统释放本地存储中的标签。这是通过减少与标签相关联的资源包的保留计数来完成的。
+
+	如果对已经在设备上的标签进行另一个请求，则进入第1阶段。
+
+9. The operating system purges the cached resources associated with the asset pack from local storage.
+
+	An asset pack is eligible for purging when all of the associated tags are no longer retained by any request. The resources associated with a tag may remain on the device for some time before it is purged, including across app launches.
+
+	Making another request for the tags moves the lifecycle back to phase 1. You can influence the order of purging by setting the preservation priority for a tag. For more information, see [Accessing and Downloading On-Demand Resources](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Managing.html#//apple_ref/doc/uid/TP40015083-CH4-SW1).
+	
+	操作系统从本地存储中清除与资源包相关联的缓存资源。
+
+	当所有相关联的标签不再被任何请求保留时，资源包就有资格被清除。与标签相关联的资源可能会在清除之前在设备上保留一段时间，包括在应用程序启动期间。
+
+	对标签进行另一个请求会将生命周期回到第1阶段。您可以通过设置标签的保留优先级来影响清除的顺序。有关更多信息，请参阅《[访问和下载按需资源](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/Managing.html#//apple_ref/doc/uid/TP40015083-CH4-SW1)》。
+
+
+
 

@@ -3,6 +3,8 @@
 
 原文地址：[https://developer.apple.com/documentation/storekit/in-app_purchase/original_api_for_in-app_purchase/validating_receipts_with_the_app_store](https://developer.apple.com/documentation/storekit/in-app_purchase/original_api_for_in-app_purchase/validating_receipts_with_the_app_store)
 
+官方中文文档：[https://developer.apple.com/cn/documentation/storekit/in-app_purchase/validating_receipts_with_the_app_store/](https://developer.apple.com/cn/documentation/storekit/in-app_purchase/validating_receipts_with_the_app_store/)
+
 > Technology
 >
 > StoreKit
@@ -13,15 +15,21 @@ Verify transactions with the App Store on a secure server.
 
 ## Overview - 概览
 
+> **Important** **重要**
+>
+> The [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt) endpoint is deprecated. To validate receipts on your server, follow the steps in [Validating receipts on the device](https://developer.apple.com/documentation/appstorereceipts/validating_receipts_on_the_device) on your server. To validate in-app purchases on your server without using receipts, call the [App Store Server API](https://developer.apple.com/documentation/appstoreserverapi) to get Apple-signed transaction and subscription information for your customers, or verify the [App Transaction](https://developer.apple.com/documentation/storekit/apptransaction) and [Transaction](https://developer.apple.com/documentation/storekit/transaction) signed data that your app obtains. You can also get the same signed transaction and subscription information from the [App Store Server Notifications V2](https://developer.apple.com/documentation/appstoreservernotifications/app_store_server_notifications_v2).
+> 
+> [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt) 接口已被弃用。要在您的服务器上验证收据，请在服务器上按照《[在设备上验证收据](https://developer.apple.com/documentation/appstorereceipts/validating_receipts_on_the_device)》的步骤进行操作。要在服务器上验证应用内购买而不使用收据，请调用 [App Store 服务器 API](https://developer.apple.com/documentation/appstoreserverapi) 来获取苹果签名的交易和订阅信息，或者验证您的应用程序获取的 [AppTransaction](https://developer.apple.com/documentation/storekit/apptransaction) 和 [Transaction](https://developer.apple.com/documentation/storekit/transaction) 签名数据。您还可以从 [App Store 服务器通知 V2 版](https://developer.apple.com/documentation/appstoreservernotifications/app_store_server_notifications_v2) 获取相同的签名交易和订阅信息。
+
 An App Store receipt is a binary encrypted file signed with an Apple certificate. In order to read the contents of the encrypted file, you need to pass it through the [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt) endpoint. The endpoint’s response includes a readable JSON body. Communication with the App Store is structured as JSON dictionaries, as defined in RFC 4627. Binary data is Base64-encoded, as defined in RFC 4648. Validate receipts with the App Store through a secure server. For information on establishing a secure network connection with the App Store, see [Preventing Insecure Network Connections](https://developer.apple.com/documentation/security/preventing_insecure_network_connections).
 
-App Store 收据是用 Apple 证书签名的二进制加密文件。为了读取加密文件的内容，需要将其传递给 [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt) 端点。端点的响应包括一个可读的 JSON 体。如 RFC 4627 中所定义，与 App Store 的通信结构为 JSON 字典。二进制数据是 Base64 编码的，如 RFC 4648 中所定义。通过安全服务器使用 App Store 验证收据。有关与 App Store 建立安全网络连接的信息，请参阅《[防止不安全网络连接](https://developer.apple.com/documentation/security/preventing_insecure_network_connections)》。
+App Store 收据是用 Apple 证书签名的二进制加密文件。为了读取加密文件的内容，需要将其传递给 [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt) 接口。接口的响应包括一个可读的 JSON 体。如 RFC 4627 中所定义，与 App Store 的通信结构为 JSON 字典。二进制数据是 Base64 编码的，如 RFC 4648 中所定义。通过安全服务器使用 App Store 验证收据。有关与 App Store 建立安全网络连接的信息，请参阅《[防止不安全网络连接](https://developer.apple.com/documentation/security/preventing_insecure_network_connections)》。
 
 > **Warning** **警告**
 >
 > Don’t call the App Store server `verifyReceipt` endpoint from your app. You can’t build a trusted connection between a user’s device and the App Store directly, because you don’t control either end of that connection, which makes it susceptible to a machine-in-the-middle attack.
 > 
-> 不要从应用程序调用 App Store 服务器 `verifyReceipt` 端点。你无法直接在用户的设备和 App Store 之间建立可信连接，因为你无法控制连接的任何一端，这使得它容易受到中间机器的攻击。
+> 不要从 App 调用 App Store 服务器 `verifyReceipt` 接口。你无法直接在用户的设备和 App Store 之间建立可信连接，因为你无法控制连接的任何一端，这使得它容易受到中间人攻击。
 
 ## Fetch the receipt data - 获取收据数据
 
@@ -58,7 +66,7 @@ On your server, create a JSON object with the `receipt-data`, `password`, and `e
 
 Submit this JSON object as the payload of an HTTP POST request. Use the test environment URL `https://sandbox.itunes.apple.com/verifyReceipt` when testing your app in the sandbox and while your application is in review. Use the production URL `https://buy.itunes.apple.com/verifyReceipt` when your app is live in the App Store. For more information on these endpoints, see [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt).
 
-提交此 JSON 对象作为 HTTP POST 请求的有效负载。在沙盒中测试应用程序时，以及在审核应用程序时使用测试环境 URL：https://sandbox.itunes.apple.com/verifyReceipt。当您的应用程序在 App Store 中运行时，使用生产 URL：`https://buy.itunes.apple.com/verifyReceipt`。有关这些端点的更多信息，请参阅 [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt)。
+提交此 JSON 对象作为 HTTP POST 请求的有效负载。在沙盒中测试应用程序时，以及在审核应用程序时使用测试环境 URL：https://sandbox.itunes.apple.com/verifyReceipt。当您的应用程序在 App Store 中运行时，使用生产 URL：`https://buy.itunes.apple.com/verifyReceipt`。有关这些接口的更多信息，请参阅 [verifyReceipt](https://developer.apple.com/documentation/appstorereceipts/verifyreceipt)。
 
 > **Important** **重要**
 >

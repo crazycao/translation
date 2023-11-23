@@ -32,10 +32,11 @@ guard let receiptURL = Bundle.main.appStoreReceiptURL else { customError() }
 do {
     let receiptData = try Data(contentsOf: receiptURL)
     // Custom method to work with receipts
+    // 自定义方法处理收据
     let rocketCarEnabled = receipt(receiptData, includesProductID: "com.example.rocketCar")
-    } catch {
+} catch {
     print(error)
-    }
+}
 ```
    
 Or, using the user defaults system:
@@ -54,8 +55,10 @@ After you define the Boolean variable, use the purchase information to enable th
 ```
 if (rocketCarEnabled) {
     // Use the rocket car.
+    // 使用火箭车。
 } else {
     // Use the regular car.
+    // 使用普通车。
 }
 ```
 

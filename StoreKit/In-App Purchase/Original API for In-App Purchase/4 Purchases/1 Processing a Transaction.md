@@ -61,10 +61,10 @@ Implement the [paymentQueue(_:updatedTransactions:)](https://developer.apple.com
 
 **表1** 交易状态和相应动作
 
-|Status</br>状态|Action to take in your app</br>在你的app内采取的动作|
+|Status</br>状态|Action to take in your app</br>在你的 App 内采取的动作|
 |:-:|:-:|
-|SKPaymentTransactionState.purchasing|Update your UI to reflect the in-progress status, and wait to be called again.</br>更新UI以反映进行中状态，并等待再次调用。|
-|SKPaymentTransactionState.deferred|Update your UI to reflect the deferred status, and wait to be called again.</br>更新UI以反映延迟状态，并等待再次调用。|
+|SKPaymentTransactionState.purchasing|Update your UI to reflect the in-progress status, and wait to be called again.</br>更新UI以反映进行中状态，并等待再次被调用。|
+|SKPaymentTransactionState.deferred|Update your UI to reflect the deferred status, and wait to be called again.</br>更新UI以反映延迟状态，并等待再次被调用。|
 |SKPaymentTransactionState.failed|Use the value of the `error` property to present a message to the user. For a list of error constants, see [SKErrorDomain](https://developer.apple.com/documentation/storekit/skerrordomain).</br>使用 `error` 属性的值向用户显示消息。有关错误常量的列表，请参阅 [SKErrorDomain](https://developer.apple.com/documentation/storekit/skerrordomain)。|
 |SKPaymentTransactionState.purchased|Provide the purchased functionality, typically by unlocking features or delivering content.</br>通常通过解锁功能或交付内容来提供购买的功能。|
 |SKPaymentTransactionState.restored|Restore the previously purchased functionality.</br>恢复先前购买的功能。|

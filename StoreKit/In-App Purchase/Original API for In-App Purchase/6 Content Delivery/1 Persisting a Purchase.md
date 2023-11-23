@@ -18,15 +18,15 @@ After making a product available, your app should make a persistent record of th
 在提供产品后，你的应用程序应该持续记录购买情况。您的应用程序在启动和恢复购买时使用该持久记录继续提供产品。你的应用程序的持久性策略取决于你销售的产品类型：
 
 - For non-consumable products and auto-renewable subscriptions, use the app receipt as your persistent record. If the app receipt is not available, use the user defaults system or iCloud to keep a persistent record.
-- 对于非消费品和自动续费订阅，请使用应用程序收据作为永久记录。如果应用程序的收据不可用，请使用用户默认系统（UserDefaults）或 iCloud 保存永久记录。
+- 对于非消耗型项目和自动续费订阅，请使用应用程序收据作为永久记录。如果应用程序的收据不可用，请使用 UserDefaults 或 iCloud 保存永久记录。
 - For non-renewing subscriptions, use iCloud or your own server to keep a persistent record.
 - 对于不续费的订阅，请使用 iCloud 或您自己的服务器保存永久记录。
 - For consumable products, your app updates its internal state to reflect the purchase. Ensure that the updated state is part of an object that supports state preservation (in iOS) or that you manually preserve the state across app launches (in iOS or macOS).
-- 对于消费品，应用程序会更新其内部状态以反映购买情况。确保更新的状态是支持状态保留的对象的一部分（在 iOS 中），或者在应用程序启动时手动保留状态（在 iOS 或 macOS 中）。
+- 对于消耗型项目，应用程序会更新其内部状态以反映购买情况。确保更新的状态是支持状态保留的对象的一部分（在 iOS 中），或者在应用程序启动时手动保留状态（在 iOS 或 macOS 中）。
 
 When using the user defaults system or iCloud, your app can store a value, such as a number or Boolean, or a copy of the transaction receipt. In macOS, the user can edit the user defaults system using the defaults command. Storing a receipt requires more application logic but prevents the persistent record from being tampered with.
 
-使用用户默认系统或 iCloud 时，你的应用程序可以存储一个值，例如数字或布尔值，或交易凭证的副本。在 macOS 中，用户可以使用 defaults 命令编辑用户默认系统。存储收据需要更多的应用程序逻辑，但可以防止永久记录被篡改。
+使用 UserDefaults 或 iCloud 时，你的应用程序可以存储一个值，例如数字或布尔值，或交易凭证的副本。在 macOS 中，用户可以使用 defaults 命令编辑 UserDefaults 。存储收据需要更多的应用程序逻辑，但可以防止永久记录被篡改。
 
 > **Note** **注意**
 > 
@@ -42,7 +42,7 @@ App 收据包含了一份用户购买的记录，由苹果加密签名。更多�
 
 Information about consumable products is added to the receipt when they’re paid for and remains in the receipt until you finish the transaction. After you finish the transaction, this information is removed the next time the receipt is updated, such as the next time the user makes a purchase.
 
-消费品的相关信息在付款时被添加到收据中，并保留在收据中，直到您完成交易。完成交易后，该信息将在下次更新收据时删除，例如用户下次购买时。
+消耗型项目的相关信息在付款时被添加到收据中，并保留在收据中，直到您完成交易。完成交易后，该信息将在下次更新收据时删除，例如用户下次购买时。
 
 Information about all other kinds of purchases is added to the receipt when the products are paid for, and remains in the receipt indefinitely.
 
@@ -52,7 +52,7 @@ Information about all other kinds of purchases is added to the receipt when the 
 
 To store information in user defaults or iCloud, set the value for a key.
 
-要在用户默认系统或 iCloud 中储存信息，只要对一个 key 设置值即可。
+要在 UserDefaults 或 iCloud 中储存信息，只要对一个 key 设置值即可。
 
 ```
 #if USE_ICLOUD_STORAGE
