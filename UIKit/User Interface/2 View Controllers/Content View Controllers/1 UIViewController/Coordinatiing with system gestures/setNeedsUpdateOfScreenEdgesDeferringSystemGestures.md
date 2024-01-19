@@ -1,10 +1,10 @@
-# prefersHomeIndicatorAutoHidden
+# setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
-原文链接：[https://developer.apple.com/documentation/uikit/uiviewcontroller/2887510-prefershomeindicatorautohidden](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887510-prefershomeindicatorautohidden)
+原文链接：[https://developer.apple.com/documentation/uikit/uiviewcontroller/2887507-setneedsupdateofscreenedgesdefer](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887507-setneedsupdateofscreenedgesdefer)
 
-A Boolean that indicates whether the system is allowed to hide the visual indicator for returning to the Home Screen.
+Notifies the system of changes to the screen edges that defer system gestures.
 
-一个布尔值，指示是否允许系统隐藏返回主屏幕的视觉指示器。
+通知系统屏幕边缘的变化，以延迟系统手势。
 
 > iOS 11.0+
 iPadOS 11.0+
@@ -14,25 +14,15 @@ visionOS 1.0+ Beta
 ## Declaration - 声明
 
 ```
-var prefersHomeIndicatorAutoHidden: Bool { get }
+func setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
 ```
 
-## Return Value - 返回值
-
-`true` if your view controller lets the system determine when to hide the indicator, or `false` if you want the indicator to show at all times. The default implementation of this method returns `false`.
-
-如果视图控制器允许系统确定何时隐藏指示器，则为 `true`；如果希望指示器始终显示，则为 `false`。此方法的默认实现返回`false`。
-
 ## Discussion - 讨论
 
-Override this method to signal your preference for displaying the visual indicator. The system takes your preference into account, but returning `true` is no guarantee that the indicator will be hidden.
+Call this method whenever you modify the screen edges that defer system gestures, such as those that invoke Control Center, so the system can update accordingly. If the [childForScreenEdgesDeferringSystemGestures](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887511-childforscreenedgesdeferringsyst) property is `nil`, the system reads the edges from the current view controller’s [preferredScreenEdgesDeferringSystemGestures](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887512-preferredscreenedgesdeferringsys) property; otherwise, it uses the same property on the referenced child view controller.
 
-重写此方法以表示您对显示视觉指示器的偏好。系统会考虑您的偏好，但返回 `true` 并不能保证指标会被隐藏。
-
-For information on allowing app-defined gestures to take precedence over system gestures for certain screen edges, see [preferredScreenEdgesRefereringSystemGestures](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887512-preferredscreenedgesdeferringsys).
-
-有关允许应用程序定义的手势优先于某些屏幕边缘的系统手势的信息，请参阅 [preferredScreenEdgesRefereringSystemGestures](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887512-preferredscreenedgesdeferringsys)。
+每当在您修改延迟系统手势（例如调用控制中心的手势）的屏幕边缘时，请调用此方法，以便系统可以相应地进行更新。如果 [childForScreenEdgesDeferringSystemGestures](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887511-childforscreenedgesdeferringsyst) 属性为 `nil`，则系统将从当前视图控制器的 [preferredScreenEdgesDeferringSystemGestures](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887512-preferredscreenedgesdeferringsys) 属性中读取边缘；否则，它将使用被引用的子视图控制器上的相同属性。
 
 
 # See Also - 其他参考

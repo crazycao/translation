@@ -18,12 +18,6 @@ func setNeedsUpdateOfHomeIndicatorAutoHidden()
 
 ```
 
-## Return Value - 返回值
-
-`true` if your view controller lets the system determine when to hide the indicator, or `false` if you want the indicator to show at all times. The default implementation of this method returns `false`.
-
-如果视图控制器允许系统确定何时隐藏指示器，则为 `true`；如果希望指示器始终显示，则为 `false`。此方法的默认实现返回`false`。
-
 ## Discussion - 讨论
 
 When you change the value returned by your view controller's [prefersHomeIndicatorAutoHidden](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887510-prefershomeindicatorautohidden) or [childForHomeIndicatorAutoHidden](https://developer.apple.com/documentation/uikit/uiviewcontroller/2887508-childforhomeindicatorautohidden) method, call this method to let UIKit know that it should call those methods again.
