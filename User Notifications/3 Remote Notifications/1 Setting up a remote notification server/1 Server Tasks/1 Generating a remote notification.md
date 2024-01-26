@@ -3,7 +3,7 @@
 
 
 原文地址：
-[https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server)
+[https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification)
 
 Send notifications to the user’s device with a JSON payload.
 
@@ -130,14 +130,14 @@ Table 1 lists the keys that you may include in the `aps` dictionary. To interact
 
 表 1 列出了您可以在 `aps` 字典中包含的键。要与用户交互，请包括 `alert`、`badge` 或 `sound` 键。不要将自定义键添加到 `aps` 字典中，因为 APNs 会忽略自定义键。相反，将您的自定义键添加为 `aps` 字典的同级，就像代码 1 中展示的那样。
 
-**Table 1** Keys to include in the aps dictionary
+**Table 1** Keys to include in the aps dictionary - 在 aps 字典中包含的键
 
 |Key|Value type|Description|
 |:-:|:-:|:-:|
-|alert|Dictionary (or String)|The information for displaying an alert. A dictionary is recommended. If you specify a string, the alert displays your string as the body text. For a list of dictionary keys, see Table 2.
-|badge|Number|The number to display in a badge on your app’s icon. Specify `0` to remove the current badge, if any.
-|sound|String|The name of a sound file in your app’s main bundle or in the `Library/Sounds` folder of your app’s container directory. Specify the string “default” to play the system sound. Use this key for regular notifications. For critical alerts, use the `sound` dictionary instead. For information about how to prepare sounds, see [UNNotificationSound](https://developer.apple.com/documentation/usernotifications/unnotificationsound).
-|sound|Dictionary|A dictionary that contains sound information for critical alerts. For regular notifications, use the sound string instead.
+|alert|Dictionary (or String)|The information for displaying an alert. A dictionary is recommended. If you specify a string, the alert displays your string as the body text. For a list of dictionary keys, see Table 2. </br>显示提醒的信息。建议使用字典进行指定。如果您指定了一个字符串，提醒将以该字符串作为正文文本显示。有关字典键的列表，请参见《表2》。
+|badge|Number|The number to display in a badge on your app’s icon. Specify `0` to remove the current badge, if any. </br>要在您应用程序图标上显示的角标数字。如果要移除当前的角标（如果有的话），请将其指定为 `0`。
+|sound|String|The name of a sound file in your app’s main bundle or in the `Library/Sounds` folder of your app’s container directory. Specify the string `“default”` to play the system sound. Use this key for regular notifications. For critical alerts, use the `sound` dictionary instead. For information about how to prepare sounds, see [UNNotificationSound](https://developer.apple.com/documentation/usernotifications/unnotificationsound). </br>您应用程序主 bundle 或应用程序容器目录中的 `Library/Sounds` 文件夹中声音文件的名称。指定字符串 `"default"` 来播放系统声音。对于常规通知，请使用此键。对于关键提醒，请改用 `sound` 字典。有关如何准备声音的信息，请参阅《[UNNotificationSound](https://developer.apple.com/documentation/usernotifications/unnotificationsound)》。
+|sound|Dictionary|A dictionary that contains sound information for critical alerts. For regular notifications, use the `sound` string instead. </br>一个包含关键提醒声音信息的字典。对于常规通知，请使用 `sound` 字符串。
 |thread-id|String|An app-specific identifier for grouping related notifications. This value corresponds to the `threadIdentifier` property in the `UNNotificationContent` object.
 |category|String|The notification’s type. This string must correspond to the `identifier` of one of the `UNNotificationCategory` objects you register at launch time. See [Declaring your actionable notification types](https://developer.apple.com/documentation/usernotifications/declaring_your_actionable_notification_types).
 |content-available|Number|The background notification flag. To perform a silent background update, specify the value `1` and don’t include the `alert`, `badge`, or `sound` keys in your payload. See [Pushing background updates to your App](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app).
