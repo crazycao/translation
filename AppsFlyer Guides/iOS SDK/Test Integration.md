@@ -404,21 +404,46 @@ A 404 response indicates that the app ID is incorrect. See [Installs and Events 
 404 响应表示 app ID 不正确。参见 [未记录安装和事件](https://support.appsflyer.com/hc/en-us/articles/360001559405-Testing-AppsFlyer-SDK-Integration#debugging-common-issues-with-ios-sdk)。
 
 ### I get response 400 on install or event recording - 在记录安装或事件时得到 400 响应
-Scenario
+
+**Scenario**
+
+**场景**
+
 You are trying to test in-app events in the log. When you trigger events you see response 400 in the logs.
 
-Possible reasons
-This might indicate an issue with the dev key. Check that the dev key is the correct one. Also, make sure that the dev key contains only alphanumeric characters. See Installs and Events are not recorded.
+您正在尝试在日志中测试应用内事件。当您触发事件时，您在日志中看到响应码为 400。
 
-I get response 403 on install or event recording
-Scenario
+**Possible reasons**
+
+**可能原因**
+
+This might indicate an issue with the dev key. Check that the dev key is the correct one. Also, make sure that the dev key contains only alphanumeric characters. See [Installs and Events are not recorded](https://support.appsflyer.com/hc/en-us/articles/360001559405-Testing-AppsFlyer-SDK-Integration#debugging-common-issues-with-ios-sdk).
+
+这可能表明开发密钥存在问题。请检查开发密钥是否正确。此外，请确保开发密钥仅包含字母数字字符。请查看[安装和事件是否未记录](https://support.appsflyer.com/hc/en-us/articles/360001559405-Testing-AppsFlyer-SDK-Integration#debugging-common-issues-with-ios-sdk)。
+
+### I get response 403 on install or event recording - 在记录安装或事件时得到 403 响应
+
+**Scenario**
+
+**场景**
+
 You are trying to test installs and other conversion events in the log. When you trigger these events, you see response 403 (forbidden) in the logs.
 
-Possible reasons
+您正在尝试在日志中测试安装和其他转化事件。当您触发这些事件时，在日志中看到的响应码为 403（禁止）。
+
+**Possible reasons**
+
+**可能原因**
+
 This might be because you have the Zero package, which does not include attribution data; only data on clicks and impressions. To start receiving attribution data, learn more about the different AppsFlyer packages, and update as needed. You can also contact our customer engagement team at hello@appsflyer.com if you have questions about our packages.
 
+这可能是因为您使用的是 Zero 套餐，该套餐不包括归因数据，只包含点击和曝光数据。要开始接收归因数据，请了解更多关于不同 AppsFlyer 套餐的信息，并根据需要进行更新。如果您对我们的套餐有疑问，也可以通过 hello@appsflyer.com 联系我们的客户参与团队。
 
+### My SDK connection to AppsFlyer is secured by TLS 1.0 or 1.1 - 我连接到 AppsFlyer 的 SDK 是由 TLS 1.0 或 1.1 加密的
 
+To ensure that the connection to AppsFlyer is secured by TLS 1.2 or 1.3 and not by lower TLS versions use the appsflyersdk.com endpoint without a prefix. Specifically call the setHost function in the following way: setHost("","[appsflyersdk.com](http://appsflyersdk.com/)")
+
+为确保连接到 AppsFlyer 的加密采用 TLS 1.2 或 1.3，而非较低版本的 TLS，请使用不带前缀的 appsflyersdk.com 终点。具体调用 setHost 函数的方式如下：setHost("","appsflyersdk.com")
 
 
 

@@ -36,45 +36,63 @@ import UIKit
 /// The parameter value is the `receivedSize` of current response.
 /// The second parameter is the total expected data length from response's "Content-Length" header.
 /// If the expected length is not available, this block will not be called.
+/// 下载进度 block 类型。
+/// 参数值为当前响应的 receivedSize。
+/// 第二个参数是来自 “Content-Length” 响应头的总预期数据长度。
+/// 如果预期长度不可用，则不会调用此块。
 public typealias DownloadProgressBlock = ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)
 
 /// Represents the result of a Kingfisher retrieving image task.
+/// 代表 Kingfisher 检索图像任务的结果。
 public struct RetrieveImageResult {
     /// Gets the image object of this result.
+    /// 获取此结果的图像对象。
     public let image: KFCrossPlatformImage
 
     /// Gets the cache source of the image. It indicates from which layer of cache this image is retrieved.
     /// If the image is just downloaded from network, `.none` will be returned.
+    /// 获取图像的缓存来源。它指示从缓存的哪一层检索到了这个图像。
+    /// 如果图像刚从网络下载，将返回 .none。
     public let cacheType: CacheType
 
     /// The `Source` which this result is related to. This indicated where the `image` of `self` is referring.
+    /// 与此结果相关的Source。这表明了self的image引用的位置。
     public let source: Source
 
     /// The original `Source` from which the retrieve task begins. It can be different from the `source` property.
     /// When an alternative source loading happened, the `source` will be the replacing loading target, while the
     /// `originalSource` will be kept as the initial `source` which issued the image loading process.
+    /// 检索任务开始的原始Source。它可能与source属性不同。
+    /// 当发生替代源加载时，source将成为替换加载目标，而originalSource将保留为发起图像加载过程的初始source。
     public let originalSource: Source
     
     /// Gets the data behind the result.
+    /// 获取结果背后的数据。
     ///
     /// If this result is from a network downloading (when `cacheType == .none`), calling this returns the downloaded
     /// data. If the reuslt is from cache, it serializes the image with the given cache serializer in the loading option
     /// and returns the result.
+    /// 如果此结果来自网络下载（当 cacheType == .none 时），调用此方法将返回已下载的数据。如果结果来自缓存，它将使用加载选项中提供的缓存序列化器对图像进行序列化，并返回结果。
     ///
     /// - Note:
     /// This can be a time-consuming action, so if you need to use the data for multiple times, it is suggested to hold
     /// it and prevent keeping calling this too frequently.
+    /// - 注意：
+    /// 这可能是一个耗时的操作，因此如果您需要多次使用数据，建议保存数据并避免过于频繁地调用此方法。
     public let data: () -> Data?
 }
 
 /// A struct that stores some related information of an `KingfisherError`. It provides some context information for
 /// a pure error so you can identify the error easier.
+/// 一个结构体，用于存储与KingfisherError相关的一些信息。它为纯错误提供一些上下文信息，以便您更容易地识别错误。
 public struct PropagationError {
 
     /// The `Source` to which current `error` is bound.
+    /// 当前error绑定的Source。
     public let source: Source
 
     /// The actual error happens in framework.
+    /// 发生在框架中的实际错误。
     public let error: KingfisherError
 }
 
@@ -82,26 +100,36 @@ public struct PropagationError {
 /// The downloading task updated block type. The parameter `newTask` is the updated new task of image setting process.
 /// It is a `nil` if the image loading does not require an image downloading process. If an image downloading is issued,
 /// this value will contain the actual `DownloadTask` for you to keep and cancel it later if you need.
+/// 下载任务更新的 block 类型。参数newTask是图像设置过程更新后的新任务。
+/// 如果图像加载不需要图像下载过程，则为nil。如果发出了图像下载请求，此值将包含实际的DownloadTask，供您稍后保留并在需要时取消。
 public typealias DownloadTaskUpdatedBlock = ((_ newTask: DownloadTask?) -> Void)
 
 /// Main manager class of Kingfisher. It connects Kingfisher downloader and cache,
 /// to provide a set of convenience methods to use Kingfisher for tasks.
 /// You can use this class to retrieve an image via a specified URL from web or cache.
+/// Kingfisher的主管理类。它连接了Kingfisher的下载器和缓存，提供了一组便捷的方法来使用Kingfisher执行任务。您可以使用这个类通过指定的URL从网络或缓存中检索图像。
 public class KingfisherManager {
 
     /// Represents a shared manager used across Kingfisher.
     /// Use this instance for getting or storing images with Kingfisher.
+    /// 表示在整个Kingfisher中共享的管理器。使用这个实例来使用Kingfisher获取或存储图像。
     public static let shared = KingfisherManager()
 
     // Mark: Public Properties
+    // 公共属性
+
     /// The `ImageCache` used by this manager. It is `ImageCache.default` by default.
     /// If a cache is specified in `KingfisherManager.defaultOptions`, the value in `defaultOptions` will be
     /// used instead.
+    /// 该管理器使用的ImageCache。默认情况下为ImageCache.default。
+    /// 如果在KingfisherManager.defaultOptions中指定了缓存，则将使用defaultOptions中的值。
     public var cache: ImageCache
     
     /// The `ImageDownloader` used by this manager. It is `ImageDownloader.default` by default.
     /// If a downloader is specified in `KingfisherManager.defaultOptions`, the value in `defaultOptions` will be
     /// used instead.
+    /// 该管理器使用的ImageDownloader。默认情况下为ImageDownloader.default。
+    /// 如果在KingfisherManager.defaultOptions中指定了下载器，则将使用defaultOptions中的值。
     public var downloader: ImageDownloader
     
     /// Default options used by the manager. This option will be used in
@@ -109,9 +137,12 @@ public class KingfisherManager {
     /// You can also passing other options for each image task by sending an `options` parameter
     /// to Kingfisher's APIs. The per image options will overwrite the default ones,
     /// if the option exists in both.
+    /// 管理器使用的默认选项。这些选项将在Kingfisher管理器相关方法以及所有视图扩展方法中使用。
+    /// 您还可以通过向Kingfisher的API发送一个options参数来为每个图像任务传递其他选项。如果在两者中都存在该选项，则每个图像的选项将覆盖默认选项。
     public var defaultOptions = KingfisherOptionsInfo.empty
     
     // Use `defaultOptions` to overwrite the `downloader` and `cache`.
+    // 使用defaultOptions来覆盖downloader和cache。
     private var currentDefaultOptions: KingfisherOptionsInfo {
         return [.downloader(downloader), .targetCache(cache)] + defaultOptions
     }
@@ -123,10 +154,14 @@ public class KingfisherManager {
     }
 
     /// Creates an image setting manager with specified downloader and cache.
+    /// 使用指定的下载器和缓存创建图像设置管理器。
     ///
     /// - Parameters:
     ///   - downloader: The image downloader used to download images.
     ///   - cache: The image cache which stores memory and disk images.
+    /// - Parameters:
+    /// - downloader: 用于下载图像的图像下载器。
+    /// - cache: 存储内存和磁盘图像的图像缓存。
     public init(downloader: ImageDownloader, cache: ImageCache) {
         self.downloader = downloader
         self.cache = cache
@@ -136,8 +171,10 @@ public class KingfisherManager {
     }
 
     // MARK: - Getting Images
+    // 获取图像
 
     /// Gets an image from a given resource.
+    /// 从给定资源获取图像。
     /// - Parameters:
     ///   - resource: The `Resource` object defines data information like key or URL.
     ///   - options: Options to use when creating the image.
@@ -152,11 +189,20 @@ public class KingfisherManager {
     ///                        from the `options.callbackQueue`. If not specified, the main queue will be used.
     /// - Returns: A task represents the image downloading. If there is a download task starts for `.network` resource,
     ///            the started `DownloadTask` is returned. Otherwise, `nil` is returned.
+    /// - 参数:
+    /// - resource: Resource 对象定义了数据信息，如键或 URL。
+    /// - options: 创建图像时使用的选项。
+    /// - progressBlock: 当图像下载进度更新时调用。如果响应不包含expectedContentLength，则不会调用此块。progressBlock 总是在主队列中调用。
+    /// - downloadTaskUpdated: 当为当前图像检索创建新的图像下载任务时调用。当使用替代源替换原始（失败的）任务时通常会发生这种情况。如果要手动cancel新任务，可以更新 DownloadTask 的引用。
+    /// - completionHandler: 当图像检索和设置完成时调用。此完成处理程序将从options.callbackQueue调用。如果未指定，将使用主队列。
+    /// - Returns: 表示图像下载的任务。如果为.network资源启动了下载任务，则返回启动的DownloadTask。否则，返回nil。
     ///
     /// - Note:
     ///    This method will first check whether the requested `resource` is already in cache or not. If cached,
     ///    it returns `nil` and invoke the `completionHandler` after the cached image retrieved. Otherwise, it
     ///    will download the `resource`, store it in cache, then call `completionHandler`.
+    /// - 注意：
+    /// 此方法首先检查请求的resource是否已经在缓存中。如果已缓存，它将返回nil，并在检索到缓存图像后调用completionHandler。否则，它将下载resource，将其存储在缓存中，然后调用completionHandler。
     @discardableResult
     public func retrieveImage(
         with resource: Resource,

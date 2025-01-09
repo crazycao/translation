@@ -35,8 +35,10 @@ import UIKit
 extension KingfisherWrapper where Base: KFCrossPlatformImageView {
 
     // MARK: Setting Image
+    // MARK: 设置图像
 
     /// Sets an image to the image view with a `Source`.
+    /// 使用 Source 将图像设置到图像视图中。
     ///
     /// - Parameters:
     ///   - source: The `Source` object defines data information from network or a data provider.
@@ -45,24 +47,37 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
     ///   - progressBlock: Called when the image downloading progress gets updated. If the response does not contain an
     ///                    `expectedContentLength`, this block will not be called.
     ///   - completionHandler: Called when the image retrieved and set finished.
+    /// - 参数:
+    /// - source: Source 对象定义了来自网络或数据提供者的数据信息。
+    /// - placeholder: 在从给定 resource 检索图像时显示的占位符。
+    /// - options: 一个选项集，用于定义图像设置行为。查看 KingfisherOptionsInfo 了解更多信息。
+    /// - progressBlock: 当图像下载进度更新时调用。如果响应不包含 expectedContentLength，则不会调用此块。
+    /// - completionHandler: 当图像检索并设置完成时调用。
+    ///
     /// - Returns: A task represents the image downloading.
+    /// - 返回: 代表图像下载的任务。
     ///
     /// - Note:
     /// This is the easiest way to use Kingfisher to boost the image setting process from a source. Since all parameters
     /// have a default value except the `source`, you can set an image from a certain URL to an image view like this:
+    /// - 说明:
+    /// 这是使用 Kingfisher 从源快速设置图像的最简单方式。由于除了 source 外，所有参数都有默认值，因此您可以像这样将来自特定 URL 的图像设置到图像视图中：
     ///
     /// ```
     /// // Set image from a network source.
+    /// // 从网络源设置图像。
     /// let url = URL(string: "https://example.com/image.png")!
     /// imageView.kf.setImage(with: .network(url))
     ///
     /// // Or set image from a data provider.
+    /// // 或者从数据提供者设置图像。
     /// let provider = LocalFileImageDataProvider(fileURL: fileURL)
     /// imageView.kf.setImage(with: .provider(provider))
     /// ```
     ///
     /// For both `.network` and `.provider` source, there are corresponding view extension methods. So the code
     /// above is equivalent to:
+    /// 对于 .network 和 .provider 源，有相应的视图扩展方法。因此，上述代码等效于：
     ///
     /// ```
     /// imageView.kf.setImage(with: url)
@@ -72,6 +87,9 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
     /// Internally, this method will use `KingfisherManager` to get the source.
     /// Since this method will perform UI changes, you must call it from the main thread.
     /// Both `progressBlock` and `completionHandler` will be also executed in the main thread.
+    /// 在内部，此方法将使用 KingfisherManager 来获取源。
+    /// 由于此方法将执行 UI 更改，因此必须从主线程调用它。
+    /// progressBlock 和 completionHandler 也将在主线程中执行。
     ///
     @discardableResult
     public func setImage(
@@ -365,9 +383,12 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
     }
 
     // MARK: Cancelling Downloading Task
+    // MARK: 取消下载任务
 
     /// Cancels the image download task of the image view if it is running.
     /// Nothing will happen if the downloading has already finished.
+    /// 如果图像视图的下载任务正在运行，则取消图像下载任务。
+    /// 如果下载已经完成，则不会发生任何事情。
     public func cancelDownloadTask() {
         imageTask?.cancel()
     }
@@ -418,6 +439,7 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
 }
 
 // MARK: - Associated Object
+// MARK: - 关联对象
 private var taskIdentifierKey: Void?
 private var indicatorKey: Void?
 private var indicatorTypeKey: Void?
@@ -427,6 +449,7 @@ private var imageTaskKey: Void?
 extension KingfisherWrapper where Base: KFCrossPlatformImageView {
 
     // MARK: Properties
+    // MARK: 属性
     public private(set) var taskIdentifier: Source.Identifier.Value? {
         get {
             let box: Box<Source.Identifier.Value>? = getAssociatedObject(base, &taskIdentifierKey)
@@ -440,6 +463,8 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
 
     /// Holds which indicator type is going to be used.
     /// Default is `.none`, means no indicator will be shown while downloading.
+    /// 保存将要使用的指示器类型。
+    /// 默认为 .none，表示在下载过程中不会显示任何指示器。
     public var indicatorType: IndicatorType {
         get {
             return getAssociatedObject(base, &indicatorTypeKey) ?? .none
@@ -460,6 +485,9 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
     /// Holds any type that conforms to the protocol `Indicator`.
     /// The protocol `Indicator` has a `view` property that will be shown when loading an image.
     /// It will be `nil` if `indicatorType` is `.none`.
+    /// 保存符合协议 Indicator 的任何类型。
+    /// 协议 Indicator 具有一个 view 属性，该属性在加载图像时显示。
+    /// 如果 indicatorType 是 .none，则该属性将为 nil。
     public private(set) var indicator: Indicator? {
         get {
             let box: Box<Indicator>? = getAssociatedObject(base, &indicatorKey)
@@ -468,13 +496,16 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
         
         set {
             // Remove previous
+            // 移除前一个
             if let previousIndicator = indicator {
                 previousIndicator.view.removeFromSuperview()
             }
             
             // Add new
+            // 添加新的
             if let newIndicator = newValue {
                 // Set default indicator layout
+                // 设置默认的指示器布局
                 let view = newIndicator.view
                 
                 base.addSubview(view)
@@ -501,6 +532,8 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
             // Save in associated object
             // Wrap newValue with Box to workaround an issue that Swift does not recognize
             // and casting protocol for associate object correctly. https://github.com/onevcat/Kingfisher/issues/872
+            // 保存在关联对象中
+            // 使用 Box 将 newValue 包装起来，以解决 Swift 无法正确识别和转换协议以用于关联对象的问题。参考：https://github.com/onevcat/Kingfisher/issues/872
             setRetainedAssociatedObject(base, &indicatorKey, newValue.map(Box.init))
         }
     }
@@ -512,6 +545,7 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
 
     /// Represents the `Placeholder` used for this image view. A `Placeholder` will be shown in the view while
     /// it is downloading an image.
+    /// 代表用于此图像视图的 Placeholder。在下载图像时，Placeholder 将显示在视图中。
     public private(set) var placeholder: Placeholder? {
         get { return getAssociatedObject(base, &placeholderKey) }
         set {
