@@ -31,7 +31,7 @@ The ad network API helps advertisers measure the success of ad campaigns while m
 - **Advertised apps** that appear in the signed ads
 - 出现在已签名的广告中的**广告应用**
 
-Ad networks must register with Apple, and developers must configure their apps to work with ad networks. For information about set up, see [Registering an Ad Network](https://developer.apple.com/documentation/storekit/skadnetwork/registering_an_ad_network), Configuring a Source App, and Configuring an Advertised App.
+Ad networks must register with Apple, and developers must configure their apps to work with ad networks. For information about set up, see [Registering an Ad Network](https://developer.apple.com/documentation/storekit/skadnetwork/registering_an_ad_network), [Configuring a Source App](https://developer.apple.com/documentation/storekit/skadnetwork/configuring_a_source_app), and [Configuring an Advertised App](https://developer.apple.com/documentation/storekit/skadnetwork/configuring_an_advertised_app).
 
 广告网络必须向苹果公司注册，且开发者必须配置他们的应用程序才能与广告网络协同工作。有关设置的信息，请参阅《[注册广告网络](https://developer.apple.com/documentation/storekit/skadnetwork/registering_an_ad_network)》、《[配置源应用](https://developer.apple.com/documentation/storekit/skadnetwork/configuring_a_source_app)》和《[配置广告应用](https://developer.apple.com/documentation/storekit/skadnetwork/configuring_an_advertised_app)》。
 
