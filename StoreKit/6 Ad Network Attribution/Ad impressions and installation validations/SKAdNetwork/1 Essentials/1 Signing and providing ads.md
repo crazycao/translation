@@ -17,8 +17,8 @@ SKAdNetwork supports several ways for ad networks to provide ads:
 
 SKAdNetwork 支持广告网络提供广告的几种方式：
 
-- StoreKit 渲染的广告，其中 StoreKit 显示 App Store 产品页面作为广告展示
-- 视图展示的广告，广告网络以任何格式呈现广告，并使用 SKAdNetwork API 报告广告展示
+- StoreKit 渲染的广告，其中 StoreKit 显示 App Store 产品页面作为广告印象
+- 视图展示的广告，广告网络以任何格式呈现广告，并使用 SKAdNetwork API 报告广告印象
 - 可归因的网络广告，广告网络使用 [用于 web 广告的 SKAdNetwork](https://developer.apple.com/documentation/SKAdNetworkforWebAds) API 在 Safari 网页上呈现广告
 
 To differentiate StoreKit-rendered ads from view-through ads, SKAdNetwork defines a `fidelity-type` parameter, which you include in the ad signature, and receive in the install-validation postback. Use a fidelity-type value of 1 for StoreKit-rendered ads and attributable web ads, and 0 for view-through ads. The following table compares the ad presentation options:
@@ -37,7 +37,7 @@ For more information about availability and versions, see [SKAdNetwork release n
 
 The `fidelity-type` can affect which ad receives attribution when the user experiences multiple ad impressions. For more information about how `fidelity-type` and the time of the ad impression affect attributions, see [Receiving ad attributions and postbacks](https://developer.apple.com/documentation/storekit/receiving-ad-attributions-and-postbacks).
 
-`fidelity-type` 可以影响用户在体验多个广告展示时哪个广告会被归因。有关 `fidelity-type` 和广告展示时间如何影响归因的更多信息，请参阅《[接收广告归因和回传信息](https://developer.apple.com/documentation/storekit/receiving-ad-attributions-and-postbacks)》。
+`fidelity-type` 可以影响用户在体验多个广告印象时哪个广告会被归因。有关 `fidelity-type` 和广告印象时间如何影响归因的更多信息，请参阅《[接收广告归因和回传信息](https://developer.apple.com/documentation/storekit/receiving-ad-attributions-and-postbacks)》。
 
 Ad networks must cryptographically sign the ads. The signature contains information that includes a campaign identifier. If ads result in conversions, ad networks receive an install-validation postback that includes the campaign identifier. For more information about the postback, see [Verifying an install-validation postback](https://developer.apple.com/documentation/storekit/verifying-an-install-validation-postback).
 
@@ -54,7 +54,7 @@ Follow these steps to display a StoreKit-rendered ad in your app:
 
 按照以下步骤在您的应用程序中显示 StoreKit 渲染的广告：
 
-1. 使用代表广告展示的值设置[广告网络安装验证键](https://developer.apple.com/documentation/storekit/ad-network-install-validation-keys)。
+1. 使用代表广告印象的值设置[广告网络安装验证键](https://developer.apple.com/documentation/storekit/ad-network-install-validation-keys)。
 2. 在广告网络的服务器上，使用这些键值生成签名。然后，使用该签名值设置 [SKStoreProductParameterAdNetworkAttributionSignature](https://developer.apple.com/documentation/storekit/skstoreproductparameteradnetworkattributionsignature) 键的值。有关生成签名的信息，请参阅《[生成用于验证 StoreKit 渲染广告的签名](https://developer.apple.com/documentation/storekit/generating-the-signature-to-validate-storekit-rendered-ads)》。
 3. 调用 [loadProduct(withParameters:completionBlock:)](https://developer.apple.com/documentation/storekit/skstoreproductviewcontroller/loadproduct(withparameters:completionblock:)) 使用您的广告网络安装验证键来加载广告。
 4. 根据您的应用程序设计，在您的应用程序中展示广告。您可以使用 [SKOverlay](https://developer.apple.com/documentation/storekit/skoverlay) 或 [SKStoreProductViewController](https://developer.apple.com/documentation/storekit/skstoreproductviewcontroller) 来显示一个 StoreKit 渲染的广告。无论是哪一种，StoreKit 渲染广告的 `fidelity-type` 值都为 `1`。
@@ -70,7 +70,7 @@ Follow these steps to provide a view-through ad:
 
 按照以下步骤提供一个视图展示广告：
 
-1. 创建一个 [SKAdImpression](https://developer.apple.com/documentation/storekit/skadimpression) 实例，并设置其属性以表示广告展示。
+1. 创建一个 [SKAdImpression](https://developer.apple.com/documentation/storekit/skadimpression) 实例，并设置其属性以表示广告印象。
 2. 在广告网络的服务器上，基于这些属性生成签名。然后将生成的签名设置为 `SKAdImpression` 实例的 `signature` 属性。有关更多信息，请参阅《[生成用于验证视图展示广告的签名](https://developer.apple.com/documentation/storekit/generating-the-signature-to-validate-view-through-ads)》。
 3. 调用 [startImpression(_:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/startimpression(_:completionhandler:))，然后根据您的应用程序设计向用户展示您的自定义广告。
 4. 当您完成展示广告时，请调用 [endImpression(_:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/endimpression(_:completionhandler:))。
@@ -95,7 +95,7 @@ Advertise apps by signing and providing StoreKit-rendered ads or view-through ad
 
 Learn about timeframes and priorities for ad impressions that result in ad attributions, and how additional impressions qualify for postbacks.
 
-了解带来广告归因的广告展示的时间框架和优先级，以及其他展示如何符合回传条件。
+了解带来广告归因的广告印象的时间框架和优先级，以及其他展示如何符合回传条件。
 
 ### [SKAdNetwork Release Notes](https://developer.apple.com/documentation/storekit/skadnetwork/skadnetwork_release_notes) - SKAdNetwork 发布说明
 

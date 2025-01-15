@@ -5,7 +5,7 @@
 
 Learn about timeframes and priorities for ad impressions that result in ad attributions, and how additional impressions qualify for postbacks.
 
-了解带来广告归因的广告展示的时间框架和优先级，以及其他展示如何符合回传条件。
+了解带来广告归因的广告印象的时间框架和优先级，以及其他展示如何符合回传条件。
 
 # Overview - 概览
 
@@ -18,14 +18,14 @@ Ad networks receive attributions in the form of install-validation postbacks. Be
 
 广告网络以安装验证回传的形式接收归因。需要在有限的时间窗口内发生以下事件，广告才网络能够接收到回传：
 
-- 广告网络签署并展示广告，包括 StoreKit 渲染的广告、视图展示广告或可归因的网络广告。StoreKit 记录广告展示。
+- 广告网络签署并展示广告，包括 StoreKit 渲染的广告、视图展示广告或可归因的网络广告。StoreKit 记录广告印象。
 - 用户安装广告宣传的应用程序。
 - 用户启动应用程序。
 - 应用程序在用户首次启动应用程序时更新转化价值，并根据需要持续更新。
 
 If all these events occur within their respective time-windows, the ad impression qualifies for an install-validation postback. The following table shows the time-windows for the events:
 
-如果所有这些事件在各自的时间窗口内发生，广告展示就有资格获得安装验证回传。以下表格显示了各事件的时间窗口：
+如果所有这些事件在各自的时间窗口内发生，广告印象就有资格获得安装验证回传。以下表格显示了各事件的时间窗口：
 
 Event</br>事件|Time-window</br>时间窗口
 |:-:|:-:|
@@ -38,7 +38,7 @@ The user launches the app and the app calls a conversion update method, such as 
 
 The minimum elapsed time between an ad impression and the time the ad network receives an install-validation postback is 24 to 48 hours. To reduce that time to 5 to 10 minutes during testing, see [Testing ad attributions with a downloaded profile](https://developer.apple.com/documentation/storekit/testing-ad-attributions-with-a-downloaded-profile).
 
-广告展示和广告网络接收安装验证回传之间的最小时间间隔为 24 到 48 小时。为了在测试期间将这段时间缩短到 5 到 10 分钟，请参阅《[通过下载配置文件进行广告归因测试](https://developer.apple.com/documentation/storekit/testing-ad-attributions-with-a-downloaded-profile)》。
+广告印象和广告网络接收安装验证回传之间的最小时间间隔为 24 到 48 小时。为了在测试期间将这段时间缩短到 5 到 10 分钟，请参阅《[通过下载配置文件进行广告归因测试](https://developer.apple.com/documentation/storekit/testing-ad-attributions-with-a-downloaded-profile)》。
 
 Devices send one or more postbacks depending on the SKAdNetwork and iOS versions:
 
@@ -65,24 +65,24 @@ When multiple ad impressions qualify for install-validation postbacks, a device 
 - In versions 1 through 2.1, the attribution goes to the most recent ad impression.
 - Starting in version 2.2, the attribution goes to the most recent ad impression with the highest `fidelity-type` value.
 
-当多个广告展示符合安装验证回传的条件时，设备根据以下规则向广告网络发送获胜的回传：
+当多个广告印象符合安装验证回传的条件时，设备根据以下规则向广告网络发送获胜的回传：
 
-- 在版本 1 至 2.1 中，归因归属于最近的广告展示。
-- 从版本 2.2 开始，归因归属于具有最高 `fidelity-type` 值的最近广告展示。
+- 在版本 1 至 2.1 中，归因归属于最近的广告印象。
+- 从版本 2.2 开始，归因归属于具有最高 `fidelity-type` 值的最近广告印象。
 
 The ad presentation option defines the `fidelity-type` value:
 
 - StoreKit-rendered ads have the highest `fidelity-type` value of `1`.
 - View-through ads have a `fidelity-type` value of `0`.
 
-广告展示选项定义了 `fidelity-type` 值：
+广告印象选项定义了 `fidelity-type` 值：
 
 - StoreKit 渲染的广告的拥有最高 `fidelity-type` 值，为 `1`。
 - 视图展示广告的 `fidelity-type` 值为 `0`。
 
 Indicate the `fidelity-type` when you generate the ad signature. Recorded ad impressions with a `fidelity-type` of `1` always take precedence over those with a `fidelity-type` of `0`. For example, if users see a StoreKit-rendered ad followed by a view-through ad for the same app, the StoreKit-rendered ad takes precedence over the view-through ad, despite the view-through ad being more recent. The source app can display StoreKit-rendered ads using an `SKOverlay` or `SKStoreProductViewController`; the `fidelity-type` value is `1` in either case. For information about the fidelity of ads that an ad network presents on a Safari web page using the [SKAdNetwork for Web Ads](https://developer.apple.com/documentation/SKAdNetworkforWebAds) API, see [signature](https://developer.apple.com/documentation/SKAdNetworkforWebAds/signature).
 
-在生成广告签名时，请指定 `fidelity-type`。`fidelity-type` 为 `1` 的广告展示始终优先于 `fidelity-type` 为 `0` 的广告被记录。例如，如果用户看到同一应用的 StoreKit 渲染广告，然后是视图展示广告，StoreKit 渲染广告将优先于视图展示广告，尽管视图展示广告更为接近。源应用可以使用 `SKOverlay` 或 `SKStoreProductViewController` 显示 StoreKit 渲染的广告；在任何情况下，`fidelity-type` 的值均为 `1`。有关广告网络在Safari网页上使用[用于 web 广告的 SKAdNetwork](https://developer.apple.com/documentation/SKAdNetworkforWebAds) API 展示的广告保真度的信息，请参阅《[签名](https://developer.apple.com/documentation/SKAdNetworkforWebAds/signature)》。
+在生成广告签名时，请指定 `fidelity-type`。`fidelity-type` 为 `1` 的广告印象始终优先于 `fidelity-type` 为 `0` 的广告被记录。例如，如果用户看到同一应用的 StoreKit 渲染广告，然后是视图展示广告，StoreKit 渲染广告将优先于视图展示广告，尽管视图展示广告更为接近。源应用可以使用 `SKOverlay` 或 `SKStoreProductViewController` 显示 StoreKit 渲染的广告；在任何情况下，`fidelity-type` 的值均为 `1`。有关广告网络在Safari网页上使用[用于 web 广告的 SKAdNetwork](https://developer.apple.com/documentation/SKAdNetworkforWebAds) API 展示的广告保真度的信息，请参阅《[签名](https://developer.apple.com/documentation/SKAdNetworkforWebAds/signature)》。
 
 In version 3 and later, the system indicates winning postbacks with a `did-win` parameter of value `true`.
 
@@ -96,11 +96,11 @@ Starting in iOS 14.6, devices can send multiple postbacks to ad networks that si
 
 Each ad network can receive only one install-validation postback, winning or not winning. If you receive the winning postback, you don’t receive any nonwinning postbacks even if your ads have multiple qualifying ad impressions.
 
-每个广告网络只能接收一个安装验证回传，无论是获胜还是非获胜。如果您收到获胜的回传，即使您的广告有多个符合条件的广告展示，您也不会收到任何非获胜的回传。
+每个广告网络只能接收一个安装验证回传，无论是获胜还是非获胜。如果您收到获胜的回传，即使您的广告有多个符合条件的广告印象，您也不会收到任何非获胜的回传。
 
 Up to five ad networks receive one nonwinning postback each. The system orders the recorded ad impressions using recency and `fidelity-type`, with the most recent ad views and highest `fidelity-type` taking precedence. Devices send nonwinning postbacks for the top five ad impressions from different ad networks that qualify for ad attribution.
 
-最多有五个广告网络分别接收一个非获胜的回传。系统根据时间和 `fidelity-type` 类型对记录的广告展示进行排序，最近的广告展示和最高 `fidelity-type` 优先。设备为符合广告归因条件的来自不同广告网络的前五个广告展示发送非获胜的回传。
+最多有五个广告网络分别接收一个非获胜的回传。系统根据时间和 `fidelity-type` 类型对记录的广告印象进行排序，最近的广告印象和最高 `fidelity-type` 优先。设备为符合广告归因条件的来自不同广告网络的前五个广告印象发送非获胜的回传。
 
 # Opt in to receive a copy of the winning postback - 选择接收获胜回传的副本
 
@@ -112,17 +112,17 @@ The postback that developers receive is an exact copy of the winning install-val
 
 开发者收到的回传是设备发送给广告网络的获胜安装验证回传的精确副本。设备在将获胜回传发送给广告网络的同时，也会将回传同时发送给开发者。要验证回传，请参阅《[验证安装验证回传](https://developer.apple.com/documentation/storekit/verifying-an-install-validation-postback)》。
 
-# Limit view-through ad impressions - 限制视图广告展示
+# Limit view-through ad impressions - 限制视图广告印象
 
 StoreKit records a maximum of 15 view-through ad impressions per source app before discarding the oldest one. The recorded ad impressions may advertise various products, and are each eligible to become pending attributions until they expire (after 24 hours).
 
-StoreKit 在丢弃最旧的视图广告展示之前，会记录每个源应用的最多 15 次视图广告展示。记录的广告展示可能宣传各种产品，并且每个广告展示都有资格成为待处理归因，直到过期（24小时后）。
+StoreKit 在丢弃最旧的视图广告印象之前，会记录每个源应用的最多 15 次视图广告印象。记录的广告印象可能宣传各种产品，并且每个广告印象都有资格成为待处理归因，直到过期（24小时后）。
 
-# Test ad impressions and postbacks - 测试广告展示和回传
+# Test ad impressions and postbacks - 测试广告印象和回传
 
 Use the [StoreKit Test](https://developer.apple.com/documentation/StoreKitTest) framework to validate your ad impressions and test your postbacks by creating unit tests. For more information, see [SKAdTestSession](https://developer.apple.com/documentation/StoreKitTest/SKAdTestSession) and [Testing and validating ad impression signatures and postbacks for SKAdNetwork](https://developer.apple.com/documentation/StoreKitTest/testing-and-validating-ad-impression-signatures-and-postbacks-for-skadnetwork).
 
-使用 [StoreKit Test](https://developer.apple.com/documentation/StoreKitTest) 框架通过创建单元测试来验证您的广告展示并测试您的回传。有关更多信息，请参阅 [SKAdTestSession](https://developer.apple.com/documentation/StoreKitTest/SKAdTestSession) 和《[测试和验证用于 SKAdNetwork 的广告展示签名和回传](https://developer.apple.com/documentation/StoreKitTest/testing-and-validating-ad-impression-signatures-and-postbacks-for-skadnetwork)》。
+使用 [StoreKit Test](https://developer.apple.com/documentation/StoreKitTest) 框架通过创建单元测试来验证您的广告印象并测试您的回传。有关更多信息，请参阅 [SKAdTestSession](https://developer.apple.com/documentation/StoreKitTest/SKAdTestSession) 和《[测试和验证用于 SKAdNetwork 的广告印象签名和回传](https://developer.apple.com/documentation/StoreKitTest/testing-and-validating-ad-impression-signatures-and-postbacks-for-skadnetwork)》。
 
 # See Also - 其他参考
 

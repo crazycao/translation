@@ -50,7 +50,7 @@ Create click-through web ads that attribute App Store app installations to your 
 
 ## Receiving a request for a web ad payload - 接收对网络广告负载的请求
 
-### [Get a Signed Web Ad Impression Payload](https://developer.apple.com/documentation/skadnetworkforwebads/get-a-signed-skadnetwork-ad-payload-for-a-web-ad.) - 获取已签名的网络广告展示负载
+### [Get a Signed Web Ad Impression Payload](https://developer.apple.com/documentation/skadnetworkforwebads/get-a-signed-skadnetwork-ad-payload-for-a-web-ad.) - 获取已签名的网络广告印象负载
 
 An endpoint you provide to receive requests from devices to serve signed ad interactions.
 
@@ -60,7 +60,7 @@ An endpoint you provide to receive requests from devices to serve signed ad inte
 
 The request body that devices send to fetch the web ad impression from the ad network’s server.
 
-设备发送的请求体，用于从广告网络服务器获取网络广告展示。
+设备发送的请求体，用于从广告网络服务器获取网络广告印象。
 
 ## Providing the web ad signature and response - 提供网络广告签名和响应
 

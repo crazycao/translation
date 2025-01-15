@@ -11,7 +11,7 @@ Prepare an advertised app to participate in ad campaigns.
 
 An advertised app is an app a user installs after viewing an ad that an ad network signs. The advertised app doesn’t require any configuration to participate in install validation. However, to register ad attributions, the app needs to call one of the methods that update conversion values when the app first launches. Those methods are: [updatePostbackConversionValue(_:coarseValue:lockWindow:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:coarsevalue:lockwindow:completionhandler:)), [updatePostbackConversionValue(_:coarseValue:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:coarsevalue:completionhandler:)), and [updatePostbackConversionValue(_:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:completionhandler:)).
 
-一个被广告应用是用户在查看广告后安装的应用程序，该广告是广告网络签署的。被广告应用不需要任何配置来参与安装验证。然而，为了注册广告归因，应用程序需要在它首次启动时调用其中一个更新转化值的方法。这些方法包括：[updatePostbackConversionValue(_:coarseValue:lockWindow:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:coarsevalue:lockwindow:completionhandler:))、[updatePostbackConversionValue(_:coarseValue:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:coarsevalue:completionhandler:)) 和  [updatePostbackConversionValue(_:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:completionhandler:))。
+一个广告应用是用户在查看广告后安装的应用程序，该广告是广告网络签署的。被广告应用不需要任何配置来参与安装验证。然而，为了注册广告归因，应用程序需要在它首次启动时调用其中一个更新转化值的方法。这些方法包括：[updatePostbackConversionValue(_:coarseValue:lockWindow:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:coarsevalue:lockwindow:completionhandler:))、[updatePostbackConversionValue(_:coarseValue:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:coarsevalue:completionhandler:)) 和  [updatePostbackConversionValue(_:completionHandler:)](https://developer.apple.com/documentation/storekit/skadnetwork/updatepostbackconversionvalue(_:completionhandler:))。
 
 Developers opt in to get copies of winning install-validation postbacks.
 
@@ -21,7 +21,7 @@ Developers opt in to get copies of winning install-validation postbacks.
 
 To opt in to receive copies of winning install-validation postbacks for your advertised app, add the [NSAdvertisingAttributionReportEndpoint](https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSAdvertisingAttributionReportEndpoint) key in your app’s `Info.plist` file, and configure your server to receive the postbacks.
 
-要选择接收您的被广告应用程序的获胜的安装验证回传的副本，请在您的应用程序的 `Info.plist` 文件中添加 [NSAdvertisingAttributionReportEndpoint](https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSAdvertisingAttributionReportEndpoint) 键，并配置您的服务器以接收这些回传。
+要选择接收您的广告应用程序的获胜的安装验证回传的副本，请在您的应用程序的 `Info.plist` 文件中添加 [NSAdvertisingAttributionReportEndpoint](https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSAdvertisingAttributionReportEndpoint) 键，并配置您的服务器以接收这些回传。
 
 To add the key in your app’s `Info.plist` file:
 

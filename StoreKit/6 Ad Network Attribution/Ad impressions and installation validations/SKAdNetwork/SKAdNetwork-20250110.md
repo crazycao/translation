@@ -51,9 +51,9 @@ Ad networks register with Apple to get an ad network ID and to use the API. Deve
 
 The following diagram shows the path of an ad impression that wins ad attribution. The ad network serves an ad that an app or Safari web page displays. A user taps the ad and downloads the advertised app.
 
-下图显示了赢得广告归因的广告展示（impression）路径。广告网络提供了一个广告，由应用程序或 Safari 网页显示。用户点击广告并下载了广告应用程序。
+下图显示了赢得广告归因的广告印象路径。广告网络提供了一个广告，由应用程序或 Safari 网页显示。用户点击广告并下载了广告应用程序。
 
-![赢得广告归因的广告展示路径](https://docs-assets.developer.apple.com/published/cfb86917a943b271b8187aff2aa2993d/media-4103236@2x.png)
+![赢得广告归因的广告印象路径](https://docs-assets.developer.apple.com/published/cfb86917a943b271b8187aff2aa2993d/media-4103236@2x.png)
 
 Apple determines a postback data tier for the app download, and the device uses the tier later to determine the level of detail the postback can contain to ensure crowd anonymity. For more information about the postback contents and the data tiers, see [Receiving postbacks in multiple conversion windows](https://developer.apple.com/documentation/storekit/receiving-postbacks-in-multiple-conversion-windows).
 
@@ -61,7 +61,7 @@ Apple determines a postback data tier for the app download, and the device uses 
 
 If the user launches the app within an attribution time-window, the ad impression is eligible for install-attribution postbacks. As the user engages with the app, the app updates the conversion value. Starting in iOS 16.1, apps can update conversion values during three conversion windows, which results in up to three postbacks for an ad signed using version 4. The system sends the postbacks to the ad network, and to the app’s developer if they opt in to receive postbacks.
 
-如果用户在归因时间窗口内启动应用程序，则广告展示有资格获得安装归因回传。当用户与应用程序互动时，应用程序会更新转化值。从 iOS 16.1 开始，应用程序可以在三个转化窗口期间更新转化值，这会导致对使用版本 4 签署的广告最多发送三个回传。系统会将回传发送给广告网络，并且如果应用程序开发者选择接收回传，则也会发送给应用程序开发者。
+如果用户在归因时间窗口内启动应用程序，则广告印象有资格获得安装归因回传。当用户与应用程序互动时，应用程序会更新转化值。从 iOS 16.1 开始，应用程序可以在三个转化窗口期间更新转化值，这会导致对使用版本 4 签署的广告最多发送三个回传。系统会将回传发送给广告网络，并且如果应用程序开发者选择接收回传，则也会发送给应用程序开发者。
 
 Devices send install-validation postbacks to multiple ad networks that sign their ads using version 3 or later.
 
@@ -70,14 +70,14 @@ Devices send install-validation postbacks to multiple ad networks that sign thei
 
 设备会向多个使用版本 3 或更高版本签署其广告的广告网络发送安装验证回传。
 
-- 一个广告网络会收到一个带有 `did-win` 参数值为 `true` 的回传，用于标识赢得广告归因的广告展示。
-- 最多还会有五个其他广告网络收到一个带有 `did-win` 参数值为 `false` 的回传，表示他们的广告展示符合归因条件，但没有获胜。
+- 一个广告网络会收到一个带有 `did-win` 参数值为 `true` 的回传，用于标识赢得广告归因的广告印象。
+- 最多还会有五个其他广告网络收到一个带有 `did-win` 参数值为 `false` 的回传，表示他们的广告印象符合归因条件，但没有获胜。
 
 The following diagram shows the path of ad impressions that qualify for, but don’t win, the ad attribution. Up to five ad networks receive a single nonwinning postback.
 
-下图展示了符合广告归因条件但未获胜的广告展示的路径。最多有五个广告网络会收到一个单个的未获胜回传。
+下图展示了符合广告归因条件但未获胜的广告印象的路径。最多有五个广告网络会收到一个单个的未获胜回传。
 
-![符合广告归因条件但未获胜的广告展示的路径](https://docs-assets.developer.apple.com/published/62cd8fd4dc40174006c06a54c155300b/media-4103237@2x.png)
+![符合广告归因条件但未获胜的广告印象的路径](https://docs-assets.developer.apple.com/published/62cd8fd4dc40174006c06a54c155300b/media-4103237@2x.png)
 
 For more information about receiving ad attributions, including time-window details and other constraints, see [Receiving ad attributions and postbacks](https://developer.apple.com/documentation/storekit/receiving-ad-attributions-and-postbacks).
 
