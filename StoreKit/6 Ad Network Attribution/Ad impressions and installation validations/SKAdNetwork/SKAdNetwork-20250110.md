@@ -31,13 +31,6 @@ The ad network API helps advertisers measure the success of ad campaigns while m
 广告网络 API 帮助广告商衡量广告活动的成功与否，同时维护用户隐私。这些 API 涉及三个参与者：
 
 - **Ad networks** that sign ads and receive install-validation postbacks after ads result in conversions
-- 对广告签名并在广告带来转化后接收安装验证回传（postbacks）的
-- **Source apps** that display ads provided by the ad networks
-- 显示广告网络提供的广告的
-- **Advertised apps** that appear in the signed ads
-- 出现在已签名的广告中的**广告应用**
-
-- **Ad networks** that sign ads and receive install-validation postbacks after ads result in conversions
 - **Source apps** that display ads from the ad networks, or websites that display the ads in Safari
 - **Advertised apps** that update conversion values as people engage with the app
 
