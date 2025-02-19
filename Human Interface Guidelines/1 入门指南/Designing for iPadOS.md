@@ -2,6 +2,8 @@
 
 原文链接：[https://developer.apple.com/design/human-interface-guidelines/platforms/designing-for-ipados/](https://developer.apple.com/design/human-interface-guidelines/platforms/designing-for-ipados/)
 
+中文链接：[https://developer.apple.com/cn/design/human-interface-guidelines/designing-for-ipados](https://developer.apple.com/cn/design/human-interface-guidelines/designing-for-ipados)
+
 **People value the power, mobility, and flexibility of iPad as they enjoy media, play games, perform detailed productivity tasks, and bring their creations to life.**
 
 **人们在欣赏媒体、玩游戏、执行细致的生产任务以及将他们的创作带入生活的过程中，都很重视iPad的电力、移动性和灵活性。**
