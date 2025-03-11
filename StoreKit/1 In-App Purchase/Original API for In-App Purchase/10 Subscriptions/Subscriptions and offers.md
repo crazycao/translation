@@ -1,5 +1,5 @@
 # Subscriptions and offers
-# 订阅和促销
+# 订阅和优惠
 
 原文地址：[https://developer.apple.com/documentation/storekit/subscriptions-and-offers?language=objc](https://developer.apple.com/documentation/storekit/subscriptions-and-offers?language=objc)
 
