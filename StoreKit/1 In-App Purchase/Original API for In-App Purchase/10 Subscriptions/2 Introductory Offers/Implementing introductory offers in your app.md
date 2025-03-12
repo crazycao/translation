@@ -63,7 +63,7 @@ To determine if a user is eligible for an introductory offer, check their receip
 >
 
 1. 按照《[使用 App Store 验证收据](https://developer.apple.com/documentation/storekit/validating-receipts-with-the-app-store?language=objc)》中所述的方法验证收据。
-2. 在收据中，检查所有应用内购买交易的 `is_trial_period` 和 `is_in_intro_offer_period` 的值。如果对于给定的订阅，这两个字段中的任何一个为 `true`，则用户没有资格获得该订阅产品或同一订阅组内任何其他产品的介绍性优惠。使用 `responseBody.Pending_renewal_info` 数组中的 `subscription_group_identifier` 来确定该订阅所属的订阅组。
+2. 在收据中，检查所有应用内购买交易的 `is_trial_period` 和 `is_in_intro_offer_period` 的值。如果对于给定的订阅，这两个字段中的任何一个为 `true`，则用户没有资格获得该订阅产品或同一订阅组内任何其他产品的推介优惠。使用 `responseBody.Pending_renewal_info` 数组中的 `subscription_group_identifier` 来确定该订阅所属的订阅组。
 
 Typically, you check the user’s eligibility from your server. Determine eligibility early—for example, on the first launch of the app, if possible.
 
