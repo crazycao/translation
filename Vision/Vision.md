@@ -103,7 +103,7 @@ A request that detects rectangular regions that contain text in the input image.
 
 一种请求，检测输入图像中包含文本所在的矩形区域。
 
-### protocol [StatefulRequest](https://developer.apple.com/documentation/vision/statefulrequest）
+### protocol [StatefulRequest](https://developer.apple.com/documentation/vision/statefulrequest)
 
 The protocol for a type that builds evidence of a condition over time.
 
