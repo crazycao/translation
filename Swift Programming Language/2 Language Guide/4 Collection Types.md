@@ -388,9 +388,529 @@ A type must be hashable in order to be stored in a set — that is, the type mus
 
 要存储在集合中，类型必须是可哈希的 —— 也就是说，该类型必须能为自身计算出一个哈希值。哈希值是一个 `Int` 值 —— 对于所有比较结果相等的对象，它们的哈希值都相同 —— 如果 `a == b`，那么 `a` 的哈希值等于 `b` 的哈希值。
 
-All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default, and can be used as set value types or dictionary key types. Enumeration case values without associated values (as described in Enumerations) are also hashable by default.
+All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default, and can be used as set value types or dictionary key types. Enumeration case values without associated values (as described in [Enumerations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/enumerations)) are also hashable by default.
 
-Note
+Swift 的所有基本类型（如 String、Int、Double 和 Bool）默认都是可哈希的，可以作为集合的值类型或字典的键类型使用。没有关联值的枚举值（如《[枚举](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/enumerations)》章节所述），默认也是可哈希的。
 
-You can use your own custom types as set value types or dictionary key types by making them conform to the Hashable protocol from the Swift standard library. For information about implementing the required hash(into:) method, see Hashable. For information about conforming to protocols, see Protocols.
+> **Note** **注意**
+>
+> You can use your own custom types as set value types or dictionary key types by making them conform to the Hashable protocol from the Swift standard library. For information about implementing the required `hash(into:)` method, see [Hashable](https://developer.apple.com/documentation/swift/hashable). For information about conforming to protocols, see [Protocols](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols).
+> 
+> 你可以使用自定义类型作为集合的值类型或字典的键类型，只要让它遵循 Swift 标准库中的 Hashable 协议即可。有关实现必需的 `hash (into:)` 方法的信息，请参阅《[可哈希](https://developer.apple.com/documentation/swift/hashable)》；有关协议遵循的信息，请参阅《[协议](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols)》。
 
+### 3.2 Set Type Syntax 集合类型语法
+
+The type of a Swift set is written as `Set<Element>`, where `Element` is the type that the set is allowed to store. Unlike arrays, sets don’t have an equivalent shorthand form.
+
+Swift 中集合的类型表示为 `Set<Element>`，其中 `Element` 是该集合允许存储的元素类型。与数组不同，集合没有对应的简写形式。
+
+### 3.3 Creating and Initializing an Empty Set 创建和初始化空集合
+
+You can create an empty set of a certain type using initializer syntax:
+
+你可以使用初始化器语法创建特定类型的空集合：
+
+```
+var letters = Set<Character>()
+print("letters is of type Set<Character> with \(letters.count) items.")
+// Prints "letters is of type Set<Character> with 0 items."
+// 输出 "letters 是 Set<Character> 类型，包含 0 个元素。"
+```
+
+> **Note** **注意**
+>
+> The type of the `letters` variable is inferred to be `Set<Character>`, from the type of the initializer.
+> 
+> 从初始化器的类型推断得到 `letters` 变量的类型是 `Set<Character>`。
+
+Alternatively, if the context already provides type information, such as a function argument or an already typed variable or constant, you can create an empty set with an empty array literal:
+
+另外，如果上下文已经提供了类型信息（例如函数参数或已指定类型的变量/常量），你可以使用空数组字面量创建空集合：
+
+```
+letters.insert("a")
+// letters now contains 1 value of type Character
+// letters 现在包含 1 个 Character 类型的值
+letters = []
+// letters is now an empty set, but is still of type Set<Character>
+// letters 现在是空集合，但仍然是 Set<Character> 类型
+```
+
+### 3.4 Creating a Set with an Array Literal 用数组字面量创建集合
+
+You can also initialize a set with an array literal, as a shorthand way to write one or more values as a set collection.
+
+你也可以使用数组字面量来初始化集合，这是一种简写方式，用于将一个或多个值编写为集合。
+
+The example below creates a set called `favoriteGenres` to store `String` values:
+
+下面的示例创建了一个名为 `favoriteGenres` 的集合，用于存储 `String` 类型的值：
+
+```
+var favoriteGenres: Set<String> = ["Rock", "Classical", "Hip hop"]
+// favoriteGenres has been initialized with three initial items
+// favoriteGenres 已用三个初始元素完成初始化
+```
+
+The `favoriteGenres` variable is declared as “a set of `String` values”, written as `Set<String>`. Because this particular set has specified a value type of String, it’s only allowed to store `String` values. Here, the `favoriteGenres` set is initialized with three `String` values (`"Rock"`, `"Classical"`, and `"Hip hop"`), written within an array literal.
+
+`favoriteGenres` 变量被声明为 “一组 `String` 类型的值”，写法为 `Set<String>`。由于这个特定的集合指定了值类型为 `String`，因此它只允许存储 `String` 类型的值。此处，`favoriteGenres` 集合通过三个 `String` 类型的值（`"Rock"`、`"Classical"` 和 `"Hip hop"`）进行初始化，这些值被写在数组字面量（array literal）中。
+
+> **Note** **说明**
+>
+> The `favoriteGenres` set is declared as a variable (with the `var` introducer) and not a constant (with the `let` introducer) because items are added and removed in the examples below.
+> 
+> `favoriteGenres` 集合被声明为变量（使用 `var` 关键字），而非常量（使用 `let` 关键字），这是因为在下方的示例中需要向该集合添加和移除元素。
+
+A set type can’t be inferred from an array literal alone, so the type `Set` must be explicitly declared. However, because of Swift’s type inference, you don’t have to write the type of the set’s elements if you’re initializing it with an array literal that contains values of just one type. The initialization of `favoriteGenres` could have been written in a shorter form instead:
+
+仅通过数组字面量无法推断出集合类型，因此必须显式声明其类型为 `Set`。不过，得益于 Swift 的类型推断机制，若使用仅包含单一类型值的数组字面量为集合初始化，则无需编写集合元素的类型。`favoriteGenres` 的初始化代码也可采用更简洁的形式编写：
+
+```
+var favoriteGenres: Set = ["Rock", "Classical", "Hip hop"]
+```
+
+Because all values in the array literal are of the same type, Swift can infer that `Set<String>` is the correct type to use for the `favoriteGenres` variable.
+
+由于数组字面量中的所有值均为同一类型，Swift 能够推断出 `favoriteGenres` 变量应使用 `Set<String>` 作为正确类型。
+
+### 3.5 Accessing and Modifying a Set 访问和修改集合
+
+You access and modify a set through its methods and properties.
+
+你可以通过集合的方法和属性来访问并修改它。
+
+To find out the number of items in a set, check its read-only `count` property:
+
+要查看集合中元素的数量，可访问其只读的 `count` 属性：
+
+```
+print("I have \(favoriteGenres.count) favorite music genres.")
+// Prints "I have 3 favorite music genres."
+// 输出："我有 3 种喜欢的音乐类型。"
+```
+
+Use the Boolean `isEmpty` property as a shortcut for checking whether the `count` property is equal to `0`:
+
+可使用布尔类型的 `isEmpty` 属性作为快捷方式，判断 `count` 属性是否等于 `0`（即集合是否为空）：
+
+```
+if favoriteGenres.isEmpty {
+    print("As far as music goes, I'm not picky.")
+} else {
+    print("I have particular music preferences.")
+}
+// Prints "I have particular music preferences."
+// 输出："我有特定的音乐偏好。"
+```
+
+You can add a new item into a set by calling the set’s `insert(_:)` method:
+
+调用集合的 `insert(_:)` 方法，可以向集合中添加新元素：
+
+```
+favoriteGenres.insert("Jazz")
+// favoriteGenres now contains 4 items
+// 此时 favoriteGenres 包含 4 个元素
+```
+
+You can remove an item from a set by calling the set’s `remove(_:)` method, which removes the item if it’s a member of the set, and returns the removed value, or returns `nil` if the set didn’t contain it. Alternatively, all items in a set can be removed with its `removeAll()` method.
+
+可以通过调用集合的 `remove(_:)` 方法从集合中移除一个元素：如果该元素是集合的成员，此方法会将其移除并返回被移除的元素；如果集合中不包含该元素，则返回 `nil`。此外，你也可以使用集合的 `removeAll()` 方法移除集合中的所有元素。
+
+```
+if let removedGenre = favoriteGenres.remove("Rock") {
+    print("\(removedGenre)? I'm over it.")
+} else {
+    print("I never much cared for that.")
+}
+// Prints "Rock? I'm over it."
+// 输出："Rock? 我已经不喜欢了。"
+```
+
+To check whether a set contains a particular item, use the `contains(_:)` method.
+
+使用 `contains(_:)` 方法，可判断集合中是否存在某个特定元素：
+
+```
+if favoriteGenres.contains("Funk") {
+    print("I get up on the good foot.")
+} else {
+    print("It's too funky in here.")
+}
+// Prints "It's too funky in here."
+// 输出："这里的音乐太放克了（我不太喜欢）。"
+```
+
+### 3.6 Iterating Over a Set 遍历集合
+
+You can iterate over the values in a set with a `for-in` loop.
+
+你可以使用 `for-in` 循环遍历集合中的所有元素。
+
+```
+for genre in favoriteGenres {
+    print("\(genre)")
+}
+// Classical（古典乐）
+// Jazz（爵士乐）
+// Hip hop（嘻哈乐）
+```
+
+For more about the `for-in` loop, see [For-In Loops](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#For-In-Loops).
+
+关于 `for-in` 循环的更多用法，可参考《[For-In 循环](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#For-In-Loops)》章节。
+
+Swift’s `Set` type doesn’t have a defined ordering. To iterate over the values of a set in a specific order, use the `sorted()` method, which returns the set’s elements as an array sorted using the `<` operator.
+
+Swift 中的 `Set` 类型没有默认的元素顺序。若要按特定顺序遍历集合元素，可使用 `sorted()` 方法 —— 该方法会将集合元素按 `<` 运算符的规则排序，并以数组形式返回排序后的结果。
+
+```
+for genre in favoriteGenres.sorted() {
+    print("\(genre)")
+}
+// Classical（古典乐）
+// Hip hop（嘻哈乐）
+// Jazz（爵士乐）
+```
+
+## 5 Performing Set Operations 执行集合操作
+
+You can efficiently perform fundamental set operations, such as combining two sets together, determining which values two sets have in common, or determining whether two sets contain all, some, or none of the same values.
+
+你可以高效地执行基本的集合操作，例如：将两个集合合并、确定两个集合的共有元素，或者判断两个集合是否包含全部、部分相同的元素，抑或是完全没有相同元素。
+
+### 5.1 Fundamental Set Operations 基本集合操作
+
+The illustration below depicts two sets — `a` and `b` — with the results of various set operations represented by the shaded regions.
+
+下图展示了两个集合 `a` 和 `b`，其中阴影部分代表各种集合操作的结果。
+
+![](images/4-5-setVennDiagram@2x.png)
+
+- Use the `intersection(_:)` method to create a new set with only the values common to both sets.
+- Use the `symmetricDifference(_:)` method to create a new set with values in either set, but not both.
+- Use the `union(_:)` method to create a new set with all of the values in both sets.
+- Use the `subtracting(_:)` method to create a new set with values not in the specified set.
+- 使用 `intersection(_:)` 方法创建一个新集合，该集合仅包含两个集合的共有元素。
+- 使用 `symmetricDifference(_:)` 方法创建一个新集合，该集合包含仅在其中一个集合中出现的元素。
+- 使用 `union(_:)` 方法创建一个新集合，该集合包含两个集合的所有元素。
+- 使用 `subtracting(_:)` 方法创建一个新集合，该集合包含原集合中不存在于指定集合中的元素。
+
+```
+let oddDigits: Set = [1, 3, 5, 7, 9]
+let evenDigits: Set = [0, 2, 4, 6, 8]
+let singleDigitPrimeNumbers: Set = [2, 3, 5, 7]
+
+oddDigits.union(evenDigits).sorted()
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+oddDigits.intersection(evenDigits).sorted()
+// []
+oddDigits.subtracting(singleDigitPrimeNumbers).sorted()
+// [1, 9]
+oddDigits.symmetricDifference(singleDigitPrimeNumbers).sorted()
+// [1, 2, 9]
+```
+
+### 5.2 Set Membership and Equality - 集合的包含关系与相等性
+
+The illustration below depicts three sets — `a`, `b` and `c` — with overlapping regions representing elements shared among sets. Set `a` is a _superset_ of set `b`, because `a` contains all elements in `b`. Conversely, set `b` is a _subset_ of set `a`, because all elements in `b` are also contained by `a`. Set `b` and set `c` are _disjoint_ with one another, because they share no elements in common.
+
+下图展示了三个集合 ——`a`、`b` 和 `c`——其中重叠区域代表集合之间共有的元素。集合 `a` 是集合 `b` 的 *超集*，因为 `a` 包含了 `b` 中的所有元素。反过来，集合 `b` 是集合 `a` 的 *子集*，因为 `b` 中的所有元素也都被 `a` 包含。集合 `b` 和集合 `c` *互不相交*，因为它们没有任何共同的元素。
+
+![](images/4-5-setEulerDiagram@2x.png)
+
+- Use the “is equal” operator (`==`) to determine whether two sets contain all of the same values.
+- Use the `isSubset(of:)` method to determine whether all of the values of a set are contained in the specified set.
+- Use the `isSuperset(of:)` method to determine whether a set contains all of the values in a specified set.
+- Use the `isStrictSubset(of:)` or `isStrictSuperset(of:)` methods to determine whether a set is a subset or superset, but not equal to, a specified set.
+- Use the `isDisjoint(with:)` method to determine whether two sets have no values in common.
+
+- 使用 “相等” 运算符（`==`）判断两个集合是否包含完全相同的元素。
+- 使用 `isSubset(of:)` 方法判断一个集合的所有元素是否都包含在指定集合中（即是否为指定集合的子集）。
+- 使用 `isSuperset(of:)` 方法判断一个集合是否包含指定集合的所有元素（即是否为指定集合的超集）。
+- 使用 `isStrictSubset(of:)` 或 `isStrictSuperset(of:)` 方法判断一个集合是否为指定集合的子集或超集，但两个集合不相等（即 “严格子集” 或 “严格超集”）。
+- 使用 `isDisjoint(with:)` 方法判断两个集合是否没有任何共有元素（即是否不相交）。
+
+```
+let houseAnimals: Set = ["🐶", "🐱"]
+let farmAnimals: Set = ["🐮", "🐔", "🐑", "🐶", "🐱"]
+let cityAnimals: Set = ["🐦", "🐭"]
+
+houseAnimals.isSubset(of: farmAnimals)
+// true
+farmAnimals.isSuperset(of: houseAnimals)
+// true
+farmAnimals.isDisjoint(with: cityAnimals)
+// true
+```
+
+## 6 Dictionaries 字典
+
+A _dictionary_ stores associations between keys of the same type and values of the same type in a collection with no defined ordering. Each value is associated with a unique key, which acts as an identifier for that value within the dictionary. Unlike items in an array, items in a dictionary don’t have a specified order. You use a dictionary when you need to look up values based on their identifier, in much the same way that a real-world dictionary is used to look up the definition for a particular word.
+
+*字典* 是一种存储着相同类型键（Key）与相同类型值（Value）的关联关系的无序集合。每个值都与唯一的键绑定，键作为该值在字典中的标识。与数组元素不同，字典元素没有固定顺序。当你需要通过标识查找值时，类似用真实字典查询特定单词的释义，使用字典最为合适。
+
+> **Note** **注意**
+>
+> Swift’s `Dictionary` type is bridged to Foundation’s `NSDictionary` class.
+> 
+> Swift 的 `Dictionary` 类型与 Foundation 的 `NSDictionary` 类是桥接的。
+>
+> For more information about using `Dictionary` with Foundation and Cocoa, see [Bridging Between Dictionary and NSDictionary](https://developer.apple.com/documentation/swift/dictionary#2846239).
+> 
+> 关于在 Foundation 和 Cocoa 之间的 `Dictionary` 配合使用，可参考《[Dictionary 与 NSDictionary 之间的桥接](https://developer.apple.com/documentation/swift/dictionary#2846239)》。
+
+## 6.1 Dictionary Type Shorthand Syntax 字典类型的简写语法
+
+The type of a Swift dictionary is written in full as `Dictionary<Key, Value>`, where `Key` is the type of value that can be used as a dictionary key, and `Value` is the type of value that the dictionary stores for those keys.
+
+Swift 字典的完整类型写法是 `Dictionary<Key, Value>`，其中 `Key` 是可作为字典键的类型，`Value` 是字典为这些键存储的值的类型。
+
+> **Note** **注意**
+>
+> A dictionary `Key` type must conform to the `Hashable` protocol, like a set’s value type.
+> 
+> 字典的 `Key` 类型必须遵循 `Hashable` 协议，这一点与集合的元素类型要求一致。
+
+You can also write the type of a dictionary in shorthand form as `[Key: Value]`. Although the two forms are functionally identical, the shorthand form is preferred and is used throughout this guide when referring to the type of a dictionary.
+
+你也可以用简写形式 `[Key: Value]` 表示字典类型。两种写法功能完全相同，但简写形式更常用，本指南中提及字典类型时均采用这种方式。
+
+## 6.2 Creating an Empty Dictionary 创建空字典
+
+As with arrays, you can create an empty `Dictionary` of a certain type by using initializer syntax:
+
+和数组类似，你可以使用初始化语法创建指定类型的空字典：
+
+```
+var namesOfIntegers: [Int: String] = [:]
+// namesOfIntegers is an empty [Int: String] dictionary
+// namesOfIntegers 是一个空的 [Int: String] 字典
+```
+
+This example creates an empty dictionary of type `[Int: String]` to store human-readable names of integer values. Its keys are of type `Int`, and its values are of type `String`.
+
+这个示例创建了一个 `[Int: String]` 类型的空字典，用于存储整数的可读名称，其键为 `Int` 类型，值为 `String` 类型。
+
+If the context already provides type information, you can create an empty dictionary with an empty dictionary literal, which is written as `[:]` (a colon inside a pair of square brackets):
+
+如果上下文已提供类型信息，你可以用空字典字面量 `[:]`（方括号内加冒号）创建空字典：
+
+```
+namesOfIntegers[16] = "sixteen"
+// namesOfIntegers now contains 1 key-value pair
+namesOfIntegers = [:]
+// namesOfIntegers is once again an empty dictionary of type [Int: String]
+```
+
+## 6.3 Creating a Dictionary with a Dictionary Literal 用字典字面量创建字典
+
+You can also initialize a dictionary with a dictionary literal, which has a similar syntax to the array literal seen earlier. A dictionary literal is a shorthand way to write one or more key-value pairs as a Dictionary collection.
+
+你也可以通过字典字面量初始化字典，语法类似之前的数组字面量。字典字面量是一种简写方式，用于直接编写一个或多个键值对作为字典集合。
+
+A key-value pair is a combination of a key and a value. In a dictionary literal, the key and value in each key-value pair are separated by a colon. The key-value pairs are written as a list, separated by commas, surrounded by a pair of square brackets:
+
+键值对由键和值组成，在字典字面量中，每个键值对的键和值用冒号分隔，多个键值对以逗号隔开，整体包裹在方括号内：
+
+```
+[<#key 1#>: <#value 1#>, <#key 2#>: <#value 2#>, <#key 3#>: <#value 3#>]
+```
+
+The example below creates a dictionary to store the names of international airports. In this dictionary, the keys are three-letter International Air Transport Association codes, and the values are airport names:
+
+以下示例创建了一个存储国际机场名称的字典，键是国际航空运输协会（IATA）的三字代码，值是机场名称：
+
+```
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+```
+
+The airports dictionary is declared as having a type of `[String: String]`, which means “a `Dictionary` whose keys are of type `String`, and whose values are also of type `String`”.
+
+该字典被声明为 `[String: String]` 类型，意为 “键为 `String` 类型、值也为 `String` 类型的字典”。
+
+> **Note** **说明**
+>
+> The `airports` dictionary is declared as a variable (with the `var` introducer), and not a constant (with the `let` introducer), because more airports are added to the dictionary in the examples below.
+> 
+> `airports` 字典用 `var` 声明为变量（而非 `let` 声明的常量），因为后续示例中会向该字典添加更多机场信息。
+
+The airports dictionary is initialized with a dictionary literal containing two key-value pairs. The first pair has a key of "YYZ" and a value of "Toronto Pearson". The second pair has a key of "DUB" and a value of "Dublin".
+
+这个字典通过包含两个键值对的字面量初始化：第一个键值对的键是 "YYZ"、值是 "多伦多皮尔逊机场"，第二个的键是 "DUB"、值是 "都柏林机场"。
+
+This dictionary literal contains two `String: String` pairs. This key-value type matches the type of the `airports` variable declaration (a dictionary with only `String` keys, and only `String` values), and so the assignment of the dictionary literal is permitted as a way to initialize the `airports` dictionary with two initial items.
+
+这个字典字面量包含两个 `String: String` 类型的键值对。这种键值类型与 `airports` 变量的声明类型完全匹配 —— 该字典仅接受 `String` 类型的键，且仅存储 `String` 类型的值。因此，允许通过这种字典字面量赋值的方式，为 `airports` 字典初始化两个初始元素。
+
+As with arrays, you don’t have to write the type of the dictionary if you’re initializing it with a dictionary literal whose keys and values have consistent types. The initialization of `airports` could have been written in a shorter form instead:
+
+和数组一样，如果用的字典字面量中所有键的类型一致、所有值的类型也一致，你就不用显式声明字典的类型。`airports` 的初始化语句可以简化成这样：
+
+```
+var airports = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+```
+
+Because all keys in the literal are of the same type as each other, and likewise all values are of the same type as each other, Swift can infer that `[String: String]` is the correct type to use for the `airports` dictionary.
+
+因为该字面量中所有键的类型都相同，所有值的类型也同样相同，所以 Swift 能够推断出 `[String: String]` 是 `airports` 字典应使用的正确类型。
+
+### 6.4 Accessing and Modifying a Dictionary 访问和修改字典
+
+You access and modify a dictionary through its methods and properties, or by using subscript syntax.
+
+你可以通过字典的方法、属性，或使用下标语法来访问和修改字典。
+
+As with an array, you find out the number of items in a Dictionary by checking its read-only `count` property:
+
+与数组类似，通过查看字典的只读属性 `count`，可获知字典中键值对的数量：
+
+```
+print("The airports dictionary contains \(airports.count) items.")
+// Prints "The airports dictionary contains 2 items."
+// 输出："airports 字典包含 2 个键值对。"
+```
+
+Use the Boolean `isEmpty` property as a shortcut for checking whether the `count` property is equal to `0`:
+
+可使用布尔类型的 `isEmpty` 属性作为快捷方式，判断 `count` 属性是否等于 `0`（即字典是否为空）：
+
+```
+if airports.isEmpty {
+    print("The airports dictionary is empty.")
+} else {
+    print("The airports dictionary isn't empty.")
+}
+// Prints "The airports dictionary isn't empty."
+// 输出："airports 字典不是空的。"
+```
+
+You can add a new item to a dictionary with subscript syntax. Use a new key of the appropriate type as the subscript index, and assign a new value of the appropriate type:
+
+通过下标语法可向字典添加新键值对。使用符合类型要求的新键作为下标索引，并为其赋值符合类型要求的新值：
+
+```
+airports["LHR"] = "London"
+// the airports dictionary now contains 3 items
+// airports 字典现在包含 3 个键值对
+```
+
+You can also use subscript syntax to change the value associated with a particular key:
+
+也可通过下标语法修改指定键关联的值：
+
+```
+airports["LHR"] = "London Heathrow"
+// the value for "LHR" has been changed to "London Heathrow"
+// "LHR" 对应的 值已更新为 "London Heathrow"
+```
+
+As an alternative to subscripting, use a dictionary’s `updateValue(_:forKey:)` method to set or update the value for a particular key. Like the subscript examples above, the `updateValue(_:forKey:)` method sets a value for a key if none exists, or updates the value if that key already exists. Unlike a subscript, however, the `updateValue(_:forKey:)` method returns the old value after performing an update. This enables you to check whether or not an update took place.
+
+除下标语法外，还可使用字典的 `updateValue(_:forKey:)` 方法设置或更新指定键的值。与上述下标示例类似，若该键不存在，`updateValue(_:forKey:)` 方法会为其设置一个值；若该键已存在则会更新其对应的值。但与下标不同的是，`updateValue(_:forKey:)` 方法在执行更新后会返回旧值。这能让你验证是否确实发生了更新。
+
+The `updateValue(_:forKey:)` method returns an optional value of the dictionary’s value type. For a dictionary that stores `String` values, for example, the method returns a value of type `String?`, or “optional String”. This optional value contains the old value for that key if one existed before the update, or `nil` if no value existed:
+
+`updateValue(_:forKey:)` 方法返回的是字典值类型的可选值。例如，对于存储 `String` 类型值的字典，该方法返回 `String?`（即 “可选 String”）。若更新前键已存在，返回的可选值会包含该键的旧值；若不存在，返回 `nil`。
+
+```
+if let oldValue = airports.updateValue("Dublin Airport", forKey: "DUB") {
+    print("The old value for DUB was \(oldValue).")
+}
+// Prints "The old value for DUB was Dublin."
+// 输出："DUB 对应的旧值是 Dublin（都柏林）。"
+```
+
+You can also use subscript syntax to retrieve a value from the dictionary for a particular key. Because it’s possible to request a key for which no value exists, a dictionary’s subscript returns an optional value of the dictionary’s value type. If the dictionary contains a value for the requested key, the subscript returns an optional value containing the existing value for that key. Otherwise, the subscript returns `nil`:
+
+通过下标语法可获取字典中指定键对应的值。由于可能查询到不存在的键，字典下标返回的是值类型的可选值。若字典包含查询的键，下标返回包含对应值的可选值。否则，下标返回 `nil`。
+
+```
+if let airportName = airports["DUB"] {
+    print("The name of the airport is \(airportName).")
+} else {
+    print("That airport isn't in the airports dictionary.")
+}
+// Prints "The name of the airport is Dublin Airport."
+// 输出："机场名称是 Dublin Airport（都柏林机场）。"
+```
+
+You can use subscript syntax to remove a key-value pair from a dictionary by assigning a value of `nil` for that key:
+
+通过使用下标语法将指定键赋值 `nil`，可以从字典中删除该键值对：
+
+```
+airports["APL"] = "Apple International"
+// "Apple International" isn't the real airport for APL, so delete it
+// "Apple International" 并非 APL 对应的真实机场，因此删除它
+airports["APL"] = nil
+// APL has now been removed from the dictionary
+// APL 现已从字典中移除
+```
+
+Alternatively, remove a key-value pair from a dictionary with the `removeValue(forKey:)` method. This method removes the key-value pair if it exists and returns the removed value, or returns `nil` if no value existed:
+
+此外，还可通过 `removeValue(forKey:)` 方法从字典中删除键值对。若键存在，该方法会删除对应的键值对并返回被删除的值；若键不存在，该方法返回 `nil`。
+
+```
+if let removedValue = airports.removeValue(forKey: "DUB") {
+    print("The removed airport's name is \(removedValue).")
+} else {
+    print("The airports dictionary doesn't contain a value for DUB.")
+}
+// Prints "The removed airport's name is Dublin Airport."
+// 输出："被删除的机场名称是 Dublin Airport（都柏林机场）。"
+```
+
+### 6.5 Iterating Over a Dictionary 遍历字典
+
+You can iterate over the key-value pairs in a dictionary with a `for-in` loop. Each item in the dictionary is returned as a `(key, value)` tuple, and you can decompose the tuple’s members into temporary constants or variables as part of the iteration:
+
+你可以使用 `for-in` 循环遍历字典中的键值对。字典中的每个元素会以 `(key, value)` 元组的形式返回，在遍历过程中，你可以将元组的成员分解为临时常量或变量：
+
+```
+for (airportCode, airportName) in airports {
+    print("\(airportCode): \(airportName)")
+}
+// LHR: London Heathrow
+// YYZ: Toronto Pearson
+```
+
+For more about the `for-in loop`, see [For-In Loops](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#For-In-Loops).
+
+有关 `for-in` 循环的更多信息，请参阅《[For-In 循环](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#For-In-Loops)》章节。
+
+You can also retrieve an iterable collection of a dictionary’s keys or values by accessing its `keys` and `values` properties:
+
+通过访问字典的 `keys` 或 `values` 属性，你还可以获取键或值的可遍历集合：
+
+```
+for airportCode in airports.keys {
+    print("Airport code: \(airportCode)")
+}
+// Airport code: LHR
+// Airport code: YYZ
+
+for airportName in airports.values {
+    print("Airport name: \(airportName)")
+}
+// Airport name: London Heathrow
+// Airport name: Toronto Pearson
+```
+
+If you need to use a dictionary’s keys or values with an API that takes an `Array` instance, initialize a new array with the `keys` or `values` property:
+
+如果你需要将字典的键或值用于要求接收 `Array` 实例的 API，可以通过 `keys` 或 `values` 属性初始化一个新数组：
+
+```
+let airportCodes = [String](airports.keys)
+// airportCodes is ["LHR", "YYZ"]
+
+let airportNames = [String](airports.values)
+// airportNames is ["London Heathrow", "Toronto Pearson"]
+```
+
+Swift’s `Dictionary` type doesn’t have a defined ordering. To iterate over the keys or values of a dictionary in a specific order, use the `sorted()` method on its `keys` or `values` property.
+
+Swift 中的 `Dictionary` 类型没有固定的元素顺序。若要按特定顺序遍历字典的键或值，可对其 `keys` 或 `values` 属性使用 `sorted()` 方法（该方法会按默认规则排序并返回数组）。
