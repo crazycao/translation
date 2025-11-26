@@ -35,15 +35,17 @@ To open, run your app (In this case I am running a demo app) and then tap on the
 
 要打开内存图调试器，请运行您的应用程序（在本例中，我正在运行一个演示应用程序），然后点击视觉调试器和位置模拟器按钮之间的有三个点的按钮。这将获取应用程序当前状态的内存快照。
 
-![The memory graph debugger button](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-04-at-3.45.45-PM.png)
+![The memory graph debugger button](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/debugger_button.webp)
 
 The left panel shows you the objects in memory for this snapshot followed by the number of instances of each class next to it's name.
 
 左侧面板显示此快照的内存中的对象，每个类名称旁边都跟着它的实例数。
 
-ex: (MainViewController(1))
+ex: `(MainViewController(1))`
 
-![The classes in-memory in Xcode](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-04-at-3.46.57-PM.png)
+例如：`(MainViewController(1))`
+
+![The classes in-memory in Xcode](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/memory_snapshot.webp)
 
 Signifies that there is only one `MainViewController` in memory at the time of the snapshot, followed by the address of that instance in memory below.
 
@@ -53,7 +55,7 @@ Signifies that there is only one `MainViewController` in memory at the time of t
 
 **如果你在左侧面板上选择一个对象，你将看到将选定对象保存在内存中的引用链。**例如，在 `MainViewController` 下选择 `0x7f85204227c0` 将显示如下图表：
 
-![The memory graph with the strong referencing and unknown referencing](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-04-at-3.47.53-PM.png)
+![The memory graph with the strong referencing and unknown referencing](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/referencing_chain.webp)
 
 - The **bold lines** mean there is a **strong reference** to the object it points to.
 - The **light gray lines** mean there is an **unknown reference** (could be weak or strong) to the object it points to.
@@ -70,7 +72,7 @@ In addition, the memory graph debugger can auto-detect simple memory leaks and p
 
 此外，内存图调试器可以自动检测简单的内存泄漏，并提示警告，如紫色 `! ` 标记。点击它将在左侧面板上显示泄漏的实例。
 
-![The retain cycles automatically detected by Xcode](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-04-at-3.49.26-PM.png)
+![The retain cycles automatically detected by Xcode](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/purple_warnings.webp)
 
 **Please note that the Xcode’s auto-detection does not always catch every memory leak, and oftentimes you will have to find them yourself.** In the next section, I will explain the approach to using the memory graph debugger for debugging.
 
@@ -132,7 +134,7 @@ After taking a memory snapshot, you will see something like this:
 
 拍摄内存快照后，你将看到像这样的内容：
 
-![Snapshot of the retain cycles and leaked instances of the classes](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-04-at-3.51.25-PM.png)
+![Snapshot of the retain cycles and leaked instances of the classes](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/snapshot_of_the_retain_cycles.webp)
 
 Since we repeated this flow several times, once we return back to the main screen `MainViewController` the observable view controller should have been deallocated if there were no memory leaks. However, we see `ObservableViewController (25)` in the left panel, which means we have 25 instances of that view controller still in memory! Also note that Xcode did not recognize this as a memory leak!
 
@@ -142,7 +144,7 @@ Now, tap on  `ObservableViewController (25)`. You will see the object graph and 
 
 现在，点击 `ObservableViewController(25)`。你将看到对象图，它看起来像这样：
 
-![Closure holding a strong referencing causing a memory leak](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-04-at-3.52.57-PM.png)
+![Closure holding a strong referencing causing a memory leak](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/closure_holding_strong_referencing.webp)
 
 As you can see, it shows a Swift closure context, retaining `ObservableViewController` in memory. This closure is retained in memory by `__NSObserver`. Now let’s go to the code and fix this leak.
 
@@ -224,7 +226,7 @@ You should see something like this where `ObservableViewController` is nowhere o
 
 你应该可以看到，在你退出该流程后，`ObservableViewController` 不再在列表中了！
 
-![Snapshot of the memory graph after fixing the memory leak](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-13-at-10.58.46-PM.png)
+![Snapshot of the memory graph after fixing the memory leak](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/memory_leak_fixed.webp)
 
 The memory leak has been fixed! 🎉 Feel free to test out the other examples in the `LeakyApp` repo, and read through the comments. I have included comments in each file explaining the causes of each retain cycle/memory leak.
 
@@ -234,41 +236,18 @@ The memory leak has been fixed! 🎉 Feel free to test out the other examples in
 ## VI. Additional tips to avoid retain cycles - 避免循环引用的提示
 
 1. Keep in mind that using a function as a closure keeps a strong reference by default. If you have to pass in a function as a closure and it causes a retain cycle, you can make an extension or operator overload to break strong reference. I won’t be going over this topic but there are many resources online for this.
+
+	请记住，使用函数作为闭包在默认情况下会保持强引用。如果你不得不将函数作为闭包传递，并且它导致了循环引用，你可以使用扩展或运算符重载来中断强引用。我不继续讨论这个话题，网上有很多关于这个的资源。
+
 2. When using views that have action handlers through closures, be careful to not reference the view inside its own closure! And if you do, you must use the capture list to keep a weak reference to that view, with the closure that the view has a strong reference to.
+
+	当使用具有通过闭包的操作句柄的视图时，请注意不要在自己的闭包中引用视图！如果这样做，则必须使用捕获列表来保持对该视图的弱引用，而该视图强引用这个闭包。
 
 	For example, we may have some reusable view like this:
 	[https://gist.github.com/chauvincent/b2da3c76b0b811c947487ef3bf171d5a](https://gist.github.com/chauvincent/b2da3c76b0b811c947487ef3bf171d5a)
 	
-	In the caller, we have some presentation code like this:
-	[https://gist.github.com/chauvincent/c049136b236c8b358d81ad16168a0243](https://gist.github.com/chauvincent/c049136b236c8b358d81ad16168a0243)
-	
-	This is a retain cycle here because `someModalVC`’s `actionHandler` captures a strong reference to `someModalVC`. Meanwhile `someModalVC` holds a strong reference to the `actionHandler`.
-
-	To fix this:
-	[https://gist.github.com/chauvincent/fe868818e9be6f61cf3bc032539ff3a8](https://gist.github.com/chauvincent/fe868818e9be6f61cf3bc032539ff3a8)
-
-	We need to make sure the reference to `someModalVC` is weak by updating the capture list with `[weak someModalVC]` in to break the retain cycle.
-
-3. When you are declaring properties on your objects and you have a variable that is a protocol type, be sure to add a class constraint and declare it as weak if needed! This is because the compiler will give you an error by default if you do not add a class constraint.  Although It is pretty well known that the delegate in the delegation pattern is supposed to be weak, but keep in mind that this rule still applies for other abstractions and design patterns, or any protocol variables you declare.
-
-	For example, here we a stubbed out clean swift pattern:
-	[https://gist.github.com/chauvincent/8882082ea1280c722955b4803ca6854b](https://gist.github.com/chauvincent/8882082ea1280c722955b4803ca6854b)
-	[https://gist.github.com/chauvincent/15f52e6908a70ea36d099a16d2d660e2](https://gist.github.com/chauvincent/15f52e6908a70ea36d099a16d2d660e2)
-	
-	Here, we need the `OrdersListPresenter`’s `view` property must be a weak reference or else we will have a strong circular reference from the `View -> Interacter -> Presenter -> View`. However when updating that property to `weak var view: OrdersListDisplayLogic` we will get a compiler error.
-	
-	![Errors from not adding a class-bound protocol while making a reference weak](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-13-at-11.09.14-PM.png)
- 
-	This compiler error may look discouraging to some when declaring a protocol-typed variable as weak! But in this case, you have to fix this by adding a class constraint to the protocol!
-	
-	[https://gist.github.com/chauvincent/bbc2c2fc42df62bad61a9d4c49b0290e](https://gist.github.com/chauvincent/bbc2c2fc42df62bad61a9d4c49b0290e)
-
->
-
-1. 请记住，使用函数作为闭包在默认情况下会保持强引用。如果你不得不将函数作为闭包传递，并且它导致了循环引用，你可以使用扩展或运算符重载来中断强引用。我不继续讨论这个话题，网上有很多关于这个的资源。
-2. 当使用具有通过闭包的操作处理程序的视图时，请注意不要在自己的闭包中引用视图！如果这样做，则必须使用捕获列表来保持对该视图的弱引用，而该视图强引用这个闭包。
-
 	例如，我们有一些像这样的可重用视图：
+	
 	```
 	class SomeModalViewController: UIViewController {
 	    var actionHandler: (() -> Void)?
@@ -279,7 +258,11 @@ The memory leak has been fixed! 🎉 Feel free to test out the other examples in
 	}
 	```
 	
+	In the caller, we have some presentation code like this:
+	[https://gist.github.com/chauvincent/c049136b236c8b358d81ad16168a0243](https://gist.github.com/chauvincent/c049136b236c8b358d81ad16168a0243)
+	
 	在调用者中，我们有一些像这样的代码：
+	
 	```
 	let someModalVC = SomeModalViewController()
 	someModalVC.actionHandler = {
@@ -288,9 +271,15 @@ The memory leak has been fixed! 🎉 Feel free to test out the other examples in
 	present(someModalVC, animated: true, completion: nil)
 	```
 	
-	这里是一个循环引用，因为 `someModalVC` 的 `actionHandler` 捕获了一个对 `someModalVC` 的强引用。同时 `someModalVC` 持有了对 `actionHandler ` 的强引用。
+	This is a retain cycle here because `someModalVC`’s `actionHandler` captures a strong reference to `someModalVC`. Meanwhile `someModalVC` holds a strong reference to the `actionHandler`.
 	
+	这里是一个循环引用，因为 `someModalVC` 的 `actionHandler` 捕获了一个对 `someModalVC` 的强引用。同时 `someModalVC` 持有了对 `actionHandler ` 的强引用。
+
+	To fix this:
+	[https://gist.github.com/chauvincent/fe868818e9be6f61cf3bc032539ff3a8](https://gist.github.com/chauvincent/fe868818e9be6f61cf3bc032539ff3a8)
+
 	这样修正：
+	
 	```
 	let someModalVC = SomeModalViewController()
 	someModalVC.actionHandler = { [weak someModalVC] in
@@ -299,10 +288,18 @@ The memory leak has been fixed! 🎉 Feel free to test out the other examples in
 	present(someModalVC, animated: true, completion: nil)
 	```
 	
+	We need to make sure the reference to `someModalVC` is weak by updating the capture list with `[weak someModalVC]` in to break the retain cycle.
+
 	我们需要通过使用 `[weak someModalVC] in` 更新捕获列表以确保对 `someModalVC` 是弱引用，来打破循环引用。
 	
-3. 当你在对象上声明属性，并且您有一个协议类型的变量时，请确保添加一个类约束，并在需要时将其声明为弱约束！这是因为如果您不添加类约束，编译器将在默认情况下给您一个错误。尽管众所周知，委托模式中的委托应该是弱引用，但请记住，此规则仍然适用于其他抽象和设计模式，或你声明的任何协议变量。
+3. When you are declaring properties on your objects and you have a variable that is a protocol type, be sure to add a class constraint and declare it as weak if needed! This is because the compiler will give you an error by default if you do not add a class constraint.  Although It is pretty well known that the delegate in the delegation pattern is supposed to be weak, but keep in mind that this rule still applies for other abstractions and design patterns, or any protocol variables you declare.
 
+	当你在对象上声明属性，并且您有一个协议类型的变量时，请确保添加一个类约束，并在需要时将其声明为弱约束！这是因为如果您不添加类约束，编译器将在默认情况下给您一个错误。尽管众所周知，委托模式中的委托应该是弱引用，但请记住，此规则仍然适用于其他抽象和设计模式，或你声明的任何协议变量。
+
+	For example, here we a stubbed out clean swift pattern:
+	[https://gist.github.com/chauvincent/8882082ea1280c722955b4803ca6854b](https://gist.github.com/chauvincent/8882082ea1280c722955b4803ca6854b)
+	[https://gist.github.com/chauvincent/15f52e6908a70ea36d099a16d2d660e2](https://gist.github.com/chauvincent/15f52e6908a70ea36d099a16d2d660e2)
+	
 	例如，这里我们有一个简单的swift模式：
 	
 	```
@@ -336,12 +333,19 @@ The memory leak has been fixed! 🎉 Feel free to test out the other examples in
 	presenter.view = view
 	```
 	
+	Here, we need the `OrdersListPresenter`’s `view` property must be a weak reference or else we will have a strong circular reference from the `View -> Interacter -> Presenter -> View`. However when updating that property to `weak var view: OrdersListDisplayLogic` we will get a compiler error.
+	
 	这里，我们需要 `OrdersListPresenter` 的 `view` 属性必须是弱引用，否则我们将有一个来自 `View->Interacter->Presenter->View` 的强循环引用。然而，当将该属性更新为 `weak var view: OrdersListDisplayLogic` 时，我们将得到一个编译器错误。
+	
+	![Errors from not adding a class-bound protocol while making a reference weak](./How_to_detect_iOS_memory_leaks_and_retain_cycles_using_Xcode’s_memory_graph_debugger/reference_error.webp)
+ 
+	This compiler error may look discouraging to some when declaring a protocol-typed variable as weak! But in this case, you have to fix this by adding a class constraint to the protocol!
+	
+	[https://gist.github.com/chauvincent/bbc2c2fc42df62bad61a9d4c49b0290e](https://gist.github.com/chauvincent/bbc2c2fc42df62bad61a9d4c49b0290e)
 
-	![Errors from not adding a class-bound protocol while making a reference weak](https://doordash.engineering/wp-content/uploads/2019/05/Screen-Shot-2019-05-13-at-11.09.14-PM.png)
-	
 	当将协议类型变量声明为弱变量时，这个编译器错误可能会让一些人灰心！而在这种情况下，你必须通过向协议添加类约束来解决这个问题！
-	
+
+
 	```
 	protocol OrdersListDisplayLogic: class {}
 
