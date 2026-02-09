@@ -326,5 +326,522 @@ The loop’s condition (`while square < finalSquare`) is the same as before, but
 
 循环条件（`while square <finalSquare`）与之前相同，但这次直到第一次循环执行完毕后才会评估。`repeat-while` 循环的结构比前例中的 `while` 循环更适合这个游戏。在上面的 `repeat-while` 循环中，`square += board[square]` 总是在循环的 `while` 条件确认 `square` 仍在棋盘上之后 _立即_ 执行。这种行为消除了前文中 `while` 循环版本中对数组边界检查的需求。
 
+## 3 Conditional Statements 条件语句
 
+It’s often useful to execute different pieces of code based on certain conditions. You might want to run an extra piece of code when an error occurs, or to display a message when a value becomes too high or too low. To do this, you make parts of your code conditional.
+
+在编程中，根据特定条件执行不同的代码块往往非常有用。例如，你可能希望在发生错误时运行一段额外的代码，或者在某个值过高或过低时显示一条提示信息。要实现这一点，你需要让代码的某些部分具备条件执行的特性。
+
+Swift provides two ways to add conditional branches to your code: the `if` statement and the `switch` statement. Typically, you use the `if` statement to evaluate simple conditions with only a few possible outcomes. The `switch` statement is better suited to more complex conditions with multiple possible permutations and is useful in situations where pattern matching can help select an appropriate code branch to execute.
+
+Swift 提供了两种为代码添加条件分支的方式：`if` 语句和 `switch` 语句。通常，`if` 语句适用于评估结果较少的简单条件；而 `switch` 语句更适合处理具有多种可能组合的复杂条件，尤其在可以通过模式匹配来选择合适代码分支执行的场景中表现更佳。
+
+### 3.1 If
+
+In its simplest form, the `if` statement has a single `if` condition. It executes a set of statements only if that condition is `true`.
+
+`if` 语句最基础的形式只包含一个 `if` 条件，只有当该条件为真时，才会执行对应的代码块。
+
+```
+var temperatureInFahrenheit = 30
+if temperatureInFahrenheit <= 32 {
+    print("It's very cold. Consider wearing a scarf.")
+}
+// Prints "It's very cold. Consider wearing a scarf."
+// 输出："天气非常冷。建议戴上围巾。"
+```
+
+The example above checks whether the temperature is less than or equal to 32 degrees Fahrenheit (the freezing point of water). If it is, a message is printed. Otherwise, no message is printed, and code execution continues after the if statement’s closing brace.
+
+上述示例检查温度是否小于或等于 32 华氏度（水的冰点）。如果满足条件，就会打印提示信息；否则，不会打印任何信息，代码会在 `if` 语句的闭合大括号后继续执行。
+
+The `if` statement can provide an alternative set of statements, known as an `else` clause, for situations when the `if` condition is `false`. These statements are indicated by the `else` keyword.
+
+`if` 语句可以提供一个备选代码块（称为 `else` 子句），用于处理 `if` 条件为假的情况。这些代码块由 `else` 关键字标识。
+
+```
+temperatureInFahrenheit = 40
+if temperatureInFahrenheit <= 32 {
+    print("It's very cold. Consider wearing a scarf.")
+} else {
+    print("It's not that cold. Wear a T-shirt.")
+}
+// Prints "It's not that cold. Wear a T-shirt."
+// 输出："没那么冷。穿件 T 恤就可以了。"
+```
+
+One of these two branches is always executed. Because the temperature has increased to 40 degrees Fahrenheit, it’s no longer cold enough to advise wearing a scarf and so the `else` branch is triggered instead.
+
+这两个分支中总有一个会被执行。由于温度升高到了 40 华氏度，已经不需要建议戴围巾了，因此会触发 `else` 分支。
+
+You can chain multiple `if` statements together to consider additional clauses.
+
+你可以将多个 `if` 语句链接起来，以处理更多条件分支。
+
+```
+temperatureInFahrenheit = 90
+if temperatureInFahrenheit <= 32 {
+    print("It's very cold. Consider wearing a scarf.")
+} else if temperatureInFahrenheit >= 86 {
+    print("It's really warm. Don't forget to wear sunscreen.")
+} else {
+    print("It's not that cold. Wear a T-shirt.")
+}
+// Prints "It's really warm. Don't forget to wear sunscreen."
+// 输出："天气非常热。别忘了涂防晒霜。"
+```
+
+Here, an additional `if` statement was added to respond to particularly warm temperatures. The final `else` clause remains, and it prints a response for any temperatures that aren’t too warm or too cold.
+
+这里新增了一个 `if` 语句来响应特别炎热的温度。最后的 `else` 子句依然保留，用于处理既不太热也不太冷的温度情况。
+
+The final `else` clause is optional, however, and can be excluded if the set of conditions doesn’t need to be complete.
+
+不过，最后的 `else` 子句是可选的，如果条件集合不需要覆盖所有情况，可以省略它。
+
+```
+temperatureInFahrenheit = 72
+if temperatureInFahrenheit <= 32 {
+    print("It's very cold. Consider wearing a scarf.")
+} else if temperatureInFahrenheit >= 86 {
+    print("It's really warm. Don't forget to wear sunscreen.")
+}
+```
+
+Because the temperature isn’t cold enough to trigger the `if` condition or warm enough to trigger the `else if` condition, no message is printed.
+
+由于温度既不足以触发 `if` 条件，也不足以触发 `else if` 条件，因此不会打印任何信息。
+
+Swift provides a shorthand spelling of if that you can use when setting values. For example, consider the following code:
+
+Swift 提供了一种简写形式的 `if` 语句，可用于赋值场景。例如，考虑以下代码：
+
+```
+let temperatureInCelsius = 25
+let weatherAdvice: String
+
+if temperatureInCelsius <= 0 {
+    weatherAdvice = "It's very cold. Consider wearing a scarf."
+} else if temperatureInCelsius >= 30 {
+    weatherAdvice = "It's really warm. Don't forget to wear sunscreen."
+} else {
+    weatherAdvice = "It's not that cold. Wear a T-shirt."
+}
+
+print(weatherAdvice)
+// Prints "It's not that cold. Wear a T-shirt."
+// 输出："没那么冷。穿件 T 恤就可以了。"
+```
+
+Here, each of the branches sets a value for the `weatherAdvice` constant, which is printed after the `if` statement.
+
+在这段代码中，每个分支都会为 `weatherAdvice` 常量赋值，赋值完成后在 `if` 语句外打印该常量。
+
+Using the alternate syntax, known as an `if` expression, you can write this code more concisely:
+
+使用替代语法（称为 `if` 表达式）可以更简洁地编写这段代码：
+
+```
+let weatherAdvice = if temperatureInCelsius <= 0 {
+    "It's very cold. Consider wearing a scarf."
+} else if temperatureInCelsius >= 30 {
+    "It's really warm. Don't forget to wear sunscreen."
+} else {
+    "It's not that cold. Wear a T-shirt."
+}
+
+print(weatherAdvice)
+// Prints "It's not that cold. Wear a T-shirt."
+// 输出："没那么冷。穿件 T 恤就可以了。"
+```
+
+In this `if` expression version, each branch contains a single value. If a branch’s condition is `true`, then that branch’s value is used as the value for the whole `if` expression in the assignment of `weatherAdvice`. Every `if` branch has a corresponding `else if` branch or `else` branch, ensuring that one of the branches always matches and that the `if` expression always produces a value, regardless of which conditions are `true`.
+
+在这个 `if` 表达式版本中，每个分支只包含一个值。如果某个分支的条件为真，该分支的值就会作为整个 `if` 表达式的值，赋值给 `weatherAdvice`。每个 `if` 分支都有对应的 `else if` 或 `else` 分支，确保无论条件如何，总有一个分支会匹配，且 `if` 表达式总能生成一个值。
+
+Because the syntax for the assignment starts outside the `if` expression, there’s no need to repeat `weatherAdvice =` inside each branch. Instead, each branch of the `if` expression produces one of the three possible values for `weatherAdvice`, and the assignment uses that value.
+
+由于赋值操作的语法写在 `if` 表达式外部，因此无需在每个分支中重复写 `weatherAdvice =`。相反，`if` 表达式的每个分支会生成 `weatherAdvice` 的三个可能值之一，赋值语句直接使用该值即可。
+
+All of the branches of an `if` expression need to contain values of the same type. Because Swift checks the type of each branch separately, values like `nil` that can be used with more than one type prevent Swift from determining the `if` expression’s type automatically. Instead, you need to specify the type explicitly — for example:
+
+`if` 表达式的所有分支必须包含相同类型的值。由于 Swift 会单独检查每个分支的类型，像 `nil` 这种可用于多种类型的值会导致 Swift 无法自动推断 `if` 表达式的类型，此时你需要显式指定类型。例如：
+
+```
+let freezeWarning: String? = if temperatureInCelsius <= 0 {
+    "It's below freezing. Watch for ice!"
+} else {
+    nil
+}
+```
+
+In the code above, one branch of the `if` expression has a string value and the other branch has a `nil` value. The `nil` value could be used as a value for any optional type, so you have to explicitly write that `freezeWarning` is an optional string, as described in [Type Annotations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics#Type-Annotations).
+
+在上述代码中，`if` 表达式的一个分支是字符串值，另一个分支是 `nil` 值。`nil` 可作为任意可选类型的值，因此你必须显式声明 `freezeWarning` 是可选字符串类型（相关内容可参考《[类型注解](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics#Type-Annotations)》）。
+
+An alternate way to provide this type information is to provide an explicit type for `nil`, instead of providing an explicit type for `freezeWarning`:
+
+另一种提供类型信息的方式是为 `nil` 指定显式类型，而非为 `freezeWarning` 指定：
+
+```
+let freezeWarning = if temperatureInCelsius <= 0 {
+    "It's below freezing. Watch for ice!"
+} else {
+    nil as String?
+}
+```
+
+An `if` expression can respond to unexpected failures by throwing an error or calling a function like `fatalError(_:file:line:)` that never returns. For example:
+
+`if` 表达式可以通过抛出错误或调用 `fatalError(_:file:line:)` 这类永不返回的函数来处理意外失败。例如：
+
+```
+let weatherAdvice = if temperatureInCelsius > 100 {
+    throw TemperatureError.boiling
+} else {
+    "It's a reasonable temperature."
+}
+```
+
+In this example, the `if` expression checks whether the forecast temperature is hotter than 100° C — the boiling point of water. A temperature this hot causes the `if` expression to throw a `.boiling` error instead of returning a textual summary. Even though this `if` expression can throw an error, you don’t write `try` before it. For information about working with errors, see [Error Handling](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/errorhandling).
+
+在这个示例中，`if` 表达式检查预测温度是否超过 100 摄氏度（水的沸点）。如果温度达到该值，`if` 表达式会抛出 `.boiling` 错误，而非返回文本描述。即便该 `if` 表达式可能抛出错误，你也无需在它前面写 `try`。有关错误处理的更多信息，请参考《[错误处理](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/errorhandling)》章节。
+
+In addition to using `if` expressions on the right-hand side of an assignment, as shown in the examples above, you can also use them as the value that a function or closure returns.
+
+除了像上述示例中那样，在赋值语句的右侧使用 `if` 表达式外，你还可以将其用作函数或闭包的返回值。
+
+### 3.2 Switch
+
+A `switch` statement considers a value and compares it against several possible matching patterns. It then executes an appropriate block of code, based on the first pattern that matches successfully. A `switch` statement provides an alternative to the `if` statement for responding to multiple potential states.
+
+`switch` 语句会判断一个值，并将其与多个可能的匹配模式进行比较。随后，它会根据第一个匹配成功的模式，执行相应的代码块。对于需要响应多种潜在状态的场景，`switch` 语句是 `if` 语句的一种替代方案。
+
+In its simplest form, a `switch` statement compares a value against one or more values of the same type.
+
+在最简单的形式下，`switch` 语句会将一个值与一个或多个同类型的值进行比较。
+
+```
+switch <#some value to consider#> {
+case <#value 1#>:
+    <#respond to value 1#>
+case <#value 2#>,
+    <#value 3#>:
+    <#respond to value 2 or 3#>
+default:
+    <#otherwise, do something else#>
+}
+```
+
+```
+switch <#需要判断的值#> {
+case <#值 1#>:
+    <#响应值 1 的逻辑#>
+case <#值 2#>,
+    <#值 3#>:
+    <#响应值 2 或值 3 的逻辑#>
+default:
+    <#其他情况的处理逻辑#>
+}
+```
+
+Every `switch` statement consists of multiple possible _cases_, each of which begins with the `case` keyword. In addition to comparing against specific values, Swift provides several ways for each case to specify more complex matching patterns. These options are described later in this chapter.
+
+每个 switch 语句都包含多个可能的 _分支_ ，每个分支均以 `case` 关键字开头。除了与具体值进行比较外，Swift 还为每个分支提供了多种方式来指定更复杂的匹配模式。这些用法会在本章后续内容中介绍。
+
+Like the body of an `if` statement, each `case` is a separate branch of code execution. The `switch` statement determines which branch should be selected. This procedure is known as switching on the value that’s being considered.
+
+与 `if` 语句的执行体类似，每个 `case` 都是代码执行的一个独立分支。switch 语句会确定应选择哪个分支执行，这个过程被称为 “对所判断的值进行匹配分支（switching on）”。
+
+Every `switch` statement must be `exhaustive`. That is, every possible value of the type being considered must be matched by one of the `switch` cases. If it’s not appropriate to provide a case for every possible value, you can define a default case to cover any values that aren’t addressed explicitly. This default case is indicated by the `default` keyword, and must always appear last.
+
+每个 `switch` 语句都必须是 _穷尽的_。也就是说，被匹配类型的每一个可能值都必须能被某个 `switch` 分支匹配到。如果不适宜为每一个可能值都提供对应的分支，你可以定义一个默认分支来涵盖所有未被显式处理的值。这个默认分支由 `default` 关键字标识，且必须始终出现在最后。
+
+This example uses a `switch` statement to consider a single lowercase character called `someCharacter`:
+
+以下示例使用 `switch` 语句匹配一个名为 `someCharacter` 的小写字符：
+
+```
+let someCharacter: Character = "z"
+switch someCharacter {
+case "a":
+    print("The first letter of the Latin alphabet")
+case "z":
+    print("The last letter of the Latin alphabet")
+default:
+    print("Some other character")
+}
+// Prints "The last letter of the Latin alphabet".
+// 打印输出："拉丁字母表的最后一个字母"。
+```
+
+The `switch` statement’s first case matches the first letter of the English alphabet, `a`, and its second case matches the last letter, `z`. Because the `switch` must have a case for every possible character, not just every alphabetic character, this switch statement uses a default case to match all characters other than `a` and `z`. This provision ensures that the `switch` statement is exhaustive.
+
+该 `switch` 语句的第一个分支匹配英语字母表的第一个字母 `a`，第二个分支匹配最后一个字母 `z`。由于 `switch` 必须匹配所有可能的字符，而非仅字母字符，因此这个 switch 语句通过默认分支来匹配除 `a` 和 `z` 之外的所有字符。这一设置确保了 `switch` 语句的穷尽性。
+
+Like `if` statements, `switch` statements also have an expression form:
+
+与 `if` 语句类似，`switch` 语句也有表达式形式：
+
+```
+let anotherCharacter: Character = "a"
+let message = switch anotherCharacter {
+case "a":
+    "The first letter of the Latin alphabet"
+case "z":
+    "The last letter of the Latin alphabet"
+default:
+    "Some other character"
+}
+
+
+print(message)
+// Prints "The first letter of the Latin alphabet".
+// 打印输出："拉丁字母表的第一个字母"。
+```
+
+In this example, each case in the `switch` expression contains the value for `message` to be used when that case matches `anotherCharacter`. Because `switch` is always exhaustive, there is always a value to assign.
+
+在这个示例中，`switch` 表达式的每个分支都包含了 `message` 变量在该分支匹配 `anotherCharacter` 时要使用的值。由于 `switch` 始终是穷尽的，因此总能为 `message` 分配到一个值。
+
+As with `if` expressions, you can throw an error or call a function like `fatalError(_:file:line:)` that never returns instead of providing a value for a given case. You can use `switch` expressions on the right-hand side of an assignment, as shown in the example above, and as the value that a function or closure returns.
+
+和 `if` 表达式一样，对于某个分支，你也可以抛出错误或调用 `fatalError(_:file:line:)` 这类不会返回的函数，而非为该分支提供具体值。你可以像上面的示例那样，将 `switch` 表达式用在赋值语句的右侧，也可以用它作为函数或闭包的返回值。
+
+#### 3.2.1 No Implicit Fallthrough 无隐式贯穿
+
+In contrast with `switch` statements in C and Objective-C, `switch` statements in Swift don’t fall through the bottom of each case and into the next one by default. Instead, the entire `switch` statement finishes its execution as soon as the first matching `switch` case is completed, without requiring an explicit `break` statement. This makes the `switch` statement safer and easier to use than the one in C and avoids executing more than one `switch` case by mistake.
+
+与 C 和 Objective-C 中的 `switch` 语句不同，Swift 中的 `switch` 语句默认不会在每个分支结束后贯穿到下一个分支。相反，一旦第一个匹配的 `switch` 分支执行完毕，整个 `switch` 语句就会结束执行，无需显式的 `break` 语句。这使得 Swift 的 `switch` 语句比 C 语言的更安全、更易用，避免了误执行多个 `switch` 分支的情况。
+
+> **Note** **注意**
+>
+> Although `break` isn’t required in Swift, you can use a `break` statement to match and ignore a particular case or to break out of a matched case before that case has completed its execution. For details, see [Break in a Switch Statement](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#Break-in-a-Switch-Statement).
+> 
+> 尽管 Swift 中不需要 `break`，但你仍可使用 `break` 语句来匹配并忽略某个特定分支，或在匹配分支执行完毕前跳出该分支。详情请参见《[Switch 语句中的 Break](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#Break-in-a-Switch-Statement)》。
+
+The body of each case _must_ contain at least one executable statement. It isn’t valid to write the following code, because the first case is empty:
+
+每个 case 分支的执行体 _必须_ 包含至少一条可执行语句。编写以下代码是无效的，因为第一个分支为空：
+
+```
+let anotherCharacter: Character = "a"
+switch anotherCharacter {
+case "a": // Invalid, the case has an empty body 无效，该 case 分支的执行体为空
+case "A":
+    print("The letter A")
+default:
+    print("Not the letter A")
+}
+// This will report a compile-time error.
+// 这会报编译时错误。
+```
+
+Unlike a `switch` statement in C, this `switch` statement doesn’t match both `"a"` and `"A"`. Rather, it reports a compile-time error that `case "a"`: doesn’t contain any executable statements. This approach avoids accidental fallthrough from one case to another and makes for safer code that’s clearer in its intent.
+
+与 C 语言中的 `switch` 语句不同，这个 `switch` 语句不会同时匹配 `"a"` 和 `"A"`。相反，它会报编译时错误，提示 `case "a"`: 未包含任何可执行语句。这种设计可以避免从一个分支意外 “贯穿” 到另一个分支，让代码的意图更清晰，安全性也更高。
+
+To make a `switch` with a single case that matches both `"a"` and `"A"`, combine the two values into a compound case, separating the values with commas.
+
+若要编写一个能同时匹配 `"a"` 和 `"A"` 的单个 case 分支，可将这两个值合并为一个复合分支，并用逗号分隔多个值：
+
+```
+let anotherCharacter: Character = "a"
+switch anotherCharacter {
+case "a", "A":
+    print("The letter A")
+default:
+    print("Not the letter A")
+}
+// Prints "The letter A".
+// 输出 "字母 A"。
+```
+
+For readability, a compound case can also be written over multiple lines. For more information about compound cases, see [Compound Cases](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#Compound-Cases).
+
+为了提升可读性，复合分支也可以分多行书写。有关复合分支的更多信息，请参见《[复合分支](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#Compound-Cases)》章节。
+
+> **Note** **注意**
+>
+> To explicitly fall through at the end of a particular `switch` case, use the `fallthrough` keyword, as described in [Fallthrough](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#Fallthrough).
+> 
+> 如需在某个 `switch` 分支的末尾显式执行 “贯穿” 操作，请使用 `fallthrough` 关键字，具体说明参见《[贯穿](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow#Fallthrough)》章节。
+
+#### 3.2.2 Interval Matching 区间匹配
+
+Values in `switch` cases can be checked for their inclusion in an interval. This example uses number intervals to provide a natural-language count for numbers of any size:
+
+`switch` 语句的分支中，可检查值是否包含在某个区间内。以下示例利用数值区间，为任意大小的数字提供符合自然语言习惯的数量描述：
+
+```
+let approximateCount = 62
+let countedThings = "moons orbiting Saturn"
+let naturalCount: String
+switch approximateCount {
+case 0:
+    naturalCount = "no"
+case 1..<5:
+    naturalCount = "a few"
+case 5..<12:
+    naturalCount = "several"
+case 12..<100:
+    naturalCount = "dozens of"
+case 100..<1000:
+    naturalCount = "hundreds of"
+default:
+    naturalCount = "many"
+}
+print("There are \(naturalCount) \(countedThings).")
+// Prints "There are dozens of moons orbiting Saturn."
+// 输出 "土星的卫星有几十个。”"
+```
+
+In the above example, `approximateCount` is evaluated in a `switch` statement. Each case compares that value to a number or interval. Because the value of `approximateCount` falls between 12 and 100, `naturalCount` is assigned the value `"dozens of"`, and execution is transferred out of the `switch` statement.
+
+在上述示例中，`approximateCount` 的值会在 `switch` 语句中进行匹配判断。每个分支都会将该值与某个数字或区间做比较。由于 `approximateCount` 的值落在 12 到 100 之间，`naturalCount` 被赋值为 `"dozens of"`（中文对应 “几十”），随后程序执行流程跳出 `switch` 语句。
+
+#### 3.2.3 Tuples 元组
+
+You can use tuples to test multiple values in the same `switch` statement. Each element of the tuple can be tested against a different value or interval of values. Alternatively, use the underscore character (`_`), also known as the wildcard pattern, to match any possible value.
+
+你可以在同一个 `switch` 语句中使用元组来匹配多个值。元组中的每个元素可以分别与不同的值或值区间进行匹配。此外，你还可以使用下划线字符（`_`，也称为通配符模式）来匹配任意可能的值。
+
+The example below takes an (x, y) point, expressed as a simple tuple of type (Int, Int), and categorizes it on the graph that follows the example.
+
+以下示例接收一个 `(x, y)` 坐标点（以 `(Int, Int)` 类型的简单元组表示），并根据该点在坐标系中的位置对其进行分类：
+
+```
+let somePoint = (1, 1)
+switch somePoint {
+case (0, 0):
+    print("\(somePoint) is at the origin")
+case (_, 0):
+    print("\(somePoint) is on the x-axis")
+case (0, _):
+    print("\(somePoint) is on the y-axis")
+case (-2...2, -2...2):
+    print("\(somePoint) is inside the box")
+default:
+    print("\(somePoint) is outside of the box")
+}
+// Prints "(1, 1) is inside the box".
+// 输出："(1, 1) 在方框内部"。
+```
+
+![](./images/5-3-coordinateGraphSimple@2x.png)
+
+The `switch` statement determines whether the point is at the origin `(0, 0)`, on the red x-axis, on the green y-axis, inside the blue 4-by-4 box centered on the origin, or outside of the box.
+
+这个 `switch` 语句会依次判断该坐标点是否位于原点 `(0, 0)`、红色的 x 轴上、绿色的 y 轴上、以原点为中心的 4×4 蓝色方框内，或是在方框外部。
+
+Unlike C, Swift allows multiple `switch` cases to consider the same value or values. In fact, the point `(0, 0)` could match all four of the cases in this example. However, if multiple matches are possible, the first matching case is always used. The point `(0, 0)` would match `case (0, 0)` first, and so all other matching cases would be ignored.
+
+与 C 语言不同，Swift 允许多个 `switch` 分支匹配同一个（或同一组）值。事实上，坐标点 `(0, 0)` 本可以匹配这个示例中的全部四个分支。但如果存在多个匹配可能，程序始终只会执行第一个匹配成功的分支。因此 `(0, 0)` 会优先匹配 `case (0, 0)`，其余所有可匹配的分支都会被忽略。
+
+#### 3.2.4 Value Bindings 值绑定
+
+A `switch` case can name the value or values it matches to temporary constants or variables, for use in the body of the case. This behavior is known as _value binding_, because the values are bound to temporary constants or variables within the case’s body.
+
+`switch` 分支可以将其匹配到的一个或多个值命名为临时常量或变量，以便在该分支的执行体中使用。这种行为被称为 _值绑定_ ，因为这些值会被绑定到该分支执行体内的临时常量或变量上。
+
+The example below takes an `(x, y)` point, expressed as a tuple of type `(Int, Int)`, and categorizes it on the graph that follows:
+
+以下示例接收一个以 `(Int, Int)` 类型元组表示的 `(x, y)` 坐标点，并根据其在坐标系中的位置进行分类：
+
+```
+let anotherPoint = (2, 0)
+switch anotherPoint {
+case (let x, 0):
+    print("on the x-axis with an x value of \(x)")
+case (0, let y):
+    print("on the y-axis with a y value of \(y)")
+case let (x, y):
+    print("somewhere else at (\(x), \(y))")
+}
+// Prints "on the x-axis with an x value of 2".
+// 输出："在 x 轴上，x 值为 2"。
+```
+
+![](./images/5-3-coordinateGraphMedium@2x.png)
+
+The `switch` statement determines whether the point is on the red x-axis, on the green y-axis, or elsewhere (on neither axis).
+
+这个 `switch` 语句会判断该坐标点是位于红色的 x 轴上、绿色的 y 轴上，还是位于其他位置（既不在 x 轴也不在 y 轴上）。
+
+The three switch cases declare placeholder constants `x` and `y`, which temporarily take on one or both tuple values from `anotherPoint`. The first case, `case (let x, 0)`, matches any point with a `y` value of `0` and assigns the point’s `x` value to the temporary constant `x`. Similarly, the second case, `case (0, let y)`, matches any point with an `x` value of `0` and assigns the point’s `y` value to the temporary constant `y`.
+
+三个 `switch` 分支分别声明了占位常量 `x` 和 `y`，这些常量会临时接收 `anotherPoint` 元组中的一个或两个值。第一个分支 `case (let x, 0)` 匹配所有 `y` 值为 `0` 的坐标点，并将该点的 `x` 值赋值给临时常量 `x`；类似的，第二个分支 `case (0, let y)` 匹配所有 `x` 值为 `0` 的坐标点，并将该点的 `y` 值赋值给临时常量 `y`。
+
+After the temporary constants are declared, they can be used within the case’s code block. Here, they’re used to print the categorization of the point.
+
+临时常量声明完成后，即可在分支的代码块中使用。本示例中，这些常量被用于打印坐标点的分类信息。
+
+This `switch` statement doesn’t have a default case. The final case, `case let (x, y)`, declares a tuple of two placeholder constants that can match any value. Because `anotherPoint` is always a tuple of two values, this case matches all possible remaining values, and a default case isn’t needed to make the `switch` statement exhaustive.
+
+该 `switch` 语句没有 `default` 分支。最后一个分支 `case let (x, y)` 声明了一个包含两个占位常量的元组，能够匹配任意值。由于 `anotherPoint` 始终是一个包含两个值的元组，这个分支会匹配所有剩余的可能值，因此无需通过 `default` 分支就能让 `switch` 语句满足 “穷尽性” 要求。
+
+#### 3.2.5 Where 
+
+A `switch` case can use a `where` clause to check for additional conditions.
+
+`switch` 分支可以使用 `where` 子句来检查额外的条件。
+
+The example below categorizes an `(x, y)` point on the following graph:
+
+以下示例根据坐标系位置，对一个 (x, y) 坐标点进行分类：
+
+```
+let yetAnotherPoint = (1, -1)
+switch yetAnotherPoint {
+case let (x, y) where x == y:
+    print("(\(x), \(y)) is on the line x == y")
+case let (x, y) where x == -y:
+    print("(\(x), \(y)) is on the line x == -y")
+case let (x, y):
+    print("(\(x), \(y)) is just some arbitrary point")
+}
+// Prints "(1, -1) is on the line x == -y".
+```
+
+![](./images/5-3-coordinateGraphComplex@2x.png)
+
+The `switch` statement determines whether the point is on the green diagonal line where `x == y`, on the purple diagonal line where `x == -y`, or neither.
+
+该 `switch` 语句会判断该坐标点是位于绿色的对角线 `x == y` 上、紫色的对角线 `x == -y` 上，还是两者都不是。
+
+The three `switch` cases declare placeholder constants `x` and `y`, which temporarily take on the two tuple values from `yetAnotherPoint`. These constants are used as part of a `where` clause, to create a dynamic filter. The `switch` case matches the current value of point only if the `where` clause’s condition evaluates to `true` for that value.
+
+三个 `switch` 分支都声明了占位常量 `x` 和 `y`，它们会临时接收 `yetAnotherPoint` 元组中的两个值。这些常量被用于 `where` 子句中，以创建一个动态过滤条件。只有当该值使 `where` 子句的条件判断结果为 `true` 时，这个 `switch` 分支才会匹配当前的坐标点。
+
+As in the previous example, the final case matches all possible remaining values, and so a default case isn’t needed to make the `switch` statement exhaustive.
+
+与前一个示例相同，最后一个分支会匹配所有剩余的可能值，因此无需 `default` 分支，即可保证该 `switch` 语句的穷尽性。
+
+Compound Cases
+Multiple switch cases that share the same body can be combined by writing several patterns after case, with a comma between each of the patterns. If any of the patterns match, then the case is considered to match. The patterns can be written over multiple lines if the list is long. For example:
+
+let someCharacter: Character = "e"
+switch someCharacter {
+case "a", "e", "i", "o", "u":
+    print("\(someCharacter) is a vowel")
+case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+    "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+    print("\(someCharacter) is a consonant")
+default:
+    print("\(someCharacter) isn't a vowel or a consonant")
+}
+// Prints "e is a vowel".
+The switch statement’s first case matches all five lowercase vowels in the English language. Similarly, its second case matches all lowercase English consonants. Finally, the default case matches any other character.
+
+Compound cases can also include value bindings. All of the patterns of a compound case have to include the same set of value bindings, and each binding has to get a value of the same type from all of the patterns in the compound case. This ensures that, no matter which part of the compound case matched, the code in the body of the case can always access a value for the bindings and that the value always has the same type.
+
+let stillAnotherPoint = (9, 0)
+switch stillAnotherPoint {
+case (let distance, 0), (0, let distance):
+    print("On an axis, \(distance) from the origin")
+default:
+    print("Not on an axis")
+}
+// Prints "On an axis, 9 from the origin".
+The case above has two patterns: (let distance, 0) matches points on the x-axis and (0, let distance) matches points on the y-axis. Both patterns include a binding for distance and distance is an integer in both patterns — which means that the code in the body of the case can always access a value for distance.
 
