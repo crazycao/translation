@@ -1,6 +1,6 @@
 ---
 name: bilingual-md
-description: Use when the user asks to add Chinese translations to an English Markdown document in this repo (e.g. "在这个文件中每一段英文之后加它的中文翻译"), or to produce a Chinese-only companion file (e.g. "生成一个 (CN) 文件"、"根据我检查过的内容制作一个 (CN) 文件"). 
+description: Use when the user asks to add Chinese translations to an English Markdown document in this repo (e.g. "在这个文件中每一段英文之后加它的中文翻译"、"加中文翻译"), or to produce a Chinese-only companion file (e.g. "生成一个 (CN) 文件"、"根据我检查过的内容制作一个 (CN) 文件"). 
 ---
 
 # 双语 Markdown 翻译约定（本项目专用）
